@@ -1,0 +1,38 @@
+package com.example.jwt.repository.FoodTodayRepository;
+
+
+import com.example.jwt.entities.FoodToday.Dishes;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Repository
+public interface DishesRepository extends JpaRepository<Dishes,Long> {
+
+    List<Dishes> findByUserUserIdAndDateAndMealName(Long userId, LocalDate date, String mealName);
+    List<Dishes> findByUserUserId(Long userId);
+
+    List<Dishes> findDishNameByUserUserIdAndMealName(Long userId,String mealName);
+
+    List<Dishes> findDishIdByUserUserIdAndMealNameAndDishName(Long userId,String mealName,String dishName);
+
+
+    List<Dishes> findDishesByUser_UserIdAndMealNameAndDishNameAndDate(
+            Long userId, String mealName, String dishName, LocalDate date);
+
+
+    public List<Dishes> findDishesByUserUserIdAndDate(Long userId, LocalDate date);
+
+    Dishes findByDishName(String dishName);
+
+
+    // Update this method to retrieve the dish ID and set ingredient details
+//    @Query("SELECT d.id, i.ingredientName, i.ingredientQuantity FROM Dishes d " +
+//            "INNER JOIN Ingredients i ON d.dishName = i.dishName " +
+//            "WHERE d.user.userId = :userId AND d.mealName = :mealName AND d.dishName = :dishName")
+//    List<Object[]> findDishIdAndIngredientDetails(@Param("userId") Long userId,
+//                                                  @Param("mealName") String mealName,
+//                                                  @Param("dishName") String dishName);
+}
