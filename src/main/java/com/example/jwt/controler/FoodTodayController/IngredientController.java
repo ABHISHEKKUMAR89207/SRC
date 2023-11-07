@@ -2,6 +2,7 @@ package com.example.jwt.controler.FoodTodayController;
 
 
 
+import com.example.jwt.FoodTodayResponse.DishWithIngredientsResponse;
 import com.example.jwt.FoodTodayResponse.IngredientsResponse;
 import com.example.jwt.FoodTodayResponse.mealResponse;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
@@ -57,12 +58,23 @@ public IngredientsResponse setIngredientsForDish( @RequestHeader("Auth") String 
 
 
     //get all ingredient with date
-//    @GetMapping("/getDishesWithIngredients")
-//    public List<DishWithIngredientsResponse> getDishesWithIngredientsByDate(
+    @GetMapping("/getDishesWithIngredients-by-date")
+    public List<mealResponse> getDishesWithIngredientsByDate(
 //            @RequestParam Long userId,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-//        return ingrdientService.getDishesWithIngredientsByDate(userId, date);
-//    }
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+
+        return ingrdientService.getDishesWithIngredientsByDate(user, date);
+    }
 
 
     //get dish with ingreddient using mealName
