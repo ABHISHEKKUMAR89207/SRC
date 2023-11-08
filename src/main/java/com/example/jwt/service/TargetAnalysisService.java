@@ -6,6 +6,7 @@ import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
 import com.example.jwt.repository.TargetDataRepository;
 import com.example.jwt.repository.UserRepository;
+import com.example.jwt.request.TargetDataRequest;
 import com.example.jwt.security.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,8 @@ public class TargetAnalysisService {
 
 
 
+
+    //    // target based analysis and get
     public List<Map<String,Double>> getAnalysis( String username){
 
         User user = userRepository.findByEmail(username)
@@ -105,6 +108,59 @@ public class TargetAnalysisService {
         listOfMaps.add(myMap);
         listOfMaps.add(calculatedMap);
         return listOfMaps;
+    }
+
+
+
+
+    //target set and update
+    public TargetData saveOrUpdateTargetData(String username, TargetDataRequest request) {
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+        TargetData existingData = targetDataRepository.findByUser(user);
+
+        if (existingData == null) {
+            TargetData newTargetData = new TargetData();
+            newTargetData.setUser(user);
+            newTargetData.setTargetCalories(request.getCalories());
+            newTargetData.setTargetCarbs(request.getCarbs());
+            newTargetData.setTargetFat(request.getFats());
+            newTargetData.setTargetProteins(request.getProteins());
+            newTargetData.setTargetFibers(request.getFiber());
+
+            // Save the new target data
+            return targetDataRepository.save(newTargetData);
+        } else {
+            if (request.getCalories() != null) {
+                existingData.setTargetCalories(request.getCalories());
+            }
+            if (request.getCarbs() != null) {
+                existingData.setTargetCarbs(request.getCarbs());
+            }
+            if (request.getFats() != null) {
+                existingData.setTargetFat(request.getFats());
+            }
+            if (request.getProteins() != null) {
+                existingData.setTargetProteins(request.getProteins());
+            }
+            if (request.getFiber() != null) {
+                existingData.setTargetFibers(request.getFiber());
+            }
+
+            // Save the updated target data
+            return targetDataRepository.save(existingData);
+        }
+    }
+
+
+    // target get
+    public TargetData getTargetData(String username) {
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
+        return targetDataRepository.findByUser(user);
     }
 }
 
