@@ -6,7 +6,10 @@ import com.example.jwt.exception.WaterEntityNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.waterEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -139,6 +142,23 @@ public class waterService {
             defaultWaterData.setWaterIntake(null); // Set the default value for waterIntake
 
             return defaultWaterData;
+        }
+    }
+
+
+    @Scheduled(fixedRate = 24 * 60 * 60 * 1000) // 24 hours in milliseconds
+    public void resetNumberOfCups() {
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            waterEntity userWater = user.getWater();
+            if (userWater != null) {
+                userWater.setNoOfCups(0);
+                // You can also update other attributes as needed
+                // e.g., update waterIntake, etc.
+                // userWater.setWaterIntake(calculateWaterIntake(userWater.getCupCapacity(), 0));
+                waterEntityRepository.save(userWater);
+            }
         }
     }
 
