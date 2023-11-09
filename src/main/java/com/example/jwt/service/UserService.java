@@ -69,8 +69,10 @@ public class UserService implements IUserService {
 
         newUser.getRoles().add(role);
 
+        // Save the user and wrap it in an Optional
+        User savedUser = userRepository.save(newUser);
 //        newUser.setRole(request.role());
-        return userRepository.save(newUser);
+        return userRepository.save(savedUser);
     }
 
 
@@ -101,6 +103,7 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<User>  findByEmail(String email) {
+
         return userRepository.findByEmail(email);
     }
 
@@ -122,7 +125,7 @@ public class UserService implements IUserService {
             tokenRepository.delete(token);
             return "Token already expired";
         }
-        user.setEnabled(true);
+        user.setEmailVerified(true);
         userRepository.save(user);
         return "valid";
     }
