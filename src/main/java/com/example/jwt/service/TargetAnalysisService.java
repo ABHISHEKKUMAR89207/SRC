@@ -72,9 +72,13 @@ public class TargetAnalysisService {
             System.out.println("t caloryyy    "+targetCalories);
 
         Double targetProteins = targetData.getTargetProteins();
+            System.out.println("t protein    "+targetProteins);
         Double targetCarbs = targetData.getTargetCarbs();
+            System.out.println("t carbs    "+targetCarbs);
         Double targetFat = targetData.getTargetFat();
+            System.out.println("t fat    "+targetFat);
         Double targetFibers = targetData.getTargetFibers();
+            System.out.println("t fibers    "+targetFibers);
 
         Set<Map.Entry<String, Double>> entrySet = myMap.entrySet();
         List<Double> ansList = new ArrayList<>();
@@ -90,11 +94,12 @@ public class TargetAnalysisService {
 //            calculatedMap.put("Left Fats: ", Math.abs(targetFat - ansList.get(2)));
 //            calculatedMap.put("Left Carbs: ", Math.abs(targetCarbs - ansList.get(3)));
 //            calculatedMap.put("Left Fibers: ", Math.abs(targetFibers - ansList.get(4)));
+        System.out.println("consumed lsit....."+ansList);
 
         calculatedMap.put("Left Calories: ", targetCalories != null ? Math.abs(targetCalories - ansList.get(0)) : null);
         calculatedMap.put("Left Proteins: ", targetProteins != null ? Math.abs(targetProteins - ansList.get(1)) : null);
-        calculatedMap.put("Left Fats: ", targetFat != null ? Math.abs(targetFat - ansList.get(2)) : null);
-        calculatedMap.put("Left Carbs: ", targetCarbs != null ? Math.abs(targetCarbs - ansList.get(3)) : null);
+        calculatedMap.put("Left Carbs: ", targetCarbs != null ? Math.abs(targetCarbs - ansList.get(2)) : null);
+        calculatedMap.put("Left Fats: ", targetFat != null ? Math.abs(targetFat - ansList.get(3)) : null);
         calculatedMap.put("Left Fibers: ", targetFibers != null ? Math.abs(targetFibers - ansList.get(4)) : null);
 
 

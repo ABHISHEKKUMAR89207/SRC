@@ -28,7 +28,7 @@ public class NinData {
     @Column(name = "food")
     private String name;
 
-    @Column(name = "calories")
+    @Column(name = "Calories")
     private Double calories;
 //    @Column(name = "Carbohydrates")
     private Double Carbs;

@@ -87,6 +87,7 @@ for (Dishes dish : dishesList) {
             // Add the ingredient to the dish's list of ingredients
             dish.getIngredientList().add(ingredient);
         } else {
+            System.out.println("Me hu gian");
             // Handle the case where the NinData for the ingredient is not found
             // You can throw an exception, log a message, or handle it as needed.
         }
@@ -211,8 +212,8 @@ for (Dishes dish : dishesList) {
 
     mapIngredient.put("Calories",calories);
     mapIngredient.put("Protiens",proteins);
-    mapIngredient.put("fats",fats);
     mapIngredient.put("carbs",carbs);
+    mapIngredient.put("fat",fats);
     mapIngredient.put("fibers",fibers);
     analysisService.setmaps(mapIngredient);
 

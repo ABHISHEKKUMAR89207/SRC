@@ -73,8 +73,9 @@ public class UserProfileService {
         return newProfile;
     }
 
-    private double calculateBMI(double heightInCentimeters, double weight) {
-        double heightInMeters = heightInCentimeters / 100; // Convert height to meters
+    private double calculateBMI(double heightInFeet, double weight) {
+
+        double heightInMeters = heightInFeet / 100; // Convert height to meters
         return weight / (heightInMeters * heightInMeters);
     }
 
