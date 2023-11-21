@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
@@ -202,7 +203,7 @@ public class UserProfileController {
             // Fetch the user's data from both User and UserProfile entities
             User user = userService.findByUsername(username);
             UserProfile userProfile = userProfileService.findByUsername(username);
-
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
             if (user != null && userProfile != null) {
                 // Update the profile data based on the input
                 if (updateData.containsKey("mobile")) {
@@ -213,17 +214,32 @@ public class UserProfileController {
                     double newWeight = Double.parseDouble(updateData.get("weight").toString());
                     userProfile.setWeight(newWeight);
                     // Calculate and update BMI
-                    double heightInMeters = userProfile.getHeight() / 100.0;
+                    String str = String.valueOf(userProfile.getHeight());
+                    String[] parts = str.split("\\.");
+                    double befDecimal = Double.parseDouble(parts[0]);
+                    double aftDecimal =Double.parseDouble(parts[1]);
+
+                    double heightInInches = (befDecimal*12) + aftDecimal;
+                    double heightInMeters = heightInInches * 0.0254; // Convert height to meters
                     double bmi = newWeight / (heightInMeters * heightInMeters);
-                    userProfile.setBmi(bmi);
+                    String formatedBmi = decimalFormat.format(bmi);
+                    userProfile.setBmi(Double.parseDouble(formatedBmi));
                 }
 
                 if (updateData.containsKey("height")) {
                     double newHeight = Double.parseDouble(updateData.get("height").toString());
                     userProfile.setHeight(newHeight);
                     // Calculate and update BMI
-                    double bmi = userProfile.getWeight() / ((newHeight / 100.0) * (newHeight / 100.0));
-                    userProfile.setBmi(bmi);
+                    String str = String.valueOf(newHeight);
+                    String[] parts = str.split("\\.");
+                    double befDecimal = Double.parseDouble(parts[0]);
+                    double aftDecimal =Double.parseDouble(parts[1]);
+
+                    double heightInInches = (befDecimal*12) + aftDecimal;
+                    double heightInMeters = heightInInches * 0.0254; // Convert height to meters
+                    double bmi = userProfile.getWeight() / ((heightInMeters / 100.0) * (heightInMeters / 100.0));
+                    String formatedBmi = decimalFormat.format(bmi);
+                    userProfile.setBmi(Double.parseDouble(formatedBmi));
                 }
 
 

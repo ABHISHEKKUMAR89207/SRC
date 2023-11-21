@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Optional;
 
@@ -74,9 +75,17 @@ public class UserProfileService {
     }
 
     private double calculateBMI(double heightInFeet, double weight) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String str = String.valueOf(heightInFeet);
+        String[] parts = str.split("\\.");
+        double befDecimal = Double.parseDouble(parts[0]);
+        double aftDecimal =Double.parseDouble(parts[1]);
 
-        double heightInMeters = heightInFeet / 100; // Convert height to meters
-        return weight / (heightInMeters * heightInMeters);
+        double heightInInches = (befDecimal*12) + aftDecimal;
+        double heightInMeters = heightInInches * 0.0254; // Convert height to meters
+        double bmis = weight / (heightInMeters * heightInMeters);
+        String formatedBmi = decimalFormat.format(bmis);
+        return Double.parseDouble(formatedBmi);
     }
 
 //    public void updateUserProfile(Long id, UserProfile updatedProfile) {
