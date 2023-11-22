@@ -37,6 +37,7 @@ public class UserProfile {
     private double bmi;
 
 
+
     // Constructors, getters, and setters
 
 
