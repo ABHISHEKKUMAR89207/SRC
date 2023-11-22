@@ -150,7 +150,7 @@ public class UserProfileController {
                 response.put("googleAccountLink", userProfile.getGoogleAccountLink());
                 response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
-                response.put("linkedinAccountLink", userProfile.getLinkedinAccountLink());
+                response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
 
 //                response.put("dateOfBirth", userProfile.getDateOfBirth());
 //                Date date = userProfile.getDateOfBirth();
@@ -277,7 +277,7 @@ public class UserProfileController {
 
                 if ((updateData.containsKey("linkedinAccountLink"))){
                     String newLinkedinAccountLink = updateData.get("linkedinAccountLink").toString();
-                    userProfile.setLinkedinAccountLink(newLinkedinAccountLink);
+                    userProfile.setLinkedInAccountLink(newLinkedinAccountLink);
                 }
 
 
@@ -296,7 +296,7 @@ public class UserProfileController {
                 response.put("googleAccountLink", userProfile.getGoogleAccountLink());
                 response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
-                response.put("linkedinAccountLink", userProfile.getLinkedinAccountLink());
+                response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
 
                 return ResponseEntity.ok(response);
             } else {
