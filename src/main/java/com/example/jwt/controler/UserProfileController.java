@@ -147,6 +147,11 @@ public class UserProfileController {
                 response.put("height", userProfile.getHeight());
                 response.put("weight", userProfile.getWeight());
                 response.put("bmi", userProfile.getBmi());
+                response.put("googleAccountLink", userProfile.getGoogleAccountLink());
+                response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
+                response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
+                response.put("linkedinAccountLink", userProfile.getLinkedinAccountLink());
+
 //                response.put("dateOfBirth", userProfile.getDateOfBirth());
 //                Date date = userProfile.getDateOfBirth();
 //                calculatedAge(String.valueOf(date));
@@ -255,6 +260,27 @@ public class UserProfileController {
                     }
                 }
 
+                if ((updateData.containsKey("googleAccountLink"))){
+                    String newGoogleAccountLink = updateData.get("googleAccountLink").toString();
+                    userProfile.setGoogleAccountLink(newGoogleAccountLink);
+                }
+
+                if ((updateData.containsKey("facebookAccountLink"))){
+                    String newFacebookAccountLink = updateData.get("facebookAccountLink").toString();
+                    userProfile.setFacebookAccountLink(newFacebookAccountLink);
+                }
+
+                if ((updateData.containsKey("twitterAccounLinkt"))){
+                    String newTwitterAccountLink = updateData.get("twitterAccountLink").toString();
+                    userProfile.setTwitterAccountLink(newTwitterAccountLink);
+                }
+
+                if ((updateData.containsKey("linkedinAccountLink"))){
+                    String newLinkedinAccountLink = updateData.get("linkedinAccountLink").toString();
+                    userProfile.setLinkedinAccountLink(newLinkedinAccountLink);
+                }
+
+
                 // Save the updated user and userProfile
                 userService.updateUser(user);
                 userProfileService.saveUserProfile(userProfile);
@@ -267,6 +293,10 @@ public class UserProfileController {
                 response.put("height", userProfile.getHeight());
                 response.put("weight", userProfile.getWeight());
                 response.put("bmi", userProfile.getBmi());
+                response.put("googleAccountLink", userProfile.getGoogleAccountLink());
+                response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
+                response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
+                response.put("linkedinAccountLink", userProfile.getLinkedinAccountLink());
 
                 return ResponseEntity.ok(response);
             } else {

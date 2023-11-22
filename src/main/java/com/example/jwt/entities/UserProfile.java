@@ -35,6 +35,10 @@ public class UserProfile {
     private double height;
     private double weight;
     private double bmi;
+    private String googleAccountLink;
+    private String facebookAccountLink;
+    private String twitterAccountLink;
+    private String linkedInAccountLink;
 
 
     // Constructors, getters, and setters
