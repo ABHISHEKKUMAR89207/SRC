@@ -7,5 +7,6 @@ public record RegistrationRequest(
          String userName,
          String mobileNo,
          String email,
-         String password) {
+         String password,
+         boolean registrationTermCondition) {
 }

@@ -135,12 +135,9 @@
 package com.example.jwt.entities;
 
 
-import com.example.jwt.entities.dashboardEntity.healthTrends.HealthTrends;
-import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.registration.token.VerificationToken;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
@@ -160,6 +157,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 //@ToString
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "userId")
 
 @Entity
 //@Table(name = "user_table")
@@ -238,7 +236,7 @@ public class User implements UserDetails
     @OneToOne(mappedBy = "user")
 //    @JsonManagedReference
 //    @JsonIgnore
-    @JsonBackReference
+    @JsonBackReference("userReference")
     private UserProfile userProfile;
 
 //
@@ -292,5 +290,100 @@ public class User implements UserDetails
     @Override
     public boolean isEnabled() {
         return this.emailVerified;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private String notificationToken;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<NotificationEntity> notifications;
+
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<NotificationEntity> notifications;
+//
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private UserNotificationSettings notificationSettings;
+
+    //@JsonManagedReference
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<NotificationEntity> notifications;
+//
+//    //@JsonBackReference
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private UserNotificationSettings notificationSettings;
+//    @JsonIdentityReference(alwaysAsId = true)
+//    @JsonBackReference("notificationSettingsRefere")
+//
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<NotificationEntity> notifications;
+
+//    @JsonIdentityReference(alwaysAsId = true)
+//@JsonBackReference("notificationSettingsReference")
+//
+//@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private UserNotificationSettings notificationSettings;
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference("userReference")
+//    private List<NotificationEntity> notifications;
+//@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//private List<NotificationEntity> notifications;
+@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//@JsonManagedReference("userReferencee")
+private List<NotificationEntity> notifications;
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference("notificationSettingsReference")
+    private AllToggle allToggle;
+
+
+    public String getNotificationToken() {
+        return this.notificationToken;
+    }
+
+    // Method to update notification token
+    public void updateNotificationToken(String newToken) {
+        if (newToken != null && (this.notificationToken == null || !this.notificationToken.equals(newToken))) {
+            this.notificationToken = newToken;
+        }
+        // If you want to save the changes immediately, you can call a repository or EntityManager here.
+        // Example: userRepository.save(this);
     }
 }
