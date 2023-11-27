@@ -96,7 +96,6 @@ public class ActivityController {
         }
     }
 
-
     //update and create by activity
 //    @PutMapping("/record-by-activity")
 //    public ResponseEntity<String> recordActivity(@RequestHeader("Auth") String tokenHeader, @RequestBody Activities activity) {
