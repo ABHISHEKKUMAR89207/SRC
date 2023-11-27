@@ -69,37 +69,6 @@ public class ActivityController {
 
 
 
-
-    @GetMapping("/get-steps")
-    public Activities getUserSteps(@RequestHeader("Auth") String tokenHeader ) {
-        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-        String token = tokenHeader.replace("Bearer ", "");
-
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-
-        if (user != null) {
-            LocalDate currentDate = LocalDate.now();
-            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
-
-            if (existingRecord != null) {
-                return existingRecord; // Return the activities record for the user and current date
-            } else {
-                // If no record exists for the current date, return a placeholder or handle it as needed
-                return null;
-            }
-        } else {
-            // Handle the case where the user with the provided userId is not found.
-            return null;
-        }
-    }
-
-
-
     //update and create by activity
 //    @PutMapping("/record-by-activity")
 //    public ResponseEntity<String> recordActivity(@RequestHeader("Auth") String tokenHeader, @RequestBody Activities activity) {
