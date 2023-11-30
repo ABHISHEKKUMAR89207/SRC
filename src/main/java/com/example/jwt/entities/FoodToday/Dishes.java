@@ -25,6 +25,7 @@ public class Dishes {
     private Double dishQuantity;
     private String mealName;
     private LocalDate date;
+    private boolean favourite;
 
     @ManyToOne
     @JoinColumn(name = "user_id")  // Use the actual field name defined in the User entity
@@ -40,5 +41,6 @@ public class Dishes {
 
     @OneToMany(mappedBy = "dishes")
     private List<Ingredients> ingredientList;
+
 
 }
