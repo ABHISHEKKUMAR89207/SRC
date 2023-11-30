@@ -2,6 +2,7 @@ package com.example.jwt.repository.FoodTodayRepository;
 
 
 import com.example.jwt.entities.FoodToday.Dishes;
+import com.example.jwt.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +25,8 @@ public interface DishesRepository extends JpaRepository<Dishes,Long> {
 
 
     public List<Dishes> findDishesByUserUserIdAndDate(Long userId, LocalDate date);
+
+    List<Dishes> findByUserAndFavourite(User user, boolean favourite);
 
     Dishes findByDishName(String dishName);
 
