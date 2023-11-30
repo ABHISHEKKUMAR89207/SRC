@@ -1,74 +1,58 @@
 package com.example.jwt.controler.controllerHealth;//package com.practice.springbootimportcsvfileapp.controller;
-//
-//import com.practice.springbootimportcsvfileapp.entities.SleepDuration;
-//import com.practice.springbootimportcsvfileapp.service.SleepDurationService;
-//import jakarta.persistence.EntityNotFoundException;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//
-//@RestController
-//@RequestMapping("/api/health-trends/{healthTrendId}/sleep-durations")
-//public class SleepDurationController {
-//
-//    @Autowired
-//    private SleepDurationService sleepDurationService;
-//
-//    // GET Request to retrieve all sleep durations for a health trend by its ID
-//    @GetMapping
-//    public ResponseEntity<List<SleepDuration>> getSleepDurationsByHealthTrendId(
-//            @PathVariable Long healthTrendId) {
-//        try {
-//            List<SleepDuration> sleepDurations = sleepDurationService.calculateAndSaveTotalSleepDuration(healthTrendId);
-//            return ResponseEntity.ok(sleepDurations);
-//        } catch (EntityNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//    }
-//
-//    // POST Request to add a new sleep duration for a health trend by its ID
-//    @PostMapping
-//    public ResponseEntity<Double> addSleepDurationToHealthTrend(
-//            @PathVariable Long healthTrendId,
-//            @RequestBody SleepDuration sleepDuration) {
-//        try {
-//            // You can use the healthTrendId to associate the sleep duration with the health trend
-//            // Assuming that sleepDuration has the necessary fields set, including the health trend association.
-//            // You should also validate and save the sleep duration.
-//            double newSleepDuration = sleepDurationService.calculateAndSaveTotalSleepDuration(sleepDuration);
-//            return ResponseEntity.ok(newSleepDuration);
-//        } catch (EntityNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//        }
-//    }
-//}
 
-
-import com.example.jwt.entities.User;
-import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SleepTarget;
+import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
-import com.example.jwt.service.UserService;
 import com.example.jwt.service.serviceHealth.SleepDurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
-    @RequestMapping("/api/sleep-durations")
+@RequestMapping("/api/users")
 public class SleepDurationController {
 
     @Autowired
-    private SleepDurationService sleepDurationService;
-
-    @Autowired
     private JwtHelper jwtHelper;
-
     @Autowired
-    private UserService userService;
+    private SleepDurationService sleepDurationService;
+    private final UserRepository userRepository;
+
+    public SleepDurationController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    // Set or update user's sleep target
+    @PutMapping("/sleepTarget")
+    public ResponseEntity<SleepTarget> setOrUpdateSleepTarget(@RequestHeader("Auth") String tokenHeader,
+                                                              @RequestBody SleepTarget sleepDuration) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the extracted username to associate the heart rate data with the user
+            sleepDuration = sleepDurationService.SleepTarget(sleepDuration, username);
+            System.out.println("Username is "+ username);
+            return new ResponseEntity<>(sleepDuration, HttpStatus.CREATED);
+        } catch(Exception e)
+          {  System.out.println("Username is "+ e);
+            // Handle exceptions, e.g., validation errors or database errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // You can customize the error response as needed
+
+          }
+    }
+}
+
+
+
+
+
+
 
 //    @GetMapping("/calculate/{date}")
 //    public ResponseEntity<Double> calculateAndSaveSleepDurationForDate(@PathVariable String date) {
@@ -153,5 +137,5 @@ public class SleepDurationController {
 //    }
 
 
-}
+
 

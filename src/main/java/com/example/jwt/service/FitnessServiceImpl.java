@@ -139,7 +139,7 @@ public class FitnessServiceImpl {
             userProfile.setBmi(bmi);
             return userProfileRepository.save(userProfile);
         } else {
-            throw new ResourceNotFoundException("UserProfile", "id");
+            throw new ResourceNotFoundException("UserProfile");
         }
     }
 

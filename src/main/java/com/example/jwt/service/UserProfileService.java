@@ -59,7 +59,7 @@ public class UserProfileService {
 
     public UserProfile createUserProfile(UserProfile userProfile, Long userId) throws ParseException {
         User user = this.userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User Profile", "UserProfile id"));
+                .orElseThrow(() -> new ResourceNotFoundException("User Profile"));
 
         // Set the user reference in the UserProfile
         userProfile.setUser(user);

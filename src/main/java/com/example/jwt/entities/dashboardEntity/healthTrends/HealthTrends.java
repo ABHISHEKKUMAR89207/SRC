@@ -130,10 +130,10 @@ public class HealthTrends {
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "healthTrends")
 //    @JsonManagedReference
-    @JsonIgnore
-    private List<SleepDuration> sleepDurations;
-
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "healthTrends")
+//    @JsonIgnore
+//    private List<SleepDuration> sleepDurations;
+//
+//    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "healthTrends")
 //    @JsonManagedReference
     @JsonIgnore
     private List<HeartRate> menstrualCycle;
