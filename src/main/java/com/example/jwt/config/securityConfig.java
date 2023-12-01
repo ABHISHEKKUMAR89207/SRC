@@ -72,6 +72,7 @@ public class securityConfig {
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/api/sleep-logs").permitAll()
                         .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
+                        .requestMatchers("/Logs").permitAll()
 //                        .requestMatchers(PUBLIC_URLS).permitAll()
 //                        .requestMatchers(HttpMethod.POST).permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()
