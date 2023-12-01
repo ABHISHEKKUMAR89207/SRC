@@ -135,6 +135,8 @@
 package com.example.jwt.entities;
 
 
+import com.example.jwt.entities.water.WaterEntity;
+import com.example.jwt.entities.water.WaterGoal;
 import com.example.jwt.registration.token.VerificationToken;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
@@ -247,10 +249,23 @@ public class User implements UserDetails
     @OneToOne(mappedBy = "user")
 //    @JsonManagedReference
 //    @JsonIgnore
-    @JsonBackReference
-    private waterEntity water;
+    @JsonBackReference("WaterGoal")
+    private WaterGoal waterGoal;
 
 
+//    @OneToOne(mappedBy = "user")
+////    @JsonManagedReference
+////    @JsonIgnore
+//    @JsonBackReference("WaterEntity")
+//    private WaterEntity waterEntity;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<WaterEntity> waterEntities = new ArrayList<>();
+
+
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<WaterEntity> waterEntities = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

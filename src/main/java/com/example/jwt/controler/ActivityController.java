@@ -48,7 +48,7 @@ public class ActivityController {
 
             if (existingRecord != null) {
                 // If a record for the user and the current date exists, update it with the new steps.
-                existingRecord.setSteps(existingRecord.getSteps() + steps);
+                existingRecord.setSteps(steps);
                 activityService.updateActivities(existingRecord);
                 return existingRecord; // Return the updated record
             } else {
@@ -66,6 +66,8 @@ public class ActivityController {
             return null; // Placeholder for error handling
         }
     }
+
+
 
 
     @GetMapping("/get-steps")

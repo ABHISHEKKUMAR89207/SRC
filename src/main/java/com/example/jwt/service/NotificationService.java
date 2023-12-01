@@ -38,6 +38,97 @@ public class NotificationService {
     }
 
 
+//    @Transactional
+//    public void scheduleNotification(String username, NotificationEntity request) {
+//        // Retrieve the user by username
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // Check if a notification with the same type for the same user exists
+//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
+//                user, request.getNotificationType());
+//
+//        // Associate the user with the notification
+//        request.setUser(user);
+//
+//        // Set the time zone to Indian Standard Time (IST)
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//
+//        // Set the start time and last time in the Indian time zone
+//        request.setStartTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getStartTime(),
+//                        ZoneId.systemDefault()
+//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
+//        );
+//        request.setLastTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getLastTime(),
+//                        ZoneId.systemDefault()
+//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
+//        );
+//
+//        if (existingNotification == null) {
+//            // If a notification with the same type doesn't exist, save the new notification
+//            notificationRepository.save(request);
+//        } else {
+//            // If a notification with the same type exists, update the existing notification
+//            existingNotification.setStartTime(request.getStartTime());
+//            existingNotification.setLastTime(request.getLastTime());
+//
+//            notificationRepository.save(existingNotification);
+//        }
+//    }
+
+
+//1 dec update
+//    @Transactional
+//    public void scheduleNotification(String username, NotificationEntity request) {
+//        // Retrieve the user by username
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // Check if a notification with the same type for the same user exists
+//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
+//                user, request.getNotificationType());
+//
+//        // Associate the user with the notification
+//        request.setUser(user);
+//
+//        // Set the time zone to Indian Standard Time (IST)
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//
+//        // Set the start time and last time in the Indian time zone
+//        request.setStartTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getStartTime(),
+//                        indianTimeZone  // Use indianTimeZone consistently
+//                ).toLocalDateTime())
+//        );
+//        request.setLastTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getLastTime(),
+//                        indianTimeZone  // Use indianTimeZone consistently
+//                ).toLocalDateTime())
+//        );
+//
+//        if (existingNotification == null) {
+//            // If a notification with the same type doesn't exist, save the new notification
+//            notificationRepository.save(request);
+//        } else {
+//            // If a notification with the same type exists, update the existing notification
+//            existingNotification.setStartTime(request.getStartTime());
+//            existingNotification.setLastTime(request.getLastTime());
+//
+//            notificationRepository.save(existingNotification);
+//        }
+//    }
+
+
     @Transactional
     public void scheduleNotification(String username, NotificationEntity request) {
         // Retrieve the user by username
@@ -59,16 +150,20 @@ public class NotificationService {
                 LocalTime.from(ZonedDateTime.of(
                         LocalDate.now(),
                         request.getStartTime(),
-                        ZoneId.systemDefault()
-                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
+                        indianTimeZone
+                ).toLocalDateTime())
         );
         request.setLastTime(
                 LocalTime.from(ZonedDateTime.of(
                         LocalDate.now(),
                         request.getLastTime(),
-                        ZoneId.systemDefault()
-                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
+                        indianTimeZone
+                ).toLocalDateTime())
         );
+
+        // Convert to UTC for scheduling comparisons
+        ZonedDateTime utcStartTime = request.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).withZoneSameInstant(ZoneId.of("UTC"));
+        ZonedDateTime utcLastTime = request.getLastTime().atDate(LocalDate.now()).atZone(indianTimeZone).withZoneSameInstant(ZoneId.of("UTC"));
 
         if (existingNotification == null) {
             // If a notification with the same type doesn't exist, save the new notification
@@ -80,8 +175,37 @@ public class NotificationService {
 
             notificationRepository.save(existingNotification);
         }
-    }
 
+        // Now you can use utcStartTime and utcLastTime for scheduling comparisons
+        // For example, you might want to compare with the current UTC time for scheduling logic
+        ZonedDateTime currentUtcTime = ZonedDateTime.now(ZoneId.of("UTC"));
+        if (currentUtcTime.isAfter(utcStartTime) && currentUtcTime.isBefore(utcLastTime)) {
+            // Perform your scheduling logic here
+
+            // Example: Send a notification to the user
+            if (user != null && user.getNotificationToken() != null) {
+                // Check if the user has notificationOn set to true
+                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
+                    // Create a new notification
+                    NotificationEntity newNotification = createNotificationForUser(user);
+
+                    // Set the recipient token for the notification
+                    newNotification.setRecipientToken(user.getNotificationToken());
+
+                    // Send the notification
+                    log.debug("Sending scheduled notification: {}", newNotification);
+                    firebaseMessagingService.sendNotificationByToken(newNotification);
+                } else {
+                    // Log a message or handle the case where the user has notificationOn set to false
+                    log.debug("User {} has notificationOn set to false. Skipping scheduled notification.", user.getUsername());
+                }
+            } else {
+                // Handle the case where the user or the notification token is null
+                // You might want to log a warning or handle it based on your requirements
+                log.warn("Invalid user or notification token for scheduled notification.");
+            }
+        }
+    }
 
     private void saveNotificationWithIndianTimeZone(String username, NotificationEntity request, ZoneId indianTimeZone) {
         // Retrieve the user by username
@@ -222,6 +346,43 @@ public class NotificationService {
         return newNotification;
     }
 
+
+
+
+//    private NotificationEntity createNotificationForUser(User user) {
+//        NotificationEntity newNotification = new NotificationEntity();
+//
+//        // Set other notification details based on your requirements
+//        newNotification.setUser(user);
+//
+//        UserProfile userProfile = user.getUserProfile();
+//        if (userProfile != null) {
+//            newNotification.setTitle("Hi " + userProfile.getFirstName());
+//
+//            // Filter notifications based on the current time
+//            List<NotificationEntity> currentNotifications = user.getNotifications()
+//                    .stream()
+//                    .filter(notification -> {
+//                        LocalTime currentTime = LocalTime.now();
+//                        return notification.getStartTime().truncatedTo(ChronoUnit.MINUTES).equals(currentTime.truncatedTo(ChronoUnit.MINUTES));
+//                    })
+//                    .collect(Collectors.toList());
+//
+//            if (!currentNotifications.isEmpty()) {
+//                // Use the first matching notification for the current time
+//                NotificationEntity matchingNotification = currentNotifications.get(0);
+//                newNotification.setBody("Time to " + matchingNotification.getNotificationType());
+//            } else {
+//                // Handle the case where there are no notifications for the current time
+//                log.warn("No matching notifications found for user: {}", user.getUserId());
+//            }
+//        } else {
+//            // Handle the case where userProfile is null
+//            log.warn("User {} has a null user profile", user.getUsername());
+//        }
+//
+//        return newNotification;
+//    }
 
 //    private NotificationEntity createNotificationForUser(User user) {
 //        NotificationEntity newNotification = new NotificationEntity();

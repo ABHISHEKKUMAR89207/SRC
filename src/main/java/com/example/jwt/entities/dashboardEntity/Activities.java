@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "Calories Data")
+@Entity
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
 public class Activities {
@@ -22,8 +22,6 @@ public class Activities {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private String name;
-//    private String gender;
 
 //        private Duration duration;
     private String activityType;
