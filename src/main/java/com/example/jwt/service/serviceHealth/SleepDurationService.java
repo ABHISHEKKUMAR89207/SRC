@@ -1,47 +1,58 @@
-package com.example.jwt.service.serviceHealth;//package com.practice.springbootimportcsvfileapp.service;//package com.practice.springbootimportcsvfileapp.service;//package com.practice.springbootimportcsvfileapp.service;
-import com.example.jwt.entities.User;
+package com.example.jwt.service.serviceHealth;
 
-import com.example.jwt.entities.dashboardEntity.healthTrends.SleepTarget;
+import com.example.jwt.entities.User;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.SleepDurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
+
 @Service
 public class SleepDurationService {
+    private final SleepDurationRepository sleepDurationRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    private SleepDurationRepository sleepDurationRepository;
-
-    public SleepDurationService(UserRepository userRepository, SleepDurationRepository sleepDurationRepository) {
-        this.userRepository = userRepository;
+    public SleepDurationService(SleepDurationRepository sleepDurationRepository) {
         this.sleepDurationRepository = sleepDurationRepository;
     }
 
-    public SleepTarget SleepTarget(SleepTarget sleepDuration, String username) {
-        // Find the user by the username, and associate the sleep duration with that user
+    public SleepDuration addOrUpdateSleepDuration(SleepDuration sleepDuration, String username) {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
 
-        if (user != null) {
-            // Get the existing sleep duration (if exists) for this user
-            SleepTarget existingSleepDuration = sleepDurationRepository.findByUser(user);
+        Optional<SleepDuration> existingSleep = sleepDurationRepository.findByUserAndDateOfSleep(user, sleepDuration.getDateOfSleep());
 
-            if (existingSleepDuration != null) {
-                // Update the sleep target for the existing sleep duration
-                existingSleepDuration.setSleepTarget(sleepDuration.getSleepTarget());
-                return sleepDurationRepository.save(existingSleepDuration);
-            } else {
-                // If no existing sleep duration found, create a new one and set the sleep target
+        if (existingSleep.isPresent()) {
+            // If sleep data already exists for the user and date, update the duration
+            SleepDuration existing = existingSleep.get();
+            existing.setDuration(sleepDuration.getDuration());
+            existing.setEfficiency(sleepDuration.getEfficiency());
+            existing.setEndTime(sleepDuration.getEndTime());
+            return sleepDurationRepository.save(existing);
+        } else {
+            // If sleep data doesn't exist, set the user and save the new sleep data
+            if (user != null) {
                 sleepDuration.setUser(user);
                 return sleepDurationRepository.save(sleepDuration);
+            } else {
+                throw new UserNotFoundException("User not found for username: " + username);
             }
-        } else {
-            // Handle the case where the user is not found
-            throw new UserNotFoundException("User not found for username: " + username);
         }
     }
+
+    public List<SleepDuration> getAllSleepLogs(String username) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+        List<SleepDuration> sleepList = (List<SleepDuration>) sleepDurationRepository.findByUser(user);
+        return sleepList;
+    }
+
+    // You can add other methods for specific business logic here
 }
+

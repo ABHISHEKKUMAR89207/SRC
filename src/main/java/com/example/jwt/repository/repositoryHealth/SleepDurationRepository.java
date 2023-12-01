@@ -1,10 +1,16 @@
 package com.example.jwt.repository.repositoryHealth;
 
-
 import com.example.jwt.entities.User;
-import com.example.jwt.entities.dashboardEntity.healthTrends.SleepTarget;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SleepDurationRepository extends JpaRepository<SleepTarget, Long> {
-    SleepTarget findByUser(User user);
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+public interface SleepDurationRepository extends JpaRepository<SleepDuration,Long> {
+
+    Optional<SleepDuration> findByUserAndDateOfSleep(User user, Date dateOfSleep);
+
+    List<SleepDuration> findByUser(User user);
 }
