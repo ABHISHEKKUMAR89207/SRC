@@ -2,6 +2,7 @@ package com.example.jwt.entities.dashboardEntity.healthTrends;
 
 import com.example.jwt.entities.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -12,42 +13,28 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 @Entity
 public class SleepDuration {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sleepDurationId;
-
-//    private LocalDateTime timeStamp;
-//    private double value;
-
-    private LocalDate date;
-    private LocalDateTime sleepStartTime;
-    private LocalTime startTime;
-
-    private LocalDateTime sleepEndTime;
+    private Long id;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date dateOfSleep;
+    private long duration;
+    private int efficiency;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date endTime;
+    // Getters and Setters
 
 
     @ManyToOne
-    @JoinColumn(name = "healthTrend_Id")
-//    @JsonBackReference
-//    @JsonManagedReference
-    private HealthTrends healthTrends;
-
-
-//    @OneToOne
-//    @JsonIgnore
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
-    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
-
 }
+

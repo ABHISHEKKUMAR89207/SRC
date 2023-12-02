@@ -70,7 +70,12 @@ public class securityConfig {
                         .requestMatchers("/auth/health-trends/**").authenticated()
 //                        .requestMatchers("/auth/Dishes").authenticated()
                         .requestMatchers("/register/**").permitAll()
+<<<<<<< HEAD
                         .requestMatchers("/v3/api-docs").permitAll()
+=======
+                        .requestMatchers("/api/sleep-logs").permitAll()
+                        .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
+>>>>>>> 933c42c6bacc9fd88e941bf7f0fd70270383979b
                         .requestMatchers("/Logs").permitAll()
 //                        .requestMatchers(PUBLIC_URLS).permitAll()
 //                        .requestMatchers(HttpMethod.POST).permitAll()
