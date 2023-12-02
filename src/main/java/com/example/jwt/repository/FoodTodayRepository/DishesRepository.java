@@ -13,6 +13,8 @@ import java.util.List;
 public interface DishesRepository extends JpaRepository<Dishes,Long> {
 
     List<Dishes> findByUserUserIdAndDateAndMealName(Long userId, LocalDate date, String mealName);
+
+    List<Dishes> findByUserUserIdAndDate(Long userId, LocalDate date);
     List<Dishes> findByUserUserId(Long userId);
 
     List<Dishes> findDishNameByUserUserIdAndMealName(Long userId,String mealName);

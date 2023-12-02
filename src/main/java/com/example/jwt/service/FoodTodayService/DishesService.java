@@ -48,6 +48,7 @@ public class DishesService {
         List<DishDTO> result = new ArrayList<>();
         for (Dishes dish : matchingDishes) {
             DishDTO dishDTO = new DishDTO();
+            dishDTO.setDishId(dish.getDishId());
             dishDTO.setDishName(dish.getDishName());
             dishDTO.setDishQuantity(dish.getDishQuantity());
             dishDTO.setMealName(dish.getMealName());
@@ -56,6 +57,30 @@ public class DishesService {
 
         return result;
     }
+
+
+
+
+
+    public List<DishDTO> getAllDishesForUser(User user, LocalDate date) {
+        List<Dishes> matchingDishes = dishesRepository.findByUserUserIdAndDate(user.getUserId(), date);
+
+        List<DishDTO> result = new ArrayList<>();
+        for (Dishes dish : matchingDishes) {
+            DishDTO dishDTO = new DishDTO();
+            dishDTO.setDishId(dish.getDishId());
+            dishDTO.setDishName(dish.getDishName());
+            dishDTO.setDishQuantity(dish.getDishQuantity());
+            dishDTO.setMealName(dish.getMealName());
+            result.add(dishDTO);
+        }
+
+        return result;
+    }
+
+
+
+
     @Transactional
     public void updateFavouriteStatus(User user, Long dishId, boolean favourite) {
         Optional<Dishes> optionalDish = dishesRepository.findById(dishId);
@@ -76,6 +101,7 @@ public class DishesService {
         List<DishDTO> result = new ArrayList<>();
         for (Dishes dish : favouriteDishes) {
             DishDTO dishDTO = new DishDTO();
+            dishDTO.setDishId(dish.getDishId());
             dishDTO.setDishName(dish.getDishName());
             dishDTO.setDishQuantity(dish.getDishQuantity());
             dishDTO.setMealName(dish.getMealName());

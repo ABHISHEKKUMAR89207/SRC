@@ -62,6 +62,21 @@ public ResponseEntity<Double> calculateWaterIntake(
     return new ResponseEntity<>(waterIntake, HttpStatus.OK);
 }
 
+
+    @GetMapping("/get-water-goal")
+    public ResponseEntity<Double> getUserWaterGoal(
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        if (user != null && user.getWaterGoal() != null) {
+            return new ResponseEntity<>(user.getWaterGoal().getWaterGoal(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @GetMapping("/calculate-intake-by-date")
     public ResponseEntity<Double> calculateWaterIntake(
             @RequestHeader("Auth") String tokenHeader,

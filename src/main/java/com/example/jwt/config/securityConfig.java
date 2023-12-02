@@ -71,6 +71,7 @@ public class securityConfig {
 //                        .requestMatchers("/auth/Dishes").authenticated()
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/v3/api-docs").permitAll()
+                        .requestMatchers("/Logs").permitAll()
 //                        .requestMatchers(PUBLIC_URLS).permitAll()
 //                        .requestMatchers(HttpMethod.POST).permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()

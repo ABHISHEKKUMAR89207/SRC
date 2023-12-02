@@ -62,6 +62,26 @@ public class DishesController {
         return dishesService.getDishesForUser(user, parsedDate, mealName);
     }
 
+
+
+//get all dish
+    @GetMapping("/get-all-dish")
+    public List<DishDTO> getAllDishesForUser( @RequestHeader("Auth") String tokenHeader, @RequestParam("date") String date) {
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        LocalDate parsedDate = LocalDate.parse(date);
+        return dishesService.getAllDishesForUser(user, parsedDate);
+    }
+
+
+
+
     @PutMapping("/add-favourite")
     public ResponseEntity<String> addDishToFavourites(
             @RequestHeader("Auth") String tokenHeader,
