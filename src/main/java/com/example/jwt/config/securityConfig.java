@@ -73,15 +73,15 @@ public class securityConfig {
                         .requestMatchers("/v3/api-docs").permitAll()
                         .requestMatchers("/api/sleep-logs").permitAll()
                         .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
-<<<<<<< HEAD
+
 //                        .requestMatchers("/api/csv-export/users/export").permitAll()
 //                        .requestMatchers(PUBLIC_URLS).permitAll()
 //                        .requestMatchers(HttpMethod.POST).permitAll()
-=======
+
                         .requestMatchers("/Logs").permitAll()
                         .requestMatchers("/api/booktables/{id}").permitAll()
                         .requestMatchers("/api/booktables").permitAll()
->>>>>>> 6f5d1c1b906cd69c8104c2774cc8eea9090bca59
+
                         .requestMatchers(HttpMethod.GET).permitAll()
 //                        .requestMatchers("/auth/create-user").permitAll()
 //                        .requestMatchers(HttpMethod.PUT).permitAll()
