@@ -3,8 +3,6 @@ package com.example.jwt.controler;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 
-import com.example.jwt.entities.dashboardEntity.healthTrends.HealthTrends;
-import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserProfileService;
 import com.example.jwt.service.UserService;
@@ -12,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +18,9 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -124,7 +120,6 @@ public class UserProfileController {
     @GetMapping("/get-userProfile")
     public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
         try {
-
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
 
@@ -141,7 +136,7 @@ public class UserProfileController {
                 Map<String, Object> response = new HashMap<>();
                 response.put("firstName", userProfile.getFirstName());
                 response.put("lastName", userProfile.getLastName());
-                response.put("gender",userProfile.getGender());
+                response.put("gender", userProfile.getGender());
                 response.put("email", user.getEmail());
                 response.put("mobile", user.getMobileNo());
                 response.put("height", userProfile.getHeight());
@@ -152,28 +147,21 @@ public class UserProfileController {
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
                 response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
 
-//                response.put("dateOfBirth", userProfile.getDateOfBirth());
-//                Date date = userProfile.getDateOfBirth();
-//                calculatedAge(String.valueOf(date));
-
-
                 // Convert dateOfBirth to "yyyy-MM-dd" format
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String dobString1 = userProfile.getDateOfBirth().format(formatter);
                 response.put("dateOfBirth", dobString1);
 
                 // Calculate the age
-//                String dobString = String.valueOf(userProfile.getDateOfBirth());
-//                Integer age = calculatedAge(dobString);
                 response.put("age", age);
 
                 return ResponseEntity.ok(response);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
             }
         } catch (Exception e) {
             // Handle any exceptions, e.g., token validation failure
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
         }
     }
 

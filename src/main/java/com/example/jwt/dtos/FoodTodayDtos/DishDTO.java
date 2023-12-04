@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DishDTO {
+
+    private Long dishId;
     private String dishName;
     private Double dishQuantity;
     private String mealName;
