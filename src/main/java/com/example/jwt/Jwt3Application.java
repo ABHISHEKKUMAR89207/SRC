@@ -2,6 +2,7 @@ package com.example.jwt;
 
 import com.example.jwt.config.AppConstants;
 import com.example.jwt.entities.Role;
+import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.repository.RoleRepo;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -75,4 +76,5 @@ public class Jwt3Application implements CommandLineRunner {
         FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"fitnessapp");
         return FirebaseMessaging.getInstance(app);
     }
+
 }

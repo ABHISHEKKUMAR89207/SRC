@@ -135,6 +135,7 @@
 package com.example.jwt.entities;
 
 
+import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.entities.water.WaterGoal;
 import com.example.jwt.registration.token.VerificationToken;
@@ -207,6 +208,15 @@ public class User implements UserDetails
 //    private boolean sleepTimeRecordingEnabled;
 
 
+
+//    @OneToMany
+//    @JoinColumn(name = "user_id")  // Use the actual field name defined in the User entity
+//    @JsonIgnore
+//    private Activities activities;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user") // Exclude userProfile from serialization
+    private List<Activities> activities;
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<SleepDuration> sleepDurations = new ArrayList<>();

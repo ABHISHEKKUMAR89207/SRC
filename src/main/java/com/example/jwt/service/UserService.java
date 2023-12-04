@@ -16,6 +16,7 @@ import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.allToggleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -37,10 +39,18 @@ public class UserService implements IUserService {
 
 
 
+
+
     public List<User> getUser(){
 
         return userRepository.findAll();
     }
+
+
+
+//    public List<User> listAll() {
+//        return userRepository.findAll(Sort.by("email").ascending());
+//    }
 
 //    public User createUser(User user)
 //    {
