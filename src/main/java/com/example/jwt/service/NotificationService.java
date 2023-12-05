@@ -272,14 +272,34 @@ public class NotificationService {
 //        }
 //    }
 
-    private List<NotificationEntity> getNotificationsForCurrentTime() {
-        LocalTime currentTime = LocalTime.now();
-
-        // Fetch notifications where startTime is within a certain range of the current time
-        return notificationRepository.findByStartTimeBetween(currentTime.minusMinutes(1), currentTime.plusMinutes(1));
-    }
-
+//    private List<NotificationEntity> getNotificationsForCurrentTime() {
+//        LocalTime currentTime = LocalTime.now();
 //
+//        // Fetch notifications where startTime is within a certain range of the current time
+//        return notificationRepository.findByStartTimeBetween(currentTime.minusMinutes(1), currentTime.plusMinutes(1));
+//    }
+// Updated getNotificationsForCurrentTime method
+// Updated getNotificationsForCurrentTime method
+// Updated getNotificationsForCurrentTime method
+// Updated getNotificationsForCurrentTime method
+// Updated getNotificationsForCurrentTime method
+// Updated getNotificationsForCurrentTime method
+// Updated getNotificationsForCurrentTime method
+private List<NotificationEntity> getNotificationsForCurrentTime() {
+    ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+    LocalTime currentTime = LocalTime.now(indianTimeZone);
+
+    // Fetch notifications where startTime is exactly at the current time
+    return notificationRepository.findAll().stream()
+            .filter(notification -> {
+                LocalTime startTime = notification.getStartTime(); // Assuming getStartTime() already returns LocalTime
+                return currentTime.getHour() == startTime.getHour() && currentTime.getMinute() == startTime.getMinute();
+            })
+            .collect(Collectors.toList());
+}
+
+
+    //
     @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
     public void sendScheduledNotifications() {
         // Fetch all notifications that have a startTime matching the current time
@@ -319,6 +339,9 @@ public class NotificationService {
 //previous final implimentation
 
     private NotificationEntity createNotificationForUser(User user) {
+        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+        LocalDateTime currentDateTime = LocalDateTime.now(indianTimeZone);
+
         NotificationEntity newNotification = new NotificationEntity();
 
         // Set other notification details based on your requirements
@@ -329,8 +352,8 @@ public class NotificationService {
         List<NotificationEntity> currentNotifications = user.getNotifications()
                 .stream()
                 .filter(notification -> {
-                    LocalTime currentTime = LocalTime.now();
-                    return notification.getStartTime().truncatedTo(ChronoUnit.MINUTES).equals(currentTime.truncatedTo(ChronoUnit.MINUTES));
+                    LocalDateTime notificationDateTime = notification.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).toLocalDateTime();
+                    return notificationDateTime.truncatedTo(ChronoUnit.MINUTES).equals(currentDateTime.truncatedTo(ChronoUnit.MINUTES));
                 })
                 .collect(Collectors.toList());
 
@@ -347,71 +370,6 @@ public class NotificationService {
     }
 
 
-
-
-//    private NotificationEntity createNotificationForUser(User user) {
-//        NotificationEntity newNotification = new NotificationEntity();
-//
-//        // Set other notification details based on your requirements
-//        newNotification.setUser(user);
-//
-//        UserProfile userProfile = user.getUserProfile();
-//        if (userProfile != null) {
-//            newNotification.setTitle("Hi " + userProfile.getFirstName());
-//
-//            // Filter notifications based on the current time
-//            List<NotificationEntity> currentNotifications = user.getNotifications()
-//                    .stream()
-//                    .filter(notification -> {
-//                        LocalTime currentTime = LocalTime.now();
-//                        return notification.getStartTime().truncatedTo(ChronoUnit.MINUTES).equals(currentTime.truncatedTo(ChronoUnit.MINUTES));
-//                    })
-//                    .collect(Collectors.toList());
-//
-//            if (!currentNotifications.isEmpty()) {
-//                // Use the first matching notification for the current time
-//                NotificationEntity matchingNotification = currentNotifications.get(0);
-//                newNotification.setBody("Time to " + matchingNotification.getNotificationType());
-//            } else {
-//                // Handle the case where there are no notifications for the current time
-//                log.warn("No matching notifications found for user: {}", user.getUserId());
-//            }
-//        } else {
-//            // Handle the case where userProfile is null
-//            log.warn("User {} has a null user profile", user.getUsername());
-//        }
-//
-//        return newNotification;
-//    }
-
-//    private NotificationEntity createNotificationForUser(User user) {
-//        NotificationEntity newNotification = new NotificationEntity();
-//
-//        // Set other notification details based on your requirements
-//        newNotification.setUser(user);
-//        newNotification.setTitle("Hi " + user.getUserProfile().getFirstName());
-//
-//        // Filter notifications based on the current time
-//        List<NotificationEntity> currentNotifications = user.getNotifications()
-//                .stream()
-//                .filter(notification -> {
-//                    LocalDateTime currentTime = LocalDateTime.now();
-//                    LocalTime notificationTime = notification.getStartTime(); // Assuming getStartTime() returns a LocalDateTime
-//                    return notificationTime.plusMinutes(1).truncatedTo(ChronoUnit.MINUTES).equals(currentTime.truncatedTo(ChronoUnit.MINUTES));
-//                })
-//                .collect(Collectors.toList());
-//
-//        if (!currentNotifications.isEmpty()) {
-//            // Use the first matching notification for the current time
-//            NotificationEntity matchingNotification = currentNotifications.get(0);
-//            newNotification.setBody("Time to " + matchingNotification.getNotificationType());
-//        } else {
-//            // Handle the case where there are no notifications for the current time
-//            log.warn("No matching notifications found for user: {}", user.getUserId());
-//        }
-//
-//        return newNotification;
-//    }
 
 
 }

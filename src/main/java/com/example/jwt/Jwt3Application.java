@@ -31,6 +31,8 @@ public class Jwt3Application implements CommandLineRunner {
     private RoleRepo roleRepo;
 
     private static final Logger LOG = LoggerFactory.getLogger(Jwt3Application.class);
+//Logger logger = LoggerFactory.getLogger(Jwt3Application.class);
+
 
     public static void main(String[] args) {
         SpringApplication.run(Jwt3Application.class, args);
