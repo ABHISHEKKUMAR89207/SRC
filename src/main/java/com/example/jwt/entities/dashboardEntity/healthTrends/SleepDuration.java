@@ -23,13 +23,14 @@ public class SleepDuration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date dateOfSleep;
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dateOfSleep;
     private long duration;
+    private double manualDuration;
     private int efficiency;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date endTime;
-    // Getters and Setters
+    //@JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime endTime;
+
 
 
     @ManyToOne

@@ -32,6 +32,7 @@ public class SleepDurationService {
             // If sleep data already exists for the user and date, update the duration
             SleepDuration existing = existingSleep.get();
             existing.setDuration(sleepDuration.getDuration());
+            existing.setManualDuration(existing.getManualDuration()+ sleepDuration.getManualDuration());
             existing.setEfficiency(sleepDuration.getEfficiency());
             existing.setEndTime(sleepDuration.getEndTime());
             return sleepDurationRepository.save(existing);

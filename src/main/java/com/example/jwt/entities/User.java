@@ -135,6 +135,7 @@
 package com.example.jwt.entities;
 
 
+import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.entities.water.WaterGoal;
 import com.example.jwt.registration.token.VerificationToken;
@@ -208,6 +209,15 @@ public class User implements UserDetails
 
 
 
+//    @OneToMany
+//    @JoinColumn(name = "user_id")  // Use the actual field name defined in the User entity
+//    @JsonIgnore
+//    private Activities activities;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user") // Exclude userProfile from serialization
+    private List<Activities> activities;
+
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 //    private List<SleepDuration> sleepDurations = new ArrayList<>();
 
@@ -264,6 +274,10 @@ public class User implements UserDetails
     private List<WaterEntity> waterEntities = new ArrayList<>();
 
 
+//    @OneToMany(mappedBy = "user")
+//    private List<WatchData> watchDataList = new ArrayList<>();
+
+
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<WaterEntity> waterEntities = new ArrayList<>();
 
@@ -306,39 +320,6 @@ public class User implements UserDetails
     public boolean isEnabled() {
         return this.emailVerified;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

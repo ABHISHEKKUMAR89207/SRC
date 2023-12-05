@@ -71,6 +71,7 @@ public class securityConfig {
 //                        .requestMatchers("/auth/Dishes").authenticated()
                         .requestMatchers("/register/**").permitAll()
 
+
                         .requestMatchers("/v3/api-docs").permitAll()
 
                         .requestMatchers("/api/sleep-logs").permitAll()
@@ -78,8 +79,20 @@ public class securityConfig {
 
                         .requestMatchers("/logs").permitAll()
                         .requestMatchers("/downloadLog").permitAll()
+
+                        .requestMatchers("/v3/api-docs").permitAll()
+                        .requestMatchers("/api/sleep-logs").permitAll()
+                        .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
+
+//                        .requestMatchers("/api/csv-export/users/export").permitAll()
+
 //                        .requestMatchers(PUBLIC_URLS).permitAll()
 //                        .requestMatchers(HttpMethod.POST).permitAll()
+
+                        .requestMatchers("/Logs").permitAll()
+                        .requestMatchers("/api/booktables/{id}").permitAll()
+                        .requestMatchers("/api/booktables").permitAll()
+
                         .requestMatchers(HttpMethod.GET).permitAll()
 //                        .requestMatchers("/auth/create-user").permitAll()
 //                        .requestMatchers(HttpMethod.PUT).permitAll()
