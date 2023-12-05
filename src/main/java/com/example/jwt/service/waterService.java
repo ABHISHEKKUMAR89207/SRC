@@ -1,11 +1,10 @@
 package com.example.jwt.service;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
-import com.example.jwt.entities.water.WaterGoal;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.WaterEntityRepository;
-import com.example.jwt.repository.WaterGoalRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,45 +22,16 @@ public class waterService {
     private UserRepository userRepository;
 
     private final WaterEntityRepository waterEntityRepository;
-    private final WaterGoalRepository waterGoalRepository;
+
 
 
     @Autowired
-    public waterService(WaterGoalRepository waterGoalRepository, WaterEntityRepository waterEntityRepository) {
-        this.waterGoalRepository = waterGoalRepository;
+    public waterService( WaterEntityRepository waterEntityRepository) {
         this.waterEntityRepository = waterEntityRepository;
     }
 
 
 
-    public WaterGoal saveOrUpdateWaterGoal(String username, Double newWaterGoal) {
-        // Find the user by username
-        Optional<User> userOptional = userRepository.findByEmail(username);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-
-            // Check if a goal already exists for the user's water entity
-            WaterGoal existingGoal = waterGoalRepository.findByUser(user);
-
-            if (existingGoal == null) {
-                // If no goal exists, create a new one
-                WaterGoal newWaterGoalEntity = new WaterGoal();
-                newWaterGoalEntity.setWaterGoal(newWaterGoal);
-                newWaterGoalEntity.setUser(user);
-
-                return waterGoalRepository.save(newWaterGoalEntity);
-            } else {
-                // If a goal already exists, update the existing one
-                existingGoal.setWaterGoal(newWaterGoal);
-                return waterGoalRepository.save(existingGoal);
-            }
-        } else {
-            // Handle the case where the user is not found
-            // You can throw an exception, log a message, or handle it in another way based on your requirements.
-            throw new UserNotFoundException("User not found for username: " + username);
-        }
-    }
 
 
 //    private double calculateWaterIntake(int cupCapacity, int noOfCups) {

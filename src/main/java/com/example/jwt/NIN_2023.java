@@ -2,7 +2,6 @@ package com.example.jwt;
 
 import com.example.jwt.config.AppConstants;
 import com.example.jwt.entities.Role;
-import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.repository.RoleRepo;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -25,18 +24,18 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableScheduling
-public class Jwt3Application implements CommandLineRunner {
+public class NIN_2023 implements CommandLineRunner {
 
 
     @Autowired
     private RoleRepo roleRepo;
 
-    private static final Logger LOG = LoggerFactory.getLogger(Jwt3Application.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NIN_2023.class);
 //Logger logger = LoggerFactory.getLogger(Jwt3Application.class);
 
 
     public static void main(String[] args) {
-        SpringApplication.run(Jwt3Application.class, args);
+        SpringApplication.run(NIN_2023.class, args);
     }
 
 

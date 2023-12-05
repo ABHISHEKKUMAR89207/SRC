@@ -1,5 +1,5 @@
-13:39:44.974 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 16680 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-13:39:44.977 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+13:39:44.974 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 16680 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+13:39:44.977 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 13:39:47.603 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:39:47.830 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 214 ms. Found 24 JPA repository interfaces.
 13:39:48.712 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -24,10 +24,10 @@
 13:39:58.194 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5168f69d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6c6a7553, org.springframework.security.web.context.SecurityContextHolderFilter@6818c0a6, org.springframework.security.web.header.HeaderWriterFilter@1ec22804, org.springframework.security.web.authentication.logout.LogoutFilter@751df26c, com.example.jwt.security.JwtAuthenticationFilter@4b6ad2eb, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@b15da69, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@71e064b2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2242dd2b, org.springframework.security.web.session.SessionManagementFilter@2471cfa0, org.springframework.security.web.access.ExceptionTranslationFilter@75ba33b8, org.springframework.security.web.access.intercept.AuthorizationFilter@75c90ec5]
 13:39:58.788 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:39:58.813 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:39:58.825 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 14.417 seconds (process running for 16.89)
-13:39:58.921 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-13:39:58.921 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-13:39:58.921 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+13:39:58.825 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 14.417 seconds (process running for 16.89)
+13:39:58.921 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+13:39:58.921 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+13:39:58.921 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 13:40:19.129 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 13:40:19.129 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 13:40:19.132 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -36,8 +36,8 @@
 13:50:36.956 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:50:37.306 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:50:37.524 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:51:05.135 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 7296 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-13:51:05.137 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+13:51:05.135 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 7296 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+13:51:05.137 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 13:51:06.404 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:51:06.617 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 202 ms. Found 24 JPA repository interfaces.
 13:51:07.750 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -62,10 +62,10 @@
 13:51:18.655 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2088e339, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@37c5e2e6, org.springframework.security.web.context.SecurityContextHolderFilter@74eebb25, org.springframework.security.web.header.HeaderWriterFilter@35984172, org.springframework.security.web.authentication.logout.LogoutFilter@2eaaef66, com.example.jwt.security.JwtAuthenticationFilter@c11ec9b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3af30ab8, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@385ff04e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@342cc706, org.springframework.security.web.session.SessionManagementFilter@3fb8e614, org.springframework.security.web.access.ExceptionTranslationFilter@46a6b8d6, org.springframework.security.web.access.intercept.AuthorizationFilter@1e2c701]
 13:51:19.937 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:51:19.986 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:51:19.999 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 15.386 seconds (process running for 17.017)
-13:51:20.157 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-13:51:20.157 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-13:51:20.157 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+13:51:19.999 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 15.386 seconds (process running for 17.017)
+13:51:20.157 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+13:51:20.157 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+13:51:20.157 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 13:51:28.752 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 13:51:28.752 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 13:51:28.754 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -77,8 +77,8 @@
 14:35:20.241 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 14:35:20.307 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 14:35:20.339 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-14:35:41.251 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 8416 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-14:35:41.253 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+14:35:41.251 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 8416 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+14:35:41.253 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 14:35:42.744 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 14:35:43.001 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 247 ms. Found 24 JPA repository interfaces.
 14:35:44.030 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -103,10 +103,10 @@
 14:35:52.754 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@78d3578e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4e4d6172, org.springframework.security.web.context.SecurityContextHolderFilter@c79a727, org.springframework.security.web.header.HeaderWriterFilter@62509b77, org.springframework.security.web.authentication.logout.LogoutFilter@4913465d, com.example.jwt.security.JwtAuthenticationFilter@577b2c5f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1c83652d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3da068e8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6b4d0be2, org.springframework.security.web.session.SessionManagementFilter@686a08f4, org.springframework.security.web.access.ExceptionTranslationFilter@6557d4c6, org.springframework.security.web.access.intercept.AuthorizationFilter@fe739e7]
 14:35:53.398 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 14:35:53.424 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-14:35:53.436 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 12.758 seconds (process running for 15.052)
-14:35:53.522 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-14:35:53.522 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-14:35:53.522 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+14:35:53.436 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 12.758 seconds (process running for 15.052)
+14:35:53.522 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+14:35:53.522 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+14:35:53.522 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 14:36:05.071 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 14:36:05.072 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 14:36:05.073 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
@@ -117,8 +117,8 @@
 14:38:47.242 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 14:38:47.250 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 14:38:47.289 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-14:39:07.504 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 6924 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-14:39:07.506 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+14:39:07.504 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 6924 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+14:39:07.506 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 14:39:09.248 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 14:39:09.484 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 221 ms. Found 24 JPA repository interfaces.
 14:39:10.908 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -143,10 +143,10 @@
 14:39:25.525 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6557d4c6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@de4bee9, org.springframework.security.web.context.SecurityContextHolderFilter@3776c917, org.springframework.security.web.header.HeaderWriterFilter@2d95c3ef, org.springframework.security.web.authentication.logout.LogoutFilter@6453c126, com.example.jwt.security.JwtAuthenticationFilter@1f4083ac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b80be13, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@df80af2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@62509b77, org.springframework.security.web.session.SessionManagementFilter@71390c8, org.springframework.security.web.access.ExceptionTranslationFilter@15beb40b, org.springframework.security.web.access.intercept.AuthorizationFilter@5fb6fdb8]
 14:39:27.446 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 14:39:27.517 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-14:39:27.530 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 20.694 seconds (process running for 22.186)
-14:39:27.692 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-14:39:27.692 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-14:39:27.692 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+14:39:27.530 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 20.694 seconds (process running for 22.186)
+14:39:27.692 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+14:39:27.692 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+14:39:27.692 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 14:40:26.567 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 14:40:26.567 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 14:40:26.569 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -155,8 +155,8 @@
 14:42:31.442 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 14:42:31.445 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 14:42:31.455 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-14:42:54.143 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 9120 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-14:42:54.145 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+14:42:54.143 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 9120 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+14:42:54.145 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 14:42:56.554 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 14:42:56.808 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 241 ms. Found 24 JPA repository interfaces.
 14:42:57.957 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -181,10 +181,10 @@
 14:43:06.103 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1aacde34, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1fdc2d45, org.springframework.security.web.context.SecurityContextHolderFilter@4d8e6daa, org.springframework.security.web.header.HeaderWriterFilter@5513745d, org.springframework.security.web.authentication.logout.LogoutFilter@b6c290a, com.example.jwt.security.JwtAuthenticationFilter@509e4d53, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74cf108b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6c3600b7, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@65fc2639, org.springframework.security.web.session.SessionManagementFilter@749330a8, org.springframework.security.web.access.ExceptionTranslationFilter@6f05062b, org.springframework.security.web.access.intercept.AuthorizationFilter@611c9d31]
 14:43:06.960 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 14:43:06.997 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-14:43:07.009 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 13.937 seconds (process running for 15.95)
-14:43:07.088 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-14:43:07.088 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-14:43:07.089 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+14:43:07.009 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 13.937 seconds (process running for 15.95)
+14:43:07.088 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+14:43:07.088 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+14:43:07.089 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 14:43:15.178 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 14:43:15.178 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 14:43:15.180 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
@@ -194,8 +194,8 @@
 15:08:37.042 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 15:08:37.200 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 15:08:37.320 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-15:09:04.614 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 3204 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-15:09:04.616 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+15:09:04.614 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 3204 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+15:09:04.616 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 15:09:06.363 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 15:09:06.608 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 232 ms. Found 24 JPA repository interfaces.
 15:09:08.232 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -244,8 +244,8 @@ Action:
 
 Identify and stop the process that's listening on port 7073 or configure this application to listen on another port.
 
-15:09:58.876 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 8856 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-15:09:58.879 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+15:09:58.876 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 8856 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+15:09:58.879 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 15:10:00.153 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 15:10:00.337 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 172 ms. Found 24 JPA repository interfaces.
 15:10:01.287 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -270,10 +270,10 @@ Identify and stop the process that's listening on port 7073 or configure this ap
 15:10:10.520 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@fe739e7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2c513e9f, org.springframework.security.web.context.SecurityContextHolderFilter@686a08f4, org.springframework.security.web.header.HeaderWriterFilter@4a9d0c6f, org.springframework.security.web.authentication.logout.LogoutFilter@3b47178c, com.example.jwt.security.JwtAuthenticationFilter@1391d95f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@78494a59, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2eaaef66, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7c057419, org.springframework.security.web.session.SessionManagementFilter@890196b, org.springframework.security.web.access.ExceptionTranslationFilter@5fb6fdb8, org.springframework.security.web.access.intercept.AuthorizationFilter@6ac93b87]
 15:10:11.197 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 15:10:11.225 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-15:10:11.237 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 12.883 seconds (process running for 14.388)
-15:10:11.329 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-15:10:11.329 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-15:10:11.329 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+15:10:11.237 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 12.883 seconds (process running for 14.388)
+15:10:11.329 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+15:10:11.329 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+15:10:11.329 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 15:10:17.246 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 15:10:17.246 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 15:10:17.248 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
@@ -284,8 +284,8 @@ Identify and stop the process that's listening on port 7073 or configure this ap
 15:13:31.290 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 15:13:31.294 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 15:13:31.305 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-15:13:47.023 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 12332 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-15:13:47.025 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+15:13:47.023 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 12332 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+15:13:47.025 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 15:13:49.955 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 15:13:50.159 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 188 ms. Found 24 JPA repository interfaces.
 15:13:51.250 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -310,10 +310,10 @@ Identify and stop the process that's listening on port 7073 or configure this ap
 15:14:02.588 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@78494a59, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@c79a727, org.springframework.security.web.context.SecurityContextHolderFilter@485996f7, org.springframework.security.web.header.HeaderWriterFilter@2cf88ae1, org.springframework.security.web.authentication.logout.LogoutFilter@1b261005, com.example.jwt.security.JwtAuthenticationFilter@31e5d408, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@746fda68, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7ec416a0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@34ec33f4, org.springframework.security.web.session.SessionManagementFilter@12f826c, org.springframework.security.web.access.ExceptionTranslationFilter@3f1bde96, org.springframework.security.web.access.intercept.AuthorizationFilter@41b6ae51]
 15:14:03.941 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 15:14:03.999 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-15:14:04.039 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 18.434 seconds (process running for 21.392)
-15:14:04.142 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-15:14:04.142 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-15:14:04.142 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+15:14:04.039 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 18.434 seconds (process running for 21.392)
+15:14:04.142 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+15:14:04.142 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+15:14:04.142 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 15:14:05.888 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 15:14:05.889 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 15:14:05.894 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -324,8 +324,8 @@ Identify and stop the process that's listening on port 7073 or configure this ap
 15:17:16.502 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 15:17:16.504 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 15:17:16.517 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-15:17:33.519 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 18120 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-15:17:33.521 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+15:17:33.519 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 18120 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+15:17:33.521 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 15:17:35.871 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 15:17:36.119 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 218 ms. Found 24 JPA repository interfaces.
 15:17:37.180 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -350,15 +350,15 @@ Identify and stop the process that's listening on port 7073 or configure this ap
 15:17:46.486 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@448861e5, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@72bd8702, org.springframework.security.web.context.SecurityContextHolderFilter@2cfd91b9, org.springframework.security.web.header.HeaderWriterFilter@377fca35, org.springframework.security.web.authentication.logout.LogoutFilter@12e1413c, com.example.jwt.security.JwtAuthenticationFilter@39336f5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@17b3b021, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@35007b7a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2620d0dc, org.springframework.security.web.session.SessionManagementFilter@74f23ecc, org.springframework.security.web.access.ExceptionTranslationFilter@6619692e, org.springframework.security.web.access.intercept.AuthorizationFilter@6fab250b]
 15:17:47.386 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 15:17:47.416 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-15:17:47.428 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 14.966 seconds (process running for 17.279)
-15:17:47.509 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-15:17:47.509 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-15:17:47.509 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+15:17:47.428 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 14.966 seconds (process running for 17.279)
+15:17:47.509 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+15:17:47.509 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+15:17:47.509 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 15:24:14.201 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 15:24:14.316 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 15:24:14.451 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-15:24:40.323 [main] INFO  com.example.jwt.Jwt3Application - Starting Jwt3Application using Java 19.0.2 with PID 16564 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-15:24:40.329 [main] INFO  com.example.jwt.Jwt3Application - The following 1 profile is active: "dev"
+15:24:40.323 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 16564 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+15:24:40.329 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
 15:24:43.727 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 15:24:44.035 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 290 ms. Found 24 JPA repository interfaces.
 15:24:45.393 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -383,10 +383,10 @@ Identify and stop the process that's listening on port 7073 or configure this ap
 15:25:01.347 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@37c5e2e6, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@342cc706, org.springframework.security.web.context.SecurityContextHolderFilter@c1e7bea, org.springframework.security.web.header.HeaderWriterFilter@746fda68, org.springframework.security.web.authentication.logout.LogoutFilter@6fab250b, com.example.jwt.security.JwtAuthenticationFilter@149162a4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6453c126, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@42ff5c92, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5c9844a4, org.springframework.security.web.session.SessionManagementFilter@35007b7a, org.springframework.security.web.access.ExceptionTranslationFilter@485996f7, org.springframework.security.web.access.intercept.AuthorizationFilter@21e441d1]
 15:25:03.879 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 15:25:04.026 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-15:25:04.049 [main] INFO  com.example.jwt.Jwt3Application - Started Jwt3Application in 24.652 seconds (process running for 27.148)
-15:25:05.081 [main] WARN  com.example.jwt.Jwt3Application - Warn Message
-15:25:05.081 [main] ERROR com.example.jwt.Jwt3Application - Error Message
-15:25:05.081 [main] INFO  com.example.jwt.Jwt3Application - Info Message
+15:25:04.049 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 24.652 seconds (process running for 27.148)
+15:25:05.081 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
+15:25:05.081 [main] ERROR com.example.jwt.NIN_2023 - Error Message
+15:25:05.081 [main] INFO  com.example.jwt.NIN_2023 - Info Message
 15:25:19.113 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 15:25:19.119 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 15:25:19.130 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 10 ms

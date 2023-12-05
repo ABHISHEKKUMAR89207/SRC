@@ -136,8 +136,8 @@ package com.example.jwt.entities;
 
 
 import com.example.jwt.entities.dashboardEntity.Activities;
+import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
 import com.example.jwt.entities.water.WaterEntity;
-import com.example.jwt.entities.water.WaterGoal;
 import com.example.jwt.registration.token.VerificationToken;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
@@ -259,8 +259,8 @@ public class User implements UserDetails
     @OneToOne(mappedBy = "user")
 //    @JsonManagedReference
 //    @JsonIgnore
-    @JsonBackReference("WaterGoal")
-    private WaterGoal waterGoal;
+    @JsonBackReference("AllTarget")
+    private AllTarget allTarget;
 
 
 //    @OneToOne(mappedBy = "user")

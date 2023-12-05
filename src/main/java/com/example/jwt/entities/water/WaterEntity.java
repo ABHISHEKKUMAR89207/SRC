@@ -1,8 +1,7 @@
 package com.example.jwt.entities.water;
 
 import com.example.jwt.entities.User;
-import com.example.jwt.entities.water.WaterGoal;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

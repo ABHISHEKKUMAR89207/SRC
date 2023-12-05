@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 @Data
 
 @Entity
-public class SleepTarget {
+public class AllTarget {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long sleepDurationId;
+    private Long targetId;
 
     private int sleepTarget;
+    private Double waterGoal;
 
 //    private LocalDateTime timeStamp;
 //    private double value;
