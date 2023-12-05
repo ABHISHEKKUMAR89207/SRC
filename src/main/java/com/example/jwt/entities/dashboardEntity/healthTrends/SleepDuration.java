@@ -26,6 +26,7 @@ public class SleepDuration {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateOfSleep;
     private long duration;
+    private double manualDuration;
     private int efficiency;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date endTime;

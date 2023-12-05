@@ -274,6 +274,10 @@ public class User implements UserDetails
     private List<WaterEntity> waterEntities = new ArrayList<>();
 
 
+//    @OneToMany(mappedBy = "user")
+//    private List<WatchData> watchDataList = new ArrayList<>();
+
+
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<WaterEntity> waterEntities = new ArrayList<>();
 
@@ -316,39 +320,6 @@ public class User implements UserDetails
     public boolean isEnabled() {
         return this.emailVerified;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
