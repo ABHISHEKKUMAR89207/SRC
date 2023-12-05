@@ -7,6 +7,9 @@ import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserProfileService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+
+import static com.mysql.cj.conf.PropertyKey.logger;
+
 @RestController
 @RequestMapping("/api/profile")
 @Tag(name = "User Profile Controller", description = "Api for Authentication")
@@ -29,6 +35,8 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
     private final JwtHelper jwtHelper;
     private final UserService userService;
+
+    Logger logger =  LoggerFactory.getLogger(UserProfileController.class);
 
 
     @Autowired
@@ -125,12 +133,14 @@ public class UserProfileController {
 
             // Extract the username (email) from the token
             String username = jwtHelper.getUsernameFromToken(token);
+            logger.info("Hello ...");
 
             // Fetch the user's data from both User and UserProfile entities
             User user = userService.findByUsername(username);
             UserProfile userProfile = userProfileService.findByUsername(username);
             String dobString = String.valueOf(userProfile.getDateOfBirth());
             Integer age = calculatedAge(dobString);
+
 
             if (user != null && userProfile != null) {
                 Map<String, Object> response = new HashMap<>();

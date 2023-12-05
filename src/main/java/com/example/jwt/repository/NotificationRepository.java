@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 //    List<NotificationEntity> findByStartTime(LocalDateTime startTime);
 //List<NotificationEntity> findByNotificationOnIsTrueAndStartTimeBefore(LocalTime startTime);
 //    List<NotificationEntity> findByStartTime(LocalTime startTime);
+
+    List<NotificationEntity> findByStartTimeLessThanEqual(LocalTime currentTime);
+
 
     @Query("SELECT n FROM NotificationEntity n WHERE n.startTime = :startTime")
     List<NotificationEntity> findByStartTime(@Param("startTime") LocalTime startTime);

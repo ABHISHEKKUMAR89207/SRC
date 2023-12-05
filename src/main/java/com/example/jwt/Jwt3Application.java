@@ -8,6 +8,9 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,11 +31,19 @@ public class Jwt3Application implements CommandLineRunner {
     @Autowired
     private RoleRepo roleRepo;
 
+    private static final Logger LOG = LoggerFactory.getLogger(Jwt3Application.class);
+//Logger logger = LoggerFactory.getLogger(Jwt3Application.class);
+
+
     public static void main(String[] args) {
         SpringApplication.run(Jwt3Application.class, args);
     }
 
 
+//    @Override
+//    public void run(String... args) throws Exception {
+//        printLog();
+//    }
     @Override
     public void run(String... args) throws Exception {
 
@@ -62,9 +73,19 @@ public class Jwt3Application implements CommandLineRunner {
             e.printStackTrace();
         }
 
+        printLog();
     }
 
 
+
+
+    private static void printLog() {
+        LOG.debug("Debug Message");
+        LOG.warn("Warn Message");
+        LOG.error("Error Message");
+        LOG.info("Info Message");
+        LOG.trace("Trace Message");
+    }
 
 
     @Bean
