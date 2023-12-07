@@ -2,7 +2,7 @@
 <configuration>
 
     <!-- Define the log file path -->
-    <property name="LOG_FILE" value="log/app.log"/>
+    <property name="LOG_FILE" value="../log/app.log"/>
 
     <!-- Console appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

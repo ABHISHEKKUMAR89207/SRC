@@ -3,7 +3,7 @@ package com.example.jwt.service;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.AllToggle;
 import com.example.jwt.exception.UserNotFoundException;
-import com.example.jwt.repository.allToggleRepository;
+import com.example.jwt.repository.AllToggleRepository;
 import com.example.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +13,10 @@ import java.util.Optional;
 @Service
 public class allToggleService {
 
-    private final allToggleRepository settingsRepository;
+    private final AllToggleRepository settingsRepository;
 
     @Autowired
-    public allToggleService(allToggleRepository settingsRepository) {
+    public allToggleService(AllToggleRepository settingsRepository) {
         this.settingsRepository = settingsRepository;
     }
 

@@ -1,11 +1,14 @@
 package com.example.jwt.controler;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
-import com.example.jwt.service.waterService;
+import com.example.jwt.service.WaterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -23,12 +26,16 @@ public class waterController {
     private JwtHelper jwtHelper;
 
     @Autowired
+<<<<<<< HEAD
     private waterService waterService;
     @Autowired
     private UserService userService;
+=======
+    private WaterService waterService;
+>>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
 
     @Autowired
-    public waterController(waterService waterService) {
+    public waterController(WaterService waterService) {
         this.waterService = waterService;
     }
 

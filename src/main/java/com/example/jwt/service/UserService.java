@@ -11,7 +11,7 @@ import com.example.jwt.registration.token.VerificationToken;
 import com.example.jwt.registration.token.VerificationTokenRepository;
 import com.example.jwt.repository.RoleRepo;
 import com.example.jwt.repository.UserRepository;
-import com.example.jwt.repository.allToggleRepository;
+import com.example.jwt.repository.AllToggleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +33,7 @@ public class UserService implements IUserService {
     @Autowired
     private RoleRepo roleRepo;
     @Autowired
-    private allToggleRepository allToggleRepository;
+    private AllToggleRepository allToggleRepository;
 
     public List<User> getUser() {
         return userRepository.findAll();

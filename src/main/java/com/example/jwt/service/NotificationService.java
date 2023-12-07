@@ -2,8 +2,11 @@ package com.example.jwt.service;
 
 
 import com.example.jwt.controler.NotificationController;
+import com.example.jwt.dtos.NotificationDetailsDTO;
+import com.example.jwt.entities.AllToggle;
 import com.example.jwt.entities.NotificationEntity;
 import com.example.jwt.entities.User;
+import com.example.jwt.repository.AllToggleRepository;
 import com.example.jwt.repository.NotificationRepository;
 import com.example.jwt.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -33,7 +37,153 @@ public class NotificationService {
         this.userRepository = userRepository;
     }
 
+<<<<<<< HEAD
     // for scheduling the notification time
+=======
+@ Autowired
+private AllToggleRepository allToggleRepository;
+
+    public List<NotificationDetailsDTO> getUserNotifications(String email) {
+        // Retrieve the AllToggle entity for the user
+        Optional<AllToggle> allToggleOptional = allToggleRepository.findByUserEmail(email);
+
+        // Check if the AllToggle entity is present and has notificationOn set to true
+        if (allToggleOptional.isPresent() && allToggleOptional.get().isNotificationOn()) {
+            // Retrieve notifications for the user
+            List<NotificationEntity> notifications = notificationRepository.findByUserEmail(email);
+
+            // Convert notifications to DTOs
+            return notifications.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        }
+
+        // Return an empty list if notifications are not enabled for the user
+        return List.of();
+    }
+
+    private NotificationDetailsDTO convertToDTO(NotificationEntity notificationEntity) {
+        return new NotificationDetailsDTO(
+                notificationEntity.getId(),
+                notificationEntity.getRecipientToken(),
+                notificationEntity.getTitle(),
+                notificationEntity.getBody(),
+                notificationEntity.getStartTime(),
+                notificationEntity.getLastTime(),
+                notificationEntity.getNotificationType()
+                // Add other fields as needed
+        );
+    }
+
+
+
+
+//    @Transactional
+@Transactional
+public void deleteNotification(User user, Long notificationId) {
+    try {
+        Long userId = user.getUserId();
+        notificationRepository.deleteByIdAndUser_UserId(notificationId, userId);
+        log.info("Notification deleted successfully: {}", notificationId);
+    } catch (Exception e) {
+        log.error("Failed to delete notification with ID {}", notificationId, e);
+        throw new RuntimeException("Failed to delete notification", e);
+    }
+}
+
+
+//    @Transactional
+//    public void scheduleNotification(String username, NotificationEntity request) {
+//        // Retrieve the user by username
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // Check if a notification with the same type for the same user exists
+//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
+//                user, request.getNotificationType());
+//
+//        // Associate the user with the notification
+//        request.setUser(user);
+//
+//        // Set the time zone to Indian Standard Time (IST)
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//
+//        // Set the start time and last time in the Indian time zone
+//        request.setStartTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getStartTime(),
+//                        ZoneId.systemDefault()
+//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
+//        );
+//        request.setLastTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getLastTime(),
+//                        ZoneId.systemDefault()
+//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
+//        );
+//
+//        if (existingNotification == null) {
+//            // If a notification with the same type doesn't exist, save the new notification
+//            notificationRepository.save(request);
+//        } else {
+//            // If a notification with the same type exists, update the existing notification
+//            existingNotification.setStartTime(request.getStartTime());
+//            existingNotification.setLastTime(request.getLastTime());
+//
+//            notificationRepository.save(existingNotification);
+//        }
+//    }
+
+
+//1 dec update
+//    @Transactional
+//    public void scheduleNotification(String username, NotificationEntity request) {
+//        // Retrieve the user by username
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // Check if a notification with the same type for the same user exists
+//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
+//                user, request.getNotificationType());
+//
+//        // Associate the user with the notification
+//        request.setUser(user);
+//
+//        // Set the time zone to Indian Standard Time (IST)
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//
+//        // Set the start time and last time in the Indian time zone
+//        request.setStartTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getStartTime(),
+//                        indianTimeZone  // Use indianTimeZone consistently
+//                ).toLocalDateTime())
+//        );
+//        request.setLastTime(
+//                LocalTime.from(ZonedDateTime.of(
+//                        LocalDate.now(),
+//                        request.getLastTime(),
+//                        indianTimeZone  // Use indianTimeZone consistently
+//                ).toLocalDateTime())
+//        );
+//
+//        if (existingNotification == null) {
+//            // If a notification with the same type doesn't exist, save the new notification
+//            notificationRepository.save(request);
+//        } else {
+//            // If a notification with the same type exists, update the existing notification
+//            existingNotification.setStartTime(request.getStartTime());
+//            existingNotification.setLastTime(request.getLastTime());
+//
+//            notificationRepository.save(existingNotification);
+//        }
+//    }
+
+
+>>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
     @Transactional
     public void scheduleNotification(String username, NotificationEntity request) {
         // Retrieve the user by username

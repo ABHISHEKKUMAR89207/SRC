@@ -16,13 +16,17 @@ import java.util.Optional;
 
 
 @Service
-public class waterService {
+public class WaterService {
 
     @Autowired
     private UserRepository userRepository;
     private final WaterEntityRepository waterEntityRepository;
     @Autowired
+<<<<<<< HEAD:src/main/java/com/example/jwt/service/waterService.java
     public waterService(WaterEntityRepository waterEntityRepository) {
+=======
+    public WaterService(WaterEntityRepository waterEntityRepository) {
+>>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57:src/main/java/com/example/jwt/service/WaterService.java
         this.waterEntityRepository = waterEntityRepository;
     }
 

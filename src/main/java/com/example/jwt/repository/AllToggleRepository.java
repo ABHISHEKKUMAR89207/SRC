@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface allToggleRepository extends JpaRepository<AllToggle, Long> {
+public interface AllToggleRepository extends JpaRepository<AllToggle, Long> {
     AllToggle findByUser(User user);
 }
