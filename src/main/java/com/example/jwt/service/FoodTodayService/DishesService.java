@@ -1,9 +1,7 @@
 package com.example.jwt.service.FoodTodayService;
 
-
 import com.example.jwt.dtos.FoodTodayDtos.DishDTO;
 import com.example.jwt.entities.FoodToday.Dishes;
-
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.DishesRepository;
 import jakarta.transaction.Transactional;
@@ -20,31 +18,21 @@ public class DishesService {
     @Autowired
     private DishesRepository dishesRepository;
 
+    // Retrieve all dishes for a user with a specific meal name on the same date
     public void saveDishesForUser(DishDTO dishDTO, User user, LocalDate date) {
         Dishes dish = new Dishes();
         dish.setDishName(dishDTO.getDishName());
         dish.setDishQuantity(dishDTO.getDishQuantity());
         dish.setMealName(dishDTO.getMealName());
         dish.setDate(date);
-
-//        User user = new User();
         user.setUserId(user.getUserId());
         dish.setUser(user);
-
         dishesRepository.save(dish);
     }
 
-
-
-
-
-
-
-
     // Retrieve all dishes for a user with a specific meal name on the same date
-    public List<DishDTO> getDishesForUser(User user, LocalDate date, String mealName) {
+    public List<DishDTO> getDishesWithMealName(User user, LocalDate date, String mealName) {
         List<Dishes> matchingDishes = dishesRepository.findByUserUserIdAndDateAndMealName(user.getUserId(), date, mealName);
-
         List<DishDTO> result = new ArrayList<>();
         for (Dishes dish : matchingDishes) {
             DishDTO dishDTO = new DishDTO();
@@ -54,17 +42,12 @@ public class DishesService {
             dishDTO.setMealName(dish.getMealName());
             result.add(dishDTO);
         }
-
         return result;
     }
 
-
-
-
-
+    // Get all the dishes without meal name on a specific date
     public List<DishDTO> getAllDishesForUser(User user, LocalDate date) {
         List<Dishes> matchingDishes = dishesRepository.findByUserUserIdAndDate(user.getUserId(), date);
-
         List<DishDTO> result = new ArrayList<>();
         for (Dishes dish : matchingDishes) {
             DishDTO dishDTO = new DishDTO();
@@ -74,17 +57,13 @@ public class DishesService {
             dishDTO.setMealName(dish.getMealName());
             result.add(dishDTO);
         }
-
         return result;
     }
 
-
-
-
+    // to add favourite dish name
     @Transactional
     public void updateFavouriteStatus(User user, Long dishId, boolean favourite) {
         Optional<Dishes> optionalDish = dishesRepository.findById(dishId);
-
         if (optionalDish.isPresent() && optionalDish.get().getUser().equals(user)) {
             Dishes dish = optionalDish.get();
             dish.setFavourite(favourite);
@@ -92,12 +71,11 @@ public class DishesService {
         } else {
             throw new RuntimeException("Dish not found or does not belong to the user");
         }
-
     }
 
+    // to retrive all the favourite food item
     public List<DishDTO> getAllFavouriteDishes(User user) {
         List<Dishes> favouriteDishes = dishesRepository.findByUserAndFavourite(user, true);
-
         List<DishDTO> result = new ArrayList<>();
         for (Dishes dish : favouriteDishes) {
             DishDTO dishDTO = new DishDTO();
@@ -107,7 +85,6 @@ public class DishesService {
             dishDTO.setMealName(dish.getMealName());
             result.add(dishDTO);
         }
-
         return result;
     }
 }

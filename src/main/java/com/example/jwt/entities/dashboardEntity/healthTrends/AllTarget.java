@@ -17,30 +17,11 @@ public class AllTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long targetId;
-
     private int sleepTarget;
     private Double waterGoal;
-
-//    private LocalDateTime timeStamp;
-//    private double value;
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "healthTrend_Id")
-////    @JsonBackReference
-////    @JsonManagedReference
-//    private HealthTrends healthTrends;
-
-
-//    @OneToOne
-//    @JsonIgnore
-//    @JoinColumn(name = "user_id")
-//    private User user;
-
 
     @OneToOne
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
-
 }

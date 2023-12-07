@@ -15,5 +15,4 @@ public class TargetDataRequest {
     private Double proteins;
     private Double fiber;
 
-    // Getters and setters
 }

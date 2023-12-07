@@ -1,4 +1,5 @@
 package com.example.jwt.service.serviceHealth;//package com.practice.springbootimportcsvfileapp.service;//package com.practice.springbootimportcsvfileapp.service;//package com.practice.springbootimportcsvfileapp.service;
+
 import com.example.jwt.entities.User;
 
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
@@ -14,19 +15,17 @@ import java.util.Optional;
 public class AllTargetService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AllTargetRepository allTargetRepository;
-
     public AllTargetService(UserRepository userRepository, AllTargetRepository sleepDurationRepository) {
         this.userRepository = userRepository;
         this.allTargetRepository = sleepDurationRepository;
     }
 
+    // To set the sleep target of a particular user
     public AllTarget SleepTarget(AllTarget sleepTarget, String username) {
         // Find the user by the username, and associate the sleep duration with that user
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
 
         if (user != null) {
             // Get the existing sleep duration (if exists) for this user
@@ -47,6 +46,7 @@ public class AllTargetService {
         }
     }
 
+    // to save and update the water goal of a specific user
     public AllTarget saveOrUpdateWaterGoal(String username, Double newWaterGoal) {
         // Find the user by username
         Optional<User> userOptional = userRepository.findByEmail(username);
@@ -75,6 +75,4 @@ public class AllTargetService {
             throw new UserNotFoundException("User not found for username: " + username);
         }
     }
-
-
 }

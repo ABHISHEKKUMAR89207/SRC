@@ -24,7 +24,6 @@ public class BookTable {
     private int quantity;
     private double price;
 
-    // Constructors, getters, setters, etc.
 @ManyToOne
     private User user;
 

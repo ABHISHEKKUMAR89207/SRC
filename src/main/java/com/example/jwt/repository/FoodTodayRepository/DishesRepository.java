@@ -10,21 +10,19 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface DishesRepository extends JpaRepository<Dishes,Long> {
+public interface DishesRepository extends JpaRepository<Dishes, Long> {
 
     List<Dishes> findByUserUserIdAndDateAndMealName(Long userId, LocalDate date, String mealName);
 
     List<Dishes> findByUserUserIdAndDate(Long userId, LocalDate date);
+
     List<Dishes> findByUserUserId(Long userId);
 
-    List<Dishes> findDishNameByUserUserIdAndMealName(Long userId,String mealName);
+    List<Dishes> findDishNameByUserUserIdAndMealName(Long userId, String mealName);
 
-    List<Dishes> findDishIdByUserUserIdAndMealNameAndDishName(Long userId,String mealName,String dishName);
+    List<Dishes> findDishIdByUserUserIdAndMealNameAndDishName(Long userId, String mealName, String dishName);
 
-
-    List<Dishes> findDishesByUser_UserIdAndMealNameAndDishNameAndDate(
-            Long userId, String mealName, String dishName, LocalDate date);
-
+    List<Dishes> findDishesByUser_UserIdAndMealNameAndDishNameAndDate(Long userId, String mealName, String dishName, LocalDate date);
 
     public List<Dishes> findDishesByUserUserIdAndDate(Long userId, LocalDate date);
 
@@ -32,12 +30,4 @@ public interface DishesRepository extends JpaRepository<Dishes,Long> {
 
     Dishes findByDishName(String dishName);
 
-
-    // Update this method to retrieve the dish ID and set ingredient details
-//    @Query("SELECT d.id, i.ingredientName, i.ingredientQuantity FROM Dishes d " +
-//            "INNER JOIN Ingredients i ON d.dishName = i.dishName " +
-//            "WHERE d.user.userId = :userId AND d.mealName = :mealName AND d.dishName = :dishName")
-//    List<Object[]> findDishIdAndIngredientDetails(@Param("userId") Long userId,
-//                                                  @Param("mealName") String mealName,
-//                                                  @Param("dishName") String dishName);
 }

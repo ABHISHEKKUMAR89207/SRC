@@ -1,10 +1,7 @@
 package com.example.jwt.service;
 
-
-
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.AllToggle;
-
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.allToggleRepository;
 import com.example.jwt.repository.UserRepository;

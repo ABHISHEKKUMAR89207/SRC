@@ -25,8 +25,9 @@ public class FeedbackController {
         this.userRepository = userRepository;
     }
 
+    // to add the feedback by the user
     @PostMapping("/add")
-    public ResponseEntity<Feedback> addFeedback(@RequestHeader("Auth") String tokenHeader,  @RequestBody Feedback feedback) {
+    public ResponseEntity<Feedback> addFeedback(@RequestHeader("Auth") String tokenHeader, @RequestBody Feedback feedback) {
 
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
         String token = tokenHeader.replace("Bearer ", "");
@@ -34,10 +35,9 @@ public class FeedbackController {
         // Extract the username (email) from the token
         String username = jwtHelper.getUsernameFromToken(token);
 
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
 
-        Feedback savedFeedback = feedbackService.saveFeedback(user,feedback);
+        Feedback savedFeedback = feedbackService.saveFeedback(user, feedback);
         return new ResponseEntity<>(savedFeedback, HttpStatus.CREATED);
     }
 }

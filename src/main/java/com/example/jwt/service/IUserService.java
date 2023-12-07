@@ -9,7 +9,9 @@ import java.util.Optional;
 public interface IUserService {
 
     List<User> getUser();
+
     User registerUser(RegistrationRequest request);
+
     Optional<User> findByEmail(String email);
 
     void saveUserVerificationToken(User theUser, String verificationToken);

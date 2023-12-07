@@ -1,6 +1,5 @@
 package com.example.jwt.entities.dashboardEntity.healthTrends;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,4 @@ import lombok.NoArgsConstructor;
 public class HeartRateRequest {
     private double value;
     private HealthTrends healthTrends;
-
-    // Getters and setters
 }

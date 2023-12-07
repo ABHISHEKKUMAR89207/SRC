@@ -17,6 +17,7 @@ public class SleepDurationService {
     private final SleepDurationRepository sleepDurationRepository;
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     public SleepDurationService(SleepDurationRepository sleepDurationRepository) {
         this.sleepDurationRepository = sleepDurationRepository;
@@ -32,7 +33,7 @@ public class SleepDurationService {
             // If sleep data already exists for the user and date, update the duration
             SleepDuration existing = existingSleep.get();
             existing.setDuration(sleepDuration.getDuration());
-            existing.setManualDuration(existing.getManualDuration()+ sleepDuration.getManualDuration());
+            existing.setManualDuration(existing.getManualDuration() + sleepDuration.getManualDuration());
             existing.setEfficiency(sleepDuration.getEfficiency());
             existing.setEndTime(sleepDuration.getEndTime());
             return sleepDurationRepository.save(existing);
@@ -47,13 +48,12 @@ public class SleepDurationService {
         }
     }
 
+    // to get all sleep log of the specifc user
     public List<SleepDuration> getAllSleepLogs(String username) {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
         List<SleepDuration> sleepList = (List<SleepDuration>) sleepDurationRepository.findByUser(user);
         return sleepList;
     }
-
-    // You can add other methods for specific business logic here
 }
 

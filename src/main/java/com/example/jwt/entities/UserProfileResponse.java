@@ -14,13 +14,9 @@ public class UserProfileResponse {
     private String lastName;
     private String email;
     private String mobile;
-
     private String gender;
     private Date dateOfBirth;
-
     private double height;
     private double weight;
     private double bmi;
-
-    // Constructors, getters, and setters
 }

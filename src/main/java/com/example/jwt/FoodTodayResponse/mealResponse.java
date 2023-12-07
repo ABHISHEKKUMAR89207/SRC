@@ -19,6 +19,7 @@ public class mealResponse {
     private Double mealFats;
     private Double mealFibers;
 
+    // to get the type of meal response we want
     public mealResponse(  List<DishWithIngredientsResponse> rList,
                           Double mealCalories,
                           Double mealProteins,

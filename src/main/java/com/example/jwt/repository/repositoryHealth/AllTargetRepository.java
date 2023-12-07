@@ -7,5 +7,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AllTargetRepository extends JpaRepository<AllTarget, Long> {
     AllTarget findByUser(User user);
-    AllTarget findByUser_email(String username);
 }

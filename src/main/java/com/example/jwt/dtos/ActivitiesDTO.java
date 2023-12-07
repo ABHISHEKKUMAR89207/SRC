@@ -1,6 +1,5 @@
 package com.example.jwt.dtos;
 
-
 import com.example.jwt.entities.dashboardEntity.Activities;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +16,6 @@ public class ActivitiesDTO {
     private String activityType;
     private Long runningDurationInSeconds;
     private Long joggingDurationInSeconds;
-
-    // Getters and setters for the above properties
 
     public static ActivitiesDTO fromActivities(Activities activities) {
         ActivitiesDTO dto = new ActivitiesDTO();

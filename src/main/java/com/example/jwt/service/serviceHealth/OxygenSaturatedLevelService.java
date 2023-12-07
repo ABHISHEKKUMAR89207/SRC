@@ -1,14 +1,11 @@
 package com.example.jwt.service.serviceHealth;
+
 import com.example.jwt.entities.User;
-import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
-import com.example.jwt.entities.dashboardEntity.healthTrends.HealthTrends;
 import com.example.jwt.entities.dashboardEntity.healthTrends.OxygenSaturatedLevel;
-import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.HealthTrendsRepository;
 import com.example.jwt.repository.repositoryHealth.OxygenSaturatedLevelRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +19,9 @@ public class OxygenSaturatedLevelService {
     private OxygenSaturatedLevelRepository oxygenSaturatedLevelRepository;
     @Autowired
     private HealthTrendsRepository healthTrendsRepository;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
-
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     public OxygenSaturatedLevelService(OxygenSaturatedLevelRepository oxygenSaturatedLevelRepository) {
 
@@ -40,53 +33,10 @@ public class OxygenSaturatedLevelService {
         return oxygenSaturatedLevelRepository.save(oxygenSaturatedLevel);
     }
 
-
-
-
-
-//    @Transactional
-//    public HeartRate saveHeartRateData(double value, HealthTrends healthTrends) {
-//        HeartRate heartRate = new HeartRate();
-//        heartRate.setTimeStamp(LocalDateTime.now());
-//        heartRate.setValue(value);
-//        heartRate.setHealthTrends(healthTrends);
-//
-////        entityManager.persist(heartRate);
-//        return healthTrendsRepository.save(heartRate);
-//    }
-
-
     public List<OxygenSaturatedLevel> getOxygenSaturatedLevelById(Long oxygenSaturatedLevelId) {
         // Use the repository to fetch heart rates between the given time range
         return oxygenSaturatedLevelRepository.findByOxygenSaturatedLevelId(oxygenSaturatedLevelId);
     }
-
-//    public HeartRate addHeartRate(HeartRate heartRate, Long healthTrendId) {
-//
-//        HealthTrends healthTrends=this.healthTrendsRepository.findById(healthTrendId)
-//                .orElseThrow(()->new ResourceNotFoundException("HealthTrends not found with ID: " + healthTrendId));
-//
-//
-//            HeartRate heartRate1 =this.modelMapper.map(heartRate,HeartRate.class);
-//            heartRate1.setHealthTrends(healthTrends);
-//
-//            return healthTrendsRepository.save(heartRate);
-//    }
-
-
-
-//    public OxygenSaturatedLevel addOxygenSaturatedLevel(OxygenSaturatedLevel oxygenSaturatedLevel, Long healthTrendId) {
-//        HealthTrends healthTrends = this.healthTrendsRepository.findById(healthTrendId)
-//                .orElseThrow(() -> new ResourceNotFoundException("HealthTrends", "ID", healthTrendId));
-//
-//        OxygenSaturatedLevel oxygenSaturatedLevel1 = this.modelMapper.map(oxygenSaturatedLevel, OxygenSaturatedLevel.class);
-//        oxygenSaturatedLevel1.setHealthTrends(healthTrends);
-//
-//        // Save the HeartRate entity
-//        return oxygenSaturatedLevelRepository.save(oxygenSaturatedLevel1);
-//    }
-//
-
 
     // add heart oxygenSaturatedLevel by token username
     public OxygenSaturatedLevel addOxygenSaturatedLevel(OxygenSaturatedLevel oxygenSaturatedLevel, String username) {
@@ -106,38 +56,13 @@ public class OxygenSaturatedLevelService {
         }
     }
 
-
-
     //get heart rate by user and date
     public List<OxygenSaturatedLevel> getOxygenSaturatedLevelForUserAndDate(User user, LocalDate date) {
         return oxygenSaturatedLevelRepository.findByUserAndLocalDate(user, date);
     }
 
-
     // get blood glucose for one week and one month
     public List<OxygenSaturatedLevel> getOxygenSaturatedLevelForUserBetweenDates(User user, LocalDate startDate, LocalDate endDate) {
         return oxygenSaturatedLevelRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
     }
-
-
-//    public HeartRate createUserProfile(HeartRate heartRate, Long userId) {
-//
-//
-//        HealthTrends user=this.healthTrendsRepository.findByDate(userId)
-//                .orElseThrow(()->new ResourceNotFoundException("User Profile","UserProfile id",userId));
-//
-//        HeartRate profile = this.modelMapper.map(heartRate,HeartRate.class);
-////        post.setImageName("default.png");
-////        post.setAddedDate(new Date());
-//        profile.setHealthTrends(user);
-////        post.setCategory(category);
-//
-//        HeartRate heartRate1 = this.healthTrendsRepository.save(profile);
-//
-////        return this.modelMapper.map(newProfile,UserProfile.class);
-//        return healthTrendsRepository.save(heartRate1);
-//    }
-
-
-
 }

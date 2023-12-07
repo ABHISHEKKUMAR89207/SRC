@@ -26,22 +26,6 @@ public class Ingredients {
     @JoinColumn(name = "dish_id")
     private Dishes dishes;
 
-
-
-
-
-
-//    @ManyToMany
-//    @JoinTable(
-//            name = "ingredient_nindata",  // You may need to adjust this table name
-//            joinColumns = @JoinColumn(name = "ingredient_id"),
-//            inverseJoinColumns = @JoinColumn(name = "nindata_id")
-//    )
-//    private Set<NinData> ninDataList = new HashSet<>();
-
-
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<NinData> ninDataList = new HashSet<>();
-
-
 }

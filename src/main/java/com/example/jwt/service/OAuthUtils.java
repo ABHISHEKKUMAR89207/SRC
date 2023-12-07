@@ -1,13 +1,13 @@
 package com.example.jwt.service;
 
 import org.springframework.stereotype.Service;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 @Service
 public class OAuthUtils {
+
     // Generate a cryptographically random code verifier
     public static String generateCodeVerifier() {
         SecureRandom secureRandom = new SecureRandom();

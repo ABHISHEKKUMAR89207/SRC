@@ -1,6 +1,5 @@
 package com.example.jwt.model;
 
-
 import lombok.*;
 
 @Data

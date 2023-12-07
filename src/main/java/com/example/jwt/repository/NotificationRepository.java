@@ -16,17 +16,8 @@ import java.util.List;
 
 
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
-//    List<NotificationEntity> findByNotificationOnIsTrueAndStartTimeBefore(LocalDateTime time);
-
-//    List<NotificationEntity> findByStartTimeBeforeAndLastTimeAfterAndNotificationOnIsTrue(
-//            LocalDateTime startTime, LocalDateTime lastTime);
-
-//    List<NotificationEntity> findByStartTime(LocalDateTime startTime);
-//List<NotificationEntity> findByNotificationOnIsTrueAndStartTimeBefore(LocalTime startTime);
-//    List<NotificationEntity> findByStartTime(LocalTime startTime);
 
     List<NotificationEntity> findByStartTimeLessThanEqual(LocalTime currentTime);
-
 
     @Query("SELECT n FROM NotificationEntity n WHERE n.startTime = :startTime")
     List<NotificationEntity> findByStartTime(@Param("startTime") LocalTime startTime);
@@ -34,10 +25,4 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
     List<NotificationEntity> findByStartTimeBetween(LocalTime startTime, LocalTime endTime);
 
     NotificationEntity findByUserAndNotificationType(User user, String notificationType);
-//    List<NotificationEntity> findByStartTimeBeforeAndNotificationOnIsTrue(LocalTime currentTime);
-//@Modifying
-//@Transactional
-//@Query("MERGE INTO NotificationEntity n USING :notification WHERE n.id = :#{#notification.id} WHEN MATCHED THEN UPDATE SET n = :notification WHEN NOT MATCHED THEN INSERT (/* fields here */) VALUES (/* values here */)")
-//void merge(@Param("notification") NotificationEntity notification);
-
 }

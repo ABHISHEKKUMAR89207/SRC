@@ -36,27 +36,7 @@ public class UserProfileService {
         return userProfileRepository.findById(id);
     }
 
-
-
-    //create user profile
-//    public UserProfile createUserProfile(UserProfile userProfile, Long userId) {
-//
-//
-//        User user=this.userRepository.findById(userId)
-//                .orElseThrow(()->new ResourceNotFoundException("User Profile","UserProfile id",userId));
-//
-//        UserProfile profile = this.modelMapper.map(userProfile,UserProfile.class);
-////        post.setImageName("default.png");
-////        post.setAddedDate(new Date());
-//        profile.setUser(user);
-////        post.setCategory(category);
-//
-//        UserProfile newProfile = this.userProfileRepository.save(profile);
-//
-////        return this.modelMapper.map(newProfile,UserProfile.class);
-//        return userProfileRepository.save(userProfile);
-//    }
-
+    // to create the user profile
     public UserProfile createUserProfile(UserProfile userProfile, Long userId) throws ParseException {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User Profile"));
@@ -67,13 +47,11 @@ public class UserProfileService {
         // Calculate and set the BMI
         double bmi = calculateBMI(userProfile.getHeight(), userProfile.getWeight());
         userProfile.setBmi(bmi);
-
-
         UserProfile newProfile = this.userProfileRepository.save(userProfile);
-
         return newProfile;
     }
 
+    // to calculate the BMI of the user
     private double calculateBMI(double heightInFeet, double weight) {
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         String str = String.valueOf(heightInFeet);
@@ -88,22 +66,7 @@ public class UserProfileService {
         return Double.parseDouble(formatedBmi);
     }
 
-//    public void updateUserProfile(Long id, UserProfile updatedProfile) {
-//        if (userProfileRepository.existsById(id)) {
-//            updatedProfile.setId(id);
-//            userProfileRepository.save(updatedProfile);
-//        }
-//    }
-
-
-//    public UserProfile findByUsername(String username) {
-//        // Use the repository to find the user's profile by username
-//        return userProfileRepository.findByUsername(username);
-//    }
-//
-
-
-    //update user profile
+//update user profile
     public UserProfile saveUserProfile(UserProfile userProfile) {
         // This method should save or update the user's profile data in the database
         return userProfileRepository.save(userProfile);
@@ -113,31 +76,8 @@ public class UserProfileService {
         return userProfileRepository.findByUserEmail(username);
     }
 
-//    public void updateUserProfile(Long id, UserProfile updatedProfile) {
-//        Optional<UserProfile> existingProfile = userProfileRepository.findById(id);
-//        if (existingProfile.isPresent()) {
-//            UserProfile userProfile = existingProfile.get();
-//            userProfile.setEmail(updatedProfile.getEmail());
-//            userProfile.setMobileNo(updatedProfile.getMobileNo());
-//            // You can update other fields as well
-//            userProfileRepository.save(userProfile);
-//        }
-//    }
 
-
-
-//    public void updateUserProfile(Long id, UserProfile updatedProfile) {
-//        Optional<UserProfile> existingProfile = userProfileRepository.findById(id);
-//        if (existingProfile.isPresent()) {
-//            UserProfile userProfile = existingProfile.get();
-//            // Access and update email and mobileNo through the User entity
-//            userProfile.getUser().setEmail(updatedProfile.getUser().getEmail());
-//            userProfile.getUser().setMobileNo(updatedProfile.getUser().getMobileNo());
-//            // You can update other fields as well
-//            userProfileRepository.save(userProfile);
-//        }
-
-
+// to update the user profile
     public void updateUserProfile(Long id, UserProfile updatedProfile) {
         Optional<UserProfile> existingProfile = userProfileRepository.findById(id);
         if (existingProfile.isPresent()) {
@@ -154,37 +94,6 @@ public class UserProfileService {
             }
         }
     }
-
-
-
-
-
-//    public void deleteUserProfile(Long id) {
-//        userProfileRepository.deleteById(id);
-//    }
-
-    // Fetch the User and UserProfile
-
-//    public void updateProfileInformation(Long userId, UserProfile userProfile) {
-//        User user = userRepository.findById(userId)
-//                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-//
-//        // Update User fields with UserProfile data
-//        user.setEmail(userProfile.getEmail());
-//        user.setMobileNo(userProfile.getMobileNo());
-//        user.setGender(userProfile.getGender());
-//        user.setDateOfBirth(userProfile.getDateOfBirth());
-//
-//        // Additional logic to calculate and update height, weight, or other fields if needed
-//        // user.setHeight(userProfile.getHeight());
-//        // user.setWeight(userProfile.getWeight());
-//
-//        // Save the updated User entity
-//        userRepository.save(user);
-//    }
-
-
-
 
 }
 

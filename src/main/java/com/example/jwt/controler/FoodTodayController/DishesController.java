@@ -5,7 +5,6 @@ import com.example.jwt.dtos.FoodTodayDtos.DishDTO;
 import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.DishesService;
-import com.example.jwt.service.FoodTodayService.IngrdientService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class DishesController {
 
     // Endpoint to retrieve all dinner dishes for a user on the same date
     @GetMapping("/get-dish")
-    public List<DishDTO> getDinnerDishesForUser( @RequestHeader("Auth") String tokenHeader, @RequestParam("date") String date, @RequestParam("mealName") String mealName) {
+    public List<DishDTO> getDishesWithMealNameForUser( @RequestHeader("Auth") String tokenHeader, @RequestParam("date") String date, @RequestParam("mealName") String mealName) {
         String token = tokenHeader.replace("Bearer ", "");
 
         // Extract the username (email) from the token
@@ -59,7 +58,7 @@ public class DishesController {
         User user = userService.findByUsername(username);
 
         LocalDate parsedDate = LocalDate.parse(date);
-        return dishesService.getDishesForUser(user, parsedDate, mealName);
+        return dishesService.getDishesWithMealName(user, parsedDate, mealName);
     }
 
 

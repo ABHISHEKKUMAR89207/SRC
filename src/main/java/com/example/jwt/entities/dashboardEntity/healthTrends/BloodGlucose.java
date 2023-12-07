@@ -20,25 +20,18 @@ import java.time.LocalDateTime;
 @Entity
 public class BloodGlucose {
 
+    LocalDateTime timeStamp = LocalDateTime.now();
+    LocalDate localDate = LocalDate.now();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bloodGlucoseId;
-
-//    private LocalDateTime timeStamp;
-    LocalDateTime timeStamp = LocalDateTime.now();
     private double value;
-    LocalDate localDate = LocalDate.now();
-
     @ManyToOne
     @JoinColumn(name = "healthTrend_Id")
-//    @JsonBackReference
-//    @JsonManagedReference
     private HealthTrends healthTrends;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-//    @JsonBackReference
     @JsonIgnore
     private User user;
 }

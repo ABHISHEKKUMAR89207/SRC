@@ -13,11 +13,9 @@ public class IngredientDTO {
 
     private String ingredientName;
     private Double ingredientQuantity;
-//    private List<Double> nutri;
     private Double calories;
     private Double proteins;
     private Double fats;
     private Double carbs;
     private Double fibers;
-
 }

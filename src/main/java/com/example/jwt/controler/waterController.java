@@ -1,5 +1,5 @@
 package com.example.jwt.controler;
-import com.example.jwt.dtos.WaterGoalDto;
+
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.exception.UserNotFoundException;
@@ -15,46 +15,37 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Map;
 
-@RestController@RequestMapping("/api/water")
+@RestController
+@RequestMapping("/api/water")
 public class waterController {
 
     @Autowired
-    private  JwtHelper jwtHelper;
-
+    private JwtHelper jwtHelper;
 
     @Autowired
-    private  waterService waterService;
+    private waterService waterService;
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public waterController(waterService waterService) {
         this.waterService = waterService;
     }
 
+    // to get the calculated water intake
+    @GetMapping("/calculate-intake")
+    public ResponseEntity<Double> calculateWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
 
+        Double waterIntake = waterService.calculateWaterIntake(user);
+        return new ResponseEntity<>(waterIntake, HttpStatus.OK);
+    }
 
-@Autowired
-private UserService userService;
-
-
-@GetMapping("/calculate-intake")
-public ResponseEntity<Double> calculateWaterIntake(
-        @RequestHeader("Auth") String tokenHeader
-) {
-    String token = tokenHeader.replace("Bearer ", "");
-    String username = jwtHelper.getUsernameFromToken(token);
-    User user = userService.findByUsername(username);
-
-    Double waterIntake = waterService.calculateWaterIntake(user);
-    return new ResponseEntity<>(waterIntake, HttpStatus.OK);
-}
-
-
-
+    // to get the calculated water intake by date
     @GetMapping("/calculate-intake-by-date")
-    public ResponseEntity<Double> calculateWaterIntake(
-            @RequestHeader("Auth") String tokenHeader,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date
-    ) {
+    public ResponseEntity<Double> calculateWaterIntake(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
@@ -63,11 +54,9 @@ public ResponseEntity<Double> calculateWaterIntake(
         return new ResponseEntity<>(waterIntake, HttpStatus.OK);
     }
 
-
+    // to get the water intake of the last week
     @GetMapping("/calculate-intake-last-week")
-    public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(
-            @RequestHeader("Auth") String tokenHeader
-    ) {
+    public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(@RequestHeader("Auth") String tokenHeader) {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
@@ -76,13 +65,9 @@ public ResponseEntity<Double> calculateWaterIntake(
         return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
     }
 
-
-
+    // to update the water entity
     @PostMapping("/update-water-entity")
-    public ResponseEntity<String> updateWaterEntity(
-            @RequestHeader("Auth") String tokenHeader,
-            @RequestBody WaterEntity waterEntity
-    ) {
+    public ResponseEntity<String> updateWaterEntity(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity waterEntity) {
         try {
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
@@ -92,13 +77,4 @@ public ResponseEntity<Double> calculateWaterIntake(
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
-
-
-
-
-
 }

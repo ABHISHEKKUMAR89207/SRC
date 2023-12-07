@@ -1,6 +1,5 @@
 package com.example.jwt.controler;
 
-
 import com.example.jwt.entities.User;
 import com.example.jwt.event.RegistrationCompleteEvent;
 import com.example.jwt.registration.RegistrationRequest;
@@ -25,29 +24,30 @@ public class RegistrationController {
     private final ApplicationEventPublisher publisher;
     private final VerificationTokenRepository tokenRepository;
 
+    //for registering the user n application
     @PostMapping
-    public String registerUser(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request){
+    public String registerUser(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request) {
         User user = userService.registerUser(registrationRequest);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "Success!  Please, check your email for to complete your registration";
     }
 
+    // to verify the e mail
     @GetMapping("/verifyEmail")
-    public String verifyEmail(@RequestParam("token") String token){
+    public String verifyEmail(@RequestParam("token") String token) {
         VerificationToken theToken = tokenRepository.findByToken(token);
-        if (theToken.getUser().isEnabled()){
+        if (theToken.getUser().isEnabled()) {
             return "This account has already been verified, please, login.";
         }
         String verificationResult = userService.validateToken(token);
-        if (verificationResult.equalsIgnoreCase("valid")){
+        if (verificationResult.equalsIgnoreCase("valid")) {
             return "Email verified successfully. Now you can login to your account";
         }
         return "Invalid verification token";
     }
 
-
-
+    // application uniform resource locator
     public String applicationUrl(HttpServletRequest request) {
-        return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+        return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 }

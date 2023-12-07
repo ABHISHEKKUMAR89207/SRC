@@ -15,12 +15,7 @@ public class FoodDataEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "nin_data_id")
     private Long id;
-
     private String food;
-
     private Integer carbs;
-
     private Integer fat;
-
-    // Getters and setters
 }

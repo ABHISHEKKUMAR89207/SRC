@@ -1,7 +1,5 @@
 package com.example.jwt.controler;
 
-
-
 import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
@@ -12,24 +10,18 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
-
-
+    private final UserService userService;
     @Autowired
     private JwtHelper jwtHelper;
-
-    private final UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-
+    // to update the verification token
     @PutMapping("/update-notification-token")
-    public ResponseEntity<User> updateNotificationToken(
-            @RequestHeader("Auth") String authorizationHeader,
-            @RequestParam String newToken) {
+    public ResponseEntity<User> updateNotificationToken(@RequestHeader("Auth") String authorizationHeader, @RequestParam String newToken) {
 
         String token = authorizationHeader.replace("Bearer ", "");
 
@@ -46,7 +38,5 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }
 

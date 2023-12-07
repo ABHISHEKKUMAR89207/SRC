@@ -3,7 +3,6 @@ package com.example.jwt.dtos;
 public class WaterGoalDto {
     private Long waterGoalId;
     private Double waterGoal;
-    // Other fields, getters, and setters
 
     public Long getWaterGoalId() {
         return waterGoalId;

@@ -1,17 +1,10 @@
 package com.example.jwt.controler.FoodTodayController;
 
-
-
-import com.example.jwt.FoodTodayResponse.DishWithIngredientsResponse;
 import com.example.jwt.FoodTodayResponse.IngredientsResponse;
 import com.example.jwt.FoodTodayResponse.mealResponse;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.entities.User;
-import com.example.jwt.repository.FoodTodayRepository.DishesRepository;
-import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
-import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.security.JwtHelper;
-import com.example.jwt.service.FoodTodayService.DishesService;
 import com.example.jwt.service.FoodTodayService.IngrdientService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -30,39 +23,30 @@ import java.util.List;
 
 public class IngredientController {
 
-
     @Autowired
     private UserService userService;
     @Autowired
     private IngrdientService ingrdientService;
-
     @Autowired
     private JwtHelper jwtHelper;
 
+    //    @PostMapping("/setIngredientsForDish")
+    @PostMapping("/setIngredientsForDish")
+    public IngredientsResponse setIngredientsForDish(@RequestHeader("Auth") String tokenHeader, @RequestParam String mealName, @RequestParam String dishName, @RequestBody List<IngredientDTO> ingredientDTOList) {
 
-//    @PostMapping("/setIngredientsForDish")
-@PostMapping( "/setIngredientsForDish")
-public IngredientsResponse setIngredientsForDish( @RequestHeader("Auth") String tokenHeader, @RequestParam String mealName, @RequestParam String dishName, @RequestBody List<IngredientDTO> ingredientDTOList) {
+        String token = tokenHeader.replace("Bearer ", "");
 
-    String token = tokenHeader.replace("Bearer ", "");
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
 
-    // Extract the username (email) from the token
-    String username = jwtHelper.getUsernameFromToken(token);
-
-    // Use the username to fetch the userId from your user service
-    User user = userService.findByUsername(username);
-
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
         return ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
     }
 
-
-
     //get all ingredient with date
     @GetMapping("/getDishesWithIngredients-by-date")
-    public List<mealResponse> getDishesWithIngredientsByDate(
-//            @RequestParam Long userId,
-            @RequestHeader("Auth") String tokenHeader,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public List<mealResponse> getDishesWithIngredientsByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         String token = tokenHeader.replace("Bearer ", "");
 
@@ -72,21 +56,15 @@ public IngredientsResponse setIngredientsForDish( @RequestHeader("Auth") String 
         // Use the username to fetch the userId from your user service
         User user = userService.findByUsername(username);
 
-
         return ingrdientService.getDishesWithIngredientsByDate(user, date);
     }
 
-
     //get dish with ingreddient using mealName
     @GetMapping("/getDishesWithIngredients")
-    public List<mealResponse> getDishesWithIngredientsByDateAndMealType(
-            @RequestHeader("Auth") String tokenHeader,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam String mealType) {
+    public List<mealResponse> getDishesWithIngredientsByDateAndMealType(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {
 
 
         String token = tokenHeader.replace("Bearer ", "");
-
         // Extract the username (email) from the token
         String username = jwtHelper.getUsernameFromToken(token);
 
@@ -95,5 +73,4 @@ public IngredientsResponse setIngredientsForDish( @RequestHeader("Auth") String 
 
         return ingrdientService.getDishesWithIngredientsByDateAndMealType(user, date, mealType);
     }
-
 }

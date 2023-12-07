@@ -20,7 +20,7 @@ public class FeedbackService {
     public Feedback saveFeedback(User user, Feedback feedback) {
         feedback.setUser(user);
         feedback.setLocalDateTime(LocalDateTime.now());
-        // You can add any business logic or validation here before saving
+
         return feedbackRepository.save(feedback);
     }
 }

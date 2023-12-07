@@ -16,20 +16,10 @@ import java.util.Optional;
 public class UserAccountCleanupService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
 
-//    @Scheduled(fixedRate = 60000) // Run every minute
-//    public void cleanupUnverifiedUsers() {
-//        LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(1);
-//        List<User> unverifiedUsers = userRepository.findByEmailVerifiedFalseAndRegistrationTimestampBefore(oneMinuteAgo);
-//
-//        if (!unverifiedUsers.isEmpty()) {
-//            for (User user : unverifiedUsers) {
-//                userRepository.delete(user);
-//                // Delete associated data as needed
-//            }
-//        }
-//    }
-
+    // to delete the data from the database if user did not verify the mail in next 30 minutes
     @Scheduled(fixedRate = 60000) // Run every minute
     public void cleanupUnverifiedUsers() {
         LocalDateTime oneMinuteAgo = LocalDateTime.now().minusMinutes(30);
@@ -37,19 +27,13 @@ public class UserAccountCleanupService {
 
         if (!unverifiedUsers.isEmpty()) {
             for (User user : unverifiedUsers) {
-                user.getRoles().clear(); // Remove roles
-                userRepository.delete(user);
+                user.getRoles().clear();
                 // Delete associated data as needed
+                userRepository.delete(user);
             }
         }
     }
 
-
-
-
-
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepository;
 
     @Transactional
     public void deleteUserWithCleanup(Long userId) {
@@ -68,6 +52,4 @@ public class UserAccountCleanupService {
             // You can log an error or throw an exception if needed.
         }
     }
-
-
 }

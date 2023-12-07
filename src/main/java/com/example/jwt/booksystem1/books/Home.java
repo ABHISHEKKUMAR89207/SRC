@@ -1,33 +1,24 @@
 package com.example.jwt.booksystem1.books;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 
+import com.example.jwt.entities.User;
+import com.example.jwt.security.JwtHelper;
+import com.example.jwt.service.UserService;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
+import com.google.gson.Gson;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
-        import java.math.BigDecimal;
-        import java.math.RoundingMode;
-        import java.util.List;
-
-        import com.example.jwt.entities.User;
-        import com.example.jwt.security.JwtHelper;
-        import com.example.jwt.service.UserService;
-        import org.json.JSONObject;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.stereotype.Controller;
-        import org.springframework.web.bind.annotation.*;
-
-        import com.google.gson.Gson;
-        import com.razorpay.Order;
-        import com.razorpay.RazorpayClient;
-        import com.razorpay.RazorpayException;
-
-/**
- *
- * @author rahul
- * This can only be used for payment for order in RazorPay.
- */
-@Controller
 
 @RestController
 @RequestMapping("/buy")
@@ -38,31 +29,15 @@ public class Home {
     private OrderRequestCartRepository orderRequestCartRepository;
     @Autowired
     private UserService userService;
-
     @Autowired
     private JwtHelper jwtHelper;
-
     private RazorpayClient client;
     private static Gson gson = new Gson();
-
-    /**
-     * add your secretId and secretValue you got from your RazorPay account.
-     */
     private static final String SECRET_ID = "rzp_test_ThfqICRiicaM5G";
     private static final String SECRET_KEY = "6v7UTKPjlwOIASl1VSbsRFDl";
-
     public Home() throws RazorpayException {
         this.client =  new RazorpayClient(SECRET_ID, SECRET_KEY);
     }
-
-//    @RequestMapping(value="/")
-//    public String getHome() {
-//        return "redirect:/home";
-//    }
-//    @RequestMapping(value="/home")
-//    public String getHomeInit() {
-//        return "home";
-//    }
 
     @RequestMapping(value="/createPayment", method=RequestMethod.POST)
     @ResponseBody
@@ -72,24 +47,14 @@ public class Home {
         User user = userService.findByUsername(Username);
         Long userid=user.getUserId();
         List<String> cartEntries = cartRequest.getCart();
-
         double totalAmount = calculateTotalAmountFromDatabase(cartEntries);
         ResponseEntity<String> outOfStockResponse = checkOutOfStock(cartRequest.getCart());
         if (outOfStockResponse != null) {
-
             return outOfStockResponse;
         }
-
-//        return ResponseEntity.ok(totalAmount);
-//        User user=new User();
-//        UserProfile userProfile = UserProfileRepository.findByUserEmail(Username);
-
         System.out.println("USER NAME"+Username);
-        // Extract the username (email) from the token
         String username = jwtHelper.getUsernameFromToken(token);
-
         try {
-
             /**
              * creating an order in RazorPay.
              * new order will have order id. you can get this order id by calling  order.get("id")
@@ -99,7 +64,6 @@ public class Home {
             String concatenatedString = String.join("/", cartEntries);
             OrderRequestCart newOrderRequestCart = new OrderRequestCart(null, username,concatenatedString, (String)order.get("id"));
             orderRequestCartRepository.save(newOrderRequestCart);
-
             return new ResponseEntity<String>(gson.toJson(getResponse(razorPay, 200)),
                     HttpStatus.OK);
         } catch (RazorpayException e) {
@@ -108,6 +72,8 @@ public class Home {
         return new ResponseEntity<String>(gson.toJson(getResponse(new RazorPay(), 500)),
                 HttpStatus.EXPECTATION_FAILED);
     }
+
+    // to check the status of the book if in stock or out f stock
     private ResponseEntity<String> checkOutOfStock(List<String> cartEntries) {
         for (String cartEntry : cartEntries) {
             String[] parts = cartEntry.split("x");
@@ -127,6 +93,8 @@ public class Home {
         // No book is out of stock
         return null;
     }
+
+    // calculate total amount of books from database
     private double calculateTotalAmountFromDatabase(List<String> cartEntries) {
         double totalAmount = 0;
         for (String cartEntry : cartEntries) {
@@ -153,6 +121,8 @@ public class Home {
         }
         return totalAmount;
     }
+
+    // to get the response of the razor pay
     private Response getResponse(RazorPay razorPay, int statusCode) {
         Response response = new Response();
         response.setStatusCode(statusCode);

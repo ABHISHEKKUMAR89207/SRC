@@ -12,5 +12,4 @@ import lombok.Setter;
 public class IngredientRequest {
     private String ingredientName;
     private Double ingredientQuantity;
-
 }

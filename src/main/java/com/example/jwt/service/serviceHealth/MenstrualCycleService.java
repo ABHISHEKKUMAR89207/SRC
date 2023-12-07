@@ -1,22 +1,15 @@
 package com.example.jwt.service.serviceHealth;
 
-
 import com.example.jwt.entities.User;
-import com.example.jwt.entities.UserProfile;
-import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
 import com.example.jwt.entities.dashboardEntity.healthTrends.MenstrualCycle;
-import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.MenstrualCycleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class MenstrualCycleService {
@@ -28,10 +21,8 @@ public class MenstrualCycleService {
     private UserProfileRepository userProfileRepository;
 
 
-
     public MenstrualCycle calculateNextPeriodStartDate(String username) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
 
         if (user.getUserProfile() != null && user.getUserProfile().getGender().equalsIgnoreCase("Female")) {
             MenstrualCycle menstrualCycle = user.getUserProfile().getMenstrualCycle();
@@ -64,10 +55,8 @@ public class MenstrualCycleService {
     }
 
 
-
     public LocalDate caalculateNextPeriodStartDate(String username) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
 
         if (user.getUserProfile() != null && user.getUserProfile().getGender().equalsIgnoreCase("Female")) {
             MenstrualCycle menstrualCycle = user.getUserProfile().getMenstrualCycle();
@@ -111,14 +100,9 @@ public class MenstrualCycleService {
     }
 
 
-
-
-
-
     public MenstrualCycle addMenstrualoCycle(MenstrualCycle menstrualCycle, String username) {
 
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
 
         if (user != null) {
             // Set the user for the heart rate
@@ -137,8 +121,7 @@ public class MenstrualCycleService {
 
 
     public MenstrualCycle addMenstrualCycle(MenstrualCycle menstrualCycle, String username) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
 
         if (user != null && user.getUserProfile() != null && user.getUserProfile().getGender().equalsIgnoreCase("Female")) {
             // Set the user for the menstrualCycle
@@ -153,9 +136,6 @@ public class MenstrualCycleService {
             throw new UserNotFoundException("User not found for username: " + username + " or user's gender is not Female.");
         }
     }
-
-
-
 
 
 }

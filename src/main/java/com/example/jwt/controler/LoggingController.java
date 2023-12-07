@@ -1,7 +1,7 @@
 package com.example.jwt.controler;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,10 +18,9 @@ import java.nio.file.Paths;
 
 @RequestMapping("/logging")
 public class LoggingController {
-
     Logger logger = LoggerFactory.getLogger(LoggingController.class);
 
-//    @RequestMapping("/logs")
+    // to get the logs of different types like error, trace, debug, info, warn
     @GetMapping("/logs")
     public String index() {
         logger.trace("A TRACE Message");
@@ -34,47 +32,20 @@ public class LoggingController {
         return "Howdy! Check out the Logs to see the output...";
     }
 
-
-//    @GetMapping("/downloadLogFile")
-//    public ResponseEntity<Resource> downloadLogFile() {
-//        // Specify the path to your log file
-//        String logFilePath = "./logs/spring-boot-logger.log";
-//        File logFile = new File(logFilePath);
-//
-//        // Prepare response headers
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=spring-boot-logger.log");
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//
-//        // Create a FileSystemResource representing the log file
-//        Resource resource = new FileSystemResource(logFile);
-//
-//        // Return the file for download
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .body(resource);
-//    }
-
-
-
+    // for downloading the logs
     @RequestMapping("/downloadLog")
     public ResponseEntity<Resource> downloadLogFile() throws IOException {
         // Specify the path to your log file
         String logFilePath = "./logs/application.log";
         Path logPath = Paths.get(logFilePath);
-
         // Create a FileSystemResource representing the log file
         Resource resource = new org.springframework.core.io.FileSystemResource(logPath);
-
         // Prepare response headers
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=application.log");
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-
         // Return the file for download
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resource);
+        return ResponseEntity.ok().headers(headers).body(resource);
     }
 }
 

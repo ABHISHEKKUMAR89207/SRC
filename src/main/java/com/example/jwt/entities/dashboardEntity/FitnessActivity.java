@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-//@Document(collection = "fitness_activities")
 @Entity(name = "fitness_activities")
 public class FitnessActivity {
     @Id
@@ -22,11 +20,8 @@ public class FitnessActivity {
     private int steps;
     private double caloriesBurnt;
     private double distanceCovered;
-//    private double bmi;
 
-    // Constructors, getters, and setters
-
-    @OneToOne(fetch = FetchType.LAZY) // You can change FetchType to EAGER if needed
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_profile_id")
     private UserProfile userProfile;
 }

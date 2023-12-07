@@ -1,13 +1,11 @@
 package com.example.jwt.FoodTodayResponse;
 
-
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-
 
 @Getter
 @Setter

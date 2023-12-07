@@ -1,6 +1,5 @@
 package com.example.jwt.controler;
 
-
 import com.example.jwt.dtos.FoodDataDTO;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodDataService;
@@ -19,37 +18,6 @@ public class FoodDataController {
     @Autowired
     private JwtHelper jwtHelper;
 
-//    @GetMapping("/top10")
-//    public List<FoodDataDTO> getTop10ByColumn(@RequestHeader("Auth") String tokenHeader,@RequestParam("column") String column) {
-//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        return foodDataService.getTop10ByColumn(column,username);
-//    }
-//
-//    @GetMapping("/top10")
-//    public ResponseEntity<List<FoodDataDTO>> getTop10ByColumn(@RequestHeader("Authorization") String tokenHeader, @RequestParam("column") String column) {
-//        try {
-//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//            String token = tokenHeader.replace("Bearer ", "");
-//
-//            // Extract the username (email) from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Check if the user is authenticated (you can add your JWT validation logic here)
-//            if (isValidToken(token)) {
-//                List<FoodDataDTO> top10Data = foodDataService.getTop10ByColumn(column, username);
-//                return ResponseEntity.ok(top10Data);
-//            } else {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Unauthorized status
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
-//        }
-
         @GetMapping("/top10")
         public ResponseEntity<List<FoodDataDTO>>getTop10ByColumn(@RequestHeader("Auth") String tokenHeader, @RequestParam("column") String column) {
             try {
@@ -67,8 +35,6 @@ public class FoodDataController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
             }
         }
-
-
     }
 
 

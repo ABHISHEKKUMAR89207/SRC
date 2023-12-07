@@ -1,7 +1,5 @@
 package com.example.jwt.service;
 
-
-
 import com.example.jwt.config.AppConstants;
 import com.example.jwt.entities.AllToggle;
 import com.example.jwt.entities.Role;
@@ -16,16 +14,18 @@ import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.allToggleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
+    private final VerificationTokenRepository tokenRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -35,63 +35,16 @@ public class UserService implements IUserService {
     @Autowired
     private allToggleRepository allToggleRepository;
 
-    private final VerificationTokenRepository tokenRepository;
-
-
-
-
-
-    public List<User> getUser(){
-
+    public List<User> getUser() {
         return userRepository.findAll();
     }
-
-
-
-//    public List<User> listAll() {
-//        return userRepository.findAll(Sort.by("email").ascending());
-//    }
-
-//    public User createUser(User user)
-//    {
-////        user.setUserId(UUID.randomUUID().toString());
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userRepository.save(user);
-//    }
 
     public User saveUser(User user) {
         // Use your UserRepository to save the user entity
         return userRepository.save(user);
     }
 
-//    @Override
-//    public User registerUser(RegistrationRequest request) {
-//        Optional<User> user = this.findByEmail(request.email());
-//        if (user.isPresent()){
-//            throw new UserAlreadyExistsException(
-//                    "User with email "+request.email() + " already exists");
-//        }
-//        var newUser = new User();
-////        newUser.setFirstName(request.firstName());
-////        newUser.setLastName(request.lastName());
-//        newUser.setMobileNo(request.mobileNo());
-//        newUser.setUserName(request.userName());
-//        newUser.setEmail(request.email());
-//        newUser.setPassword(passwordEncoder.encode(request.password()));
-//        //roles
-//        Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
-//
-//        newUser.getRoles().add(role);
-//
-//        // Save the user and wrap it in an Optional
-//        User savedUser = userRepository.save(newUser);
-////        newUser.setRole(request.role());
-//        return userRepository.save(savedUser);
-//    }
-
-
-
-
+    // for registering the user in application
     public User registerUser(RegistrationRequest request) {
         // Check if the user with the provided email already exists
         Optional<User> existingUser = userRepository.findByEmail(request.email());
@@ -132,7 +85,7 @@ public class UserService implements IUserService {
         return savedUser;
     }
 
-
+    // to check if e mail in use
     public boolean isEmailInUse(String email) {
         // Perform a database query to check if the email is already in use.
         Optional<User> existingUserOptional = userRepository.findByEmail(email);
@@ -141,63 +94,50 @@ public class UserService implements IUserService {
         return existingUserOptional.isPresent();
     }
 
+    // to update the user
     public User updateUser(User user) {
         // This method should update the user and save the changes to the database
         return userRepository.save(user);
     }
 
-
     public User findByUsername(String username) {
         Optional<User> userOptional = userRepository.findByEmail(username);
         return userOptional.orElse(null); // Return null if not found, or handle differently if needed
     }
-//    public Long findUserIdByUsername(String username) {
-//        return userRepository.findByEmail(username);
-//    }
-
-
-//    public User findByUsername(String username) {
-//        return userRepository.findByEmail(username);
-//    }
 
     @Override
-    public Optional<User>  findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
 
         return userRepository.findByEmail(email);
     }
 
-//    @Override
-//    public void saveUserVerificationToken(User theUser, String token) {
-//        var verificationToken = new VerificationToken(token, theUser);
-//        tokenRepository.save(verificationToken);
-//    }
-@Override
-public void saveUserVerificationToken(User theUser, String token) {
-    // Check if the user already has a verification token
-    VerificationToken existingToken = tokenRepository.findByUser(theUser);
+    @Override
+    public void saveUserVerificationToken(User theUser, String token) {
+        // Check if the user already has a verification token
+        VerificationToken existingToken = tokenRepository.findByUser(theUser);
 
-    if (existingToken != null) {
-        // If an existing token is found, update it with the new token and reset the expiration time
-        existingToken.setToken(token);
-        existingToken.setExpirationTime(existingToken.getTokenExpirationTime());
-        tokenRepository.save(existingToken);
-    } else {
-        // If no existing token is found, create a new one
-        var verificationToken = new VerificationToken(token, theUser);
-        tokenRepository.save(verificationToken);
+        if (existingToken != null) {
+            // If an existing token is found, update it with the new token and reset the expiration time
+            existingToken.setToken(token);
+            existingToken.setExpirationTime(existingToken.getTokenExpirationTime());
+            tokenRepository.save(existingToken);
+        } else {
+            // If no existing token is found, create a new one
+            var verificationToken = new VerificationToken(token, theUser);
+            tokenRepository.save(verificationToken);
+        }
     }
-}
 
 
     @Override
     public String validateToken(String theToken) {
         VerificationToken token = tokenRepository.findByToken(theToken);
-        if(token == null){
+        if (token == null) {
             return "Invalid verification token";
         }
-        User user = (User) token.getUser();
+        User user = token.getUser();
         Calendar calendar = Calendar.getInstance();
-        if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0){
+        if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
             tokenRepository.delete(token);
             return "Token already expired";
         }
@@ -207,35 +147,7 @@ public void saveUserVerificationToken(User theUser, String token) {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public User updateUserNotificationToken(Long userId, String newToken) {
+    //    public User updateUserNotificationToken(Long userId, String newToken) {
 //        Optional<User> optionalUser = userRepository.findById(userId);
 //        if (optionalUser.isPresent()) {
 //            User user = optionalUser.get();
@@ -247,30 +159,27 @@ public void saveUserVerificationToken(User theUser, String token) {
 //        // Handle the case when the user with the given ID is not found
 //        return null;
 //    }
-public User updateUserNotificationToken(String username, String newToken) {
-    Optional<User> optionalUser = userRepository.findByEmail(username);
+    public User updateUserNotificationToken(String username, String newToken) {
+        Optional<User> optionalUser = userRepository.findByEmail(username);
 
-    if (optionalUser.isPresent()) {
-        User user = optionalUser.get();
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
 
-        if (newToken != null) {
-            user.updateNotificationToken(newToken);
+            if (newToken != null) {
+                user.updateNotificationToken(newToken);
+            }
+
+            return userRepository.save(user);
         }
 
-        return userRepository.save(user);
+        // Handle the case when the user with the given username is not found
+        return null;
     }
-
-    // Handle the case when the user with the given username is not found
-    return null;
-}
-
-
 
 
     public Optional<User> getUserById(Long userId) {
         return userRepository.findById(userId);
     }
-
 
 
 }

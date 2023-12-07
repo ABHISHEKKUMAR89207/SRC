@@ -13,11 +13,9 @@ import java.util.function.Function;
 
 @Component
 public class JwtHelper {
-    //requirement :
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
-    //    public static final long JWT_TOKEN_VALIDITY =  60;
-    private String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
+    private final String secret = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -51,16 +49,10 @@ public class JwtHelper {
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
-    //while creating the token -
-    //1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
-    //2. Sign the JWT using the HS512 algorithm and secret key.
-    //3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
-    //   compaction of the JWT to a URL-safe string
+    //for token generation
     private String doGenerateToken(Map<String, Object> claims, String subject) {
 
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
-                .signWith(SignatureAlgorithm.HS512, secret).compact();
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000)).signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     //validate token
@@ -68,7 +60,4 @@ public class JwtHelper {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
-
-
 }

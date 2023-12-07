@@ -20,11 +20,8 @@ public class Feedback {
     private LocalDateTime localDateTime;
     private String feedback;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-//    @JsonBackReference
     @JsonIgnore
     private User user;
 }

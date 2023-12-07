@@ -1,7 +1,5 @@
 package com.example.jwt.controler;
 
-
-
 import com.example.jwt.entities.AllToggle;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.allToggleService;
@@ -13,26 +11,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/notification-settings")
 public class allToggleController {
+    private final allToggleService settingsService;
     @Autowired
     private JwtHelper jwtHelper;
-
     @Autowired
     private allToggleService notificationSettingsService;
     private UserService userService;
-    private final allToggleService settingsService;
 
     @Autowired
     public allToggleController(allToggleService settingsService) {
         this.settingsService = settingsService;
     }
 
-
-
     //notification get onn/off
-
     @GetMapping("/get-notify-on-off")
-    public ResponseEntity<AllToggle> getCurrentUserNotificationSettings(
-            @RequestHeader("Auth") String authorizationHeader) {
+    public ResponseEntity<AllToggle> getCurrentUserNotificationSettings(@RequestHeader("Auth") String authorizationHeader) {
 
         String token = authorizationHeader.replace("Bearer ", "");
 
@@ -50,11 +43,8 @@ public class allToggleController {
     }
 
     //notification update onn/off
-
     @PutMapping("/update-notify-on-off")
-    public ResponseEntity<AllToggle> updateUserNotificationSettings(
-            @RequestHeader("Auth") String tokenHeader,
-            @RequestParam boolean notificationOn) {
+    public ResponseEntity<AllToggle> updateUserNotificationSettings(@RequestHeader("Auth") String tokenHeader, @RequestParam boolean notificationOn) {
 
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
@@ -67,29 +57,4 @@ public class allToggleController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
-//    @PutMapping("/update-notify-on-off")
-//    public ResponseEntity<UserNotificationSettings> updateUserNotificationSettings(
-//            @RequestHeader("Auth") String tokenHeader,
-//            @RequestParam boolean notificationOn) {
-//
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        UserNotificationSettings updatedSettings = notificationSettingsService.updateUserNotificationSettings(username, notificationOn);
-//
-//        if (updatedSettings != null) {
-//            return ResponseEntity.ok(updatedSettings);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-
-
-
 }

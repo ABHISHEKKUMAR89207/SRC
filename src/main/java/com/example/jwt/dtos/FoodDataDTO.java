@@ -2,36 +2,16 @@ package com.example.jwt.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-//import com.fasterxml.jackson.annotation.JsonProperty;
-//import lombok.Data;
-//
-//@Data
-//public class FoodDataDTO {
-//    private Long id;
-//    private String food;
-////    @JsonProperty
-//    private Integer value; // Either carbs or fat
-//
-//    public FoodDataDTO(Long id, String food, Integer value) {
-//        this.id = id;
-//        this.food = food;
-//        this.value = value;
-//    }
-//
-//    // Getters and setters
-//}
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FoodDataDTO {
     private Long id;
     private String food;
-    private Integer carbs; // Add carbs field
-    private Integer fat;   // Add fat field
+    private Integer carbs;
+    private Integer fat;
 
-    // Empty constructor
     public FoodDataDTO() {
     }
 
-    // Constructor for both "carbs" and "fat"
     public FoodDataDTO(Long id, String food, Integer carbs, Integer fat) {
         this.id = id;
         this.food = food;
@@ -39,7 +19,6 @@ public class FoodDataDTO {
         this.fat = fat;
     }
 
-    // Getters and setters for all fields
     public Long getId() {
         return id;
     }

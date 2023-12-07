@@ -7,7 +7,6 @@ import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserProfileService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import static com.mysql.cj.conf.PropertyKey.logger;
-
 @RestController
 @RequestMapping("/api/profile")
 @Tag(name = "User Profile Controller", description = "Api for Authentication")
@@ -35,96 +31,20 @@ public class UserProfileController {
     private final UserProfileService userProfileService;
     private final JwtHelper jwtHelper;
     private final UserService userService;
-
-    Logger logger =  LoggerFactory.getLogger(UserProfileController.class);
-
+    Logger logger = LoggerFactory.getLogger(UserProfileController.class);
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
-    public UserProfileController(UserProfileService userProfileService, UserService userService,
-                                 JwtHelper jwtHelper) {
+    public UserProfileController(UserProfileService userProfileService, UserService userService, JwtHelper jwtHelper) {
         this.userProfileService = userProfileService;
         this.jwtHelper = jwtHelper;
         this.userService = userService;
-
     }
 
-
-
-
-//    @GetMapping("/another-testing")
-//    public ResponseEntity<String> getProfileByUserEmail(@RequestHeader("Auth") String tokenHeader) {
-//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        System.out.println("Username from token: " + username);
-//
-////         Retrieve the user details from the database
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//        System.out.println("UserDetails: " + userDetails);
-//        return ResponseEntity.ok("Username: " + username);
-//    }
-
-
-//    @GetMapping("/user-profile")
-//    public ResponseEntity<UserProfile> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
-//        try {
-//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//            String token = tokenHeader.replace("Bearer ", "");
-//
-//            // Extract the username (email) from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//            System.out.println("Username from token: " + username);
-//
-////            Retrieve the user details from the database
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//            System.out.println("UserDetails: " + userDetails);
-////        return ResponseEntity.ok("Username: " + username);
-//
-//            if (userDetails != null) {
-//                // Fetch health trends for the user based on the username
-//                UserProfile userProfile = userProfileService.findByUsername(username);
-//                System.out.println("Health Trends: " + userProfile);
-//            } else {
-//                return ResponseEntity.notFound().build(); // UserProfile not found
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Token validation failed
-//        }
-//    }
-
-//    @GetMapping("/get-userProfile")
-//    public ResponseEntity<UserProfile> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
-//        try {
-//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//            String token = tokenHeader.replace("Bearer ", "");
-//
-//            // Extract the username (email) from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Retrieve the user's profile based on the username
-//            UserProfile userProfile = userProfileService.findByUsername(username);
-//
-//            if (userProfile != null) {
-//                return ResponseEntity.ok(userProfile);
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//            }
-//        } catch (Exception e) {
-//            // Handle any exceptions, e.g., token validation failure
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-//        }
-//    }
-//
-
-
-
-
-
+    // to get the user's
+    // profile
     @GetMapping("/get-userProfile")
     public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
         try {
@@ -175,25 +95,23 @@ public class UserProfileController {
         }
     }
 
-     private Integer calculatedAge(String date){
-             // Define the date format for the input DOB
-             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    // for calculating the age of the user with the given D.O.B
+    private Integer calculatedAge(String date) {
+        // Define the date format for the input DOB
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-             // Parse the DOB string into a LocalDate object
-             LocalDate birthDate = LocalDate.parse(date, formatter);
+        // Parse the DOB string into a LocalDate object
+        LocalDate birthDate = LocalDate.parse(date, formatter);
 
-             // Calculate the period (difference) between the birthDate and the current date
-             Period age = Period.between(birthDate, LocalDate.now());
+        // Calculate the period (difference) between the birthDate and the current date
+        Period age = Period.between(birthDate, LocalDate.now());
 
-             // Extract the years from the age period
-             int years = age.getYears();
-
-             return years;
-         }
-
+        // Extract the years from the age period
+        int years = age.getYears();
+        return years;
+    }
 
     //update profile
-
     @PutMapping("/update-userProfile")
     public ResponseEntity<?> updateUserProfileByToken(@RequestHeader("Auth") String tokenHeader, @RequestBody Map<String, Object> updateData) {
         try {
@@ -220,9 +138,9 @@ public class UserProfileController {
                     String str = String.valueOf(userProfile.getHeight());
                     String[] parts = str.split("\\.");
                     double befDecimal = Double.parseDouble(parts[0]);
-                    double aftDecimal =Double.parseDouble(parts[1]);
+                    double aftDecimal = Double.parseDouble(parts[1]);
 
-                    double heightInInches = (befDecimal*12) + aftDecimal;
+                    double heightInInches = (befDecimal * 12) + aftDecimal;
                     double heightInMeters = heightInInches * 0.0254; // Convert height to meters
                     double bmi = newWeight / (heightInMeters * heightInMeters);
                     String formatedBmi = decimalFormat.format(bmi);
@@ -236,9 +154,9 @@ public class UserProfileController {
                     String str = String.valueOf(newHeight);
                     String[] parts = str.split("\\.");
                     double befDecimal = Double.parseDouble(parts[0]);
-                    double aftDecimal =Double.parseDouble(parts[1]);
+                    double aftDecimal = Double.parseDouble(parts[1]);
 
-                    double heightInInches = (befDecimal*12) + aftDecimal;
+                    double heightInInches = (befDecimal * 12) + aftDecimal;
                     double heightInMeters = heightInInches * 0.0254; // Convert height to meters
                     double bmi = userProfile.getWeight() / ((heightInMeters / 100.0) * (heightInMeters / 100.0));
                     String formatedBmi = decimalFormat.format(bmi);
@@ -258,22 +176,22 @@ public class UserProfileController {
                     }
                 }
 
-                if ((updateData.containsKey("googleAccountLink"))){
+                if ((updateData.containsKey("googleAccountLink"))) {
                     String newGoogleAccountLink = updateData.get("googleAccountLink").toString();
                     userProfile.setGoogleAccountLink(newGoogleAccountLink);
                 }
 
-                if ((updateData.containsKey("facebookAccountLink"))){
+                if ((updateData.containsKey("facebookAccountLink"))) {
                     String newFacebookAccountLink = updateData.get("facebookAccountLink").toString();
                     userProfile.setFacebookAccountLink(newFacebookAccountLink);
                 }
 
-                if ((updateData.containsKey("twitterAccounLinkt"))){
+                if ((updateData.containsKey("twitterAccounLinkt"))) {
                     String newTwitterAccountLink = updateData.get("twitterAccountLink").toString();
                     userProfile.setTwitterAccountLink(newTwitterAccountLink);
                 }
 
-                if ((updateData.containsKey("linkedinAccountLink"))){
+                if ((updateData.containsKey("linkedinAccountLink"))) {
                     String newLinkedinAccountLink = updateData.get("linkedinAccountLink").toString();
                     userProfile.setLinkedInAccountLink(newLinkedinAccountLink);
                 }
@@ -301,81 +219,14 @@ public class UserProfileController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or profile not found.");
             }
         } catch (Exception e) {
-            // Handle any exceptions, e.g., token validation failure
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized.");
         }
     }
 
-
-
-
-
-
-
-//    @GetMapping("/testing")
-//    public ResponseEntity<String> getProfile(@RequestHeader("Auth") String tokenHeader) {
-//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        System.out.println("Username from token: " + username);
-//
-//        // Retrieve the user details from the database
-////        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-////        System.out.println("UserDetails: " + userDetails);
-//        return ResponseEntity.ok("Username: " + username);
-//    }
-
-
-
     //create user profile
     @PostMapping("/createProfile/{userId}")
-    public ResponseEntity<UserProfile> createUserProfile(
-            @RequestBody UserProfile userProfile,
-            @PathVariable Long userId
-    ) throws ParseException {
-//        return userProfileService.createUserProfile(userProfile);
+    public ResponseEntity<UserProfile> createUserProfile(@RequestBody UserProfile userProfile, @PathVariable Long userId) throws ParseException {
         UserProfile userProfile1 = this.userProfileService.createUserProfile(userProfile, userId);
         return new ResponseEntity<UserProfile>(userProfile1, HttpStatus.CREATED);
     }
-
-
-
-//
-//    // create user profile
-//    @PostMapping("/createProfile/{userId}")
-//    public ResponseEntity<UserProfile> createUserProfile(
-//            @RequestBody UserProfile userProfile,
-//            @PathVariable Long userId
-//    ) {
-//        User user = this.userRepository.findById(userId)
-//                .orElseThrow(() -> new ResourceNotFoundException("User Profile", "UserProfile id", userId));
-//
-//        // Set the user reference in the UserProfile
-//        userProfile.setUser(user);
-//
-//        // Calculate and set the BMI
-//        double bmi = calculateBMI(userProfile);
-//        userProfile.setBmi(bmi);
-//
-//        UserProfile newProfile = this.userProfileRepository.save(userProfile);
-//
-//        return new ResponseEntity<>(newProfile, HttpStatus.CREATED);
-//    }
-//
-//
-//    private double calculateBMI(double heightInCentimeters, double weight) {
-//        double heightInMeters = heightInCentimeters / 100; // Convert height to meters
-//        return weight / (heightInMeters * heightInMeters);
-//    }
-
-////update profile
-//    @PutMapping("/updateProfile/{userId}")
-//    public ResponseEntity<UserProfile> updateUserProfile(@PathVariable Long userId, @RequestBody UserProfile updatedProfile) {
-//        userProfileService.updateUserProfile(userId, updatedProfile);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
-
-
 }

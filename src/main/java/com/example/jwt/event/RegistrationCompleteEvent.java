@@ -1,6 +1,5 @@
 package com.example.jwt.event;
 
-
 import com.example.jwt.entities.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +11,7 @@ public class RegistrationCompleteEvent extends ApplicationEvent {
     private User user;
     private String applicationUrl;
 
+    //runs when registration event is completed
     public RegistrationCompleteEvent(User user, String applicationUrl) {
         super(user);
         this.user = user;

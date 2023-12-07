@@ -15,20 +15,19 @@ import java.util.List;
 @RequestMapping("/api/sleep-logs")
 public class SleepDurationController {
     private final SleepDurationRepository sleepDurationRepository;
-
     @Autowired
     private JwtHelper jwtHelper;
     @Autowired
     private SleepDurationService sleepDurationService;
+
     @Autowired
     public SleepDurationController(SleepDurationRepository sleepDurationRepository) {
         this.sleepDurationRepository = sleepDurationRepository;
     }
 
+    // creeate the sleep goal of the user
     @PutMapping("/creatSleepLog")
-    public ResponseEntity<SleepDuration> createSleepLog(@RequestHeader("Auth") String tokenHeader,
-                                        @RequestBody SleepDuration sleepDuration) {
-
+    public ResponseEntity<SleepDuration> createSleepLog(@RequestHeader("Auth") String tokenHeader, @RequestBody SleepDuration sleepDuration) {
         try {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
@@ -38,14 +37,14 @@ public class SleepDurationController {
             sleepDuration = sleepDurationService.addOrUpdateSleepDuration(sleepDuration, username);
 
             return new ResponseEntity<>(sleepDuration, HttpStatus.CREATED);
-        }catch(Exception e){
-            System.out.println("Username is "+ e);
+        } catch (Exception e) {
+            System.out.println("Username is " + e);
             // Handle exceptions, e.g., validation errors or database errors
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // You can customize the error response as needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // You can customize the error response as needed
         }
     }
 
+    //get all the sleep recrd of the specific user
     @GetMapping("/getAllSleep")
     public ResponseEntity<List<SleepDuration>> getAllSleepLogs(@RequestHeader("Auth") String tokenHeader) {
 
@@ -58,14 +57,11 @@ public class SleepDurationController {
             List<SleepDuration> sleepDuration = sleepDurationService.getAllSleepLogs(username);
 
             return new ResponseEntity<>(sleepDuration, HttpStatus.CREATED);
-        }catch(Exception e){
-            System.out.println("Username is "+ e);
+        } catch (Exception e) {
+            System.out.println("Username is " + e);
             // Handle exceptions, e.g., validation errors or database errors
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null); // You can customize the error response as needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // You can customize the error response as needed
         }
     }
-
-    // Other endpoints for updating, deleting, or retrieving specific sleep logs
 }
 

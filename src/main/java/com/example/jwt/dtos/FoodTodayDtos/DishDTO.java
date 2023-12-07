@@ -1,6 +1,5 @@
 package com.example.jwt.dtos.FoodTodayDtos;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +15,4 @@ public class DishDTO {
     private String dishName;
     private Double dishQuantity;
     private String mealName;
-
-
 }

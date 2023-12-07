@@ -28,16 +28,8 @@ public class Dishes {
     private boolean favourite;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")  // Use the actual field name defined in the User entity
+    @JoinColumn(name = "user_id")
     private User user;
-
-//    @OneToMany
-//    @Column(name = "ingrdient_Id")
-//    private List<Ingredients> ingredient;
-
-//    @OneToMany
-//    @Column(name = "ingrdient_Id")
-//    private Set<Ingredients> ingredient;
 
     @OneToMany(mappedBy = "dishes")
     private List<Ingredients> ingredientList;

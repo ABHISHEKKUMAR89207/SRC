@@ -21,15 +21,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class NotificationService {
-
-//    @Autowired
-//    private NotificationRepository notificationRepository;
-
-    @Autowired
-    private FirebaseMessagingService firebaseMessagingService;
-
+    private static final Logger log = LoggerFactory.getLogger(NotificationController.class);
     private final NotificationRepository notificationRepository;
     private final UserRepository userRepository;
+    @Autowired
+    private FirebaseMessagingService firebaseMessagingService;
 
     @Autowired
     public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository) {
@@ -37,107 +33,14 @@ public class NotificationService {
         this.userRepository = userRepository;
     }
 
-
-//    @Transactional
-//    public void scheduleNotification(String username, NotificationEntity request) {
-//        // Retrieve the user by username
-//        User user = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // Check if a notification with the same type for the same user exists
-//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
-//                user, request.getNotificationType());
-//
-//        // Associate the user with the notification
-//        request.setUser(user);
-//
-//        // Set the time zone to Indian Standard Time (IST)
-//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
-//
-//        // Set the start time and last time in the Indian time zone
-//        request.setStartTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getStartTime(),
-//                        ZoneId.systemDefault()
-//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
-//        );
-//        request.setLastTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getLastTime(),
-//                        ZoneId.systemDefault()
-//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
-//        );
-//
-//        if (existingNotification == null) {
-//            // If a notification with the same type doesn't exist, save the new notification
-//            notificationRepository.save(request);
-//        } else {
-//            // If a notification with the same type exists, update the existing notification
-//            existingNotification.setStartTime(request.getStartTime());
-//            existingNotification.setLastTime(request.getLastTime());
-//
-//            notificationRepository.save(existingNotification);
-//        }
-//    }
-
-
-//1 dec update
-//    @Transactional
-//    public void scheduleNotification(String username, NotificationEntity request) {
-//        // Retrieve the user by username
-//        User user = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // Check if a notification with the same type for the same user exists
-//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
-//                user, request.getNotificationType());
-//
-//        // Associate the user with the notification
-//        request.setUser(user);
-//
-//        // Set the time zone to Indian Standard Time (IST)
-//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
-//
-//        // Set the start time and last time in the Indian time zone
-//        request.setStartTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getStartTime(),
-//                        indianTimeZone  // Use indianTimeZone consistently
-//                ).toLocalDateTime())
-//        );
-//        request.setLastTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getLastTime(),
-//                        indianTimeZone  // Use indianTimeZone consistently
-//                ).toLocalDateTime())
-//        );
-//
-//        if (existingNotification == null) {
-//            // If a notification with the same type doesn't exist, save the new notification
-//            notificationRepository.save(request);
-//        } else {
-//            // If a notification with the same type exists, update the existing notification
-//            existingNotification.setStartTime(request.getStartTime());
-//            existingNotification.setLastTime(request.getLastTime());
-//
-//            notificationRepository.save(existingNotification);
-//        }
-//    }
-
-
+    // for scheduling the notification time
     @Transactional
     public void scheduleNotification(String username, NotificationEntity request) {
         // Retrieve the user by username
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
 
         // Check if a notification with the same type for the same user exists
-        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
-                user, request.getNotificationType());
+        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(user, request.getNotificationType());
 
         // Associate the user with the notification
         request.setUser(user);
@@ -146,20 +49,8 @@ public class NotificationService {
         ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
 
         // Set the start time and last time in the Indian time zone
-        request.setStartTime(
-                LocalTime.from(ZonedDateTime.of(
-                        LocalDate.now(),
-                        request.getStartTime(),
-                        indianTimeZone
-                ).toLocalDateTime())
-        );
-        request.setLastTime(
-                LocalTime.from(ZonedDateTime.of(
-                        LocalDate.now(),
-                        request.getLastTime(),
-                        indianTimeZone
-                ).toLocalDateTime())
-        );
+        request.setStartTime(LocalTime.from(ZonedDateTime.of(LocalDate.now(), request.getStartTime(), indianTimeZone).toLocalDateTime()));
+        request.setLastTime(LocalTime.from(ZonedDateTime.of(LocalDate.now(), request.getLastTime(), indianTimeZone).toLocalDateTime()));
 
         // Convert to UTC for scheduling comparisons
         ZonedDateTime utcStartTime = request.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).withZoneSameInstant(ZoneId.of("UTC"));
@@ -177,12 +68,9 @@ public class NotificationService {
         }
 
         // Now you can use utcStartTime and utcLastTime for scheduling comparisons
-        // For example, you might want to compare with the current UTC time for scheduling logic
         ZonedDateTime currentUtcTime = ZonedDateTime.now(ZoneId.of("UTC"));
         if (currentUtcTime.isAfter(utcStartTime) && currentUtcTime.isBefore(utcLastTime)) {
             // Perform your scheduling logic here
-
-            // Example: Send a notification to the user
             if (user != null && user.getNotificationToken() != null) {
                 // Check if the user has notificationOn set to true
                 if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
@@ -207,99 +95,36 @@ public class NotificationService {
         }
     }
 
+    // to save notification in backend with Indian time zone
     private void saveNotificationWithIndianTimeZone(String username, NotificationEntity request, ZoneId indianTimeZone) {
         // Retrieve the user by username
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
 
         // Associate the user with the notification
         request.setUser(user);
 
         // Set the start time and last time in the Indian time zone
-        request.setStartTime(
-                LocalTime.from(ZonedDateTime.of(
-                        LocalDateTime.of(LocalDate.now(), request.getStartTime()),
-                        ZoneId.systemDefault()
-                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
-        );
-        request.setLastTime(
-                LocalTime.from(ZonedDateTime.of(
-                        LocalDateTime.of(LocalDate.now(), request.getLastTime()),
-                        ZoneId.systemDefault()
-                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
-        );
+        request.setStartTime(LocalTime.from(ZonedDateTime.of(LocalDateTime.of(LocalDate.now(), request.getStartTime()), ZoneId.systemDefault()).withZoneSameInstant(indianTimeZone).toLocalDateTime()));
+        request.setLastTime(LocalTime.from(ZonedDateTime.of(LocalDateTime.of(LocalDate.now(), request.getLastTime()), ZoneId.systemDefault()).withZoneSameInstant(indianTimeZone).toLocalDateTime()));
 
         // Save the notification
         notificationRepository.save(request);
     }
 
+    // to get notification for current time
+    private List<NotificationEntity> getNotificationsForCurrentTime() {
+        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+        LocalTime currentTime = LocalTime.now(indianTimeZone);
+
+        // Fetch notifications where startTime is exactly at the current time
+        return notificationRepository.findAll().stream().filter(notification -> {
+            LocalTime startTime = notification.getStartTime(); // Assuming getStartTime() already returns LocalTime
+            return currentTime.getHour() == startTime.getHour() && currentTime.getMinute() == startTime.getMinute();
+        }).collect(Collectors.toList());
+    }
 
 
-
-
-
-    private static final Logger log = LoggerFactory.getLogger(NotificationController.class);
-
-
-
-//previous final implimentation
-
-//    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
-//    public void sendScheduledNotifications() {
-//        // Fetch all notifications that have a startTime matching the current time
-//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
-//
-//        for (NotificationEntity notification : notifications) {
-//            // Fetch the associated user for the notification
-//            User user = notification.getUser();
-//
-//            // Check if the user is not null and has a notification token
-//            if (user != null && user.getNotificationToken() != null) {
-//                // Create a new notification
-//                NotificationEntity newNotification = createNotificationForUser(user);
-//
-//                // Set the recipient token for the notification
-//                newNotification.setRecipientToken(user.getNotificationToken());
-//
-//                // Send the notification
-//                log.debug("Sending notification: {}", newNotification);
-//                firebaseMessagingService.sendNotificationByToken(newNotification);
-//            } else {
-//                // Handle the case where the user or the notification token is null
-//                // You might want to log a warning or handle it based on your requirements
-//                log.warn("Invalid user or notification token for notification: {}", notification.getId());
-//            }
-//        }
-//    }
-
-//    private List<NotificationEntity> getNotificationsForCurrentTime() {
-//        LocalTime currentTime = LocalTime.now();
-//
-//        // Fetch notifications where startTime is within a certain range of the current time
-//        return notificationRepository.findByStartTimeBetween(currentTime.minusMinutes(1), currentTime.plusMinutes(1));
-//    }
-// Updated getNotificationsForCurrentTime method
-// Updated getNotificationsForCurrentTime method
-// Updated getNotificationsForCurrentTime method
-// Updated getNotificationsForCurrentTime method
-// Updated getNotificationsForCurrentTime method
-// Updated getNotificationsForCurrentTime method
-// Updated getNotificationsForCurrentTime method
-private List<NotificationEntity> getNotificationsForCurrentTime() {
-    ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
-    LocalTime currentTime = LocalTime.now(indianTimeZone);
-
-    // Fetch notifications where startTime is exactly at the current time
-    return notificationRepository.findAll().stream()
-            .filter(notification -> {
-                LocalTime startTime = notification.getStartTime(); // Assuming getStartTime() already returns LocalTime
-                return currentTime.getHour() == startTime.getHour() && currentTime.getMinute() == startTime.getMinute();
-            })
-            .collect(Collectors.toList());
-}
-
-
-    //
+    // for seding notification at a fixed time interval
     @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
     public void sendScheduledNotifications() {
         // Fetch all notifications that have a startTime matching the current time
@@ -335,7 +160,6 @@ private List<NotificationEntity> getNotificationsForCurrentTime() {
     }
 
 
-
 //previous final implimentation
 
     private NotificationEntity createNotificationForUser(User user) {
@@ -349,13 +173,10 @@ private List<NotificationEntity> getNotificationsForCurrentTime() {
         newNotification.setTitle("Hi " + user.getUserProfile().getFirstName());
 
         // Filter notifications based on the current time
-        List<NotificationEntity> currentNotifications = user.getNotifications()
-                .stream()
-                .filter(notification -> {
-                    LocalDateTime notificationDateTime = notification.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).toLocalDateTime();
-                    return notificationDateTime.truncatedTo(ChronoUnit.MINUTES).equals(currentDateTime.truncatedTo(ChronoUnit.MINUTES));
-                })
-                .collect(Collectors.toList());
+        List<NotificationEntity> currentNotifications = user.getNotifications().stream().filter(notification -> {
+            LocalDateTime notificationDateTime = notification.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).toLocalDateTime();
+            return notificationDateTime.truncatedTo(ChronoUnit.MINUTES).equals(currentDateTime.truncatedTo(ChronoUnit.MINUTES));
+        }).collect(Collectors.toList());
 
         if (!currentNotifications.isEmpty()) {
             // Use the first matching notification for the current time
@@ -368,8 +189,6 @@ private List<NotificationEntity> getNotificationsForCurrentTime() {
 
         return newNotification;
     }
-
-
 
 
 }

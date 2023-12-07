@@ -1,18 +1,14 @@
 package com.example.jwt.controler;
 
 import com.example.jwt.entities.NotificationEntity;
-
-
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FirebaseMessagingService;
 import com.example.jwt.service.NotificationService;
-import com.example.jwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 
 @RestController
@@ -25,13 +21,11 @@ public class NotificationController {
     @Autowired
     private FirebaseMessagingService firebaseMessagingService;
 
-    private static final Logger log = LoggerFactory.getLogger(NotificationController.class);
-
     @Autowired
     private JwtHelper jwtHelper;
+    private static final Logger log = LoggerFactory.getLogger(NotificationController.class);
 
-
-
+    // for scheduling the notification
     @PostMapping("/scheduleNotification")
     public ResponseEntity<String> scheduleNotification(
             @RequestBody NotificationEntity request,
@@ -57,12 +51,6 @@ public class NotificationController {
             return ResponseEntity.status(500).body("Failed to schedule or update notification");
         }
     }
-
-
-
-
-
-
 
 
 //

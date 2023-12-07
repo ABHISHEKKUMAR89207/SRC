@@ -1,6 +1,5 @@
 package com.example.jwt.controler;
 
-
 import com.example.jwt.dtos.ActivitiesDTO;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.Activities;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/activities")
 public class ActivityController {
@@ -28,7 +26,6 @@ public class ActivityController {
     private JwtHelper jwtHelper;
     @Autowired
     private ActivityRepository activityRepository;
-
 
     //By steps
     @PostMapping("/record-by-steps")
@@ -67,11 +64,9 @@ public class ActivityController {
         }
     }
 
-
-
-
+    // to get the steps of the user by fitbit watch
     @GetMapping("/get-steps")
-    public Activities getUserSteps(@RequestHeader("Auth") String tokenHeader ) {
+    public Activities getUserSteps(@RequestHeader("Auth") String tokenHeader) {
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
         String token = tokenHeader.replace("Bearer ", "");
 
@@ -81,75 +76,19 @@ public class ActivityController {
         // Use the username to fetch the userId from your user service
         User user = userService.findByUsername(username);
 
-
         if (user != null) {
             LocalDate currentDate = LocalDate.now();
             Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
 
-            if (existingRecord != null) {
-                return existingRecord; // Return the activities record for the user and current date
-            } else {
-                // If no record exists for the current date, return a placeholder or handle it as needed
-                return null;
-            }
+            // If no record exists for the current date, return a placeholder or handle it as needed
+            return existingRecord; // Return the activities record for the user and current date
         } else {
             // Handle the case where the user with the provided userId is not found.
             return null;
         }
     }
 
-    //update and create by activity
-//    @PutMapping("/record-by-activity")
-//    public ResponseEntity<String> recordActivity(@RequestHeader("Auth") String tokenHeader, @RequestBody Activities activity) {
-//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//        if (activity.getActivityType() != null) {
-//            activityService.recordActivity(user, activity); // Pass the userId to your service method
-//            return ResponseEntity.ok("Activity recorded successfully");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid activity type");
-//        }
-//    }
-
-//    @PutMapping("/record-by-activity")
-//    public ResponseEntity<String> recordActivity(@RequestHeader("Auth") String tokenHeader, @RequestBody Activities activity) {
-//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//
-//        if (activity.getActivityType() != null) {
-//            activityService.recordActivity(user, activity); // Pass the userId to your service method
-//            return ResponseEntity.ok("Activity recorded successfully");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid activity type");
-//        }
-//    }
-
-    //update and create by activity
-//    @PutMapping("/record-by-activity")
-//    public ResponseEntity<String> recordActivity(@RequestParam Long userId, @RequestBody Activities activity) {
-//        if (activity.getActivityType() != null) {
-//            activityService.recordActivity(userId, activity); // Pass the userId to your service method
-//            return ResponseEntity.ok("Activity recorded successfully");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid activity type");
-//        }
-//    }
-
-
-
-
+    // to get the record by activity of the user
     @PutMapping("/record-by-activity")
     public ResponseEntity<?> recordActivity(@RequestHeader("Auth") String tokenHeader, @RequestBody Activities activity) {
         try {
@@ -161,8 +100,6 @@ public class ActivityController {
 
             // Use the username to fetch the userId from your user service
             User user = userService.findByUsername(username);
-
-            // ... (Your existing code to extract the user and validate)
 
             if (user != null) {
                 if (activity.getActivityType() != null) {
@@ -206,18 +143,9 @@ public class ActivityController {
         }
     }
 
-
-
-
-
-
     //calculate and get caloriesBurn
     @GetMapping("/calculateCalories-by duration")
-    public double calculateCalories(
-            @RequestParam String activityType,
-            @RequestParam String activityDate,
-            @RequestHeader("Auth") String tokenHeader
-    ) {
+    public double calculateCalories(@RequestParam String activityType, @RequestParam String activityDate, @RequestHeader("Auth") String tokenHeader) {
         LocalDate date = LocalDate.parse(activityDate);
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
         String token = tokenHeader.replace("Bearer ", "");
@@ -234,9 +162,6 @@ public class ActivityController {
             return -1.0; // You can use an appropriate error value
         }
     }
-
-
-
 
     //calculate and get calory burn by steps
     @GetMapping("/calculateCalories-by-steps")

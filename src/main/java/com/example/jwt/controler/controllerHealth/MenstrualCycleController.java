@@ -26,11 +26,6 @@ public class MenstrualCycleController {
     private final JwtHelper jwtHelper;
     private final MenstrualCycleRepository menstrualCycleRepository;
 
-
-
-
-
-
     @Autowired
     public MenstrualCycleController(MenstrualCycleService menstrualCycleService,
                                     HealthTrendsService healthTrendsService,
@@ -45,7 +40,6 @@ public class MenstrualCycleController {
         this.userService = userService;
         this.menstrualCycleService = menstrualCycleService;
         this.healthTrendsService = healthTrendsService;
-        
     }
 
 

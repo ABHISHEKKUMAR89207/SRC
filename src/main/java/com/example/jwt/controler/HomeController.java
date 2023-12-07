@@ -18,8 +18,6 @@ public class HomeController {
 
         @Autowired
         private UserService userService;
-
-        //http://localhost:8080/home/user
         @GetMapping("/user")
         public List<User> getUser()
         {
@@ -29,7 +27,6 @@ public class HomeController {
 
         @GetMapping("/current-user")
         public String getLoggedInUser(Principal principal){
-
             return principal.getName();
         }
 
