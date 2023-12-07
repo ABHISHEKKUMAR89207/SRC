@@ -1,11 +1,10 @@
 package com.example.jwt.controler;
-import com.example.jwt.dtos.WaterGoalDto;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
-import com.example.jwt.service.waterService;
+import com.example.jwt.service.WaterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -23,10 +22,10 @@ public class waterController {
 
 
     @Autowired
-    private  waterService waterService;
+    private WaterService waterService;
 
     @Autowired
-    public waterController(waterService waterService) {
+    public waterController(WaterService waterService) {
         this.waterService = waterService;
     }
 

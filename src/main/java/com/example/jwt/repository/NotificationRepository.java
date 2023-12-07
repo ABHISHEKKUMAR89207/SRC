@@ -9,14 +9,27 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-
+@Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
 //    List<NotificationEntity> findByNotificationOnIsTrueAndStartTimeBefore(LocalDateTime time);
+List<NotificationEntity> findByUserEmail(String email);
+
+    void deleteByIdAndUser_UserId(Long id, Long userId);
+////@Modifying
+////@Query("DELETE FROM NotificationEntity n WHERE n.id = :id AND n.user.email = :userEmail")
+////void deleteByIdAndUserEmail(@Param("id") Long id, @Param("userEmail") String userEmail);
+////void deleteByIdAndUserEmail(@Param("id") Long id, @Param("userEmail") String userEmail);
+//@Modifying
+//@Query("DELETE FROM NotificationEntity n WHERE n.id = :id AND n.user.email = :userEmail")
+//void deleteByIdAndUserEmail(@Param("id") Long id, @Param("userEmail") String userEmail);
+
+
 
 //    List<NotificationEntity> findByStartTimeBeforeAndLastTimeAfterAndNotificationOnIsTrue(
 //            LocalDateTime startTime, LocalDateTime lastTime);
@@ -27,6 +40,7 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 
     List<NotificationEntity> findByStartTimeLessThanEqual(LocalTime currentTime);
 
+//    List<NotificationEntity> findByUserEmail(String username, boolean notificationOn);
 
     @Query("SELECT n FROM NotificationEntity n WHERE n.startTime = :startTime")
     List<NotificationEntity> findByStartTime(@Param("startTime") LocalTime startTime);

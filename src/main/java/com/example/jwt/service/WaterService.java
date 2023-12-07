@@ -16,7 +16,7 @@ import java.util.Optional;
 
 
 @Service
-public class waterService {
+public class WaterService {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,7 +26,7 @@ public class waterService {
 
 
     @Autowired
-    public waterService( WaterEntityRepository waterEntityRepository) {
+    public WaterService(WaterEntityRepository waterEntityRepository) {
         this.waterEntityRepository = waterEntityRepository;
     }
 

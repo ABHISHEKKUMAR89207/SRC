@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class DishWithIngredientsResponse {
 
+    private Long dishId;
     private String dishName;
     private List<IngredientDTO> ingredients;
     private Double totalCalories;
@@ -22,13 +23,15 @@ public class DishWithIngredientsResponse {
     private Double totalFats;
     private Double totalFibers;
 
-    public DishWithIngredientsResponse(String dishName,
+    public DishWithIngredientsResponse(Long dishId,
+                                       String dishName,
                                        List<IngredientDTO> ingredients,
                                        Double totalCalories,
                                        Double totalProteins,
                                        Double totalCarbs,
                                        Double totalFats,
                                        Double totalFibers) {
+        this.dishId=dishId;
         this.dishName = dishName;
         this.ingredients = ingredients;
         this.totalCalories = totalCalories;

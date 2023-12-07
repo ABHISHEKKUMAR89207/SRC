@@ -1,8 +1,10 @@
 package com.example.jwt.controler;
 
+import com.example.jwt.dtos.NotificationDetailsDTO;
 import com.example.jwt.entities.NotificationEntity;
 
 
+import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FirebaseMessagingService;
 import com.example.jwt.service.NotificationService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 
 @RestController
@@ -61,9 +64,55 @@ public class NotificationController {
 
 
 
+    @GetMapping("/get-user-notifications")
+    public ResponseEntity<List<NotificationDetailsDTO>> getUserNotifications(
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+        try {
+            // Extract the JWT token from the Authorization header
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username from the JWT token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Retrieve notifications for the user where notificationOn is true
+            List<NotificationDetailsDTO> userNotifications = notificationService.getUserNotifications(username);
+
+            return ResponseEntity.ok(userNotifications);
+        } catch (Exception e) {
+            // Handle exceptions appropriately (e.g., log, return an error response)
+            log.error("Failed to retrieve user notifications", e);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 
 
+@Autowired
+private UserService userService;
 
+    @DeleteMapping("/delete-notification/{notificationId}")
+    public ResponseEntity<String> deleteNotification(
+            @PathVariable Long notificationId,
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+        try {
+            // Extract the JWT token from the Authorization header
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username from the JWT token
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            // Delete the notification for the user
+            notificationService.deleteNotification(user, notificationId);
+
+            return ResponseEntity.ok("Notification deleted successfully");
+        } catch (Exception e) {
+            // Handle exceptions appropriately (e.g., log, return an error response)
+            log.error("Failed to delete notification", e);
+            return ResponseEntity.status(500).body("Failed to delete notification");
+        }
+    }
 
 //
 //@PostMapping("/remainder")

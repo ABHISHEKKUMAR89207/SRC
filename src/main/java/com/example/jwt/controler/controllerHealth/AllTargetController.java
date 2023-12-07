@@ -1,16 +1,25 @@
 package com.example.jwt.controler.controllerHealth;//package com.practice.springbootimportcsvfileapp.controller;
 
+import com.example.jwt.dtos.WaterGoalAndIntakeResponse;
 import com.example.jwt.dtos.WaterGoalDto;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
+import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
+import com.example.jwt.service.WaterService;
 import com.example.jwt.service.serviceHealth.AllTargetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -90,20 +99,65 @@ public class AllTargetController {
 
 
 
-    @GetMapping("/get-water-goal")
-    public ResponseEntity<Double> getUserWaterGoal(
-            @RequestHeader("Auth") String tokenHeader
-    ) {
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
+//    @GetMapping("/get-water-goal")
+//    public ResponseEntity<Double> getUserWaterGoal(
+//            @RequestHeader("Auth") String tokenHeader
+//    ) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Define the date format
+//        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//        // Format the current date
+//        String formattedDate = currentDate.format(dateFormat);
+//        user.getWaterEntities().getWaterIntake();
+//        if (user != null && user.getAllTarget() != null) {
+//            return new ResponseEntity<>(user.getAllTarget().getWaterGoal(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 
-        if (user != null && user.getAllTarget() != null) {
-            return new ResponseEntity<>(user.getAllTarget().getWaterGoal(), HttpStatus.OK);
+    @Autowired
+    private WaterService waterService;
+@GetMapping("/get-water-goal")
+public ResponseEntity<WaterGoalAndIntakeResponse> getUserWaterGoal(@RequestHeader("Auth") String tokenHeader) {
+    String token = tokenHeader.replace("Bearer ", "");
+    String username = jwtHelper.getUsernameFromToken(token);
+    User user = userService.findByUsername(username);
+
+    if (user != null && user.getAllTarget() != null && user.getWaterEntities() != null) {
+        // Get water goal from AllTarget
+        Double waterGoal = user.getAllTarget().getWaterGoal();
+
+        LocalDate currentDate = LocalDate.now();
+
+        // Calculate total water intake for the current date
+        Double waterIntakeForCurrentDate = waterService.calculateWaterIntake(user, currentDate);
+
+        if (waterGoal != null) {
+            WaterGoalAndIntakeResponse response = new WaterGoalAndIntakeResponse();
+            response.setWaterGoal(waterGoal);
+            response.setWaterIntakeForCurrentDate(waterIntakeForCurrentDate);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+}
+
+
+
+
+
+
+
 
 }
 

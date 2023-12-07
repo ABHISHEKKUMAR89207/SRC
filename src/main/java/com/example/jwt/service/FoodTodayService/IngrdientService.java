@@ -217,7 +217,7 @@ for (Dishes dish : dishesList) {
     mapIngredient.put("fibers",fibers);
     analysisService.setmaps(mapIngredient);
 
-    responseList.add(new DishWithIngredientsResponse(dish.getDishName(), ingredientsList, totalCalories,totalProtiens,totalCarbs,totalFats,totalFibers));
+    responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(), ingredientsList, totalCalories,totalProtiens,totalCarbs,totalFats,totalFibers));
 }
     finalResponseList.add(new mealResponse(responseList,calories,proteins,carbs,fats,fibers));
     return finalResponseList;
@@ -283,7 +283,7 @@ for (Dishes dish : dishesList) {
 
 
 
-        responseList.add(new DishWithIngredientsResponse(dish.getDishName(), ingredientsList, totalCalories,totalProtiens,totalCarbs,totalFats,totalFibers));
+        responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(), ingredientsList, totalCalories,totalProtiens,totalCarbs,totalFats,totalFibers));
     }
 }
     finalResponseList.add(new mealResponse(responseList,calories,proteins,carbs,fats,fibers));
