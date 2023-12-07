@@ -5,6 +5,8 @@ import com.example.jwt.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,6 +26,10 @@ public class BookTable {
     private int quantity;
     private double price;
 
+    // Constructors, getters, setters, etc.
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 @ManyToOne
     private User user;
 

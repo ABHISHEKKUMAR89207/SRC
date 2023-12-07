@@ -1,9 +1,13 @@
 package com.example.jwt.booksystem1.books;
 
 import com.example.jwt.entities.User;
+import com.example.jwt.entities.UserProfile;
+import com.example.jwt.repository.UserProfileRepository;
+import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
