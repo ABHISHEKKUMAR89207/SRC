@@ -37,10 +37,9 @@ public class NotificationService {
         this.userRepository = userRepository;
     }
 
-<<<<<<< HEAD
+
     // for scheduling the notification time
-=======
-@ Autowired
+@Autowired
 private AllToggleRepository allToggleRepository;
 
     public List<NotificationDetailsDTO> getUserNotifications(String email) {
@@ -183,7 +182,7 @@ public void deleteNotification(User user, Long notificationId) {
 //    }
 
 
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
+
     @Transactional
     public void scheduleNotification(String username, NotificationEntity request) {
         // Retrieve the user by username

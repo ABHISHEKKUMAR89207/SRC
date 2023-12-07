@@ -2,15 +2,14 @@ package com.example.jwt.controler;
 
 import com.example.jwt.dtos.NotificationDetailsDTO;
 import com.example.jwt.entities.NotificationEntity;
-<<<<<<< HEAD
-=======
+
 
 
 import com.example.jwt.entities.User;
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FirebaseMessagingService;
 import com.example.jwt.service.NotificationService;
+import com.example.jwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,8 +60,6 @@ public class NotificationController {
     }
 
 
-<<<<<<< HEAD
-=======
 
 
     @GetMapping("/get-user-notifications")
@@ -115,7 +112,7 @@ private UserService userService;
         }
     }
 
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
+
 //
 //@PostMapping("/remainder")
 //public String sendReminderNotificationByType(@RequestBody NotificationEntity notificationEntity) {

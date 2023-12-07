@@ -15,16 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< HEAD
-=======
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
+
+
 @RestController
 @RequestMapping("/api/all-target")
 public class AllTargetController {
@@ -90,38 +86,7 @@ public class AllTargetController {
         return waterGoalDto;
     }
 
-<<<<<<< HEAD
-    // to get the water goal of the specicfic user
-    @GetMapping("/get-water-goal")
-    public ResponseEntity<Double> getUserWaterGoal(@RequestHeader("Auth") String tokenHeader) {
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
-=======
 
-
-//    @GetMapping("/get-water-goal")
-//    public ResponseEntity<Double> getUserWaterGoal(
-//            @RequestHeader("Auth") String tokenHeader
-//    ) {
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        User user = userService.findByUsername(username);
-//        LocalDate currentDate = LocalDate.now();
-//
-//        // Define the date format
-//        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//        // Format the current date
-//        String formattedDate = currentDate.format(dateFormat);
-//        user.getWaterEntities().getWaterIntake();
-//        if (user != null && user.getAllTarget() != null) {
-//            return new ResponseEntity<>(user.getAllTarget().getWaterGoal(), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
 
     @Autowired
     private WaterService waterService;
@@ -152,18 +117,9 @@ public ResponseEntity<WaterGoalAndIntakeResponse> getUserWaterGoal(@RequestHeade
     } else {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-<<<<<<< HEAD
-=======
+
 }
 
-
-
-
-
-
-
-
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
 }
 
 

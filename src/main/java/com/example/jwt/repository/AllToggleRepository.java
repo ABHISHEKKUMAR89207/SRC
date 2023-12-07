@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface AllToggleRepository extends JpaRepository<AllToggle, Long> {
     AllToggle findByUser(User user);
+
+    Optional<AllToggle> findByUserEmail(String email);
 }

@@ -38,4 +38,6 @@ public class DishWithIngredientsResponse {
         this.totalFats = totalFats;
         this.totalFibers = totalFibers;
     }
+
+
 }

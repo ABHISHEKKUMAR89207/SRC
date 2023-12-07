@@ -17,11 +17,11 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
-<<<<<<< HEAD
 
-    List<NotificationEntity> findByStartTimeLessThanEqual(LocalTime currentTime);
 
-=======
+
+
+
 //    List<NotificationEntity> findByNotificationOnIsTrueAndStartTimeBefore(LocalDateTime time);
 List<NotificationEntity> findByUserEmail(String email);
 
@@ -47,7 +47,6 @@ List<NotificationEntity> findByUserEmail(String email);
 
 //    List<NotificationEntity> findByUserEmail(String username, boolean notificationOn);
 
->>>>>>> 495700b4804df131a48b75088fdae4d03dbf4e57
     @Query("SELECT n FROM NotificationEntity n WHERE n.startTime = :startTime")
     List<NotificationEntity> findByStartTime(@Param("startTime") LocalTime startTime);
 
