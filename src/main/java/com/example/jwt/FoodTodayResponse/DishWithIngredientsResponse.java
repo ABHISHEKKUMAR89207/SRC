@@ -14,6 +14,7 @@ public class DishWithIngredientsResponse {
 
     private Long dishId;
     private String dishName;
+    private boolean favourite;
     private List<IngredientDTO> ingredients;
     private Double totalCalories;
     private Double totalProteins;
@@ -23,6 +24,7 @@ public class DishWithIngredientsResponse {
 
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
+                                       boolean favourite,
                                        List<IngredientDTO> ingredients,
                                        Double totalCalories,
                                        Double totalProteins,
@@ -31,6 +33,7 @@ public class DishWithIngredientsResponse {
                                        Double totalFibers) {
         this.dishId=dishId;
         this.dishName = dishName;
+        this.favourite = favourite;
         this.ingredients = ingredients;
         this.totalCalories = totalCalories;
         this.totalProteins = totalProteins;
