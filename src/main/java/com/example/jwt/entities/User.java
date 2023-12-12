@@ -69,6 +69,9 @@ public class User implements UserDetails {
                 .map((role)-> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
         return authories;
     }
+    public String getUserName() {
+        return this.userName;
+    }
 
     @Override
     public String getUsername() {

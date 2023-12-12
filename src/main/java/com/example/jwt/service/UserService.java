@@ -12,11 +12,13 @@ import com.example.jwt.registration.token.VerificationTokenRepository;
 import com.example.jwt.repository.RoleRepo;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.AllToggleRepository;
+import com.google.api.gax.paging.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +41,9 @@ public class UserService implements IUserService {
         return userRepository.findAll();
     }
 
+//    public Page<User> getAllUsers(Pageable pageable) {
+//        return userRepository.findAll(pageable);
+//    }
     public User saveUser(User user) {
         // Use your UserRepository to save the user entity
         return userRepository.save(user);
