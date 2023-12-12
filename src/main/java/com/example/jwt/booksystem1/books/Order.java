@@ -39,6 +39,7 @@ private BookTable book;
     private String deliveryDate;
     private String contact;
     private String ninOrderId;
+    private String deliveryStatus;
 
 
 

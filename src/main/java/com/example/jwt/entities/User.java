@@ -2,6 +2,7 @@ package com.example.jwt.entities;
 
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.registration.token.VerificationToken;
 import com.fasterxml.jackson.annotation.*;
@@ -61,6 +62,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<WaterEntity> waterEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<SleepDuration> sleepDurations = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

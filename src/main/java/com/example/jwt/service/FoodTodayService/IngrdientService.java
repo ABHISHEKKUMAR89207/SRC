@@ -199,7 +199,7 @@ public class IngrdientService {
     mapIngredient.put("fibers",fibers);
     analysisService.setmaps(mapIngredient);
 
-    responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(), ingredientsList, totalCalories,totalProtiens,totalCarbs,totalFats,totalFibers));
+    responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(),dish.isFavourite(), ingredientsList, totalCalories,totalProtiens,totalCarbs,totalFats,totalFibers));
 }
     finalResponseList.add(new mealResponse(responseList,calories,proteins,carbs,fats,fibers));
     return finalResponseList;
@@ -258,7 +258,7 @@ public class IngrdientService {
                     carbs = carbs + totalCarbs;
                     fibers = fibers + totalFibers;
 
-                    responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(), ingredientsList, totalCalories, totalProtiens, totalCarbs, totalFats, totalFibers));
+                    responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(),dish.isFavourite(), ingredientsList, totalCalories, totalProtiens, totalCarbs, totalFats, totalFibers));
                 }
             }
             finalResponseList.add(new mealResponse(responseList, calories, proteins, carbs, fats, fibers));
