@@ -144,7 +144,8 @@ List<Integer> quantities=new ArrayList<>();
                             addressForDelivery,  // deliveryAddress - you can set to null or provide a default value
                             "soon",   // deliveryDate - you can set to null or provide a default value
                             contactForDelivery ,
-                            OrderIdNIN
+                            OrderIdNIN,
+                            "Not delivered yet"
                     );
                     // Save the order using the repository
                     Order savedOrder = orderRepository.save(newOrder);

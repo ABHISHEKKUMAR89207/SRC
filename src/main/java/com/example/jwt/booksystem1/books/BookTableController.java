@@ -54,7 +54,10 @@ public class BookTableController {
         }
     }
 
-
+    @GetMapping("/multiple")
+    public List<BookTable> getBookTablesByIds(@RequestParam List<Long> ids) {
+        return bookTableRepository.findAllById(ids);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBookTable(@PathVariable Long id) {

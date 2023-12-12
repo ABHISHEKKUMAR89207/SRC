@@ -29,6 +29,18 @@ public class UserBOOKBUY {
     @Autowired
     private  OrderRepository orderRepository;
 
+    @PostMapping("/getMultipleBooks")
+    public List<BookTable> getBookTablesByIds(@RequestHeader("Auth") String tokenHeader,@RequestBody List<Long> ids) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String Username=jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(Username);
+        Long userid=user.getUserId();
+        System.out.println("USER NAME"+Username);
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+        return bookTableRepository.findAllById(ids);
+
+    }
     @GetMapping
     public List<BookTable> getAllBookTables(@RequestHeader("Auth") String tokenHeader) {
         String token = tokenHeader.replace("Bearer ", "");
