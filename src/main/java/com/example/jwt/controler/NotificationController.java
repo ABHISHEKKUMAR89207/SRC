@@ -13,6 +13,7 @@ import com.example.jwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -88,30 +89,86 @@ public class NotificationController {
 @Autowired
 private UserService userService;
 
-    @DeleteMapping("/delete-notification/{notificationId}")
-    public ResponseEntity<String> deleteNotification(
-            @PathVariable Long notificationId,
-            @RequestHeader("Auth") String tokenHeader
-    ) {
+//    del by waris
+@DeleteMapping("/delete-notification/{notificationId}")
+public ResponseEntity<String> deleteNotification(
+        @PathVariable Long notificationId,
+        @RequestHeader("Auth") String tokenHeader
+) {
+    try {
+        // Extract the JWT token from the Authorization header
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username from the JWT token
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        // Delete the notification for the user
+        notificationService.deleteNotification(user, notificationId);
+
+        return ResponseEntity.ok("Notification deleted successfully");
+    } catch (Exception e) {
+        // Handle exceptions appropriately (e.g., log, return an error response)
+        log.error("Failed to delete notification", e);
+        return ResponseEntity.status(500).body("Failed to delete notification");
+    }
+}
+
+// NotificationController.java
+
+    @PutMapping("/update-toggle-notification-type")
+    public ResponseEntity<Void> toggleNotification(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam String notificationType,
+            @RequestParam boolean notificationOn) {
         try {
-            // Extract the JWT token from the Authorization header
             String token = tokenHeader.replace("Bearer ", "");
 
             // Extract the username from the JWT token
             String username = jwtHelper.getUsernameFromToken(token);
-            User user = userService.findByUsername(username);
 
-            // Delete the notification for the user
-            notificationService.deleteNotification(user, notificationId);
-
-            return ResponseEntity.ok("Notification deleted successfully");
+            // Toggle notifications for the user and specific notification type
+            notificationService.toggleNotification(username, notificationType, notificationOn);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
-            // Handle exceptions appropriately (e.g., log, return an error response)
-            log.error("Failed to delete notification", e);
-            return ResponseEntity.status(500).body("Failed to delete notification");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
+
+//    @GetMapping("/get-toggle-notification-type")
+//    public ResponseEntity<Boolean> toggleNotificationType(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam String notificationType
+//    ) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username from the JWT token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//            // Assuming you have a method in your service to get the notification for the user and type
+//            boolean isNotificationTypeOn = notificationService.isNotificationTypeOn(user, notificationType);
+//
+//            return ResponseEntity.ok(isNotificationTypeOn);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
+
+
+//    @PutMapping("/{notificationId}/toggle")
+//    public ResponseEntity<Void> toggleNotification(
+//            @PathVariable Long notificationId,
+//            @RequestParam boolean notificationOn) {
+//        try {
+//            notificationService.toggleNotification(notificationId, notificationOn);
+//            return ResponseEntity.ok().build();
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 
 //
 //@PostMapping("/remainder")

@@ -7,9 +7,12 @@ import com.example.jwt.repository.ActivityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.YearMonth;
 
 @Service
 public class ActivityService {
@@ -20,6 +23,30 @@ public class ActivityService {
     double metValue = 0.0;
     boolean flag = true;
     double strideLength = 0.0;
+
+
+
+    public Activities getActivitiesForUserAndDate(User user, LocalDate date) {
+        return activityRepository.findByUserAndActivityDate(user, date);
+    }
+
+    public List<Activities> getActivitiesForUserAndWeek(User user, LocalDate startDate, LocalDate endDate) {
+        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
+    }
+
+    public List<Activities> getActivitiesByMonthAndYear(User user, int year, int month) {
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
+
+        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
+    }
+
+    public List<Activities> getActivitiesByYear(User user, int year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = startDate.plusYears(1).minusDays(1);
+
+        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
+    }
 
     private Double calculateCaloriesBurnt(String activityType, int steps, String gender) {
 
@@ -96,9 +123,6 @@ public class ActivityService {
     }
 
 
-    public Activities getActivitiesForUserAndDate(User user, LocalDate date) {
-        return activityRepository.findByUserAndActivityDate(user, date);
-    }
 
     public Activities updateActivities(Activities activities) {
         return activityRepository.save(activities);

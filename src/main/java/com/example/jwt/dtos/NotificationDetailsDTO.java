@@ -21,11 +21,12 @@ public class NotificationDetailsDTO {
     private LocalTime startTime;
     private LocalTime lastTime;
     private String notificationType;
+    private boolean notificationOn;
 
     // Constructor, getters, and setters
 
     public NotificationDetailsDTO(Long id, String recipientToken, String title, String body,
-                                  LocalTime startTime, LocalTime lastTime, String notificationType) {
+                                  LocalTime startTime, LocalTime lastTime, String notificationType,Boolean notificationOn) {
         this.id = id;
         this.recipientToken = recipientToken;
         this.title = title;
@@ -33,6 +34,7 @@ public class NotificationDetailsDTO {
         this.startTime = startTime;
         this.lastTime = lastTime;
         this.notificationType = notificationType;
+        this.notificationOn = notificationOn;
     }
 
     // Add other fields as needed

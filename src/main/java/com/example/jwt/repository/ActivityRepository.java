@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ActivityRepository extends JpaRepository<Activities, Long> {
+    List<Activities> findByUserAndActivityDateBetween(User user, LocalDate startDate, LocalDate endDate);
+
 
     Activities findByUserAndActivityTypeAndActivityDate(User user, String activityType, LocalDate activityDate);
 

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/feedback")
 public class FeedbackController {
@@ -39,5 +41,11 @@ public class FeedbackController {
 
         Feedback savedFeedback = feedbackService.saveFeedback(user, feedback);
         return new ResponseEntity<>(savedFeedback, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Feedback>> getAllFeedback() {
+        List<Feedback> allFeedback = feedbackService.getAllFeedback();
+        return ResponseEntity.ok(allFeedback);
     }
 }

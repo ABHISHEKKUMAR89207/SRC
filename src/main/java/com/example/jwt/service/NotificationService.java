@@ -37,6 +37,26 @@ public class NotificationService {
         this.userRepository = userRepository;
     }
 
+    public void toggleNotification(String username, String notificationType, boolean notificationOn) {
+        List<NotificationEntity> userNotifications = notificationRepository.findByUserEmail(username);
+
+        for (NotificationEntity notification : userNotifications) {
+            // Check if the notification has the target type
+            if (notification.hasNotificationType(notificationType)) {
+                notification.setNotificationOn(notificationOn);
+                notificationRepository.save(notification);
+            }
+        }
+    }
+
+
+    // Assuming you have a method to fetch a notification by type and user
+//    public boolean isNotificationTypeOn(User user, String notificationType) {
+//        NotificationEntity notification = notificationRepository.findByUserAndNotificationType(user, notificationType);
+//
+//        // Check if notification is not null and its notificationOn is true
+//        return notification != null && notification.isNotificationOn();
+//    }
 
     // for scheduling the notification time
 @Autowired
@@ -69,7 +89,8 @@ private AllToggleRepository allToggleRepository;
                 notificationEntity.getBody(),
                 notificationEntity.getStartTime(),
                 notificationEntity.getLastTime(),
-                notificationEntity.getNotificationType()
+                notificationEntity.getNotificationType(),
+                notificationEntity.isNotificationOn()
                 // Add other fields as needed
         );
     }
@@ -78,109 +99,39 @@ private AllToggleRepository allToggleRepository;
 
 
 //    @Transactional
-@Transactional
-public void deleteNotification(User user, Long notificationId) {
-    try {
-        Long userId = user.getUserId();
-        notificationRepository.deleteByIdAndUser_UserId(notificationId, userId);
-        log.info("Notification deleted successfully: {}", notificationId);
-    } catch (Exception e) {
-        log.error("Failed to delete notification with ID {}", notificationId, e);
-        throw new RuntimeException("Failed to delete notification", e);
+//@Transactional
+//public void deleteNotification(User user, Long notificationId) {
+//    try {
+//        Long userId = user.getUserId();
+//        notificationRepository.deleteByIdAndUser_UserId(notificationId, userId);
+//        log.info("Notification deleted successfully: {}", notificationId);
+//    } catch (Exception e) {
+//        log.error("Failed to delete notification with ID {}", notificationId, e);
+//        throw new RuntimeException("Failed to delete notification", e);
+//    }
+//}
+
+    public void deleteNotification(User user, Long notificationId) {
+        try {
+            Optional<NotificationEntity> notificationOptional = notificationRepository.findById(notificationId);
+
+            if (notificationOptional.isPresent()) {
+                NotificationEntity notification = notificationOptional.get();
+
+                // Remove the notification from the user's collection
+                user.getNotifications().remove(notification);
+
+                notificationRepository.delete(notification);
+                log.info("Notification deleted successfully: {}", notificationId);
+            } else {
+                log.error("Notification with ID {} not found", notificationId);
+                throw new RuntimeException("Notification not found");
+            }
+        } catch (Exception e) {
+            log.error("Failed to delete notification with ID {}", notificationId, e);
+            throw new RuntimeException("Failed to delete notification", e);
+        }
     }
-}
-
-
-//    @Transactional
-//    public void scheduleNotification(String username, NotificationEntity request) {
-//        // Retrieve the user by username
-//        User user = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // Check if a notification with the same type for the same user exists
-//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
-//                user, request.getNotificationType());
-//
-//        // Associate the user with the notification
-//        request.setUser(user);
-//
-//        // Set the time zone to Indian Standard Time (IST)
-//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
-//
-//        // Set the start time and last time in the Indian time zone
-//        request.setStartTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getStartTime(),
-//                        ZoneId.systemDefault()
-//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
-//        );
-//        request.setLastTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getLastTime(),
-//                        ZoneId.systemDefault()
-//                ).withZoneSameInstant(indianTimeZone).toLocalDateTime())
-//        );
-//
-//        if (existingNotification == null) {
-//            // If a notification with the same type doesn't exist, save the new notification
-//            notificationRepository.save(request);
-//        } else {
-//            // If a notification with the same type exists, update the existing notification
-//            existingNotification.setStartTime(request.getStartTime());
-//            existingNotification.setLastTime(request.getLastTime());
-//
-//            notificationRepository.save(existingNotification);
-//        }
-//    }
-
-
-//1 dec update
-//    @Transactional
-//    public void scheduleNotification(String username, NotificationEntity request) {
-//        // Retrieve the user by username
-//        User user = userRepository.findByEmail(username)
-//                .orElseThrow(() -> new RuntimeException("User not found"));
-//
-//        // Check if a notification with the same type for the same user exists
-//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(
-//                user, request.getNotificationType());
-//
-//        // Associate the user with the notification
-//        request.setUser(user);
-//
-//        // Set the time zone to Indian Standard Time (IST)
-//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
-//
-//        // Set the start time and last time in the Indian time zone
-//        request.setStartTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getStartTime(),
-//                        indianTimeZone  // Use indianTimeZone consistently
-//                ).toLocalDateTime())
-//        );
-//        request.setLastTime(
-//                LocalTime.from(ZonedDateTime.of(
-//                        LocalDate.now(),
-//                        request.getLastTime(),
-//                        indianTimeZone  // Use indianTimeZone consistently
-//                ).toLocalDateTime())
-//        );
-//
-//        if (existingNotification == null) {
-//            // If a notification with the same type doesn't exist, save the new notification
-//            notificationRepository.save(request);
-//        } else {
-//            // If a notification with the same type exists, update the existing notification
-//            existingNotification.setStartTime(request.getStartTime());
-//            existingNotification.setLastTime(request.getLastTime());
-//
-//            notificationRepository.save(existingNotification);
-//        }
-//    }
-
 
 
     @Transactional
@@ -274,31 +225,79 @@ public void deleteNotification(User user, Long notificationId) {
 
 
     // for seding notification at a fixed time interval
+//    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
+//    public void sendScheduledNotifications() {
+//        // Fetch all notifications that have a startTime matching the current time
+//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+//
+//        for (NotificationEntity notification : notifications) {
+//            // Fetch the associated user for the notification
+//            User user = notification.getUser();
+//
+//            // Check if the user is not null and has a notification token
+//            if (user != null && user.getNotificationToken() != null) {
+//                // Check if the user has notificationOn set to true
+//                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
+//                    // Create a new notification
+//                    NotificationEntity newNotification = createNotificationForUser(user);
+//
+//                    // Set the recipient token for the notification
+//                    newNotification.setRecipientToken(user.getNotificationToken());
+//
+//                    // Send the notification
+//                    log.debug("Sending notification: {}", newNotification);
+//                    firebaseMessagingService.sendNotificationByToken(newNotification);
+//                } else {
+//                    // Log a message or handle the case where the user has notificationOn set to false
+//                    log.debug("User {} has notificationOn set to false. Skipping notification.", user.getUsername());
+//                }
+//            } else {
+//                // Handle the case where the user or the notification token is null
+//                // You might want to log a warning or handle it based on your requirements
+//                log.warn("Invalid user or notification token for notification: {}", notification.getId());
+//            }
+//        }
+//    }
+
+
     @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
     public void sendScheduledNotifications() {
         // Fetch all notifications that have a startTime matching the current time
         List<NotificationEntity> notifications = getNotificationsForCurrentTime();
 
         for (NotificationEntity notification : notifications) {
+            log.debug("Processing notification: {}", notification.getId());
+
             // Fetch the associated user for the notification
             User user = notification.getUser();
 
             // Check if the user is not null and has a notification token
             if (user != null && user.getNotificationToken() != null) {
-                // Check if the user has notificationOn set to true
+                // Check if the user has notificationOn set to true in AllToggle
                 if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
-                    // Create a new notification
-                    NotificationEntity newNotification = createNotificationForUser(user);
+                    log.debug("AllToggle notificationOn is true for user: {}", user.getUsername());
+                    // Check if the notificationType's notificationOn is true
+                    if (user.getNotifications().stream().anyMatch(n ->
+                            n.getNotificationType().equals(notification.getNotificationType()) && n.isNotificationOn())) {
+                        log.debug("NotificationType {} notificationOn is true for user: {}", notification.getNotificationType(), user.getUsername());
+                        // Create a new notification
+                        NotificationEntity newNotification = createNotificationForUser(user);
 
-                    // Set the recipient token for the notification
-                    newNotification.setRecipientToken(user.getNotificationToken());
+                        // Set the recipient token for the notification
+                        newNotification.setRecipientToken(user.getNotificationToken());
 
-                    // Send the notification
-                    log.debug("Sending notification: {}", newNotification);
-                    firebaseMessagingService.sendNotificationByToken(newNotification);
+                        // Send the notification
+                        log.debug("Sending notification: {}", newNotification);
+                        firebaseMessagingService.sendNotificationByToken(newNotification);
+                    } else {
+                        // Log a message or handle the case where the notificationType's notificationOn is false
+                        log.debug("User {} has notificationOn set to false for NotificationType {}. Skipping notification.",
+                                user.getUsername(), notification.getNotificationType());
+                    }
                 } else {
-                    // Log a message or handle the case where the user has notificationOn set to false
-                    log.debug("User {} has notificationOn set to false. Skipping notification.", user.getUsername());
+                    // Log a message or handle the case where the user's AllToggle has notificationOn set to false
+                    log.debug("User {} has notificationOn set to false in AllToggle. Skipping notification.",
+                            user.getUsername());
                 }
             } else {
                 // Handle the case where the user or the notification token is null
@@ -307,6 +306,92 @@ public void deleteNotification(User user, Long notificationId) {
             }
         }
     }
+
+
+//    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
+//    public void sendScheduledNotifications() {
+//        // Fetch all notifications that have a startTime matching the current time
+//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+//
+//        for (NotificationEntity notification : notifications) {
+//            // Fetch the associated user for the notification
+//            User user = notification.getUser();
+//
+//            // Check if the user is not null and has a notification token
+//            if (user != null && user.getNotificationToken() != null) {
+//                // Check if the user has notificationOn set to true and notificationType matches
+//                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()
+//                        && notification.getNotificationType().equals(user.getNotifications().getNotificationType())) {
+//                    // Create a new notification
+//                    NotificationEntity newNotification = createNotificationForUser(user);
+//
+//                    // Set the recipient token for the notification
+//                    newNotification.setRecipientToken(user.getNotificationToken());
+//
+//                    // Send the notification
+//                    log.debug("Sending notification: {}", newNotification);
+//                    firebaseMessagingService.sendNotificationByToken(newNotification);
+//                } else {
+//                    // Log a message or handle the case where the user has notificationOn set to false or notificationType mismatch
+//                    log.debug("User {} has notificationOn set to false or notificationType mismatch. Skipping notification.",
+//                            user.getUsername());
+//                }
+//            } else {
+//                // Handle the case where the user or the notification token is null
+//                // You might want to log a warning or handle it based on your requirements
+//                log.warn("Invalid user or notification token for notification: {}", notification.getId());
+//            }
+//        }
+//    }
+//
+
+//    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
+//    public void sendScheduledNotifications() {
+//        // Fetch all notifications that have a startTime matching the current time
+//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+//
+//        for (NotificationEntity notification : notifications) {
+//            // Fetch the associated user for the notification
+//            User user = notification.getUser();
+//
+//            // Check if the user is not null and has a notification token
+//            if (user != null && user.getNotificationToken() != null) {
+//                // Check if the user has notificationOn set to true for the specific notificationType
+//                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()
+//                        && isNotificationTypeEnabled(user.getAllToggle(), notification.getNotificationType())) {
+//                    // Create a new notification
+//                    NotificationEntity newNotification = createNotificationForUser(user);
+//
+//                    // Set the recipient token for the notification
+//                    newNotification.setRecipientToken(user.getNotificationToken());
+//
+//                    // Send the notification
+//                    log.debug("Sending notification: {}", newNotification);
+//                    firebaseMessagingService.sendNotificationByToken(newNotification);
+//                } else {
+//                    // Log a message or handle the case where the user has notificationOn set to false
+//                    log.debug("User {} has notificationOn set to false or specific notification type is disabled. Skipping notification.",
+//                            user.getUsername());
+//                }
+//            } else {
+//                // Handle the case where the user or the notification token is null
+//                // You might want to log a warning or handle it based on your requirements
+//                log.warn("Invalid user or notification token for notification: {}", notification.getId());
+//            }
+//        }
+//    }
+//
+//    private boolean isNotificationTypeEnabled(UserToggleSettings toggleSettings, String notificationType) {
+//        switch (notificationType) {
+//            case "breakfast":
+//                return toggleSettings.isBreakfastNotificationOn();
+//            // Add more cases for other notification types
+//            default:
+//                return true; // Default to true if the notification type is not recognized
+//        }
+//    }
+
+
 
 
 //previous final implimentation

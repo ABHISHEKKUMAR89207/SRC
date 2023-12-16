@@ -93,7 +93,7 @@ public class NIN_2023 implements CommandLineRunner {
                 .fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                 .setCredentials(googleCredentials).build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"fitnessapp");
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"o2ininprojectofficial");
         return FirebaseMessaging.getInstance(app);
     }
 

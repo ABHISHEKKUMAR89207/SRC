@@ -27,9 +27,18 @@ public class NotificationEntity {
     private LocalTime startTime;
     private LocalTime lastTime;
     private String notificationType;
+    private boolean notificationOn;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+
+
+    // Add a new method to check if the notification type matches
+    public boolean hasNotificationType(String targetType) {
+        return notificationType != null && notificationType.equals(targetType);
+    }
 
     public boolean shouldSendNotification() {
         LocalTime currentTime = LocalTime.now();

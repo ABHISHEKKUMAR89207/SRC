@@ -61,6 +61,7 @@ public class securityConfig {
                                 .requestMatchers("/dashboard/all").permitAll()
                                 .requestMatchers("/api/booktables/{id}").permitAll()
                                 .requestMatchers("/api/booktables").permitAll()
+                                .requestMatchers("/api/contact-us/**").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
