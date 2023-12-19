@@ -138,11 +138,12 @@ public class ActivityController {
         }
     }
 
-    //    Get steps by date for export
+    //    Get steps by data for export
 
-    @GetMapping("/get-steps/week")
-    public ResponseEntity<Map<String, Object>> getUserStepsForWeek(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    @GetMapping("/get-steps/custom-range")
+    public ResponseEntity<Map<String, Object>> getUserStepsForCustomRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestHeader("Auth") String tokenHeader) {
         try {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
@@ -155,17 +156,14 @@ public class ActivityController {
             User user = userService.findByUsername(username);
 
             if (user != null) {
-                // Calculate the start date of the week preceding the given date
-                LocalDate weekStartDate = date.minusDays(7);
-
-                // Get activities for the week and user
-                List<Activities> activitiesList = activityService.getActivitiesForUserAndWeek(user, weekStartDate, date);
+                // Get activities for the custom date range and user
+                List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
 
                 // Create a map to hold only steps and formatted activity date
                 Map<String, Object> response = new HashMap<>();
 
                 // Create a list to store activity details for each day
-                List<Map<String, Object>> activitiesForWeek = new ArrayList<>();
+                List<Map<String, Object>> activitiesForRange = new ArrayList<>();
 
                 // Convert each activity to a map with formatted activityDate and steps
                 for (Activities activity : activitiesList) {
@@ -176,11 +174,11 @@ public class ActivityController {
 
                     activityMap.put("activityDate", formattedActivityDate);
                     activityMap.put("steps", activity.getSteps());
-                    activitiesForWeek.add(activityMap);
+                    activitiesForRange.add(activityMap);
                 }
 
                 // Add the list of activities to the response map
-                response.put("activitiesForWeek", activitiesForWeek);
+                response.put("activitiesForRange", activitiesForRange);
 
                 return ResponseEntity.ok(response);
             } else {
@@ -192,100 +190,154 @@ public class ActivityController {
         }
     }
 
+
+
+//    @GetMapping("/get-steps/week")
+//    public ResponseEntity<Map<String, Object>> getUserStepsForWeek(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Calculate the start date of the week preceding the given date
+//                LocalDate weekStartDate = date.minusDays(7);
+//
+//                // Get activities for the week and user
+//                List<Activities> activitiesList = activityService.getActivitiesForUserAndWeek(user, weekStartDate, date);
+//
+//                // Create a map to hold only steps and formatted activity date
+//                Map<String, Object> response = new HashMap<>();
+//
+//                // Create a list to store activity details for each day
+//                List<Map<String, Object>> activitiesForWeek = new ArrayList<>();
+//
+//                // Convert each activity to a map with formatted activityDate and steps
+//                for (Activities activity : activitiesList) {
+//                    Map<String, Object> activityMap = new HashMap<>();
+//
+//                    // Format the activityDate
+//                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//                    activityMap.put("activityDate", formattedActivityDate);
+//                    activityMap.put("steps", activity.getSteps());
+//                    activitiesForWeek.add(activityMap);
+//                }
+//
+//                // Add the list of activities to the response map
+//                response.put("activitiesForWeek", activitiesForWeek);
+//
+//                return ResponseEntity.ok(response);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
     //    Get steps by month for export
 
-    @GetMapping("/get-steps/mon-year")
-    public ResponseEntity<List<Map<String, Object>>> getActivitiesByMonthAndYear(
-            @RequestParam int year,
-            @RequestParam int month,
-            @RequestHeader("Auth") String tokenHeader) {
-        try {
-            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-            String token = tokenHeader.replace("Bearer ", "");
-
-            // Extract the username (email) from the token
-            String username = jwtHelper.getUsernameFromToken(token);
-
-            // Use the username to fetch the userId from your user service
-            User user = userService.findByUsername(username);
-
-            if (user != null) {
-                // Get activities for the specified month and year
-                List<Activities> activitiesList = activityService.getActivitiesByMonthAndYear(user, year, month);
-
-                // Create a list to hold response maps with only activityDate and steps
-                List<Map<String, Object>> responseList = new ArrayList<>();
-
-
-
-                // Convert each activity to a map with activityDate and steps
-                for (Activities activity : activitiesList) {
-                    Map<String, Object> activityMap = new HashMap<>();
-
-                    // Format the activityDate
-                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-
-                    activityMap.put("activityDate", formattedActivityDate);
-                    activityMap.put("steps", activity.getSteps());
-                    responseList.add(activityMap);
-                }
-
-                return ResponseEntity.ok(responseList);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+//    @GetMapping("/get-steps/mon-year")
+//    public ResponseEntity<List<Map<String, Object>>> getActivitiesByMonthAndYear(
+//            @RequestParam int year,
+//            @RequestParam int month,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the specified month and year
+//                List<Activities> activitiesList = activityService.getActivitiesByMonthAndYear(user, year, month);
+//
+//                // Create a list to hold response maps with only activityDate and steps
+//                List<Map<String, Object>> responseList = new ArrayList<>();
+//
+//
+//
+//                // Convert each activity to a map with activityDate and steps
+//                for (Activities activity : activitiesList) {
+//                    Map<String, Object> activityMap = new HashMap<>();
+//
+//                    // Format the activityDate
+//                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//
+//                    activityMap.put("activityDate", formattedActivityDate);
+//                    activityMap.put("steps", activity.getSteps());
+//                    responseList.add(activityMap);
+//                }
+//
+//                return ResponseEntity.ok(responseList);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 
 
 // Get steps by year for export
 
-    @GetMapping("/get-steps/year")
-    public ResponseEntity<List<Map<String, Object>>> getActivitiesByYear(
-            @RequestParam int year,
-            @RequestHeader("Auth") String tokenHeader) {
-        try {
-            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-            String token = tokenHeader.replace("Bearer ", "");
-
-            // Extract the username (email) from the token
-            String username = jwtHelper.getUsernameFromToken(token);
-
-            // Use the username to fetch the userId from your user service
-            User user = userService.findByUsername(username);
-
-            if (user != null) {
-                // Get activities for the specified year
-                List<Activities> activitiesList = activityService.getActivitiesByYear(user, year);
-
-                // Create a list to hold response maps with only activityDate and steps
-                List<Map<String, Object>> responseList = new ArrayList<>();
-
-                // Convert each activity to a map with activityDate and steps
-                for (Activities activity : activitiesList) {
-                    Map<String, Object> activityMap = new HashMap<>();
-
-                    // Format the activityDate
-                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-                    activityMap.put("activityDate", formattedActivityDate);
-                    activityMap.put("steps", activity.getSteps());
-                    responseList.add(activityMap);
-                }
-
-                return ResponseEntity.ok(responseList);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+//    @GetMapping("/get-steps/year")
+//    public ResponseEntity<List<Map<String, Object>>> getActivitiesByYear(
+//            @RequestParam int year,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the specified year
+//                List<Activities> activitiesList = activityService.getActivitiesByYear(user, year);
+//
+//                // Create a list to hold response maps with only activityDate and steps
+//                List<Map<String, Object>> responseList = new ArrayList<>();
+//
+//                // Convert each activity to a map with activityDate and steps
+//                for (Activities activity : activitiesList) {
+//                    Map<String, Object> activityMap = new HashMap<>();
+//
+//                    // Format the activityDate
+//                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//                    activityMap.put("activityDate", formattedActivityDate);
+//                    activityMap.put("steps", activity.getSteps());
+//                    responseList.add(activityMap);
+//                }
+//
+//                return ResponseEntity.ok(responseList);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 
 
 

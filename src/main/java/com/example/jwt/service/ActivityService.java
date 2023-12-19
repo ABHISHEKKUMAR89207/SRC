@@ -30,23 +30,28 @@ public class ActivityService {
         return activityRepository.findByUserAndActivityDate(user, date);
     }
 
-    public List<Activities> getActivitiesForUserAndWeek(User user, LocalDate startDate, LocalDate endDate) {
+
+    public List<Activities> getActivitiesForUserAndCustomRange(User user, LocalDate startDate, LocalDate endDate) {
         return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
     }
 
-    public List<Activities> getActivitiesByMonthAndYear(User user, int year, int month) {
-        LocalDate startDate = LocalDate.of(year, month, 1);
-        LocalDate endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
-
-        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
-    }
-
-    public List<Activities> getActivitiesByYear(User user, int year) {
-        LocalDate startDate = LocalDate.of(year, 1, 1);
-        LocalDate endDate = startDate.plusYears(1).minusDays(1);
-
-        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
-    }
+//    public List<Activities> getActivitiesForUserAndWeek(User user, LocalDate startDate, LocalDate endDate) {
+//        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
+//    }
+//
+//    public List<Activities> getActivitiesByMonthAndYear(User user, int year, int month) {
+//        LocalDate startDate = LocalDate.of(year, month, 1);
+//        LocalDate endDate = startDate.with(TemporalAdjusters.lastDayOfMonth());
+//
+//        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
+//    }
+//
+//    public List<Activities> getActivitiesByYear(User user, int year) {
+//        LocalDate startDate = LocalDate.of(year, 1, 1);
+//        LocalDate endDate = startDate.plusYears(1).minusDays(1);
+//
+//        return activityRepository.findByUserAndActivityDateBetween(user, startDate, endDate);
+//    }
 
     private Double calculateCaloriesBurnt(String activityType, int steps, String gender) {
 

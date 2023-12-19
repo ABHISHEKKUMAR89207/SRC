@@ -52,6 +52,7 @@ public class securityConfig {
                                 .requestMatchers("/api/sleep-logs").permitAll()
                                 .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
                                 .requestMatchers("/logs").permitAll()
+                                .requestMatchers("/api").permitAll()
                                 .requestMatchers("/downloadLog").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()
                                 .requestMatchers("/api/sleep-logs").permitAll()

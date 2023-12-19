@@ -1,5 +1,7 @@
 package com.example.jwt.entities.FoodToday;
 
+import com.example.jwt.entities.UnitsDatabase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,10 +33,18 @@ public class NinData {
     private Double Carbs;
     @Column(name = "Protein")
     private Double protein;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")
+    @JsonIgnore
+    private UnitsDatabase unitsDatabase;
+
+
     @Column(name = "Fat")
     private Double Fat;
     private Double Fiber;
 
     @ManyToMany(mappedBy = "ninDataList", fetch = FetchType.LAZY)
     private Set<Ingredients> ingredientsSet = new HashSet<>();
+
+    private String SIUnit;
 }

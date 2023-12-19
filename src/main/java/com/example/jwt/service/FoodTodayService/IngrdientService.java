@@ -7,10 +7,12 @@ import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.Ingredients;
 import com.example.jwt.entities.FoodToday.NinData;
+import com.example.jwt.entities.UnitsDatabase;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.DishesRepository;
 import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
+import com.example.jwt.repository.UnitsDatabaseRepository;
 import com.example.jwt.service.TargetAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,21 @@ public class IngrdientService {
     private NinDataRepository ninDataRepository;
     @Autowired
     private TargetAnalysisService analysisService;
+    @Autowired
+    private UnitsDatabaseRepository unitsDatabaseRepository;
+
+
+    public String getSIUnitForNutrient(String nutrientName) {
+        UnitsDatabase unitsDatabase = unitsDatabaseRepository.findByNutrientName(nutrientName);
+        if (unitsDatabase != null) {
+            return unitsDatabase.getSIUnit();
+        } else {
+            // Handle the case where the nutrientName is not found in the UnitsDatabase
+            return null;
+        }
+    }
+
+
 
 
     //final new method save ingredient
@@ -101,14 +118,31 @@ public class IngrdientService {
         }
     }
 
+//    private Double calculateProteins(Ingredients ingredient) {
+//        NinData ninData = ninDataRepository.findByName(ingredient.getIngredientName());
+//        if (ninData != null) {
+//            return ingredient.getIngredientQuantity() * ninData.getProtein();
+//        } else {
+//            return 0.0;
+//        }
+//    }
+
+
+
     private Double calculateProteins(Ingredients ingredient) {
         NinData ninData = ninDataRepository.findByName(ingredient.getIngredientName());
         if (ninData != null) {
+            Double nutrientName = ninData.getProtein(); // Access the nutrient name directly
+            String siUnit = getSIUnitForNutrient(String.valueOf(nutrientName));
+            // Now you have the SI unit, you can use it as needed.
+            System.out.println("SI Unit for " + nutrientName + ": " + siUnit);
             return ingredient.getIngredientQuantity() * ninData.getProtein();
         } else {
             return 0.0;
         }
     }
+
+
 
     private Double calculateFats(Ingredients ingredient) {
         NinData ninData = ninDataRepository.findByName(ingredient.getIngredientName());
@@ -261,6 +295,8 @@ public class IngrdientService {
                     responseList.add(new DishWithIngredientsResponse(dish.getDishId(),dish.getDishName(),dish.isFavourite(), ingredientsList, totalCalories, totalProtiens, totalCarbs, totalFats, totalFibers));
                 }
             }
+
+
             finalResponseList.add(new mealResponse(responseList, calories, proteins, carbs, fats, fibers));
             return finalResponseList;
         }

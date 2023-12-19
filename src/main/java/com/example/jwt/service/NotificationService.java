@@ -5,9 +5,11 @@ import com.example.jwt.controler.NotificationController;
 import com.example.jwt.dtos.NotificationDetailsDTO;
 import com.example.jwt.entities.AllToggle;
 import com.example.jwt.entities.NotificationEntity;
+import com.example.jwt.entities.NotifySendSuccess;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.AllToggleRepository;
 import com.example.jwt.repository.NotificationRepository;
+import com.example.jwt.repository.NotifySendSuccessRepository;
 import com.example.jwt.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -289,6 +291,9 @@ private AllToggleRepository allToggleRepository;
                         // Send the notification
                         log.debug("Sending notification: {}", newNotification);
                         firebaseMessagingService.sendNotificationByToken(newNotification);
+
+                        // Save success details in NotificationSendSuccess
+                        saveNotificationSendSuccess(newNotification);
                     } else {
                         // Log a message or handle the case where the notificationType's notificationOn is false
                         log.debug("User {} has notificationOn set to false for NotificationType {}. Skipping notification.",
@@ -424,5 +429,26 @@ private AllToggleRepository allToggleRepository;
         return newNotification;
     }
 
+    @Autowired
+    private NotifySendSuccessRepository notifySendSuccessRepository;
+
+//    private void saveNotificationSendSuccess(NotificationEntity notification) {
+//        // Assuming you have a repository for NotificationSendSuccess
+//        NotifySendSuccess successDetails = new NotifySendSuccess();
+//        successDetails.setStartTime(LocalTime.now());
+//        successDetails.setBody(notification.getNotificationType() + " notification send successfully");
+//
+//        // Save success details in the database
+//        notifySendSuccessRepository.save(successDetails);
+//    }
+private void saveNotificationSendSuccess(NotificationEntity notification) {
+    NotifySendSuccess successDetails = new NotifySendSuccess();
+    successDetails.setStartTime(notification.getStartTime());
+    successDetails.setBody(notification.getNotificationType() + " notification send successfully");
+    successDetails.setNotificationEntity(notification); // Set the reference
+
+    // Save success details in the database
+    notifySendSuccessRepository.save(successDetails);
+}
 
 }
