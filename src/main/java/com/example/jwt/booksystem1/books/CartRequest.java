@@ -15,16 +15,3 @@ public class CartRequest {
     }
 }
 
-
-//public class CartRequest {
-//
-//    private List<BookTable> cart;
-//
-//    public List<BookTable> getCart() {
-//        return cart;
-//    }
-//
-//    public void setCart(List<BookTable> cart) {
-//        this.cart = cart;
-//    }
-//}

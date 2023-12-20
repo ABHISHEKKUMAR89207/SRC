@@ -48,50 +48,11 @@ public class UserBOOKBUY {
         User user = userService.findByUsername(Username);
         Long userid=user.getUserId();
 
-//        User user=new User();
-//        UserProfile userProfile = UserProfileRepository.findByUserEmail(Username);
-
-        System.out.println("USER NAME"+Username);
         // Extract the username (email) from the token
         String username = jwtHelper.getUsernameFromToken(token);
 
-        // Use the extracted username to associate the heart rate data with the user
-//        BookTable bookTable = bookTableRepository.SleepTarget(sleepDuration, username);
-//        System.out.println("Username is "+ username);
-
-
         return bookTableRepository.findAll();
     }
-//    @PostMapping("/getcartbookbyid")
-//    public ResponseEntity<List<BookTable>> getCartBooksById(@RequestBody List<String> cartItems, @RequestHeader("Auth") String tokenHeader) {
-//        System.out.println("api hitdfgbfhfghgf");
-//        try {
-//            String token = tokenHeader.replace("Bearer ", "");
-//            String username = jwtHelper.getUsernameFromToken(token);
-//            User user = userService.findByUsername(username);
-//
-//            // Extract the book IDs and quantities from the cartItems list
-//            for (String cartItem : cartItems) {
-//                String[] parts = cartItem.split("x");
-//                if (parts.length == 2) {
-//                    Long bookId = Long.parseLong(parts[0]);
-//                    int quantity = Integer.parseInt(parts[1]);
-//
-//                    // Implement logic to fetch book details by ID and quantity
-//                    // You may use bookTableRepository.findById(bookId) and update the quantity
-//
-//                    // For demonstration purposes, printing the bookId and quantity
-//                    System.out.println("Book ID: " + bookId + ", Quantity: " + quantity);
-//                }
-//            }
-//
-//            // Return the list of book tables (replace with actual logic)
-//            List<BookTable> cartBooks = bookTableRepository.findAll();
-//            return ResponseEntity.ok(cartBooks);
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
 @PostMapping("/getcartbookbyid")
 public ResponseEntity<List<BookTable>> getCartBooksById( @RequestHeader("Auth") String tokenHeader,@RequestBody CartRequest cartRequest) {
     System.out.println("api hitdfgbfhfghgf");
@@ -120,25 +81,11 @@ public ResponseEntity<List<BookTable>> getCartBooksById( @RequestHeader("Auth") 
                     return ResponseEntity.badRequest().build();
                 }
                 bookTableList.add(bookTable);
-//                Order order = orderRepository.findById(bookId);
-
-
-
-
-                // Implement logic to fetch book details by ID and quantity
-                // You may use bookTableRepository.findById(bookId) and update the quantity
-
-                // For demonstration purposes, printing the bookId and quantity
-                System.out.println("Book ID: " + bookId + ", Quantity: " + quantity);
             }
         }
-
-        // Return the list of book tables (replace with actual logic)
-//        List<BookTable> cartBooks = bookTableRepository.findAll();
         return ResponseEntity.ok(bookTableList);
     } catch (Exception e) {
         return ResponseEntity.badRequest().build();
     }
 }
-
 }

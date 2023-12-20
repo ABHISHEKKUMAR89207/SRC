@@ -1,12 +1,4 @@
 package com.example.jwt.booksystem1.books;
-
-
-
-/**
- *
- * @author rahul
- *
- */
 public class Response {
 
     private int statusCode;

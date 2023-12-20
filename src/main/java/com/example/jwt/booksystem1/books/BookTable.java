@@ -26,11 +26,10 @@ public class BookTable {
     private int quantity;
     private double price;
 
-    // Constructors, getters, setters, etc.
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-@ManyToOne
+    @ManyToOne
     private User user;
 
 

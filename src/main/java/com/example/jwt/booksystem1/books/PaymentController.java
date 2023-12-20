@@ -6,9 +6,6 @@ public class PaymentController {
 
     private String paymentId;
     private int amount;  // Assuming the amount is an integer, adjust as needed
-
-    // Constructors, getters, and setters
-
     public PaymentController() {
         // Default constructor
     }
