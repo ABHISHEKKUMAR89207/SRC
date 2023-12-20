@@ -55,16 +55,6 @@ public class Home {
     public Home() throws RazorpayException {
         this.client =  new RazorpayClient(SECRET_ID, SECRET_KEY);
     }
-
-//    @RequestMapping(value="/")
-//    public String getHome() {
-//        return "redirect:/home";
-//    }
-//    @RequestMapping(value="/home")
-//    public String getHomeInit() {
-//        return "home";
-//    }
-
     @RequestMapping(value="/createPayment", method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> createOrder(@RequestHeader("Auth")  String tokenHeader ,@RequestBody CartRequest cartRequest) {
@@ -81,26 +71,16 @@ public class Home {
             return outOfStockResponse;
         }
 
-//        return ResponseEntity.ok(totalAmount);
-//        User user=new User();
-//        UserProfile userProfile = UserProfileRepository.findByUserEmail(Username);
-
         System.out.println("USER NAME"+Username);
         // Extract the username (email) from the token
         String username = jwtHelper.getUsernameFromToken(token);
 
         try {
-
-            /**
-             * creating an order in RazorPay.
-             * new order will have order id. you can get this order id by calling  order.get("id")
-             */
             Order order = createRazorPayOrder( totalAmount );
             RazorPay razorPay = getRazorPay((String)order.get("id"), user,totalAmount);
             String concatenatedString = String.join("/", cartEntries);
             OrderRequestCart newOrderRequestCart = new OrderRequestCart(null, username,concatenatedString, (String)order.get("id"));
             orderRequestCartRepository.save(newOrderRequestCart);
-
             return new ResponseEntity<String>(gson.toJson(getResponse(razorPay, 200)),
                     HttpStatus.OK);
         } catch (RazorpayException e) {

@@ -1,15 +1,5 @@
 package com.example.jwt.booksystem1.books;
 
-
-
-/**
- *
- *
- * wrapper for RazorPay payment
- *
- *
- */
-
 public class RazorPay {
 
 
@@ -140,8 +130,4 @@ public class RazorPay {
     public void setTheme(String theme) {
         this.theme = theme;
     }
-
-
-
-
 }

@@ -69,47 +69,7 @@ public class BookTableController {
         }
     }
 
-//
-//    @PostMapping("/totalAmount")
-//    public ResponseEntity<Double> calculateTotalAmount(@RequestBody CartRequest cartRequest) {
-//        List<BookTable> cart = cartRequest.getCart();
-//        double totalAmount = calculateTotalAmountFromCart(cart);
-//        return ResponseEntity.ok(totalAmount);
-//    }
-//
-//    private double calculateTotalAmountFromCart(List<BookTable> cart) {
-//        double totalAmount = 0;
-//        System.out.println("cart is"+cart);
-//        for (BookTable book : cart) {
-//            totalAmount += book.getPrice();
-//        }
-//        return totalAmount;
-//    }
-//    @Autowired
-//    private BookTableRepository bookTableRepository;
 
-//    @PostMapping("/totalAmount")
-//    public ResponseEntity<Double> calculateTotalAmount(@RequestBody CartRequest cartRequest) {
-//        List<BookTable> cart = cartRequest.getCart();
-//        double totalAmount = calculateTotalAmountFromDatabase(cart);
-//        return ResponseEntity.ok(totalAmount);
-//    }
-//
-//    private double calculateTotalAmountFromDatabase(List<BookTable> cart) {
-//        double totalAmount = 0;
-//        for (BookTable book : cart) {
-//            // Find the book by ID in the database
-//            BookTable dbBook = bookTableRepository.findById(book.getId()).orElse(null);
-//
-//            if (dbBook != null) {
-//                // Add the amount of the book from the database to the total
-//                totalAmount += dbBook.getPrice();
-//            }
-//            // If the book is not found, you might want to handle it accordingly
-//            // For simplicity, let's assume the price is 0 in such cases
-//        }
-//        return totalAmount;
-//    }
 @PostMapping("/totalAmount")
 public ResponseEntity<Double> calculateTotalAmount(@RequestBody CartRequest cartRequest) {
     List<String> cartEntries = cartRequest.getCart();
@@ -141,8 +101,4 @@ public ResponseEntity<Double> calculateTotalAmount(@RequestBody CartRequest cart
         }
         return totalAmount;
     }
-//    @DeleteMapping("/{id}")
-//    public void deleteBookTable(@PathVariable Long id) {
-//        bookTableRepository.deleteById(id);
-//    }
 }

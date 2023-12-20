@@ -17,7 +17,6 @@ import java.util.List;
 
 
 @RestController
-//@Controller
 @RequestMapping("/ingredient")
 @Tag(name = "FoodTodayIngredient Controller", description = "This is FoodTodayIngredient Controller")
 

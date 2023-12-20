@@ -29,8 +29,6 @@ public class OrdersGetController {
         String Username=jwtHelper.getUsernameFromToken(token);
         User user = userService.findByUsername(Username);
         Long userid=user.getUserId();
-System.out.println("arrived here");
-//        return orderRepository.findByUserUserId(userid);
         List<Order> orders = orderRepository.findByUserUserId(userid);
 
         // Convert Order entities to simplified representation
