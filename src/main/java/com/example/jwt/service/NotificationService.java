@@ -3,6 +3,7 @@ package com.example.jwt.service;
 
 import com.example.jwt.controler.NotificationController;
 import com.example.jwt.dtos.NotificationDetailsDTO;
+import com.example.jwt.dtos.NotifySendSuccessDTO;
 import com.example.jwt.entities.AllToggle;
 import com.example.jwt.entities.NotificationEntity;
 import com.example.jwt.entities.NotifySendSuccess;
@@ -214,15 +215,32 @@ private AllToggleRepository allToggleRepository;
     }
 
     // to get notification for current time
+//    private List<NotificationEntity> getNotificationsForCurrentTime() {
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//        LocalTime currentTime = LocalTime.now(indianTimeZone);
+//
+//        // Fetch notifications where startTime is exactly at the current time
+//        return notificationRepository.findAll().stream().filter(notification -> {
+//            LocalTime startTime = notification.getStartTime(); // Assuming getStartTime() already returns LocalTime
+//            return currentTime.getHour() == startTime.getHour() && currentTime.getMinute() == startTime.getMinute();
+//        }).collect(Collectors.toList());
+//    }
+
+
     private List<NotificationEntity> getNotificationsForCurrentTime() {
         ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
         LocalTime currentTime = LocalTime.now(indianTimeZone);
 
         // Fetch notifications where startTime is exactly at the current time
-        return notificationRepository.findAll().stream().filter(notification -> {
-            LocalTime startTime = notification.getStartTime(); // Assuming getStartTime() already returns LocalTime
-            return currentTime.getHour() == startTime.getHour() && currentTime.getMinute() == startTime.getMinute();
-        }).collect(Collectors.toList());
+        return notificationRepository.findAll().stream()
+                .filter(notification -> {
+                    LocalTime startTime = notification.getStartTime();
+                    // Check if startTime is not null before accessing its properties
+                    return startTime != null &&
+                            currentTime.getHour() == startTime.getHour() &&
+                            currentTime.getMinute() == startTime.getMinute();
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -262,56 +280,141 @@ private AllToggleRepository allToggleRepository;
 //    }
 
 
-    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
+//    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
+//    public void sendScheduledNotifications() {
+//        // Fetch all notifications that have a startTime matching the current time
+//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+//
+//        for (NotificationEntity notification : notifications) {
+//            log.debug("Processing notification: {}", notification.getId());
+//
+//            // Fetch the associated user for the notification
+//            User user = notification.getUser();
+//
+//            // Check if the user is not null and has a notification token
+//            if (user != null && user.getNotificationToken() != null) {
+//                // Check if the user has notificationOn set to true in AllToggle
+//                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
+//                    log.debug("AllToggle notificationOn is true for user: {}", user.getUsername());
+//                    // Check if the notificationType's notificationOn is true
+//                    if (user.getNotifications().stream().anyMatch(n ->
+//                            n.getNotificationType().equals(notification.getNotificationType()) && n.isNotificationOn())) {
+//                        log.debug("NotificationType {} notificationOn is true for user: {}", notification.getNotificationType(), user.getUsername());
+//                        // Create a new notification
+//                        NotificationEntity newNotification = createNotificationForUser(user);
+//
+//                        // Set the recipient token for the notification
+//                        newNotification.setRecipientToken(user.getNotificationToken());
+//
+//                        // Send the notification
+//                        log.debug("Sending notification: {}", newNotification);
+//                        firebaseMessagingService.sendNotificationByToken(newNotification);
+//
+//                        // Save success details in NotificationSendSuccess
+//                        saveNotificationSendSuccess(newNotification);
+//                    } else {
+//                        // Log a message or handle the case where the notificationType's notificationOn is false
+//                        log.debug("User {} has notificationOn set to false for NotificationType {}. Skipping notification.",
+//                                user.getUsername(), notification.getNotificationType());
+//                    }
+//                } else {
+//                    // Log a message or handle the case where the user's AllToggle has notificationOn set to false
+//                    log.debug("User {} has notificationOn set to false in AllToggle. Skipping notification.",
+//                            user.getUsername());
+//                }
+//            } else {
+//                // Handle the case where the user or the notification token is null
+//                // You might want to log a warning or handle it based on your requirements
+//                log.warn("Invalid user or notification token for notification: {}", notification.getId());
+//            }
+//        }
+//    }
+
+
+    @Scheduled(fixedDelay = 60000)
     public void sendScheduledNotifications() {
-        // Fetch all notifications that have a startTime matching the current time
         List<NotificationEntity> notifications = getNotificationsForCurrentTime();
 
         for (NotificationEntity notification : notifications) {
             log.debug("Processing notification: {}", notification.getId());
 
-            // Fetch the associated user for the notification
             User user = notification.getUser();
 
-            // Check if the user is not null and has a notification token
             if (user != null && user.getNotificationToken() != null) {
-                // Check if the user has notificationOn set to true in AllToggle
                 if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
-                    log.debug("AllToggle notificationOn is true for user: {}", user.getUsername());
-                    // Check if the notificationType's notificationOn is true
                     if (user.getNotifications().stream().anyMatch(n ->
                             n.getNotificationType().equals(notification.getNotificationType()) && n.isNotificationOn())) {
-                        log.debug("NotificationType {} notificationOn is true for user: {}", notification.getNotificationType(), user.getUsername());
-                        // Create a new notification
                         NotificationEntity newNotification = createNotificationForUser(user);
-
-                        // Set the recipient token for the notification
                         newNotification.setRecipientToken(user.getNotificationToken());
 
-                        // Send the notification
                         log.debug("Sending notification: {}", newNotification);
                         firebaseMessagingService.sendNotificationByToken(newNotification);
 
                         // Save success details in NotificationSendSuccess
-                        saveNotificationSendSuccess(newNotification);
+                        saveNotificationSendSuccess(notification);
                     } else {
-                        // Log a message or handle the case where the notificationType's notificationOn is false
                         log.debug("User {} has notificationOn set to false for NotificationType {}. Skipping notification.",
                                 user.getUsername(), notification.getNotificationType());
                     }
                 } else {
-                    // Log a message or handle the case where the user's AllToggle has notificationOn set to false
                     log.debug("User {} has notificationOn set to false in AllToggle. Skipping notification.",
                             user.getUsername());
                 }
             } else {
-                // Handle the case where the user or the notification token is null
-                // You might want to log a warning or handle it based on your requirements
                 log.warn("Invalid user or notification token for notification: {}", notification.getId());
             }
         }
     }
-
+//@Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
+//
+//private void sendScheduledNotifications() {
+//        // Fetch all notifications that have a startTime matching the current time
+//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+//
+//        for (NotificationEntity notification : notifications) {
+//            log.debug("Processing notification: {}", notification.getId());
+//
+//            // Fetch the associated user for the notification
+//            User user = notification.getUser();
+//
+//            // Check if the user is not null and has a notification token
+//            if (user != null && user.getNotificationToken() != null) {
+//                // Check if the user has notificationOn set to true in AllToggle
+//                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
+//                    log.debug("AllToggle notificationOn is true for user: {}", user.getUsername());
+//                    // Check if the notificationType's notificationOn is true
+//                    if (user.getNotifications().stream().anyMatch(n ->
+//                            n.getNotificationType().equals(notification.getNotificationType()) && n.isNotificationOn())) {
+//                        log.debug("NotificationType {} notificationOn is true for user: {}", notification.getNotificationType(), user.getUsername());
+//                        // Create a new notification
+//                        NotificationEntity newNotification = createNotificationForUser(user);
+//
+//                        // Set the recipient token for the notification
+//                        newNotification.setRecipientToken(user.getNotificationToken());
+//
+//                        // Send the notification
+//                        log.debug("Sending notification: {}", newNotification);
+//                        firebaseMessagingService.sendNotificationByToken(newNotification);
+//
+//                        // Save success details in NotificationSendSuccess
+//                        saveNotificationSendSuccess(notification);
+//                    } else {
+//                        // Log a message or handle the case where the notificationType's notificationOn is false
+//                        log.debug("User {} has notificationOn set to false for NotificationType {}. Skipping notification.",
+//                                user.getUsername(), notification.getNotificationType());
+//                    }
+//                } else {
+//                    // Log a message or handle the case where the user's AllToggle has notificationOn set to false
+//                    log.debug("User {} has notificationOn set to false in AllToggle. Skipping notification.",
+//                            user.getUsername());
+//                }
+//            } else {
+//                // Handle the case where the user or the notification token is null
+//                // You might want to log a warning or handle it based on your requirements
+//                log.warn("Invalid user or notification token for notification: {}", notification.getId());
+//            }
+//        }
+//    }
 
 //    @Scheduled(fixedDelay = 60000) // Run every minute, adjust as needed
 //    public void sendScheduledNotifications() {
@@ -401,6 +504,36 @@ private AllToggleRepository allToggleRepository;
 
 //previous final implimentation
 
+//    private NotificationEntity createNotificationForUser(User user) {
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//        LocalDateTime currentDateTime = LocalDateTime.now(indianTimeZone);
+//
+//        NotificationEntity newNotification = new NotificationEntity();
+//
+//        // Set other notification details based on your requirements
+//        newNotification.setUser(user);
+//        newNotification.setTitle("Hi " + user.getUserProfile().getFirstName());
+//
+//        // Filter notifications based on the current time
+//        List<NotificationEntity> currentNotifications = user.getNotifications().stream().filter(notification -> {
+//            LocalDateTime notificationDateTime = notification.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).toLocalDateTime();
+//            return notificationDateTime.truncatedTo(ChronoUnit.MINUTES).equals(currentDateTime.truncatedTo(ChronoUnit.MINUTES));
+//        }).collect(Collectors.toList());
+//
+//        if (!currentNotifications.isEmpty()) {
+//            // Use the first matching notification for the current time
+//            NotificationEntity matchingNotification = currentNotifications.get(0);
+//            newNotification.setBody("Time to " + matchingNotification.getNotificationType());
+//        } else {
+//            // Handle the case where there are no notifications for the current time
+//            log.warn("No matching notifications found for user: {}", user.getUserId());
+//        }
+//
+//        return newNotification;
+//    }
+
+
+
     private NotificationEntity createNotificationForUser(User user) {
         ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
         LocalDateTime currentDateTime = LocalDateTime.now(indianTimeZone);
@@ -412,10 +545,16 @@ private AllToggleRepository allToggleRepository;
         newNotification.setTitle("Hi " + user.getUserProfile().getFirstName());
 
         // Filter notifications based on the current time
-        List<NotificationEntity> currentNotifications = user.getNotifications().stream().filter(notification -> {
-            LocalDateTime notificationDateTime = notification.getStartTime().atDate(LocalDate.now()).atZone(indianTimeZone).toLocalDateTime();
-            return notificationDateTime.truncatedTo(ChronoUnit.MINUTES).equals(currentDateTime.truncatedTo(ChronoUnit.MINUTES));
-        }).collect(Collectors.toList());
+        List<NotificationEntity> currentNotifications = user.getNotifications().stream()
+                .filter(notification -> {
+                    LocalTime startTime = notification.getStartTime();
+                    // Check if startTime is not null before accessing its properties
+                    return startTime != null &&
+                            startTime.atDate(LocalDate.now()).atZone(indianTimeZone).toLocalDateTime()
+                                    .truncatedTo(ChronoUnit.MINUTES)
+                                    .equals(currentDateTime.truncatedTo(ChronoUnit.MINUTES));
+                })
+                .collect(Collectors.toList());
 
         if (!currentNotifications.isEmpty()) {
             // Use the first matching notification for the current time
@@ -441,14 +580,273 @@ private AllToggleRepository allToggleRepository;
 //        // Save success details in the database
 //        notifySendSuccessRepository.save(successDetails);
 //    }
-private void saveNotificationSendSuccess(NotificationEntity notification) {
-    NotifySendSuccess successDetails = new NotifySendSuccess();
-    successDetails.setStartTime(notification.getStartTime());
-    successDetails.setBody(notification.getNotificationType() + " notification send successfully");
-    successDetails.setNotificationEntity(notification); // Set the reference
+//private void saveNotificationSendSuccess(NotificationEntity notification) {
+//    NotifySendSuccess successDetails = new NotifySendSuccess();
+//    successDetails.setStartTime(notification.getStartTime());
+//    successDetails.setUser(notification.getUser());
+//    successDetails.setDesc(notification.getNotificationType() + " notification send successfully");
+//
+//    // Save the associated NotificationEntity first
+////    NotificationEntity savedNotification = notificationRepository.save(notification);
+//
+//    // Set the reference to the saved NotificationEntity
+////    successDetails.setNotificationEntity(savedNotification);
+//
+//    // Save success details in the database
+//    notifySendSuccessRepository.save(successDetails);
+//}
+//private void saveNotificationSendSuccess(NotificationEntity notification) {
+//    NotifySendSuccess successDetails = new NotifySendSuccess();
+//    successDetails.setUser(notification.getUser());
+//    successDetails.setDesc(notification.getNotificationType() + " notification send successfully");
+//
+//    LocalTime startTime = notification.getStartTime();
+//
+//    // Check if startTime is not null before accessing its properties
+//    if (startTime != null) {
+//        successDetails.setStartTime(startTime);
+//    } else {
+//        // Handle the case where startTime is null
+//        log.warn("NotificationEntity with null startTime encountered while saving NotifySendSuccess.");
+//
+//        // Set startTime to the current time
+//        successDetails.setStartTime(LocalTime.now());
+//    }
+//
+//    // Save the associated NotificationEntity first if it's not already saved
+//    if (notification.getId() == null) {
+//        notificationRepository.save(notification);
+//    }
+//
+//    // Set the reference to the saved NotificationEntity
+//    successDetails.setNotificationEntity(notification);
+//
+//    // Save success details in the database
+//    notifySendSuccessRepository.save(successDetails);
+//}
 
-    // Save success details in the database
-    notifySendSuccessRepository.save(successDetails);
-}
+//    private void saveNotificationSendSuccess(NotificationEntity notification) {
+//        NotifySendSuccess successDetails = new NotifySendSuccess();
+//        successDetails.setUser(notification.getUser());
+//        successDetails.setDesc(notification.getNotificationType() + " notification send successfully");
+//
+//        LocalTime startTime = notification.getStartTime();
+////        successDetails.setId(notification.getId());
+//
+//        // Check if startTime is not null before accessing its properties
+//        if (startTime != null) {
+//            successDetails.setStartTime(startTime);
+//        } else {
+//            // Handle the case where startTime is null
+//            log.warn("NotificationEntity with null startTime encountered while saving NotifySendSuccess.");
+//
+//            // Set startTime to the current time
+//            successDetails.setStartTime(LocalTime.now());
+//        }
+//        // Set NotificationEntity id to NotifySendSuccess
+////        Long notificationEntityId = notification.getId();
+////        successDetails.setNotificationEntity(notification.getId());
+////                successDetails.setNotificationEntity(notificationEntityId);
+//
+//
+//
+//        // Save success details in the database
+//        notifySendSuccessRepository.save(successDetails);
+//    }
+
+//    private void saveNotificationSendSuccess(NotificationEntity notification) {
+//        if (notification == null || notification.getUser() == null) {
+//            // Log a warning or handle the case where notification or user is null
+//            log.warn("Invalid NotificationEntity or User. Skipping NotifySendSuccess save.");
+//            return;
+//        }
+//
+//        NotifySendSuccess successDetails = new NotifySendSuccess();
+//        successDetails.setUser(notification.getUser());
+//
+//
+//        LocalTime startTime = notification.getStartTime();
+//
+//        // Check if startTime is not null before accessing its properties
+//        if (startTime != null) {
+//            successDetails.setStartTime(startTime);
+//        } else {
+//            // Handle the case where startTime is null
+//            log.warn("NotificationEntity with null startTime encountered while saving NotifySendSuccess.");
+//
+//            // Set startTime to the current time
+//            successDetails.setStartTime(LocalTime.now());
+//        }
+//        successDetails.setBody(notification.getNotificationType());
+//        successDetails.setId(notification.getId());
+//
+//        // Save success details in the database
+//        notifySendSuccessRepository.save(successDetails);
+//    }
+
+
+    private void saveNotificationSendSuccess(NotificationEntity notification) {
+        if (notification == null || notification.getUser() == null) {
+            log.warn("Invalid NotificationEntity or User. Skipping NotifySendSuccess save.");
+            return;
+        }
+
+        NotifySendSuccess successDetails = new NotifySendSuccess();
+        successDetails.setUser(notification.getUser());
+
+        LocalTime startTime = notification.getStartTime();
+
+        if (startTime != null) {
+            successDetails.setStartTime(startTime);
+        } else {
+            log.warn("NotificationEntity with null startTime encountered while saving NotifySendSuccess.");
+            successDetails.setStartTime(LocalTime.now());
+        }
+
+        // Set the id of the associated NotificationEntity
+        successDetails.setNotificationEntity(notification);
+
+        // Set the notification type in the body field
+        successDetails.setBody(notification.getNotificationType());
+
+        // Save success details in the database
+        notifySendSuccessRepository.save(successDetails);
+    }
+
+
+//    private void saveNotificationSendSuccess(NotificationEntity notification) {
+//        if (notification == null || notification.getUser() == null) {
+//            log.warn("Invalid NotificationEntity or User. Skipping NotifySendSuccess save.");
+//            return;
+//        }
+//
+//        // Check if the associated NotificationEntity is already saved in NotifySendSuccess
+////        if (notifySendSuccessRepository.existsByNotificationEntity(notification)) {
+////            log.warn("NotificationEntity details already saved. Skipping NotifySendSuccess save.");
+////            return;
+////        }
+//
+//        NotifySendSuccess successDetails = new NotifySendSuccess();
+//        successDetails.setUser(notification.getUser());
+//
+//        LocalTime startTime = notification.getStartTime();
+//
+//        if (startTime != null) {
+//            successDetails.setStartTime(startTime);
+//        } else {
+//            log.warn("NotificationEntity with null startTime encountered while saving NotifySendSuccess.");
+//            successDetails.setStartTime(LocalTime.now());
+//        }
+//
+//        // Set only the id of the NotificationEntity
+//        successDetails.setNotificationEntity(notification.getId());
+//
+//        // Set the notification type in the body field
+//        successDetails.setBody(notification.getNotificationType());
+//
+//        // Save success details in the database
+//        notifySendSuccessRepository.save(successDetails);
+//    }
+//
+//
+//
+//    private Long getNotificationIdByStartTime(LocalTime startTime, User user) {
+//        List<NotificationEntity> notifications = notificationRepository.findByStartTime(startTime);
+//
+//        // Filter notifications for the specific user
+//        Optional<NotificationEntity> matchingNotification = notifications.stream()
+//                .filter(notification -> notification.getUser().equals(user))
+//                .findFirst();
+//
+//        return matchingNotification.map(NotificationEntity::getId).orElse(null);
+//    }
+//
+
+//    private void saveNotificationSendSuccess(NotificationEntity notification) {
+//        NotifySendSuccess successDetails = new NotifySendSuccess();
+//        successDetails.setUser(notification.getUser());
+//        successDetails.setDesc(notification.getNotificationType() + " notification send successfully");
+//
+//        LocalTime startTime = notification.getStartTime();
+//
+//        // Check if startTime is not null before accessing its properties
+//        if (startTime != null) {
+//            successDetails.setStartTime(startTime);
+//        } else {
+//            // Handle the case where startTime is null
+//            log.warn("NotificationEntity with null startTime encountered while saving NotifySendSuccess.");
+//
+//            // Set startTime to the current time
+//            successDetails.setStartTime(LocalTime.now());
+//        }
+//
+//        // Save the associated NotificationEntity first if it's not already saved
+////        if (notification.getId() == null) {
+////            notificationRepository.save(notification);
+////        }
+//
+//        // Set the reference to the saved NotificationEntity
+//        successDetails.setNotificationEntity(notification);
+//
+//        // Save success details in the database
+//        notifySendSuccessRepository.save(successDetails);
+//    }
+
+    public List<NotifySendSuccessDTO> getUserSendSuccessNotifications(String username) {
+        List<NotifySendSuccess> notifications = notifySendSuccessRepository.findByUserEmail(username);
+
+        // Convert entities to DTOs
+        return notifications.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+//
+//    private NotifySendSuccessDTO convertToDTO(NotifySendSuccess notifySendSuccess) {
+//        NotifySendSuccessDTO dto = new NotifySendSuccessDTO();
+//        dto.setId(notifySendSuccess.getId());
+//        dto.setLocalDate(notifySendSuccess.getLocalDate());
+//        dto.setStartTime(notifySendSuccess.getStartTime());
+//        dto.setDesc(notifySendSuccess.getDesc());
+//        dto.setBody(notifySendSuccess.getBody());
+//
+//        return dto;
+//    }
+
+
+    private NotifySendSuccessDTO convertToDTO(NotifySendSuccess notifySendSuccess) {
+        NotifySendSuccessDTO dto = new NotifySendSuccessDTO();
+        dto.setId(notifySendSuccess.getId());
+        dto.setLocalDate(notifySendSuccess.getLocalDate());
+        dto.setStartTime(notifySendSuccess.getStartTime());
+        dto.setBody(notifySendSuccess.getBody());
+
+        // Set message based on different scenarios
+        if (isLunchTime(notifySendSuccess)) {
+            dto.setMessage("It's time for Lunch!");
+//        } else if (isBreakfastTime(notifySendSuccess)) {
+//            dto.setMessage("It's time for Breakfast!");
+//        } else if (isDinnerTime(notifySendSuccess)) {
+//            dto.setMessage("It's time for Dinner!");
+//        } else if (isSnacksTime(notifySendSuccess)) {
+//            dto.setMessage("It's time for Snacks!");
+//        } else if (isWorkoutTime(notifySendSuccess)) {
+//            dto.setMessage("It's time for your Workout!");
+//        } else if (isDrinkingWaterTime(notifySendSuccess)) {
+//            dto.setMessage("It's time to drink water!");
+        }
+
+        return dto;
+    }
+
+    private boolean isLunchTime(NotifySendSuccess notifySendSuccess) {
+        // Add your logic to check if it's lunchtime based on the startTime
+        // For example, if lunch is scheduled between 12:00 PM and 1:00 PM
+        LocalTime lunchStartTime = LocalTime.of(12, 0);
+        LocalTime lunchEndTime = LocalTime.of(13, 0);
+
+        return notifySendSuccess.getStartTime().isAfter(lunchStartTime) &&
+                notifySendSuccess.getStartTime().isBefore(lunchEndTime);
+    }
 
 }

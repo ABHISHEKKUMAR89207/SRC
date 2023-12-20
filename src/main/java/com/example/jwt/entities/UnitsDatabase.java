@@ -16,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "units database")
+@Table(name = "units database", indexes = {@Index(name = "idx_nutrient_name", columnList = "nutrientName")})
 public class UnitsDatabase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
