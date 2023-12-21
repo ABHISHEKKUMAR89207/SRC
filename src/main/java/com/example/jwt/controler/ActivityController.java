@@ -140,8 +140,58 @@ public class ActivityController {
 
     //    Get steps by data for export
 
+//    @GetMapping("/get-steps/custom-range")
+//    public ResponseEntity<Map<String, Object>> getUserStepsForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the custom date range and user
+//                List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+//
+//                // Create a map to hold only steps and formatted activity date
+//                Map<String, Object> response = new HashMap<>();
+//
+//                // Create a list to store activity details for each day
+//                List<Map<String, Object>> activitiesForRange = new ArrayList<>();
+//
+//                // Convert each activity to a map with formatted activityDate and steps
+//                for (Activities activity : activitiesList) {
+//                    Map<String, Object> activityMap = new HashMap<>();
+//
+//                    // Format the activityDate
+//                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//                    activityMap.put("activityDate", formattedActivityDate);
+//                    activityMap.put("steps", activity.getSteps());
+//                    activitiesForRange.add(activityMap);
+//                }
+//
+//                // Add the list of activities to the response map
+//                response.put("activitiesForRange", activitiesForRange);
+//
+//                return ResponseEntity.ok(response);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
     @GetMapping("/get-steps/custom-range")
-    public ResponseEntity<Map<String, Object>> getUserStepsForCustomRange(
+    public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestHeader("Auth") String tokenHeader) {
@@ -159,9 +209,6 @@ public class ActivityController {
                 // Get activities for the custom date range and user
                 List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
 
-                // Create a map to hold only steps and formatted activity date
-                Map<String, Object> response = new HashMap<>();
-
                 // Create a list to store activity details for each day
                 List<Map<String, Object>> activitiesForRange = new ArrayList<>();
 
@@ -177,10 +224,7 @@ public class ActivityController {
                     activitiesForRange.add(activityMap);
                 }
 
-                // Add the list of activities to the response map
-                response.put("activitiesForRange", activitiesForRange);
-
-                return ResponseEntity.ok(response);
+                return ResponseEntity.ok(activitiesForRange);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
@@ -189,8 +233,6 @@ public class ActivityController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 
 //    @GetMapping("/get-steps/week")
 //    public ResponseEntity<Map<String, Object>> getUserStepsForWeek(

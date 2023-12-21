@@ -2,26 +2,23 @@ package com.example.jwt.AdminDashboard;
 
 
 
+import com.example.jwt.entities.ContactUs;
+import com.example.jwt.entities.Feedback;
 import com.example.jwt.entities.User;
-import com.example.jwt.model.JwtRequest;
-import com.example.jwt.model.JwtResponse;
+import com.example.jwt.repository.ContactUsRepository;
+import com.example.jwt.repository.FeedbackRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
-import com.google.api.gax.paging.Page;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -30,11 +27,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -78,9 +73,9 @@ public class Dashbaord {
         return "tables"; // Assuming "tables" is the Thymeleaf template name
     }
 
-    @GetMapping("/billing.html")
-    public String billing() {
-        return "billing"; // Assuming "tables" is the Thymeleaf template name
+    @GetMapping("/books.html")
+    public String Books() {
+        return "Books"; // Assuming "tables" is the Thymeleaf template name
     }
 
     @GetMapping("/sign-in.html")
@@ -407,6 +402,9 @@ public class Dashbaord {
 //    public Page<User> getAllUsers(Pageable pageable) {
 //        return userRepository.findAll(pageable);
 //    }
+
+
+
 @GetMapping("/user.html")
 public String showUser(Model model) {
     setupModel(model);
@@ -468,5 +466,67 @@ public String showUser(Model model) {
         // Redirect to the sign-in page
         return "redirect:/dashboard/sign-in.html";
     }
+
+
+
+
+
+
+
+
+
+
+
+//    @GetMapping("/all")
+//    public ResponseEntity<List<ContactUs>> getAllContactUs() {
+//        List<ContactUs> allContactUs = contactUsService.getAllContactUs();
+//        return ResponseEntity.ok(allContactUs);
+//    }
+
+
+
+
+
+//    @GetMapping("/contactUs.html")
+//    public String showContactUs(Model model) {
+//        setupModel(model);
+//        return "contactUs";
+//    }
+
+    @GetMapping("/contactUs.html")
+    public String showContactUs(Model model) {
+        List<ContactUs> contactUsList = getAllContactUsData();
+        model.addAttribute("contactUs", contactUsList);
+        return "contactUs";
+    }
+@Autowired
+    private ContactUsRepository contactUsRepository; // Assuming you have a repository
+
+    public List<ContactUs> getAllContactUsData() {
+        // Example: Fetch all contactUs data from a repository (replace this with your actual logic)
+        return contactUsRepository.findAll();
+    }
+//    @GetMapping("/user.html")
+//    public String showUser(Model model) {
+//        setupModel(model);
+//        return "user";
+//    }
+
+    @GetMapping("/feedback.html")
+    public String showFeedback(Model model) {
+        List<Feedback> feedbackList = getAllFeedbackData();
+        model.addAttribute("feedback", feedbackList);
+        return "feedback";
+    }
+
+    @Autowired
+    private FeedbackRepository feedbackRepository; // Assuming you have a repository for Feedback
+
+    public List<Feedback> getAllFeedbackData() {
+        // Example: Fetch all feedback data from a repository (replace this with your actual logic)
+        return feedbackRepository.findAll();
+    }
+
+
 
 }

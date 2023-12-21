@@ -29,12 +29,18 @@ public class User implements UserDetails {
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
+
 //    @Column(unique = true)
     private String userName;
     @NaturalId(mutable = true)
     private String email;
     private String password;
     private String mobileNo;
+
+    private String deviceType;
+    private Double latitude;
+    private Double longitude;
+
     private LocalDate localDate = LocalDate.now();
     private boolean emailVerified = false;
     private String notificationToken;
@@ -118,4 +124,6 @@ public class User implements UserDetails {
             this.notificationToken = newToken;
         }
     }
+
+
 }

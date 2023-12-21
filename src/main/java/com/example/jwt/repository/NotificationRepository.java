@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
+    List<NotificationEntity> findByUser(User user);
 
     List<NotificationEntity> findByUserEmail(String email);
 

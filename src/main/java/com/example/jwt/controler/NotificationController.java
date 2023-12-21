@@ -1,10 +1,11 @@
 package com.example.jwt.controler;
 
 import com.example.jwt.dtos.NotificationDetailsDTO;
+import com.example.jwt.dtos.NotifySendSuccessDTO;
 import com.example.jwt.entities.NotificationEntity;
 
 
-
+import com.example.jwt.entities.NotifySendSuccess;
 import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FirebaseMessagingService;
@@ -239,6 +240,55 @@ public ResponseEntity<String> deleteNotification(
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @GetMapping("/get-user-send-success-notifications")
+    public ResponseEntity<List<NotifySendSuccessDTO>> getUserSendSuccessNotifications(
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+        try {
+            // Extract the JWT token from the Authorization header
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username from the JWT token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Retrieve user send success notifications
+            List<NotifySendSuccessDTO> userSendSuccessNotifications = notificationService.getUserSendSuccessNotifications(username);
+
+            return ResponseEntity.ok(userSendSuccessNotifications);
+        } catch (Exception e) {
+            // Handle exceptions appropriately (e.g., log, return an error response)
+            log.error("Failed to retrieve user send success notifications", e);
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 
     }
 
