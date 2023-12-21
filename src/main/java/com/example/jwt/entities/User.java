@@ -36,6 +36,11 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private String mobileNo;
+
+    private String deviceType;
+    private Double latitude;
+    private Double longitude;
+
     private LocalDate localDate = LocalDate.now();
     private boolean emailVerified = false;
     private String notificationToken;
