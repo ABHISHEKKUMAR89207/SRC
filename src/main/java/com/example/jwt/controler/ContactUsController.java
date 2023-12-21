@@ -22,21 +22,21 @@ public class ContactUsController {
         return new ResponseEntity<>(savedContactUs, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ContactUs> getContactUsById(@PathVariable Long id) {
-        ContactUs contactUs = contactUsService.getContactUsById(id);
-        if (contactUs != null) {
-            return ResponseEntity.ok(contactUs);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @GetMapping("/{id}")
+//    public ResponseEntity<ContactUs> getContactUsById(@PathVariable Long id) {
+//        ContactUs contactUs = contactUsService.getContactUsById(id);
+//        if (contactUs != null) {
+//            return ResponseEntity.ok(contactUs);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ContactUs>> getAllContactUs() {
-        List<ContactUs> allContactUs = contactUsService.getAllContactUs();
-        return ResponseEntity.ok(allContactUs);
-    }
+//    @GetMapping("/all")
+//    public ResponseEntity<List<ContactUs>> getAllContactUs() {
+//        List<ContactUs> allContactUs = contactUsService.getAllContactUs();
+//        return ResponseEntity.ok(allContactUs);
+//    }
     // Add more GET endpoints as needed
 
 }
