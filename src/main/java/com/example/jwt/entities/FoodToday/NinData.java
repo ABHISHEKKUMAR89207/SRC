@@ -33,15 +33,7 @@ public class NinData {
     private Double Carbs;
     @Column(name = "Protein")
     private Double protein;
-<<<<<<< HEAD
-=======
-//    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")
-//    @JsonIgnore
-//    private UnitsDatabase unitsDatabase;
 
-
->>>>>>> d59c7af6602562f19f08903c6547730cbb3bb1f6
     @Column(name = "Fat")
     private Double Fat;
     private Double Fiber;

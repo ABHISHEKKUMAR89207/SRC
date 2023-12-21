@@ -801,17 +801,9 @@ private AllToggleRepository allToggleRepository;
                 .collect(Collectors.toList());
     }
 
-//
-//    private NotifySendSuccessDTO convertToDTO(NotifySendSuccess notifySendSuccess) {
-//        NotifySendSuccessDTO dto = new NotifySendSuccessDTO();
-//        dto.setId(notifySendSuccess.getId());
-//        dto.setLocalDate(notifySendSuccess.getLocalDate());
-//        dto.setStartTime(notifySendSuccess.getStartTime());
-//        dto.setDesc(notifySendSuccess.getDesc());
-//        dto.setBody(notifySendSuccess.getBody());
-//
-//        return dto;
-//    }
+
+
+
 
 
     private NotifySendSuccessDTO convertToDTO(NotifySendSuccess notifySendSuccess) {
@@ -821,32 +813,37 @@ private AllToggleRepository allToggleRepository;
         dto.setStartTime(notifySendSuccess.getStartTime());
         dto.setBody(notifySendSuccess.getBody());
 
-        // Set message based on different scenarios
-        if (isLunchTime(notifySendSuccess)) {
-            dto.setMessage("It's time for Lunch!");
-//        } else if (isBreakfastTime(notifySendSuccess)) {
-//            dto.setMessage("It's time for Breakfast!");
-//        } else if (isDinnerTime(notifySendSuccess)) {
-//            dto.setMessage("It's time for Dinner!");
-//        } else if (isSnacksTime(notifySendSuccess)) {
-//            dto.setMessage("It's time for Snacks!");
-//        } else if (isWorkoutTime(notifySendSuccess)) {
-//            dto.setMessage("It's time for your Workout!");
-//        } else if (isDrinkingWaterTime(notifySendSuccess)) {
-//            dto.setMessage("It's time to drink water!");
+        // Check if body is not null before processing
+        if (notifySendSuccess.getBody() != null) {
+            // Extract meal information from the body
+            String bodyText = notifySendSuccess.getBody().toLowerCase(); // Convert to lowercase for case-insensitive matching
+
+            // Set message based on different scenarios
+//            if (isLunchTime(notifySendSuccess)) {
+//                dto.setMessage("It's time for Lunch!");
+
+            // Check if the body contains "breakfast" and set a custom message
+            if (bodyText.contains("breakfast")) {
+                dto.setMessage("Hey, It's time for Breakfast!");
+            } else if (bodyText.contains("lunch")) {
+                dto.setMessage("Hey, It's time for Lunch!");
+            } else if (bodyText.contains("dinner")) {
+                dto.setMessage("Hey, It's time for Dinner!");
+            } else if (bodyText.contains("snacks")) {
+                dto.setMessage("Hey, It's time for Snacks!");
+            } else if (bodyText.contains("drinking water")) {
+                dto.setMessage("Hey, It's time for Water!");
+            } else if (bodyText.contains("sleep")) {
+                dto.setMessage("Hey, It's time for Sleep!");
+            } else if (bodyText.contains("calories")) {
+                dto.setMessage("Hey, It's time for Calories!");
+            }
+//
+        } else {
+            // Handle the case where body is null
+            dto.setMessage("No specific message. Body is null.");
         }
 
         return dto;
     }
-
-    private boolean isLunchTime(NotifySendSuccess notifySendSuccess) {
-        // Add your logic to check if it's lunchtime based on the startTime
-        // For example, if lunch is scheduled between 12:00 PM and 1:00 PM
-        LocalTime lunchStartTime = LocalTime.of(12, 0);
-        LocalTime lunchEndTime = LocalTime.of(13, 0);
-
-        return notifySendSuccess.getStartTime().isAfter(lunchStartTime) &&
-                notifySendSuccess.getStartTime().isBefore(lunchEndTime);
-    }
-
 }
