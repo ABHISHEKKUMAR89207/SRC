@@ -67,6 +67,9 @@ public class UserService implements IUserService {
         newUser.setMobileNo(request.mobileNo());
         newUser.setUserName(request.userName());
         newUser.setEmail(request.email());
+        newUser.setDeviceType(request.deviceType());
+        newUser.setLatitude(request.latitude());
+        newUser.setLongitude(request.longitude());
         newUser.setPassword(passwordEncoder.encode(request.password()));
 
         // Assign a role to the user (adjust as needed)

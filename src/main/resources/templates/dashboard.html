@@ -22,6 +22,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="../static/img/apple-icon.png">
     <link rel="icon" type="image/png" href="../static/img/favicon.png">
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />-->
+<!--    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>-->
+
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />-->
+<!--    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>-->
+<!--    <style>-->
+<!--        #indiaMap {-->
+<!--            height: 500px;-->
+<!--        }-->
+<!--    </style>-->
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Include Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Your other head content -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+
     <title>
         Nutrify India Now 2.O Dashboard
     </title>
@@ -76,6 +96,58 @@
 
 
     </style>
+    <link type="text/css" rel="stylesheet" href="zcolorbrewer.css" />
+    <style type="text/css">
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        svg {
+            background: #f7f7f7;
+        }
+
+        #india {
+            /*    fill: #00BCD4;
+            opacity: .7; */
+            stroke: #101010;
+            stroke-width: .6;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 0.5em;
+            font-size: 10px;
+            color: #222;
+            background: #FFF;
+            border-radius: 2px;
+            pointer-events: none;
+            box-shadow: 0px 0px 2px 0px #a6a6a6;
+        }
+
+        .key path {
+            display: none;
+        }
+
+        .key line {
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        .key text {
+            font-size: 10px;
+        }
+
+        .key rect {
+            stroke-width: .4;
+        }
+        #indiaMap {
+            height: 600px;
+            width: 100%;
+        }
+
+    </style>
+
     <script>
         (function(a, s, y, n, c, h, i, d, e) {
             s.className += ' ' + y;
@@ -259,26 +331,26 @@
                 </a>
             </li>
 
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link  " href="books.html">-->
-<!--                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">-->
-<!--                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
-<!--                            <title>credit-card</title>-->
-<!--                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">-->
-<!--                                <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">-->
-<!--                                    <g transform="translate(1716.000000, 291.000000)">-->
-<!--                                        <g transform="translate(453.000000, 454.000000)">-->
-<!--                                            <path class="color-background opacity-6" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z"></path>-->
-<!--                                            <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>-->
-<!--                                        </g>-->
-<!--                                    </g>-->
-<!--                                </g>-->
-<!--                            </g>-->
-<!--                        </svg>-->
-<!--                    </div>-->
-<!--                    <span class="nav-link-text ms-1">Book</span>-->
-<!--                </a>-->
-<!--            </li>-->
+            <li class="nav-item">
+                <a class="nav-link  " href="book.html">
+                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <title>credit-card</title>
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                    <g transform="translate(1716.000000, 291.000000)">
+                                        <g transform="translate(453.000000, 454.000000)">
+                                            <path class="color-background opacity-6" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z"></path>
+                                            <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Book</span>
+                </a>
+            </li>
 <!--            <li class="nav-item">-->
 <!--                <a class="nav-link  " href="virtual-reality.html">-->
 <!--                    <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">-->
@@ -714,6 +786,12 @@
                         <h6 class="ms-2 mt-4 mb-0"> No of Registered User By Month </h6>
 <!--                        <p class="text-sm ms-2"> (<span class="font-weight-bolder">+23%</span>) than last week </p>-->
                         <div class="container border-radius-lg">
+
+
+
+
+
+
 <!--                            <div class="row">-->
 <!--                                <div class="col-3 py-3 ps-0">-->
 <!--                                    <div class="d-flex mb-2">-->
@@ -815,6 +893,14 @@
 <!--                                    </div>-->
 <!--                                </div>-->
 <!--                            </div>-->
+
+<!--                            -->
+
+
+
+
+
+
                         </div>
                     </div>
                 </div>
@@ -840,6 +926,11 @@
             </div>
         </div>
 
+
+
+
+
+
 <!--        <div class="row my-4">-->
 <!--            <div class="col-lg-8 col-md-6 mb-md-0 mb-4">-->
 <!--                <div class="card">-->
@@ -858,9 +949,12 @@
 <!--                                        <i class="fa fa-ellipsis-v text-secondary"></i>-->
 <!--                                    </a>-->
 <!--                                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">-->
-<!--                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>-->
-<!--                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>-->
-<!--                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>-->
+<!--&lt;!&ndash;                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>&ndash;&gt;-->
+<!--                                        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />-->
+<!--                                        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>-->
+
 <!--                                    </ul>-->
 <!--                                </div>-->
 <!--                            </div>-->
@@ -1115,7 +1209,660 @@
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-<!--            <div class="col-lg-4 col-md-6">-->
+
+<!--        <div class="row my-4">-->
+<!--            <div class="col-lg-8 col-md-6 mb-md-0 mb-4">-->
+<!--                <div class="card">-->
+<!--                    <div class="card-header pb-0">-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-lg-6 col-7">-->
+<!--                                <h6>Projects</h6>-->
+<!--                                <p class="text-sm mb-0">-->
+<!--                                    <i class="fa fa-check text-info" aria-hidden="true"></i>-->
+<!--                                    <span class="font-weight-bold ms-1">30 done</span> this month-->
+<!--                                </p>-->
+<!--                            </div>-->
+<!--                            <div class="col-lg-6 col-5 my-auto text-end">-->
+<!--                                <div class="dropdown float-lg-end pe-4">-->
+<!--                                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                                        <i class="fa fa-ellipsis-v text-secondary"></i>-->
+<!--                                    </a>-->
+<!--                                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">-->
+<!--                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>-->
+<!--                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>-->
+<!--                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="card-body px-0 pb-2">-->
+<!--                        <div class="table-responsive">-->
+<!--                            &lt;!&ndash; Replace this table with the Leaflet map &ndash;&gt;-->
+<!--&lt;!&ndash;                            <div id="indiaMap" style="height: 400px;"></div>&ndash;&gt;-->
+<!--                            <div id="indiaMap" style="height: 600px;"></div>-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <div class="row my-4">
+            <!-- Left Column: Leaflet Map -->
+            <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <div class="row">
+                            <div class="col-lg-6 col-7">
+                                <h6>India Map</h6>
+<!--                                <p class="text-sm mb-0">-->
+<!--                                    <i class="fa fa-check text-info" aria-hidden="true"></i>-->
+<!--                                    <span class="font-weight-bold ms-1">30 done</span> this month-->
+<!--                                </p>-->
+                            </div>
+                            <div class="col-lg-6 col-5 my-auto text-end">
+                                <div class="dropdown float-lg-end pe-4">
+                                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa fa-ellipsis-v text-secondary"></i>
+                                    </a>
+                                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
+                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
+                                        <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+<!--                    <div class="card-body px-0 pb-2">-->
+<!--                        <div class="table-responsive">-->
+<!--                            <div id="chart"></div>-->
+
+<!--                            <script src="http://d3js.org/d3.v3.min.js"></script>-->
+<!--                            <script src="http://d3js.org/topojson.v1.min.js"></script>-->
+
+<!--                            <script type="text/javascript" src="../static/js/india/d3.geo.min.js"></script>-->
+
+<!--                            <script type="text/javascript">-->
+<!--                                var w = 650;-->
+<!--                                var h = 650;-->
+<!--                                var proj = d3.geo.mercator();-->
+<!--                                var path = d3.geo.path().projection(proj);-->
+<!--                                var t = proj.translate(); // the projection's default translation-->
+<!--                                var s = proj.scale() // the projection's default scale-->
+
+<!--                                var buckets = 9,-->
+<!--                                    colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"]; // alternatively colorbrewer.YlGnBu[9]-->
+
+<!--                                var map = d3.select("#chart").append("svg:svg")-->
+<!--                                    .attr("width", w)-->
+<!--                                    .attr("height", h)-->
+<!--                                    //.call(d3.behavior.zoom().on("zoom", redraw))-->
+<!--                                    .call(initialize);-->
+
+<!--                                var india = map.append("svg:g")-->
+<!--                                    .attr("id", "india");-->
+
+<!--                                var div = d3.select("body").append("div")-->
+<!--                                    .attr("class", "tooltip")-->
+<!--                                    .style("opacity", 0);-->
+
+
+<!--                                d3.json("../static/js/india/states.json", function (json) {-->
+
+<!--                                    var maxTotal = d3.max(json.features, function (d) { return d.total });-->
+
+<!--                                    var colorScale = d3.scale.quantile()-->
+<!--                                        .domain(d3.range(buckets).map(function (d) { return (d / buckets) * maxTotal }))-->
+<!--                                        .range(colors);-->
+
+
+<!--                                    var y = d3.scale.sqrt()-->
+<!--                                        .domain([0, 10000])-->
+<!--                                        .range([0,300]);-->
+
+<!--                                    var yAxis = d3.svg.axis()-->
+<!--                                        .scale(y)-->
+<!--                                        .tickValues(colorScale.domain())-->
+<!--                                        .orient("right");-->
+
+
+<!--                                    india.selectAll("path")-->
+<!--                                        .data(json.features)-->
+<!--                                        .enter().append("path")-->
+<!--                                        .attr("d", path)-->
+<!--                                        .style("fill", colors[0])-->
+<!--                                        .style("opacity", 0.5)-->
+
+<!--                                        .on('click', function (d, i) {-->
+<!--                                            d3.select(this).transition().duration(300).style("opacity", 1);-->
+<!--                                            div.transition().duration(300)-->
+<!--                                                .style("opacity", 1)-->
+<!--                                            div.text(d.id + " : " + d.total)-->
+<!--                                                .style("left", (d3.event.pageX) + "px")-->
+<!--                                                .style("top", (d3.event.pageY - 30) + "px");-->
+<!--                                        })-->
+
+<!--                                        .on('mouseleave', function (d, i) {-->
+<!--                                            d3.select(this).transition().duration(300)-->
+<!--                                                .style("opacity", 0.5);-->
+<!--                                            div.transition().duration(300)-->
+<!--                                                .style("opacity", 0);-->
+<!--                                        })-->
+<!--                                        .on('mouseenter', function (d, i) {-->
+<!--                                            d3.select(this).transition().duration(300)-->
+<!--                                                .style("opacity", 0.5);-->
+<!--                                            div.transition().duration(300)-->
+<!--                                                .style("opacity", 0);-->
+
+<!--                                        });-->
+
+<!--                                    india.selectAll("path").transition().duration(1000)-->
+<!--                                        .style("fill", function (d) { return colorScale(d.total); });-->
+
+
+
+<!--                                    //Adding legend for our Choropleth-->
+
+
+<!--                                    var g = india.append("g")-->
+<!--                                        .attr("class", "key")-->
+<!--                                        .attr("transform", "translate(445, 305)")-->
+<!--                                        .call(yAxis);-->
+
+<!--                                    g.selectAll("rect")-->
+<!--                                        .data(colorScale.range().map(function(d, i) {-->
+<!--                                            return {-->
+<!--                                                y0: i ? y(colorScale.domain()[i - 1]) : y.range()[0],-->
+<!--                                                y1: i < colorScale.domain().length ? y(colorScale.domain()[i]) : y.range()[1],-->
+<!--                                                z: d-->
+<!--                                            };-->
+<!--                                        }))-->
+<!--                                        .enter().append("rect")-->
+<!--                                        .attr("width", 7)-->
+<!--                                        .attr("y", function(d) { return d.y0; })-->
+<!--                                        .attr("height", function(d) { return d.y1 - d.y0; })-->
+<!--                                        .style("fill", function(d) { return d.z; });-->
+
+
+<!--                                });-->
+
+<!--                                function initialize() {-->
+<!--                                    proj.scale(6700);-->
+<!--                                    proj.translate([-1240, 720]);-->
+<!--                                }-->
+
+
+<!--                            </script>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive">
+                            <div id="chart"></div>
+                            <div id="stateInfo" class="tooltip">
+                                <h6 id="stateName"></h6>
+                                <p id="userCount"></p>
+                            </div>
+                        </div>
+
+                        <script src="http://d3js.org/d3.v3.min.js"></script>
+                        <script src="http://d3js.org/topojson.v1.min.js"></script>
+                        <script type="text/javascript" src="../static/js/india/d3.geo.min.js"></script>
+
+                        <script type="text/javascript">
+                            var w = 650;
+                            var h = 650;
+                            var proj = d3.geo.mercator();
+                            var path = d3.geo.path().projection(proj);
+                            var t = proj.translate(); // the projection's default translation
+                            var s = proj.scale() // the projection's default scale
+
+                            var buckets = 9,
+                                colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"];
+
+                            var map = d3.select("#chart").append("svg:svg")
+                                .attr("width", w)
+                                .attr("height", h)
+                                .call(initialize);
+
+                            var india = map.append("svg:g")
+                                .attr("id", "india");
+
+                            var div = d3.select("body").append("div")
+                                .attr("class", "tooltip")
+                                .style("opacity", 0);
+
+                            var stateInfo = d3.select("#chart").append("div")
+                                .attr("class", "state-info")
+                                .style("opacity", 0);
+
+                            d3.json("../static/js/india/states.json", function (json) {
+                                // ... (your existing code)
+
+                                india.selectAll("path")
+                                    .data(json.features)
+                                    .enter().append("path")
+                                    .attr("d", path)
+                                    .style("fill", colors[0])
+                                    .style("opacity", 0.5)
+                                    .on('mouseover', function (d, i) {
+                                        d3.select(this).transition().duration(300).style("opacity", 1);
+                                        var stateNameValue = d.id;
+                                        var userCountValue = usersByState[stateNameValue] ? usersByState[stateNameValue].length : 0;
+                                        stateInfo.html("<h6>State: " + stateNameValue + "</h6><p>Users: " + userCountValue + "</p>");
+                                        stateInfo.style("opacity", 1);
+                                    })
+                                    .on('mouseleave', function (d, i) {
+                                        d3.select(this).transition().duration(300)
+                                            .style("opacity", 0.5);
+                                        stateInfo.style("opacity", 0);
+                                    });
+
+                                // ... (your existing code)
+                            });
+
+                            function initialize() {
+                                proj.scale(6700);
+                                proj.translate([-1240, 720]);
+                            }
+                        </script>
+
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+
+
+            <!-- Right Column: State and No of Users -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100">
+                    <div class="card-header pb-0">
+                        <h6>State and No of Users</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-6">
+                                <h6>State</h6>
+                                <!-- Iterate over states and display state names -->
+                                <ul th:each="state : ${usersByState.keySet()}">
+                                    <li th:text="${state}"></li>
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <h6>No of Users</h6>
+                                <!-- Iterate over user counts and display user count information -->
+                                <ul th:each="userList : ${usersByState.values()}">
+                                    <li th:text="${#lists.size(userList)}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+        <!--        <script>-->
+<!--            // Initialize the map-->
+<!--            var map = L.map('indiaMap').setView([20.5937, 78.9629], 5);-->
+
+<!--            // Add a base map-->
+<!--            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {-->
+<!--                attribution: '&copy; OpenStreetMap contributors'-->
+<!--            }).addTo(map);-->
+
+<!--            // Define state coordinates (replace with actual coordinates)-->
+<!--            var states = {-->
+<!--                'Andhra Pradesh': [15.9129, 79.7400],-->
+<!--                'Arunachal Pradesh': [27.0844, 93.6053],-->
+<!--                // Add coordinates for other states-->
+<!--            };-->
+
+<!--            // Add markers for each state-->
+<!--            for (var state in states) {-->
+<!--                var marker = L.marker(states[state]).addTo(map);-->
+<!--                marker.bindPopup(state);-->
+<!--            }-->
+<!--        </script>-->
+
+
+
+
+
+<!--        <script>-->
+<!--            // Example user data (replace it with your actual data)-->
+<!--            var userData = [-->
+<!--                { state: 'Bihar', coordinates: [27.0238, 80.5937] },-->
+<!--                { state: 'Uttar Pradesh', coordinates: [25.4358, 81.8463] },-->
+<!--                { state: 'Jammu', coordinates: [32.7266, 74.8570] },-->
+<!--                // Add more user data...-->
+<!--            ];-->
+
+<!--            // Function to calculate the number of users in each state-->
+<!--            function calculateUsersByState() {-->
+<!--                var userCountByState = {};-->
+
+<!--                userData.forEach(function (user) {-->
+<!--                    var state = user.state;-->
+<!--                    if (userCountByState[state]) {-->
+<!--                        userCountByState[state]++;-->
+<!--                    } else {-->
+<!--                        userCountByState[state] = 1;-->
+<!--                    }-->
+<!--                });-->
+
+<!--                return userCountByState;-->
+<!--            }-->
+
+<!--            // Function to display user information-->
+<!--            function displayUserInformation() {-->
+<!--                var userStateInfoElement = document.getElementById('userStateInfo');-->
+<!--                var userCountByState = calculateUsersByState();-->
+
+<!--                // Create and append HTML for user information-->
+<!--                var html = '<ul>';-->
+<!--                for (var state in userCountByState) {-->
+<!--                    var userCount = userCountByState[state];-->
+<!--                    html += '<li>' + state + ' - ' + userCount + ' users</li>';-->
+<!--                }-->
+<!--                html += '</ul>';-->
+
+<!--                userStateInfoElement.innerHTML = html;-->
+<!--            }-->
+
+<!--            // Call the function to display user information-->
+<!--            displayUserInformation();-->
+<!--        </script>-->
+
+
+
+<!--        <script>-->
+<!--            // Hypothetical asynchronous function to fetch user data from the database-->
+<!--            async function fetchUserData() {-->
+<!--                // Simulating an asynchronous database call-->
+<!--                return new Promise((resolve) => {-->
+<!--                    setTimeout(() => {-->
+<!--                        resolve([-->
+<!--                            { state: 'Bihar', coordinates: [27.0238, 80.5937] },-->
+<!--                            { state: 'Uttar Pradesh', coordinates: [25.4358, 81.8463] },-->
+<!--                            // { state: 'Bihar', coordinates: [28.6139, 77.2090] },-->
+<!--                            // { state: 'Uttar Pradesh', coordinates: [26.8467, 80.9462] },-->
+<!--                            // Add more user data...-->
+<!--                        ]);-->
+<!--                    }, 1000); // Simulating a delay of 1 second-->
+<!--                });-->
+<!--            }-->
+
+<!--            // Function to calculate the number of users in each state-->
+<!--            async function calculateUsersByState() {-->
+<!--                var userData = await fetchUserData();-->
+<!--                var userCountByState = {};-->
+
+<!--                userData.forEach(function (user) {-->
+<!--                    var state = user.state;-->
+<!--                    if (userCountByState[state]) {-->
+<!--                        userCountByState[state]++;-->
+<!--                    } else {-->
+<!--                        userCountByState[state] = 1;-->
+<!--                    }-->
+<!--                });-->
+
+<!--                return userCountByState;-->
+<!--            }-->
+
+<!--            // Function to display user information-->
+<!--            async function displayUserInformation() {-->
+<!--                var userStateInfoElement = document.getElementById('userStateInfo');-->
+<!--                var userCountByState = await calculateUsersByState();-->
+
+<!--                // Create and append HTML for user information-->
+<!--                var html = '<ul>';-->
+<!--                for (var state in userCountByState) {-->
+<!--                    var userCount = userCountByState[state];-->
+<!--                    html += '<li>' + state + ' - ' + userCount + ' users</li>';-->
+<!--                }-->
+<!--                html += '</ul>';-->
+
+<!--                userStateInfoElement.innerHTML = html;-->
+<!--            }-->
+
+<!--            // Call the function to display user information-->
+<!--            displayUserInformation();-->
+<!--        </script>-->
+
+
+
+
+
+
+
+
+
+
+
+
+<!--        <script>-->
+<!--            async function fetchUserData() {-->
+<!--                // Simulate an asynchronous database call-->
+<!--                return new Promise((resolve) => {-->
+<!--                    setTimeout(() => {-->
+<!--                        resolve([-->
+<!--                            { state: 'Bihar', coordinates: [27.0238, 80.5937] },-->
+<!--                            { state: 'Uttar Pradesh', coordinates: [25.4358, 81.8463] },-->
+<!--                            // Add more user data...-->
+<!--                        ]);-->
+<!--                    }, 1000); // Simulate a delay of 1 second-->
+<!--                });-->
+<!--            }-->
+
+<!--            async function calculateUsersByState() {-->
+<!--                var userData = await fetchUserData();-->
+<!--                var userCountByState = {};-->
+
+<!--                userData.forEach(function (user) {-->
+<!--                    var state = user.state;-->
+<!--                    if (userCountByState[state]) {-->
+<!--                        userCountByState[state]++;-->
+<!--                    } else {-->
+<!--                        userCountByState[state] = 1;-->
+<!--                    }-->
+<!--                });-->
+
+<!--                return userCountByState;-->
+<!--            }-->
+
+<!--            async function displayUserInformation() {-->
+<!--                var userCountByState = await calculateUsersByState();-->
+
+<!--                // Create Leaflet map-->
+<!--                var map = L.map('userStateInfo').setView([20.5937, 78.9629], 5);-->
+
+<!--                // Add OpenStreetMap tile layer-->
+<!--                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {-->
+<!--                    attribution: '© OpenStreetMap contributors'-->
+<!--                }).addTo(map);-->
+
+<!--                // Add GeoJSON data for each state with user count-->
+<!--                var geoJsonData = {-->
+<!--                    type: 'FeatureCollection',-->
+<!--                    features: []-->
+<!--                };-->
+
+<!--                for (var state in userCountByState) {-->
+<!--                    var userCount = userCountByState[state];-->
+<!--                    var coordinates = userData.find(user => user.state === state).coordinates;-->
+
+<!--                    geoJsonData.features.push({-->
+<!--                        type: 'Feature',-->
+<!--                        properties: {-->
+<!--                            state: state,-->
+<!--                            userCount: userCount-->
+<!--                        },-->
+<!--                        geometry: {-->
+<!--                            type: 'Point',-->
+<!--                            coordinates: coordinates-->
+<!--                        }-->
+<!--                    });-->
+<!--                }-->
+
+<!--                // Define a color scale based on user count-->
+<!--                var colorScale = d3.scaleLinear()-->
+<!--                    .domain([1, d3.max(Object.values(userCountByState))])-->
+<!--                    .range(['yellow', 'red']);-->
+
+<!--                // Add GeoJSON layer with circle markers-->
+<!--                L.geoJSON(geoJsonData, {-->
+<!--                    pointToLayer: function (feature, latlng) {-->
+<!--                        return L.circleMarker(latlng, {-->
+<!--                            radius: feature.properties.userCount * 2,-->
+<!--                            fillColor: colorScale(feature.properties.userCount),-->
+<!--                            color: 'black',-->
+<!--                            weight: 1,-->
+<!--                            opacity: 1,-->
+<!--                            fillOpacity: 0.8-->
+<!--                        });-->
+<!--                    },-->
+<!--                    onEachFeature: function (feature, layer) {-->
+<!--                        layer.bindPopup('<b>' + feature.properties.state + '</b><br>Users: ' + feature.properties.userCount);-->
+<!--                    }-->
+<!--                }).addTo(map);-->
+<!--            }-->
+
+<!--            displayUserInformation();-->
+<!--        </script>-->
+
+
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="http://d3js.org/topojson.v1.min.js"></script>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<!--        <script type="text/javascript">-->
+<!--            var w = 650;-->
+<!--            var h = 650;-->
+<!--            var proj = d3.geo.mercator();-->
+<!--            var path = d3.geo.path().projection(proj);-->
+<!--            var t = proj.translate(); // the projection's default translation-->
+<!--            var s = proj.scale() // the projection's default scale-->
+
+<!--            var buckets = 9,-->
+<!--                colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"]; // alternatively colorbrewer.YlGnBu[9]-->
+
+<!--            var map = d3.select("#chart").append("svg:svg")-->
+<!--                .attr("width", w)-->
+<!--                .attr("height", h)-->
+<!--                //.call(d3.behavior.zoom().on("zoom", redraw))-->
+<!--                .call(initialize);-->
+
+<!--            var india = map.append("svg:g")-->
+<!--                .attr("id", "india");-->
+
+<!--            var div = d3.select("body").append("div")-->
+<!--                .attr("class", "tooltip")-->
+<!--                .style("opacity", 0);-->
+
+<!--            d3.json("states.json", function (json) {-->
+<!--                var maxTotal = d3.max(json.features, function (d) {-->
+<!--                    return d.total-->
+<!--                });-->
+
+<!--                var colorScale = d3.scale.quantile()-->
+<!--                    .domain(d3.range(buckets).map(function (d) {-->
+<!--                        return (d / buckets) * maxTotal-->
+<!--                    }))-->
+<!--                    .range(colors);-->
+
+<!--                var y = d3.scale.sqrt()-->
+<!--                    .domain([0, 10000])-->
+<!--                    .range([0, 300]);-->
+
+<!--                var yAxis = d3.svg.axis()-->
+<!--                    .scale(y)-->
+<!--                    .tickValues(colorScale.domain())-->
+<!--                    .orient("right");-->
+
+<!--                india.selectAll("path")-->
+<!--                    .data(json.features)-->
+<!--                    .enter().append("path")-->
+<!--                    .attr("d", path)-->
+<!--                    .style("fill", colors[0])-->
+<!--                    .style("opacity", 0.5)-->
+
+<!--                    .on('click', function (d, i) {-->
+<!--                        d3.select(this).transition().duration(300).style("opacity", 1);-->
+<!--                        div.transition().duration(300)-->
+<!--                            .style("opacity", 1)-->
+<!--                        div.text(d.id + " : " + d.total)-->
+<!--                            .style("left", (d3.event.pageX) + "px")-->
+<!--                            .style("top", (d3.event.pageY - 30) + "px");-->
+<!--                    })-->
+
+<!--                    .on('mouseleave', function (d, i) {-->
+<!--                        d3.select(this).transition().duration(300)-->
+<!--                            .style("opacity", 0.5);-->
+<!--                        div.transition().duration(300)-->
+<!--                            .style("opacity", 0);-->
+<!--                    })-->
+<!--                    .on('mouseenter', function (d, i) {-->
+<!--                        d3.select(this).transition().duration(300)-->
+<!--                            .style("opacity", 0.5);-->
+<!--                        div.transition().duration(300)-->
+<!--                            .style("opacity", 0);-->
+<!--                    });-->
+
+<!--                india.selectAll("path").transition().duration(1000)-->
+<!--                    .style("fill", function (d) {-->
+<!--                        return colorScale(d.total);-->
+<!--                    });-->
+
+<!--                //Adding legend for our Choropleth-->
+<!--                var g = india.append("g")-->
+<!--                    .attr("class", "key")-->
+<!--                    .attr("transform", "translate(445, 305)")-->
+<!--                    .call(yAxis);-->
+
+<!--                g.selectAll("rect")-->
+<!--                    .data(colorScale.range().map(function (d, i) {-->
+<!--                        return {-->
+<!--                            y0: i ? y(colorScale.domain()[i - 1]) : y.range()[0],-->
+<!--                            y1: i < colorScale.domain().length ? y(colorScale.domain()[i]) : y.range()[1],-->
+<!--                            z: d-->
+<!--                        };-->
+<!--                    }))-->
+<!--                    .enter().append("rect")-->
+<!--                    .attr("width", 7)-->
+<!--                    .attr("y", function (d) {-->
+<!--                        return d.y0;-->
+<!--                    })-->
+<!--                    .attr("height", function (d) {-->
+<!--                        return d.y1 - d.y0;-->
+<!--                    })-->
+<!--                    .style("fill", function (d) {-->
+<!--                        return d.z;-->
+<!--                    });-->
+<!--            });-->
+
+<!--            function initialize() {-->
+<!--                proj.scale(6700);-->
+<!--                proj.translate([-1240, 720]);-->
+<!--            }-->
+<!--        </script>-->
+<!--                    <div class="col-lg-4 col-md-6">-->
 <!--                <div class="card h-100">-->
 <!--                    <div class="card-header pb-0">-->
 <!--                        <h6>Orders overview</h6>-->
@@ -1179,6 +1926,54 @@
 <!--                                    <h6 class="text-dark text-sm font-weight-bold mb-0">New order #9583120</h6>-->
 <!--                                    <p class="text-secondary font-weight-bold text-xs mt-1 mb-0">17 DEC</p>-->
 <!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+
+
+
+
+<!--//rough-->
+
+
+<!--        <div class="row my-4">-->
+<!--            &lt;!&ndash; Column 1: State Information &ndash;&gt;-->
+<!--            <div class="col-lg-8 col-md-6 mb-md-0 mb-4">-->
+<!--                <div class="card h-100">-->
+<!--                    <div class="card-header pb-0">-->
+<!--                        <h6>Orders overview</h6>-->
+<!--                        <p class="text-sm">-->
+<!--                            <i class="fa fa-arrow-up text-success" aria-hidden="true"></i>-->
+<!--                            <span class="font-weight-bold">24%</span> this month-->
+<!--                        </p>-->
+<!--                    </div>-->
+<!--                    <div class="card-body p-3">-->
+<!--                        &lt;!&ndash; Your timeline content goes here &ndash;&gt;-->
+<!--                        &lt;!&ndash; ... &ndash;&gt;-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Column 2: State and No of Users &ndash;&gt;-->
+<!--            <div class="col-lg-4 col-md-6">-->
+<!--                <div class="card h-100">-->
+<!--                    <div class="card-header pb-0">-->
+<!--                        <h6>State and No of Users</h6>-->
+<!--                    </div>-->
+<!--                    <div class="card-body p-3">-->
+<!--                        &lt;!&ndash; Your content for State and No of Users goes here &ndash;&gt;-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-6">-->
+<!--                                <h6>State</h6>-->
+<!--                                &lt;!&ndash; Add state information here &ndash;&gt;-->
+<!--                            </div>-->
+<!--                            <div class="col-6">-->
+<!--                                <h6>No of Users</h6>-->
+<!--                                &lt;!&ndash; Add number of users information here &ndash;&gt;-->
 <!--                            </div>-->
 <!--                        </div>-->
 <!--                    </div>-->

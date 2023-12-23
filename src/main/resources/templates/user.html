@@ -670,9 +670,13 @@ Payment successfully completed
                 <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Email</th>
                 <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Mobile No</th>
                 <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Registration Date</th>
+                <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Device Type</th>
+                <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Address</th>
+<!--                <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Longitude</th>-->
                 </tr>
                 </thead>
 <!--                <tbody id="userTableBody">-->
+<!--                <tbody>-->
                 <!-- Use Thymeleaf to iterate over the user list -->
                 <tr th:each="user : ${user}">
                   <td th:text="${user.userId}"></td>
@@ -680,6 +684,20 @@ Payment successfully completed
                   <td th:text="${user.email}"></td>
                   <td th:text="${user.mobileNo}"></td>
                   <td th:text="${user.localDate}"></td>
+                  <td th:text="${user.deviceType}"></td>
+                    <td th:text="${user.address}"></td>
+
+                    <!--                  <td th:text="${user.latitude}"></td>-->
+<!--                  <td th:text="${user.longitude}"></td>-->
+
+                    <!-- Call the getAddressFromCoordinates method to get the address -->
+<!--                    <td th:text="${@GeocodingUtility.getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
+<!--                    <td th:text="${T(com.example.jwt.util.GeocodingUtility).getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
+<!--                    <td th:text="${@com.example.jwt.AdminDashboard.Dashbaord@getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
+                    <!-- Assuming "user" is an instance of your User class -->
+<!--                    <td th:text="${@com.example.jwt.AdminDashboard.Dashbaord@getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
+
+
                 </tr>
                 <!-- Add the total users row at the end -->
 

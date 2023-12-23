@@ -1,5 +1,6 @@
 package com.example.jwt.AdminDashboard;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,6 +20,11 @@ public class WebConfig implements WebMvcConfigurer {
 //    }
         registry.addResourceHandler("/static/**", "/img/**")
                 .addResourceLocations("classpath:/static/");
+    }
+
+    @Bean
+    public GeocodingUtility geocodingUtility() {
+        return new GeocodingUtility();
     }
 }
 

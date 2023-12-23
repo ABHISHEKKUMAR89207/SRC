@@ -40,6 +40,7 @@ public class User implements UserDetails {
     private String deviceType;
     private Double latitude;
     private Double longitude;
+    private String address;
 
     private LocalDate localDate = LocalDate.now();
     private boolean emailVerified = false;

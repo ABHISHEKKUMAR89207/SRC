@@ -10,6 +10,13 @@ import com.example.jwt.repository.FeedbackRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.model.GeocodingResult;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +34,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -73,9 +87,9 @@ public class Dashbaord {
         return "tables"; // Assuming "tables" is the Thymeleaf template name
     }
 
-    @GetMapping("/books.html")
+    @GetMapping("/book.html")
     public String Books() {
-        return "Books"; // Assuming "tables" is the Thymeleaf template name
+        return "book"; // Assuming "tables" is the Thymeleaf template name
     }
 
     @GetMapping("/sign-in.html")
@@ -404,8 +418,232 @@ public class Dashbaord {
 //    }
 
 
+ //   for google map
+//    private static final String API_KEY = "AIzaSyBEbRP55FENnA5PPM6oJlSLY1Yz2lU3-Cc";
+//
+//    public static String getAddressFromCoordinates(Double latitude, Double longitude) {
+//        // Your implementation here
+//        try {
+//            GeoApiContext context = new GeoApiContext.Builder().apiKey(API_KEY).build();
+//            GeocodingResult[] results = GeocodingApi.newRequest(context)
+//                    .latlng(new com.google.maps.model.LatLng(latitude, longitude)).await();
+//
+//            if (results != null && results.length > 0) {
+//                return results[0].formattedAddress;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
-@GetMapping("/user.html")
+// full address
+//    private static final String OPENCAGE_API_KEY = "106199112e264ac08fb97c11935a2fc3";
+//
+//    public static String getAddressFromCoordinates(Double latitude, Double longitude) {
+//        try {
+//            String apiUrl = "https://api.opencagedata.com/geocode/v1/json"
+//                    + "?q=" + latitude + "+" + longitude
+//                    + "&key=" + OPENCAGE_API_KEY;
+//
+//            URL url = new URL(apiUrl);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//            StringBuilder response = new StringBuilder();
+//            String line;
+//
+//            while ((line = reader.readLine()) != null) {
+//                response.append(line);
+//            }
+//
+//            reader.close();
+//            connection.disconnect();
+//
+//            // Parse the JSON response to get the formatted address
+//            JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+//            JsonArray results = jsonResponse.getAsJsonArray("results");
+//
+//            if (results.size() > 0) {
+//                JsonObject firstResult = results.get(0).getAsJsonObject();
+//                return firstResult.getAsJsonPrimitive("formatted").getAsString();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+
+
+
+    private static final String OPENCAGE_API_KEY = "106199112e264ac08fb97c11935a2fc3";
+//
+//    public static String getAddressFromCoordinates(Double latitude, Double longitude) {
+//        try {
+//            String apiUrl = "https://api.opencagedata.com/geocode/v1/json"
+//                    + "?q=" + latitude + "+" + longitude
+//                    + "&key=" + OPENCAGE_API_KEY;
+//
+//            URL url = new URL(apiUrl);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//            StringBuilder response = new StringBuilder();
+//            String line;
+//
+//            while ((line = reader.readLine()) != null) {
+//                response.append(line);
+//            }
+//
+//            reader.close();
+//            connection.disconnect();
+//
+//            // Parse the JSON response to get the country and state
+//            JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+//            JsonArray results = jsonResponse.getAsJsonArray("results");
+//
+//            if (results.size() > 0) {
+//                JsonObject firstResult = results.get(0).getAsJsonObject();
+//
+//                // Extract country and state components
+//                JsonArray components = firstResult.getAsJsonArray("components");
+//                String country = getComponentValue(components, "country");
+//                String state = getComponentValue(components, "state");
+//
+//                // Format the result
+//                StringBuilder formattedAddress = new StringBuilder();
+//
+//                if (state != null && !state.isEmpty()) {
+//                    formattedAddress.append(state).append(", ");
+//                }
+//
+//                if (country != null && !country.isEmpty()) {
+//                    formattedAddress.append(country);
+//                }
+//
+//                return formattedAddress.toString();
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+//
+//    private static String getComponentValue(JsonArray components, String componentType) {
+//        for (JsonElement component : components) {
+//            JsonObject componentObject = component.getAsJsonObject();
+//            JsonArray types = componentObject.getAsJsonArray("types");
+//
+//            for (JsonElement type : types) {
+//                if (type.getAsString().equals(componentType)) {
+//                    return componentObject.getAsJsonPrimitive("long_name").getAsString();
+//                }
+//            }
+//        }
+//
+//        return null;
+//    }
+
+
+
+    //country and state
+
+
+    private static String getAddressComponent(JsonObject result, String componentType) {
+        if (result.has("components")) {
+            JsonObject components = result.getAsJsonObject("components");
+
+            if (components.has(componentType)) {
+                return components.getAsJsonPrimitive(componentType).getAsString();
+            }
+        }
+
+        return null;
+    }
+//
+//    private static String getAddressFromCoordinates(Double latitude, Double longitude) {
+//        try {
+//            String apiUrl = "https://api.opencagedata.com/geocode/v1/json"
+//                    + "?q=" + latitude + "+" + longitude
+//                    + "&key=" + OPENCAGE_API_KEY;
+//
+//            URL url = new URL(apiUrl);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//            StringBuilder response = new StringBuilder();
+//            String line;
+//
+//            while ((line = reader.readLine()) != null) {
+//                response.append(line);
+//            }
+//
+//            reader.close();
+//            connection.disconnect();
+//
+//            // Parse the JSON response to get the formatted address
+//            JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+//            JsonArray results = jsonResponse.getAsJsonArray("results");
+//
+//            if (results.size() > 0) {
+//                JsonObject firstResult = results.get(0).getAsJsonObject();
+//                String country = getAddressComponent(firstResult, "country");
+//                String state = getAddressComponent(firstResult, "state");
+//                return String.format("%s, %s", state, country);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+//
+
+
+
+
+    private static String getStateFromCoordinates(Double latitude, Double longitude) {
+        try {
+            String apiUrl = "https://api.opencagedata.com/geocode/v1/json"
+                    + "?q=" + latitude + "+" + longitude
+                    + "&key=" + OPENCAGE_API_KEY;
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+
+            reader.close();
+            connection.disconnect();
+
+            // Parse the JSON response to get the state
+            JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
+            JsonArray results = jsonResponse.getAsJsonArray("results");
+
+            if (results.size() > 0) {
+                JsonObject firstResult = results.get(0).getAsJsonObject();
+                return getAddressComponent(firstResult, "state");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @GetMapping("/user.html")
 public String showUser(Model model) {
     setupModel(model);
     return "user";
@@ -417,6 +655,46 @@ public String showUser(Model model) {
         return "dashboard";
     }
 
+//    private void setupModel(Model model) {
+//        // Retrieve all users from the repository
+//        List<User> userList = userRepository.findAll();
+//
+//        // Calculate the total number of users
+//        int totalUsers = userList.size();
+//
+//        // Add the user list and total users to the model
+//        model.addAttribute("user", userList);
+//        model.addAttribute("totalUsers", totalUsers);
+//
+//        // Your additional logic if needed
+//    }
+
+
+//    private void setupModel(Model model) {
+//        // Retrieve all users from the repository
+//        List<User> userList = userRepository.findAll();
+//
+//        // Calculate the total number of users
+//        int totalUsers = userList.size();
+//
+//        // Add the user list and total users to the model
+//        model.addAttribute("user", userList);
+//
+//        // Iterate through the user list and add the address for each user
+//        for (User user : userList) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//            String address = getStateFromCoordinates(latitude, longitude);
+//            user.setAddress(address);
+//        }
+//
+//        model.addAttribute("totalUsers", totalUsers);
+//
+//        // Your additional logic if needed
+//    }
+
+
+
     private void setupModel(Model model) {
         // Retrieve all users from the repository
         List<User> userList = userRepository.findAll();
@@ -424,14 +702,31 @@ public String showUser(Model model) {
         // Calculate the total number of users
         int totalUsers = userList.size();
 
+        // Create a map to store users grouped by state
+        Map<String, List<User>> usersByState = new HashMap<>();
+
+        // Iterate through the user list and add the address for each user
+        for (User user : userList) {
+            Double latitude = user.getLatitude();
+            Double longitude = user.getLongitude();
+            String state = getStateFromCoordinates(latitude, longitude);
+
+            // Add the user to the list corresponding to their state
+            usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(user);
+
+            // Set the address for each user (if needed)
+            user.setAddress(state);
+        }
+
         // Add the user list and total users to the model
         model.addAttribute("user", userList);
         model.addAttribute("totalUsers", totalUsers);
 
+        // Add the map of users grouped by state to the model
+        model.addAttribute("usersByState", usersByState);
+
         // Your additional logic if needed
     }
-
-
 
 
 
