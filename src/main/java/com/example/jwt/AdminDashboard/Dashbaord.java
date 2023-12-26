@@ -2,6 +2,10 @@ package com.example.jwt.AdminDashboard;
 
 
 
+import com.example.jwt.booksystem1.books.BookTable;
+import com.example.jwt.booksystem1.books.BookTableRepository;
+import com.example.jwt.booksystem1.books.Order;
+import com.example.jwt.booksystem1.books.OrderRepository;
 import com.example.jwt.entities.ContactUs;
 import com.example.jwt.entities.Feedback;
 import com.example.jwt.entities.User;
@@ -14,25 +18,30 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.model.GeocodingResult;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -40,10 +49,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -71,7 +77,7 @@ public class Dashbaord {
 
 
 
-//    @GetMapping("/dashboard.html")
+    //    @GetMapping("/dashboard.html")
 //    public String showDashboard(Model model) {
 //        // Add logic to retrieve dashboard content
 ////        DashboardData dashboardData = dashboardService.getDashboardData(); // Replace with your actual logic
@@ -87,11 +93,131 @@ public class Dashbaord {
         return "tables"; // Assuming "tables" is the Thymeleaf template name
     }
 
+//    @GetMapping("/book.html")
+//    public String Books(Model model) {
+//        List<BookTable> book = bookTableRepository.findAll();
+//        model.addAttribute("book", book);
+//        System.out.println();
+//        return "book"; // Assuming "tables" is the Thymeleaf template name
+//    }
+
+
+//    @GetMapping("/book.html")
+//    public String Books(Model model) {
+//        List<User> users = userRepository.findAll(); // Assuming you have a user repository
+//        model.addAttribute("user", users);
+//        return "book"; // Assuming "book" is the Thymeleaf template name
+//    }
+
+    @Autowired
+    private OrderRepository orderRepository;
+
     @GetMapping("/book.html")
-    public String Books() {
-        return "book"; // Assuming "tables" is the Thymeleaf template name
+    public String books(Model model) {
+        List<Order> orders = orderRepository.findAll(); // Assuming you have an Order repository
+        model.addAttribute("orders", orders); // Use "orders" instead of "order" to pass the list to the template
+        return "book"; // Assuming "book" is the Thymeleaf template name
     }
 
+
+    // Endpoint to handle the form submission for updating order status
+//    @PostMapping("/updateOrderStatus")
+//    public String updateOrderStatus(@RequestParam("orderId") Long orderId,
+//                                    @RequestParam("newStatus") String newStatus) {
+//        // Retrieve the order by ID
+//        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+//
+//        // Check if the order exists
+//        if (optionalOrder.isPresent()) {
+//            Order order = optionalOrder.get();
+//
+//            // Update the order status
+//            order.setDeliveryStatus(newStatus);
+//
+//            // Save the updated order
+//            orderRepository.save(order);
+//        }
+//
+//        // Redirect back to the book.html page or any other appropriate page
+//        return "redirect:/book.html";
+//    }
+    @PostMapping("/updateOrderStatus")
+    public String updateOrderStatus(@AuthenticationPrincipal UserDetails userDetails,
+                                    @RequestParam("orderId") Long orderId,
+                                    @RequestParam("newStatus") String newStatus) {
+
+        // Check if the user is an admin
+        if (userDetails != null && userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            // Admin user, proceed with updating the order status
+            Optional<Order> optionalOrder = orderRepository.findById(orderId);
+
+            if (optionalOrder.isPresent()) {
+                Order order = optionalOrder.get();
+                order.setDeliveryStatus(newStatus);
+                orderRepository.save(order);
+            }
+            return "redirect:/book.html"; // Redirect to book.html after updating
+        } else {
+            // Non-admin user, handle unauthorized access
+            return "redirect:/unauthorized.html"; // Redirect to an unauthorized access page or handle accordingly
+        }
+    }
+
+
+
+//    @PostMapping("/updateOrderStatus")
+//    public ResponseEntity<String> updateOrderStatus(@RequestParam("orderId") Long orderId,
+//                                                    @RequestParam("newStatus") String newStatus) {
+//        // Retrieve the authentication object from SecurityContextHolder
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        if (authentication instanceof JwtAuthenticationToken) {
+//            JwtAuthenticationToken jwtAuthToken = (JwtAuthenticationToken) authentication;
+//
+//            // Extract claims from the JWT token
+//            Map<String, Object> claims = jwtAuthToken.getTokenAttributes();
+//
+//            // Extract username from the claims
+//            String username = (String) claims.get("preferred_username");
+//
+//            // Use the username for further processing
+//            // ...
+//
+//            return ResponseEntity.ok("Username extracted from JWT: " + username);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing JWT token.");
+//        }
+//    }
+//
+
+    @Autowired
+    private JwtHelper jwtHelper;
+
+    //    public void updateOrderStatus(Long orderId, String newStatus) {
+//        String jwtToken = jwtHelper.retrieveToken();
+//
+//        // Use the retrieved JWT token in the headers
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.set("Authorization", "Bearer " + jwtToken);
+//
+//        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+//        map.add("orderId", orderId.toString());
+//        map.add("newStatus", newStatus);
+//
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+//
+//        ResponseEntity<String> response = restTemplate.postForEntity("http://your-api-domain/updateOrderStatus", request, String.class);
+//
+//        // Handle response as needed
+//    }
+    @Autowired
+    private BookTableRepository bookTableRepository;
+
+    @GetMapping
+    public List<BookTable> getAllBookTables() {
+        return bookTableRepository.findAll();
+    }
     @GetMapping("/sign-in.html")
     public String signIn() {
         return "sign-in"; // Assuming "tables" is the Thymeleaf template name
@@ -418,7 +544,7 @@ public class Dashbaord {
 //    }
 
 
- //   for google map
+    //   for google map
 //    private static final String API_KEY = "AIzaSyBEbRP55FENnA5PPM6oJlSLY1Yz2lU3-Cc";
 //
 //    public static String getAddressFromCoordinates(Double latitude, Double longitude) {
@@ -644,10 +770,10 @@ public class Dashbaord {
     }
 
     @GetMapping("/user.html")
-public String showUser(Model model) {
-    setupModel(model);
-    return "user";
-}
+    public String showUser(Model model) {
+        setupModel(model);
+        return "user";
+    }
 
     @GetMapping("/dashboard.html")
     public String showDashboard(Model model) {
@@ -738,14 +864,14 @@ public String showUser(Model model) {
         long registeredUsersCount = countRegisteredUsersInMonth(yearMonth);
 
         return ResponseEntity.ok(registeredUsersCount);
-}
+    }
     public long countRegisteredUsersInMonth(YearMonth yearMonth) {
         LocalDateTime startOfMonth = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime endOfMonth = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<User> users = userRepository.findByRegistrationTimestampBetween(startOfMonth, endOfMonth);
         return users.size();
-}
+    }
 
 
 
@@ -794,7 +920,7 @@ public String showUser(Model model) {
         model.addAttribute("contactUs", contactUsList);
         return "contactUs";
     }
-@Autowired
+    @Autowired
     private ContactUsRepository contactUsRepository; // Assuming you have a repository
 
     public List<ContactUs> getAllContactUsData() {
