@@ -1,6 +1,6 @@
 //package com.example.jwt.service;
 //
-//import com.example.jwt.entities.UnitsDatabase;
+//import com.example.jwt.entities.FoodToday.UnitsDatabase;
 //import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 //import com.example.jwt.repository.UnitsDatabaseRepository;
 //import org.springframework.beans.factory.annotation.Autowired;

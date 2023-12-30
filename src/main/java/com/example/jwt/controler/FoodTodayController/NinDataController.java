@@ -44,7 +44,7 @@ public class NinDataController {
 
         if (user != null && user.getUserId().equals(user.getUserId())) {
             List<NinData> foodItems = ninDataRepository.findAll();
-            List<String> foodNames = foodItems.stream().map(NinData::getName).collect(Collectors.toList());
+            List<String> foodNames = foodItems.stream().map(NinData::getFood).collect(Collectors.toList());
             return foodNames;
         } else {
             throw new AccessDeniedException("Access denied");

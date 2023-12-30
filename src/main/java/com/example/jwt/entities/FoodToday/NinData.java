@@ -1,6 +1,5 @@
 package com.example.jwt.entities.FoodToday;
 
-import com.example.jwt.entities.UnitsDatabase;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,18 +20,19 @@ import java.util.Set;
 public class NinData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "nin_data_id")
+//    @Column(name = "nin_data_id")
     @Index(name = "idx_nin_data_id")
-    private Long id;
+    private Long nin_data_id;
 
-    @Column(name = "food")
-    private String name;
+//    @Column(name = "food")
+    private String food;
 
-    @Column(name = "Calories")
-    private Double calories;
-    private Double Carbs;
-    @Column(name = "Protein")
-    private Double protein;
+    private Double Energy;
+    private Double carbohydrate;
+//    @Column(name = "Protein")
+    private Double Protein;
+    private Double Total_Fat;
+    private Double Total_Dietary_Fibre;
     
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")
@@ -40,18 +40,18 @@ public class NinData {
 //    private UnitsDatabase unitsDatabase;
 
 
-    @Column(name = "Fat")
-    private Double Fat;
-    private Double Fiber;
+//    @Column(name = "Fat")
+
 
     @ManyToMany(mappedBy = "ninDataList", fetch = FetchType.LAZY)
     private Set<Ingredients> ingredientsSet = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")
+    @JoinColumn(name = "foodUnit", referencedColumnName = "food_unit") // Use 'food_unit' instead of 'FoodUnit'
     @JsonIgnore
     private UnitsDatabase unitsDatabase;
 
 
-    private String SIUnit;
+
+//    private String SIUnit;
 }
