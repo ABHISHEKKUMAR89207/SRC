@@ -29,10 +29,22 @@ public class NinData {
 
     private Double Energy;
     private Double carbohydrate;
+
 //    @Column(name = "Protein")
     private Double Protein;
     private Double Total_Fat;
     private Double Total_Dietary_Fibre;
+    private Double  cholestrol;
+    private Double  sodium;
+    private Double calcium;
+    private Double iron;
+    private Double potassium;
+    private Double phosphorus;
+    private Double magnesium;
+    private Double zinc;
+    private Double selenium;
+    private Double copper;
+    private Double manganese;
     
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")
