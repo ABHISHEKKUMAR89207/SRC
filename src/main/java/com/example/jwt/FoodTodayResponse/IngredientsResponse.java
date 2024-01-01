@@ -12,15 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 public class IngredientsResponse {
     private List<IngredientDTO> ingredients;
-    private Double totalCalories;
+    private Double totalEnergy;
     private Double totalProteins;
     private Double totalCarbs;
     private Double totalFats;
     private Double totalFibers;
 
-    public IngredientsResponse(List<IngredientDTO> ingredients, Double totalCalories,Double totalProteins,Double totalCarbs,Double totalFats,Double totalFibers) {
+    public IngredientsResponse(List<IngredientDTO> ingredients, Double totalEnergy,Double totalProteins,Double totalCarbs,Double totalFats,Double totalFibers) {
         this.ingredients = ingredients;
-        this.totalCalories = totalCalories;
+        this.totalEnergy = totalEnergy;
         this.totalProteins = totalProteins;
         this.totalCarbs = totalCarbs;
         this.totalFats = totalFats;

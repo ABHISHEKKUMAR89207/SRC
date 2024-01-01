@@ -13,9 +13,18 @@ public class IngredientDTO {
 
     private String ingredientName;
     private Double ingredientQuantity;
-    private Double calories;
+    private Double energy;
     private Double proteins;
     private Double fats;
     private Double carbs;
     private Double fibers;
+
+    public IngredientDTO(String ingredientName,
+                         Double ingredientQuantity,
+                         Double energy) {
+        this.ingredientName = ingredientName;
+        this.ingredientQuantity = ingredientQuantity;
+        this.energy =energy;
+
+    }
 }

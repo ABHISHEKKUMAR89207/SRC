@@ -79,6 +79,20 @@ public class IngredientController {
 
 
 
+    @GetMapping("/get-calories-with-date")
+    public Map<String, Double> getCaloriesByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        return ingrdientService.getEnergyByDate(user, date);
+    }
+
+
 
     @GetMapping("/nutrition-summary-detailed")
     public ResponseEntity<Map<String, Map<String, Map<String, Map<String, Double>>>>> getDetailedNutritionSummary(

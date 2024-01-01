@@ -50,7 +50,7 @@ public class IngrdientService {
 // Retrieve the dish by user ID, meal name, and dish name
         List<Dishes> dishesList = dishesRepository.findDishIdByUserUserIdAndMealNameAndDishName(user.getUserId(), mealName, dishName);
         List<IngredientDTO> updatedIngredients = new ArrayList<>();
-        Double totalCalories = 0.0;
+        Double totalEnergy = 0.0;
         Double totalProtiens = 0.0;
         Double totalCarbs = 0.0;
         Double totalFats = 0.0;
@@ -69,18 +69,18 @@ public class IngrdientService {
                     ingredient.getNinDataList().add(ninData);
                     updatedIngredients.add(new IngredientDTO(ingredient.getIngredientName(),
                             ingredient.getIngredientQuantity(),
-                            ingredient.getIngredientQuantity() * ninData.getEnergy(),
-                            ingredient.getIngredientQuantity() * ninData.getProtein(),
-                            ingredient.getIngredientQuantity() * ninData.getTotal_Fat(),
-                            ingredient.getIngredientQuantity() * ninData.getCarbohydrate(),
-                            ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre()));
+                            (ingredient.getIngredientQuantity()/100) * ninData.getEnergy(),
+                            (ingredient.getIngredientQuantity()/100) * ninData.getProtein(),
+                            (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat(),
+                            (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate(),
+                            (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre()));
 
-                    totalCalories += ingredient.getIngredientQuantity() * ninData.getEnergy();
-                    totalProtiens += ingredient.getIngredientQuantity() * ninData.getProtein();
-                    totalCarbs += ingredient.getIngredientQuantity() * ninData.getCarbohydrate();
-                    totalFats += ingredient.getIngredientQuantity() * ninData.getTotal_Fat();
-                    totalFibers += ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre();
-                    System.out.println("Total Calories Mesage......" + totalCalories);
+                    totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+                    totalProtiens += (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
+                    totalCarbs += (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate();
+                    totalFats += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat();
+                    totalFibers += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre();
+                    System.out.println("Total Calories Mesage......" + totalEnergy);
                     ingredient.setDishes(dish);
                     // Explicitly persist the ingredient to the database
                     ingredient = ingredientsRepository.save(ingredient);
@@ -96,7 +96,7 @@ public class IngrdientService {
 // Save the updated dishes with ingredients
         dishesRepository.saveAll(dishesList);
         return new IngredientsResponse(updatedIngredients,
-                totalCalories,
+                totalEnergy,
                 totalProtiens,
                 totalCarbs,
                 totalFats,
@@ -104,10 +104,10 @@ public class IngrdientService {
     }
 
     // Calculate total calories for an ingredient based on NinData
-    private Double calculateCalories(Ingredients ingredient) {
+    private Double calculateEnergy(Ingredients ingredient) {
         NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
         if (ninData != null) {
-            return ingredient.getIngredientQuantity() * ninData.getEnergy();
+            return (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
         } else {
             return 0.0;
         }
@@ -130,7 +130,7 @@ public class IngrdientService {
             String siUnit = getSIUnitForNutrient(String.valueOf(nutrientName));
             // Now you have the SI unit, you can use it as needed.
             System.out.println("SI Unit for " + nutrientName + ": " + siUnit);
-            return ingredient.getIngredientQuantity() * ninData.getProtein();
+            return (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
         } else {
             return 0.0;
         }
@@ -140,7 +140,7 @@ public class IngrdientService {
     private Double calculateFats(Ingredients ingredient) {
         NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
         if (ninData != null) {
-            return ingredient.getIngredientQuantity() * ninData.getTotal_Fat();
+            return (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat();
         } else {
             return 0.0;
         }
@@ -149,7 +149,7 @@ public class IngrdientService {
     private Double calculateCarbs(Ingredients ingredient) {
         NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
         if (ninData != null) {
-            return ingredient.getIngredientQuantity() * ninData.getCarbohydrate();
+            return (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate();
         } else {
             return 0.0;
         }
@@ -158,7 +158,7 @@ public class IngrdientService {
     private Double calculateFibers(Ingredients ingredient) {
         NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
         if (ninData != null) {
-            return ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre();
+            return (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre();
         } else {
             return 0.0;
         }
@@ -173,7 +173,7 @@ public class IngrdientService {
         List<mealResponse> finalResponseList = new ArrayList<>();
 
 
-        Double calories = 0.0;
+        Double energy = 0.0;
         Double proteins = 0.0;
         Double fats = 0.0;
         Double carbs = 0.0;
@@ -184,7 +184,7 @@ public class IngrdientService {
             List<IngredientDTO> ingredientsList = new ArrayList<>();
             Map<String, Double> mapIngredient = new HashMap<>();
 
-            Double totalCalories = 0.0;
+            Double totalEnergy = 0.0;
             Double totalProtiens = 0.0;
             Double totalCarbs = 0.0;
             Double totalFats = 0.0;
@@ -197,39 +197,51 @@ public class IngrdientService {
                 ingredientsList.add(new IngredientDTO(
                         ingredient.getIngredientName(),
                         ingredient.getIngredientQuantity(),
-                        calculateCalories(ingredient),
+                        calculateEnergy(ingredient),
                         calculateProteins(ingredient),
                         calculateCarbs(ingredient),
                         calculateFats(ingredient),
                         calculateFibers(ingredient)
                 ));
 
-                totalCalories += ingredient.getIngredientQuantity() * ninData.getEnergy();
-                totalProtiens += ingredient.getIngredientQuantity() * ninData.getProtein();
-                totalCarbs += ingredient.getIngredientQuantity() * ninData.getCarbohydrate();
-                totalFats += ingredient.getIngredientQuantity() * ninData.getTotal_Fat();
-                totalFibers += ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre();
+                totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+                totalProtiens += (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
+                totalCarbs += (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate();
+                totalFats += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat();
+                totalFibers += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre();
 
             }
-            calories = calories + totalCalories;
+            energy = energy + totalEnergy;
             proteins = proteins + totalProtiens;
             fats = fats + totalFats;
             carbs = carbs + totalCarbs;
             fibers = fibers + totalFibers;
 
 
-            mapIngredient.put("Calories", calories);
+            mapIngredient.put("Energy", energy);
             mapIngredient.put("Protiens", proteins);
             mapIngredient.put("carbs", carbs);
             mapIngredient.put("fat", fats);
             mapIngredient.put("fibers", fibers);
             analysisService.setmaps(mapIngredient);
 
-            responseList.add(new DishWithIngredientsResponse(dish.getDishId(), dish.getDishName(), dish.isFavourite(), ingredientsList, totalCalories, totalProtiens, totalCarbs, totalFats, totalFibers));
+
+            responseList.add(new DishWithIngredientsResponse(dish.getDishId(), dish.getDishName(), dish.isFavourite(), ingredientsList, totalEnergy, totalProtiens, totalCarbs, totalFats, totalFibers));
         }
-        finalResponseList.add(new mealResponse(responseList, calories, proteins, carbs, fats, fibers));
+
+        Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
+
+        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
+        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
+            String nutrientName = unitsDatabase.getFood_unit();
+            String siUnit = unitsDatabase.getSI_Unit();
+            nutrientsNameWithSIUnit.put(nutrientName, siUnit);
+        }
+        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit,responseList, energy, proteins, carbs, fats, fibers));
         return finalResponseList;
     }
+
+
 
 
     //get dish with ingreddient using mealName
@@ -240,7 +252,7 @@ public class IngrdientService {
         List<mealResponse> finalResponseList = new ArrayList<>();
 
 
-        Double calories = 0.0;
+        Double energy = 0.0;
         Double proteins = 0.0;
         Double fats = 0.0;
         Double carbs = 0.0;
@@ -252,7 +264,7 @@ public class IngrdientService {
                 List<Ingredients> ingredients = dish.getIngredientList();
                 List<IngredientDTO> ingredientsList = new ArrayList<>();
 
-                Double totalCalories = 0.0;
+                Double totalEnergy = 0.0;
                 Double totalProtiens = 0.0;
                 Double totalCarbs = 0.0;
                 Double totalFats = 0.0;
@@ -263,7 +275,7 @@ public class IngrdientService {
                     ingredientsList.add(new IngredientDTO(
                             ingredient.getIngredientName(),
                             ingredient.getIngredientQuantity(),
-                            calculateCalories(ingredient),
+                            calculateEnergy(ingredient),
                             calculateProteins(ingredient),
                             calculateCarbs(ingredient),
                             calculateFats(ingredient),
@@ -271,19 +283,19 @@ public class IngrdientService {
 
                     ));
 
-                    totalCalories += ingredient.getIngredientQuantity() * ninData.getEnergy();
-                    totalProtiens += ingredient.getIngredientQuantity() * ninData.getProtein();
-                    totalCarbs += ingredient.getIngredientQuantity() * ninData.getCarbohydrate();
-                    totalFats += ingredient.getIngredientQuantity() * ninData.getTotal_Fat();
-                    totalFibers += ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre();
+                    totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+                    totalProtiens += (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
+                    totalCarbs += (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate();
+                    totalFats += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat();
+                    totalFibers += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre();
                 }
-                calories = calories + totalCalories;
+                energy = energy + totalEnergy;
                 proteins = proteins + totalProtiens;
                 fats = fats + totalFats;
                 carbs = carbs + totalCarbs;
                 fibers = fibers + totalFibers;
 
-                responseList.add(new DishWithIngredientsResponse(dish.getDishId(), dish.getDishName(), dish.isFavourite(), ingredientsList, totalCalories, totalProtiens, totalCarbs, totalFats, totalFibers));
+                responseList.add(new DishWithIngredientsResponse(dish.getDishId(), dish.getDishName(), dish.isFavourite(), ingredientsList, totalEnergy, totalProtiens, totalCarbs, totalFats, totalFibers));
             }
         }
 
@@ -296,9 +308,52 @@ public class IngrdientService {
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
 //            System.out.println("Nutrient Name: " + nutrientName + ", SI Unit: " + siUnit);
         }
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit,responseList, calories, proteins, carbs, fats, fibers));
+        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit,responseList, energy, proteins, carbs, fats, fibers));
         return finalResponseList;
     }
+
+
+
+    public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
+        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+
+        Map<String, Double> energyByMealType = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            String mealType = dish.getMealName();
+            if (!energyByMealType.containsKey(mealType)) {
+                energyByMealType.put(mealType, 0.0);
+            }
+
+            if (dish.getMealName().equalsIgnoreCase(mealType)) {
+                Double totalEnergy = calculateTotalEnergyForDish(dish);
+                energyByMealType.put(mealType, energyByMealType.get(mealType) + totalEnergy);
+            }
+        }
+
+        return energyByMealType;
+    }
+
+    private Double calculateTotalEnergyForDish(Dishes dish) {
+        List<Ingredients> ingredients = dish.getIngredientList();
+        Double totalEnergy = 0.0;
+
+        for (Ingredients ingredient : ingredients) {
+            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+            Double energy = (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+            totalEnergy += energy;
+        }
+
+        return totalEnergy;
+    }
+
+
+
+
+
+
+
+
 
 
     public List<Map<String, Object>> calculateNutritionSummary(User user, LocalDate startDate, LocalDate endDate) {
@@ -311,15 +366,15 @@ public class IngrdientService {
             LocalDate dishDate = dish.getDate();
 
             // Calculate total calories for each dish
-            Double totalCalories = 0.0;
+            Double totalEnergy = 0.0;
 
             for (Ingredients ingredient : dish.getIngredientList()) {
                 NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
-                totalCalories += ingredient.getIngredientQuantity() * ninData.getEnergy();
+                totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
             }
 
             nutritionObject.put("activityDate", dishDate.toString());
-            nutritionObject.put("calories", totalCalories.intValue()); // Convert to int if needed
+            nutritionObject.put("energy", totalEnergy.intValue()); // Convert to int if needed
 
             nutritionList.add(nutritionObject);
         }
@@ -361,25 +416,25 @@ public class IngrdientService {
             for (Ingredients ingredient : dish.getIngredientList()) {
                 NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
 
-                nutritionForDish.compute("Calories", (key, value) -> value != null ?
-                        value + ingredient.getIngredientQuantity() * ninData.getEnergy() :
-                        ingredient.getIngredientQuantity() * ninData.getEnergy());
+                nutritionForDish.compute("Energy", (key, value) -> value != null ?
+                        value + (ingredient.getIngredientQuantity()/100) * ninData.getEnergy() :
+                        (ingredient.getIngredientQuantity()/100) * ninData.getEnergy());
 
                 nutritionForDish.compute("Proteins", (key, value) -> value != null ?
-                        value + ingredient.getIngredientQuantity() * ninData.getProtein() :
-                        ingredient.getIngredientQuantity() * ninData.getProtein());
+                        value + (ingredient.getIngredientQuantity()/100) * ninData.getProtein() :
+                        (ingredient.getIngredientQuantity()/100) * ninData.getProtein());
 
                 nutritionForDish.compute("Carbs", (key, value) -> value != null ?
-                        value + ingredient.getIngredientQuantity() * ninData.getCarbohydrate() :
-                        ingredient.getIngredientQuantity() * ninData.getCarbohydrate());
+                        value + (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate() :
+                        (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate());
 
                 nutritionForDish.compute("Fats", (key, value) -> value != null ?
-                        value + ingredient.getIngredientQuantity() * ninData.getTotal_Fat() :
-                        ingredient.getIngredientQuantity() * ninData.getTotal_Fat());
+                        value + (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat() :
+                        (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat());
 
                 nutritionForDish.compute("Fibers", (key, value) -> value != null ?
-                        value + ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre() :
-                        ingredient.getIngredientQuantity() * ninData.getTotal_Dietary_Fibre());
+                        value + (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre() :
+                        (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre());
             }
         }
         return nutritionByMealAndDate;

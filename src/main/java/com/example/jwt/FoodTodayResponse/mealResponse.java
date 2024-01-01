@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class mealResponse {
     private List<DishWithIngredientsResponse> rList = new ArrayList<>();
-    private Double mealCalories;
+    private Double mealEnergy;
     private Double mealProteins;
     private Double mealCarbs;
     private Double mealFats;
@@ -23,13 +23,13 @@ public class mealResponse {
    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     // to get the type of meal response we want
     public mealResponse(  List<DishWithIngredientsResponse> rList,
-                          Double mealCalories,
+                          Double mealEnergy,
                           Double mealProteins,
                           Double mealCarbs,
                           Double mealFats,
                           Double mealFibers){
         this.rList = rList;
-        this.mealCalories = mealCalories;
+        this.mealEnergy = mealEnergy;
         this.mealProteins = mealProteins;
         this.mealCarbs = mealCarbs;
         this.mealFats = mealFats;
@@ -38,18 +38,26 @@ public class mealResponse {
     }
     public mealResponse(  Map<String, String> nutrientsNameWithSIUnit,
                           List<DishWithIngredientsResponse> rList,
-                          Double mealCalories,
+                          Double mealEnergy,
                           Double mealProteins,
                           Double mealCarbs,
                           Double mealFats,
                           Double mealFibers){
         this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
         this.rList = rList;
-        this.mealCalories = mealCalories;
+        this.mealEnergy = mealEnergy;
         this.mealProteins = mealProteins;
         this.mealCarbs = mealCarbs;
         this.mealFats = mealFats;
         this.mealFibers = mealFibers;
 
+    }
+
+
+
+    public mealResponse(Map<String, String> nutrientsNameWithSIUnit, Double calories) {
+
+        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
+        this.mealEnergy = calories;
     }
 }

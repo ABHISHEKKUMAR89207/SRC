@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -16,17 +18,17 @@ public class DishWithIngredientsResponse {
     private String dishName;
     private boolean favourite;
     private List<IngredientDTO> ingredients;
-    private Double totalCalories;
+    private Double totalEnergy;
     private Double totalProteins;
     private Double totalCarbs;
     private Double totalFats;
     private Double totalFibers;
-
+//    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
                                        boolean favourite,
                                        List<IngredientDTO> ingredients,
-                                       Double totalCalories,
+                                       Double totalEnergy,
                                        Double totalProteins,
                                        Double totalCarbs,
                                        Double totalFats,
@@ -35,7 +37,7 @@ public class DishWithIngredientsResponse {
         this.dishName = dishName;
         this.favourite = favourite;
         this.ingredients = ingredients;
-        this.totalCalories = totalCalories;
+        this.totalEnergy = totalEnergy;
         this.totalProteins = totalProteins;
         this.totalCarbs = totalCarbs;
         this.totalFats = totalFats;
@@ -43,4 +45,13 @@ public class DishWithIngredientsResponse {
     }
 
 
+    public DishWithIngredientsResponse(Long dishId,
+                                       String dishName,
+                                      List<IngredientDTO> ingredientsList,
+                                       Double totalEnergy) {
+        this.dishId=dishId;
+        this.dishName = dishName;
+        this.ingredients = ingredientsList;
+        this.totalEnergy = totalEnergy;
+    }
 }
