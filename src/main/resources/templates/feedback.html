@@ -722,9 +722,13 @@
                         <!--                  <input type="text" class="form-control" id="userSearch" placeholder="Type here..." oninput="searchUsers()">-->
                         <!--              </div>-->
                     </div>
+
+
                     <div class="card-body px-0 pt-0 pb-2">
                         <!--            <div class="table-responsive p-0">-->
                         <div class="table-responsive p-0 table-container">
+                            <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;">Reply</th>
+
 
                             <table class="table align-items-center mb-0">
                                 <thead class="fixed-header">
@@ -735,6 +739,7 @@
                                     <!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Mobile No</th>-->
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >LocalDate And Time</th>
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User Id</th>
+                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;">Reply</th>
                                 </tr>
                                 </thead>
                                 <!--                <tbody id="userTableBody">-->
@@ -744,6 +749,20 @@
                                     <td th:text="${feedback.feedback}"></td>
                                     <td th:text="${feedback.localDateTime}"></td>
                                     <td th:text="${feedback.user.userId}"></td> <!-- Update this line -->
+
+                                    <td>
+                                        <div class="reply-container">
+                                            <button onclick="toggleReplyInput(this)" class="reply-button">Reply</button>
+                                            <input type="text" class="form-control reply-input" style="display: none;" />
+                                            <button onclick="sendReply(this)" style="display: none;">Send</button>
+                                        </div>
+                                    </td>
+
+                                    <!--                                    <button onclick="replyToFeedback(this)" data-feedbackid="${feedback.id}" class="reply-button">-->
+<!--                                        Reply-->
+<!--                                        <input type="text" class="form-control reply-input" />-->
+<!--                                    </button>-->
+
                                 </tr>
                                 <!-- Add the total users row at the end -->
 
@@ -781,7 +800,35 @@
     <!--      });-->
     <!--    });-->
     <!--  </script>-->
+<script>
+    function toggleReplyInput(button) {
+        var container = button.parentNode;
+        var inputField = container.querySelector('.reply-input');
+        var sendButton = container.querySelector('button:last-of-type');
 
+        inputField.style.display = 'block';
+        sendButton.style.display = 'block';
+        button.style.display = 'none';
+    }
+
+    function sendReply(button) {
+        var container = button.parentNode;
+        var inputField = container.querySelector('.reply-input');
+        var replyText = inputField.value;
+
+        // Do something with the reply text, like sending it to the server
+
+        // For demo purposes, log the reply
+        console.log('Reply:', replyText);
+
+        // Reset the elements to their initial state
+        inputField.value = '';
+        inputField.style.display = 'none';
+        button.style.display = 'none';
+        container.querySelector('.reply-button').style.display = 'block';
+    }
+
+</script>
 
 
     <script th:inline="javascript">

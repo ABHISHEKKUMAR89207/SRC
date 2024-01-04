@@ -1106,32 +1106,69 @@
 <!--                </div>-->
 <!--            </div>-->
 
+
+            <div class="container-fluid py-4">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card z-index-3">
+                            <div class="card-header pb-0">
+                                <h6>Gender Wise Registered Users</h6>
+                            </div>
+                            <div class="card-body p-3">
+                                <table id="gender-count" class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Gender</th>
+                                        <th>Registered Users</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>Male</td>
+                                        <td id="maleCount">Loading...</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Female</td>
+                                        <td id="femaleCount">Loading...</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                // Fetch data from the endpoint
+                fetch('/dashboard/gender-count')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update the male and female count in the HTML
+                        document.getElementById('maleCount').textContent = data['Male'] || '0';
+                        document.getElementById('femaleCount').textContent = data['Female'] || '0';
+                    })
+                    .catch(error => console.error('Error:', error));
+            </script>
+
+
             <div class="col-lg-6">
                 <div class="card z-index-3">
                     <div class="card-header pb-0">
-                        <h6>Gender Wise Registered Users</h6>
+                        <h6>Nutrient Target vs Achieved</h6>
                     </div>
                     <div class="card-body p-3">
-                        <!--                        <canvas id="user-chart" class="chart-canvas" height="358"></canvas>-->
-                        <table id="user-table" class="table">
-                            <thead>
-                            <tr>
-                                <th>Gender</th>
-                                <th>Registered Users</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                                        <tr>
-                                                            <td>Male</td>
-                                                            <td>150</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Female</td>
-                                                            <td>150</td>
-                                                        </tr>
-                            <!-- Repeat the above 'tr' for each month -->
-                            </tbody>
-                        </table>
+                        <div class="nutrient-bars">
+                            <div class="nutrient">
+                                <div class="nutrient-label">Nutrient 1</div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="target-achieved">Target: 100g | Achieved: 60g</div>
+                            </div>
+                            <!-- Repeat the above structure for other nutrients -->
+                            <!-- ... -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1177,6 +1214,30 @@
                 </div>
             </div>
 
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    fetch('/dashboard/age-categories') // Replace with your actual endpoint
+                        .then(response => response.json())
+                        .then(data => {
+                            const ageCategoryKeys = Object.keys(data);
+                            ageCategoryKeys.forEach((key, index) => {
+                                const ageCategoryCount = document.getElementById(`age-category-${index + 1}`);
+                                if (ageCategoryCount) {
+                                    ageCategoryCount.textContent = data[key];
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching Age Category data:', error);
+                        });
+                });
+
+            </script>
+
+
+
+
+
 
             <div class="col-lg-6">
                 <div class="card z-index-3">
@@ -1188,32 +1249,84 @@
                     </div>
                 </div>
             </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const ctx = document.getElementById('bmi-chart').getContext('2d');
 
-        // Sample data (replace this with your actual data)
-        const bmiData = {
-            labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
-            datasets: [
-                {
-                    label: 'Male', // Replace with gender
-                    data: [15, 40, 25, 20], // Replace with BMI counts for males by category
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)', // Adjust colors as needed
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Female', // Replace with gender
-                    data: [10, 35, 30, 25], // Replace with BMI counts for females by category
-                    backgroundColor: 'rgba(255, 99, 132, 0.5)', // Adjust colors as needed
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1
-                }
-            ]
-        };
 
-        const bmiChart = new Chart(ctx, {
+
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const ctx = document.getElementById('bmi-chart').getContext('2d');
+
+                    // Fetch BMI data for males from the backend
+                    fetch('/dashboard/male-categories') // Replace with your actual endpoint
+                        .then(response => response.json())
+                        .then(maleData => {
+                            // Fetch BMI data for females from the backend
+                            fetch('/dashboard/female-categories') // Replace with your actual endpoint
+                                .then(response => response.json())
+                                .then(femaleData => {
+                                    const bmiData = {
+                                        labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
+                                        datasets: [
+                                            {
+                                                label: 'Male',
+                                                data: maleData,
+                                                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                                                borderColor: 'rgba(54, 162, 235, 1)',
+                                                borderWidth: 1
+                                            },
+                                            {
+                                                label: 'Female',
+                                                data: femaleData,
+                                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                                borderColor: 'rgba(255, 99, 132, 1)',
+                                                borderWidth: 1
+                                            }
+                                        ]
+                                    };
+
+                                    const bmiChart = new Chart(ctx, {
+                                        type: 'bar',
+                                        data: bmiData,
+                                        options: {
+                                            // Chart options
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            }
+                                        }
+                                    });
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching Female BMI data:', error);
+                                });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching Male BMI data:', error);
+                        // });
+                // });
+
+                const bmiChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: bmiData,
+                                options: {
+                                    // Chart options
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching BMI data:', error);
+                        });
+                });
+
+
+                const bmiChart = new Chart(ctx, {
             type: 'bar',
             data: bmiData,
             options: {
@@ -1223,32 +1336,22 @@
                     }
                 }
             }
-        });
+        // });
     });
 
 </script>
 
-            <div class="col-lg-6">
-                <div class="card z-index-3">
-                    <div class="card-header pb-0">
-                        <h6>Nutrient Target vs Achieved</h6>
-                    </div>
-                    <div class="card-body p-3">
-                        <div class="nutrient-bars">
-                            <div class="nutrient">
-                                <div class="nutrient-label">Nutrient 1</div>
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <div class="target-achieved">Target: 100g | Achieved: 60g</div>
-                            </div>
-                            <!-- Repeat the above structure for other nutrients -->
-                            <!-- ... -->
-                        </div>
-                    </div>
-                </div>
-            </div>
 
+            <style>
+                .card-body {
+                    padding: 0; /* Remove default padding */
+                }
+                .activity-item {
+                    padding: 15px 20px; /* Adjust padding as needed */
+                    margin: 0; /* Remove default margin */
+                    border-bottom: 1px solid #eee; /* Add a bottom border for separation */
+                }
+            </style>
 
 
 
@@ -1282,6 +1385,7 @@
                     </div>
                 </div>
             </div>
+
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const ctx = document.getElementById('activity-pie-chart').getContext('2d');
@@ -1354,7 +1458,7 @@
     }
 
     .ratings-container {
-        width: 50%; /* Adjust the width as needed */
+        width: 40%; /* Adjust the width as needed */
         margin: auto; /* Center the container */
     }
 
@@ -1496,46 +1600,46 @@
 
 
             <!--            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const tableBody = document.querySelector('#user-table tbody');
+<!--            <script>-->
+<!--                document.addEventListener('DOMContentLoaded', function () {-->
+<!--                    const tableBody = document.querySelector('#user-table tbody');-->
 
-                    const monthNames = [
-                        'January', 'February', 'March', 'April', 'May', 'June',
-                        'July', 'August', 'September', 'October', 'November', 'December'
-                    ];
+<!--                    const monthNames = [-->
+<!--                        'January', 'February', 'March', 'April', 'May', 'June',-->
+<!--                        'July', 'August', 'September', 'October', 'November', 'December'-->
+<!--                    ];-->
 
-                    // Function to fetch monthly registered users
-                    function fetchMonthlyRegisteredUsers(monthIndex) {
-                        const year = new Date().getFullYear();
-                        const fromDate = new Date(year, monthIndex, 1).toISOString().split('T')[0];
-                        const toDate = new Date(year, monthIndex + 1, 0).toISOString().split('T')[0];
+<!--                    // Function to fetch monthly registered users-->
+<!--                    function fetchMonthlyRegisteredUsers(monthIndex) {-->
+<!--                        const year = new Date().getFullYear();-->
+<!--                        const fromDate = new Date(year, monthIndex, 1).toISOString().split('T')[0];-->
+<!--                        const toDate = new Date(year, monthIndex + 1, 0).toISOString().split('T')[0];-->
 
-                        fetch(`/dashboard/registered-users-monthly?fromDate=${fromDate}&toDate=${toDate}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                const row = document.createElement('tr');
-                                const monthCell = document.createElement('td');
-                                monthCell.textContent = monthNames[monthIndex];
+<!--                        fetch(`/dashboard/registered-users-monthly?fromDate=${fromDate}&toDate=${toDate}`)-->
+<!--                            .then(response => response.json())-->
+<!--                            .then(data => {-->
+<!--                                const row = document.createElement('tr');-->
+<!--                                const monthCell = document.createElement('td');-->
+<!--                                monthCell.textContent = monthNames[monthIndex];-->
 
-                                const userDataCell = document.createElement('td');
-                                userDataCell.textContent = data[monthNames[monthIndex]] || 0;
+<!--                                const userDataCell = document.createElement('td');-->
+<!--                                userDataCell.textContent = data[monthNames[monthIndex]] || 0;-->
 
-                                row.appendChild(monthCell);
-                                row.appendChild(userDataCell);
-                                tableBody.appendChild(row);
-                            })
-                            .catch(error => console.error('Error fetching data:', error));
-                    }
+<!--                                row.appendChild(monthCell);-->
+<!--                                row.appendChild(userDataCell);-->
+<!--                                tableBody.appendChild(row);-->
+<!--                            })-->
+<!--                            .catch(error => console.error('Error fetching data:', error));-->
+<!--                    }-->
 
-                    // Loop through each month and fetch registered users
-                    for (let i = 0; i < monthNames.length; i++) {
-                        fetchMonthlyRegisteredUsers(i);
-                    }
-                });
+<!--                    // Loop through each month and fetch registered users-->
+<!--                    for (let i = 0; i < monthNames.length; i++) {-->
+<!--                        fetchMonthlyRegisteredUsers(i);-->
+<!--                    }-->
+<!--                });-->
 
 
-            </script>
+<!--            </script>-->
 
 
 
@@ -3002,177 +3106,260 @@
 <script src="../static/js/plugins/smooth-scrollbar.min.js"></script>
 <script src="../static/js/plugins/chartjs.min.js"></script>
 
+
+
 <script>
-    var ctx = document.getElementById("chart-bars").getContext("2d");
+    fetch('/dashboard/user-registration-by-month')
+        .then(response => response.json())
+        .then(data => {
+            const months = Object.keys(data);
+            const userCounts = Object.values(data);
 
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            // labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            labels: ["Jan","Feb","March","April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-                label: "Registered Users",
-                tension: 0.4,
-                borderWidth: 0,
-                borderRadius: 4,
-                borderSkipped: false,
-                backgroundColor: "#fff",
-                data: [450, 200, 2000, 220, 500, 100, 400, 230, 500, 600, 700, 800],
-                maxBarThickness: 6
-            }, ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false,
-                }
-            },
-            interaction: {
-                intersect: false,
-                mode: 'index',
-            },
-            scales: {
-                y: {
-                    grid: {
-                        drawBorder: false,
-                        display: false,
-                        drawOnChartArea: false,
-                        drawTicks: false,
+            var ctx = document.getElementById("chart-bars").getContext("2d");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: "Registered Users",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                        backgroundColor: "#fff",
+                        data: userCounts,
+                        maxBarThickness: 6
+                    }],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
                     },
-                    ticks: {
-                        suggestedMin: 0,
-                        suggestedMax: 500,
-                        beginAtZero: true,
-                        padding: 15,
-                        font: {
-                            size: 14,
-                            family: "Open Sans",
-                            style: 'normal',
-                            lineHeight: 2
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                            },
+                            ticks: {
+                                suggestedMin: 0,
+                                beginAtZero: true,
+                                padding: 15,
+                                font: {
+                                    size: 14,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                                color: "#fff"
+                            },
                         },
-                        color: "#fff"
-                    },
-                },
-                x: {
-                    grid: {
-                        drawBorder: false,
-                        display: false,
-                        drawOnChartArea: false,
-                        drawTicks: false
-                    },
-                    ticks: {
-                        display: false
-                    },
-                },
-            },
-        },
-    });
-
-
-    var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
-
-    new Chart(ctx2, {
-        type: "line",
-        data: {
-            labels: ["Jan","Feb","March","April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            datasets: [{
-                label: "Mobile apps",
-                tension: 0.4,
-                borderWidth: 0,
-                pointRadius: 0,
-                borderColor: "#cb0c9f",
-                borderWidth: 3,
-                backgroundColor: gradientStroke1,
-                fill: true,
-                data: [450, 200, 100, 220, 500, 100, 400, 230, 500, 600, 700, 800],
-                maxBarThickness: 6
-
-            },
-                {
-                    label: "Websites",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#3A416F",
-                    borderWidth: 3,
-                    backgroundColor: gradientStroke2,
-                    fill: true,
-                    data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-                    maxBarThickness: 6
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false,
-                }
-            },
-            interaction: {
-                intersect: false,
-                mode: 'index',
-            },
-            scales: {
-                y: {
-                    grid: {
-                        drawBorder: false,
-                        display: true,
-                        drawOnChartArea: true,
-                        drawTicks: false,
-                        borderDash: [5, 5]
-                    },
-                    ticks: {
-                        display: true,
-                        padding: 10,
-                        color: '#b2b9bf',
-                        font: {
-                            size: 11,
-                            family: "Open Sans",
-                            style: 'normal',
-                            lineHeight: 2
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false
+                            },
+                            ticks: {
+                                display: false
+                            },
                         },
-                    }
-                },
-                x: {
-                    grid: {
-                        drawBorder: false,
-                        display: false,
-                        drawOnChartArea: false,
-                        drawTicks: false,
-                        borderDash: [5, 5]
                     },
-                    ticks: {
-                        display: true,
-                        color: '#b2b9bf',
-                        padding: 20,
-                        font: {
-                            size: 11,
-                            family: "Open Sans",
-                            style: 'normal',
-                            lineHeight: 2
-                        },
-                    }
                 },
-            },
-        },
-    });
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching user registration data:', error);
+        });
+
 </script>
+
+<!--<script>-->
+
+
+
+<!--    var ctx = document.getElementById("chart-bars").getContext("2d");-->
+
+<!--    new Chart(ctx, {-->
+<!--        type: "bar",-->
+<!--        data: {-->
+<!--            // labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],-->
+<!--            labels: ["Jan","Feb","March","April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],-->
+<!--            datasets: [{-->
+<!--                label: "Registered Users",-->
+<!--                tension: 0.4,-->
+<!--                borderWidth: 0,-->
+<!--                borderRadius: 4,-->
+<!--                borderSkipped: false,-->
+<!--                backgroundColor: "#fff",-->
+<!--                data: [450, 200, 2000, 220, 500, 100, 400, 230, 500, 600, 700, 800],-->
+<!--                maxBarThickness: 6-->
+<!--            }, ],-->
+<!--        },-->
+<!--        options: {-->
+<!--            responsive: true,-->
+<!--            maintainAspectRatio: false,-->
+<!--            plugins: {-->
+<!--                legend: {-->
+<!--                    display: false,-->
+<!--                }-->
+<!--            },-->
+<!--            interaction: {-->
+<!--                intersect: false,-->
+<!--                mode: 'index',-->
+<!--            },-->
+<!--            scales: {-->
+<!--                y: {-->
+<!--                    grid: {-->
+<!--                        drawBorder: false,-->
+<!--                        display: false,-->
+<!--                        drawOnChartArea: false,-->
+<!--                        drawTicks: false,-->
+<!--                    },-->
+<!--                    ticks: {-->
+<!--                        suggestedMin: 0,-->
+<!--                        suggestedMax: 500,-->
+<!--                        beginAtZero: true,-->
+<!--                        padding: 15,-->
+<!--                        font: {-->
+<!--                            size: 14,-->
+<!--                            family: "Open Sans",-->
+<!--                            style: 'normal',-->
+<!--                            lineHeight: 2-->
+<!--                        },-->
+<!--                        color: "#fff"-->
+<!--                    },-->
+<!--                },-->
+<!--                x: {-->
+<!--                    grid: {-->
+<!--                        drawBorder: false,-->
+<!--                        display: false,-->
+<!--                        drawOnChartArea: false,-->
+<!--                        drawTicks: false-->
+<!--                    },-->
+<!--                    ticks: {-->
+<!--                        display: false-->
+<!--                    },-->
+<!--                },-->
+<!--            },-->
+<!--        },-->
+<!--    });-->
+
+
+<!--    var ctx2 = document.getElementById("chart-line").getContext("2d");-->
+
+<!--    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);-->
+
+<!--    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');-->
+<!--    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');-->
+<!--    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors-->
+
+<!--    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);-->
+
+<!--    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');-->
+<!--    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');-->
+<!--    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors-->
+
+<!--    new Chart(ctx2, {-->
+<!--        type: "line",-->
+<!--        data: {-->
+<!--            labels: ["Jan","Feb","March","April", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],-->
+<!--            datasets: [{-->
+<!--                label: "Mobile apps",-->
+<!--                tension: 0.4,-->
+<!--                borderWidth: 0,-->
+<!--                pointRadius: 0,-->
+<!--                borderColor: "#cb0c9f",-->
+<!--                borderWidth: 3,-->
+<!--                backgroundColor: gradientStroke1,-->
+<!--                fill: true,-->
+<!--                data: [450, 200, 100, 220, 500, 100, 400, 230, 500, 600, 700, 800],-->
+<!--                maxBarThickness: 6-->
+
+<!--            },-->
+<!--                {-->
+<!--                    label: "Websites",-->
+<!--                    tension: 0.4,-->
+<!--                    borderWidth: 0,-->
+<!--                    pointRadius: 0,-->
+<!--                    borderColor: "#3A416F",-->
+<!--                    borderWidth: 3,-->
+<!--                    backgroundColor: gradientStroke2,-->
+<!--                    fill: true,-->
+<!--                    data: [30, 90, 40, 140, 290, 290, 340, 230, 400],-->
+<!--                    maxBarThickness: 6-->
+<!--                },-->
+<!--            ],-->
+<!--        },-->
+<!--        options: {-->
+<!--            responsive: true,-->
+<!--            maintainAspectRatio: false,-->
+<!--            plugins: {-->
+<!--                legend: {-->
+<!--                    display: false,-->
+<!--                }-->
+<!--            },-->
+<!--            interaction: {-->
+<!--                intersect: false,-->
+<!--                mode: 'index',-->
+<!--            },-->
+<!--            scales: {-->
+<!--                y: {-->
+<!--                    grid: {-->
+<!--                        drawBorder: false,-->
+<!--                        display: true,-->
+<!--                        drawOnChartArea: true,-->
+<!--                        drawTicks: false,-->
+<!--                        borderDash: [5, 5]-->
+<!--                    },-->
+<!--                    ticks: {-->
+<!--                        display: true,-->
+<!--                        padding: 10,-->
+<!--                        color: '#b2b9bf',-->
+<!--                        font: {-->
+<!--                            size: 11,-->
+<!--                            family: "Open Sans",-->
+<!--                            style: 'normal',-->
+<!--                            lineHeight: 2-->
+<!--                        },-->
+<!--                    }-->
+<!--                },-->
+<!--                x: {-->
+<!--                    grid: {-->
+<!--                        drawBorder: false,-->
+<!--                        display: false,-->
+<!--                        drawOnChartArea: false,-->
+<!--                        drawTicks: false,-->
+<!--                        borderDash: [5, 5]-->
+<!--                    },-->
+<!--                    ticks: {-->
+<!--                        display: true,-->
+<!--                        color: '#b2b9bf',-->
+<!--                        padding: 20,-->
+<!--                        font: {-->
+<!--                            size: 11,-->
+<!--                            family: "Open Sans",-->
+<!--                            style: 'normal',-->
+<!--                            lineHeight: 2-->
+<!--                        },-->
+<!--                    }-->
+<!--                },-->
+<!--            },-->
+<!--        },-->
+<!--    });-->
+<!--</script>-->
 <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

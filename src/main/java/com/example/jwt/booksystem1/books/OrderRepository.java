@@ -8,5 +8,8 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 Order findByPaymentId(String paymentId);
     List<Order> findByUserUserId(Long userId);
+
+    Order findByUserUserIdAndBookId(Long userid, Long bookId);
+//    Order findByUserUserIdAndBookBookId(Long userId, Long bookId);
     // You can add custom queries if needed
 }

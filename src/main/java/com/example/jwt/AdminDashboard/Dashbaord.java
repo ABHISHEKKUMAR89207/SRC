@@ -9,8 +9,10 @@ import com.example.jwt.booksystem1.books.OrderRepository;
 import com.example.jwt.entities.ContactUs;
 import com.example.jwt.entities.Feedback;
 import com.example.jwt.entities.User;
+import com.example.jwt.entities.UserProfile;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.FeedbackRepository;
+import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
@@ -19,9 +21,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -50,7 +56,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1029,5 +1037,286 @@ public class Dashbaord {
     }
 
 
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+
+
+//    @GetMapping("/user-gender-count")
+//    public Map<String, Integer> getUserGenderCount(Model model) {
+//        Map<String, Integer> genderCounts = getUserGenderCount();
+//        model.addAttribute("genderCounts", genderCounts);
+////        System.out.println("model  "+model);
+//        return genderCounts;
+//    }
+
+//    @GetMapping("/user-gender-count")
+//    public String dashboard(Model model) {
+//        Map<String, Integer> genderCounts = getUserGenderCount();
+//        if (genderCounts == null) {
+//            genderCounts = new HashMap<>(); // or initialize with default values
+//        }
+//        model.addAttribute("genderCounts", genderCounts);
+//        // Add other necessary attributes to the model if needed
+//        // ...
+//        return "/dashboard/user-gender-count"; // Assuming "dashboard" is your Thymeleaf template name
+//    }
+//    public Map<String, Integer> getUserGenderCount() {
+//        Integer maleCount = userRepository.countByUserProfileGender("Male");
+//        Integer femaleCount = userRepository.countByUserProfileGender("Female");
+//
+//        Map<String, Integer> genderCount = new HashMap<>();
+//        genderCount.put("Male", maleCount);
+//        genderCount.put("Female", femaleCount);
+//
+//        return genderCount;
+//    }
+
+
+//    @GetMapping("/dashboard")
+//    public String dashboard(Model model) {
+//        // Assuming genderCounts is a Map<String, Integer> containing Male and Female counts
+//        Map<String, Integer> genderCounts = new HashMap<>();
+//        genderCounts.put("Male", 50); // Replace with actual Male count
+//        genderCounts.put("Female", 30); // Replace with actual Female count
+//
+//        model.addAttribute("genderCounts", genderCounts);
+//        // Other attributes you might add to the model
+//
+//        return "dashboard"; // Assuming "dashboard" is your Thymeleaf template name
+//    }
+
+
+//    @GetMapping("/dashboard")
+//    public String dashboard(Model model) {
+//        Map<String, Long> genderCounts = getGenderCounts();
+//        model.addAttribute("genderCounts", genderCounts);
+//        return "dashboard"; // Assuming "dashboard" is your Thymeleaf template name
+//    }
+
+//    public Map<String, Integer> getUserGenderCount() {
+//        Integer maleCount = userRepository.countByUserProfileGender("Male");
+//        Integer femaleCount = userRepository.countByUserProfileGender("Female");
+//
+//        Map<String, Integer> genderCount = new HashMap<>();
+//        genderCount.put("Male", maleCount);
+//        genderCount.put("Female", femaleCount);
+//
+//        return genderCount;
+//    }
+@PersistenceContext
+private EntityManager entityManager;
+    public Map<String, Long> getGenderCounts() {
+//        String queryString = "SELECT gender, COUNT(*) FROM UserProfile GROUP BY gender";
+        String queryString = "SELECT up.gender, COUNT(*) FROM User u JOIN u.userProfile up GROUP BY up.gender";
+
+        Query query = entityManager.createQuery(queryString);
+        List<Object[]> resultList = query.getResultList();
+
+        Map<String, Long> genderCounts = new HashMap<>();
+        for (Object[] result : resultList) {
+            String gender = (String) result[0];
+            Long count = (Long) result[1];
+            genderCounts.put(gender, count);
+        }
+
+        return genderCounts;
+    }
+//    @GetMapping("/gender-count")
+//    public String getGenderCounts(Model model) {
+//        Map<String, Long> genderCounts = getGenderCounts(); // Retrieve gender counts
+//        model.addAttribute("genderCounts", genderCounts); // Add gender counts to the model
+//        return "dashboard"; // Replace "your_html_page" with your HTML file name
+//    }
+
+    @GetMapping("/gender-count")
+    public ResponseEntity<Map<String, Long>> getGenderCountss() {
+        Map<String, Long> genderCounts = getGenderCounts();
+        return ResponseEntity.ok(genderCounts);
+    }
+
+    //    public String getUserGenderCountPage(Model model) {
+//        // Fetch gender counts and add them to the model
+//        Map<String, Integer> genderCounts = getUserGenderCount();
+//        model.addAttribute("genderCounts", genderCounts);
+//
+//        // Return the name of the Thymeleaf template to render
+//        return "/dashboard/user-gender-count"; // Make sure this matches the template name
+//    }
+//
+//    @GetMapping("/user-gender-count")
+
+
+
+
+
+    @GetMapping("/male-categories")
+    public ResponseEntity<List<Integer>> getMaleBMICategoriess() {
+        // Fetch BMI counts for males by category from your service
+        List<Integer> maleBMICategories = getMaleBMICategories();
+
+        return ResponseEntity.ok(maleBMICategories);
+    }
+    @GetMapping("/female-categories")
+    public ResponseEntity<List<Integer>> getFemaleBMICategories() {
+        List<Integer> femaleBMICategories = getBMICategoriesByGender("Female");
+        return ResponseEntity.ok(femaleBMICategories);
+    }
+
+    public List<Integer> getBMICategoriesByGender(String gender) {
+        List<UserProfile> profiles = userProfileRepository.findByGender(gender);
+        return calculateBMICategoriesCount(profiles);
+    }
+
+    public List<Integer> getMaleBMICategories() {
+        List<UserProfile> maleProfiles = userProfileRepository.findByGender("Male");
+        List<Integer> bmiCategoriesCount = calculateBMICategoriesCount(maleProfiles);
+        return bmiCategoriesCount;
+    }
+
+    private List<Integer> calculateBMICategoriesCount(List<UserProfile> profiles) {
+        int underweightCount = 0;
+        int normalCount = 0;
+        int overweightCount = 0;
+        int obeseCount = 0;
+
+        for (UserProfile profile : profiles) {
+            double bmi = profile.getBmi();
+            if (bmi < 18.5) {
+                underweightCount++;
+            } else if (bmi >= 18.5 && bmi < 25) {
+                normalCount++;
+            } else if (bmi >= 25 && bmi < 30) {
+                overweightCount++;
+            } else {
+                obeseCount++;
+            }
+        }
+
+        return Arrays.asList(underweightCount, normalCount, overweightCount, obeseCount);
+    }
+
+
+
+
+
+    @GetMapping("/age-categories")
+    public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount() {
+        Map<String, Integer> ageCategoryCounts = calculateAgeCategoriesCount();
+        return ResponseEntity.ok(ageCategoryCounts);
+    }
+
+    public Map<String, Integer> calculateAgeCategoriesCount() {
+        List<UserProfile> profiles = userProfileRepository.findAll(); // Retrieve all user profiles
+        Map<String, Integer> ageCategoryCounts = new HashMap<>();
+
+        // Initialize counters for different age categories
+        int category1Count = 0; // <15 yrs
+        int category2Count = 0; // 15-29 yrs
+        int category3Count = 0; // 30-44 yrs
+        int category4Count = 0; // 45-59 yrs
+        int category5Count = 0; // >60 yrs
+
+        LocalDate currentDate = LocalDate.now();
+
+        // Calculate age and categorize users
+        for (UserProfile profile : profiles) {
+            LocalDate dob = profile.getDateOfBirth();
+            int age = Period.between(dob, currentDate).getYears();
+
+            if (age < 15) {
+                category1Count++;
+            } else if (age >= 15 && age <= 29) {
+                category2Count++;
+            } else if (age >= 30 && age <= 44) {
+                category3Count++;
+            } else if (age >= 45 && age <= 59) {
+                category4Count++;
+            } else {
+                category5Count++;
+            }
+        }
+
+        // Put counts into the map
+        ageCategoryCounts.put("<15 yrs", category1Count);
+        ageCategoryCounts.put("15-29 yrs", category2Count);
+        ageCategoryCounts.put("30-44 yrs", category3Count);
+        ageCategoryCounts.put("45-59 yrs", category4Count);
+        ageCategoryCounts.put(">60 yrs", category5Count);
+
+        return ageCategoryCounts;
+    }
+
+
+//    public Map<String, Integer> calculateAgeCategoriesCount() {
+//        List<UserProfile> profiles = userProfileRepository.findAll(); // Retrieve all user profiles
+//        Map<String, Integer> ageCategoryCounts = new HashMap<>();
+//
+//        // Initialize counters for different age categories
+//        int category1Count = 0; // <15 yrs
+//        int category2Count = 0; // 15-29 yrs
+//        int category3Count = 0; // 30-44 yrs
+//        int category4Count = 0; // 45-59 yrs
+//        int category5Count = 0; // >60 yrs
+//
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Calculate age and categorize users
+//        for (UserProfile profile : profiles) {
+//            LocalDate dob = profile.getDateOfBirth();
+//            int age = calculateAgeFromDOB(dob, currentDate);
+//
+//            // Categorize users based on age
+//            if (age < 15) {
+//                category1Count++;
+//            } else if (age >= 15 && age <= 29) {
+//                category2Count++;
+//            } else if (age >= 30 && age <= 44) {
+//                category3Count++;
+//            } else if (age >= 45 && age <= 59) {
+//                category4Count++;
+//            } else {
+//                category5Count++;
+//            }
+//        }
+//
+//        // Put counts into the map
+//        ageCategoryCounts.put("<15 yrs", category1Count);
+//        ageCategoryCounts.put("15-29 yrs", category2Count);
+//        ageCategoryCounts.put("30-44 yrs", category3Count);
+//        ageCategoryCounts.put("45-59 yrs", category4Count);
+//        ageCategoryCounts.put(">60 yrs", category5Count);
+//
+//        return ageCategoryCounts;
+//    }
+//
+//    // Method to calculate age from DateOfBirth
+//    private int calculateAgeFromDOB(LocalDate dob, LocalDate currentDate) {
+//        if (dob != null) {
+//            return Period.between(dob, currentDate).getYears();
+//        }
+//        return 0; // Return default value or handle null case
+//    }
+@GetMapping("/user-registration-by-month")
+public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth() {
+    List<User> users = userRepository.findAll(); // Retrieve all users
+
+    Map<String, Integer> userCountByMonth = new HashMap<>();
+    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+
+    for (User user : users) {
+        LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
+        String month = registrationDate.format(monthFormatter);
+
+        // Update the count for the corresponding month
+        userCountByMonth.put(month, userCountByMonth.getOrDefault(month, 0) + 1);
+    }
+
+    return ResponseEntity.ok(userCountByMonth);
+}
+
 
 }
+
+
+
+

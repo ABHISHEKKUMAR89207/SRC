@@ -18,6 +18,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findByEmailVerifiedFalseAndRegistrationTimestampBefore(LocalDateTime timestamp);
 
 //    Page<User> findAll(Pageable pageable);
+//long countByGender(String gender);
+
+Integer countByUserProfileGender(String gender);
 
     List<User> findByLocalDateBetween(LocalDate startDateTime, LocalDate endDateTime);
 

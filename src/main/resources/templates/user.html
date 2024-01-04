@@ -742,7 +742,9 @@
                         <div class="table-responsive p-0 table-container">
 
                             <table class="table align-items-center mb-0">
-                                <thead class="fixed-header">
+<!--                            <table class="table table-striped">-->
+
+                            <thead class="fixed-header">
                                 <tr>
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User ID</th>
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User Name</th>
@@ -751,6 +753,7 @@
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Registration Date</th>
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Device Type</th>
                                     <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Address</th>
+                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Status</th>
                                     <!--                <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Longitude</th>-->
                                 </tr>
                                 </thead>
@@ -765,6 +768,10 @@
                                     <td th:text="${user.localDate}"></td>
                                     <td th:text="${user.deviceType}"></td>
                                     <td th:text="${user.address}"></td>
+                                    <td>
+                                        <button onclick="checkStatus('${user.userId}')">Check Status</button>
+                                        <span id="status-${user.userId}"></span>
+                                    </td>
 
                                     <!--                  <td th:text="${user.latitude}"></td>-->
                                     <!--                  <td th:text="${user.longitude}"></td>-->
@@ -804,6 +811,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function checkStatus(userId) {
+        // Make an API call or perform logic to fetch status based on the userId
+        // Update the content of the span with the received status
+        const statusSpan = document.getElementById(`status-${userId}`);
+        // Assuming you receive the status as 'Active' or 'Inactive'
+        statusSpan.innerText = 'Active'; // Replace this with the actual status received
+    }
+
+    </script>
     <!--   -->
     <!--  <script th:inline="javascript">-->
     <!--    $(document).ready(function () {-->
