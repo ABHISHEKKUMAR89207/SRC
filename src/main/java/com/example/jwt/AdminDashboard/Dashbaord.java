@@ -22,6 +22,7 @@ import com.google.gson.JsonParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,14 +48,35 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
 @RequestMapping("/dashboard")
 public class Dashbaord {
+
+    @GetMapping("/monthly")
+    public String showMonthlyDashboard(Model model) {
+        Map<String, Integer> monthlyRegistrations = getMonthlyUserRegistrations();
+        model.addAttribute("monthlyRegistrations", monthlyRegistrations);
+        return "dashboard/monthly";
+    }
+
+    private Map<String, Integer> getMonthlyUserRegistrations() {
+        List<User> allUsers = userRepository.findAll();
+        Map<String, Integer> monthlyRegistrations = new HashMap<>();
+
+        for (User user : allUsers) {
+            String registrationMonth = user.getLocalDate().getMonth().toString();
+            monthlyRegistrations.put(registrationMonth, monthlyRegistrations.getOrDefault(registrationMonth, 0) + 1);
+        }
+        System.out.println("monthly    "+monthlyRegistrations);
+        return monthlyRegistrations;
+    }
 
     @GetMapping("/home")
     public String home(Model model) {
@@ -821,6 +843,40 @@ public class Dashbaord {
 
 
 
+//    private void setupModel(Model model) {
+//        // Retrieve all users from the repository
+//        List<User> userList = userRepository.findAll();
+//
+//        // Calculate the total number of users
+//        int totalUsers = userList.size();
+//
+//        // Create a map to store users grouped by state
+//        Map<String, List<User>> usersByState = new HashMap<>();
+//
+//        // Iterate through the user list and add the address for each user
+//        for (User user : userList) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//            String state = getStateFromCoordinates(latitude, longitude);
+//
+//            // Add the user to the list corresponding to their state
+//            usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(user);
+//
+//            // Set the address for each user (if needed)
+//            user.setAddress(state);
+//        }
+//
+//        // Add the user list and total users to the model
+//        model.addAttribute("user", userList);
+//        model.addAttribute("totalUsers", totalUsers);
+//
+//        // Add the map of users grouped by state to the model
+//        model.addAttribute("usersByState", usersByState);
+//
+//        // Your additional logic if needed
+//    }
+
+
     private void setupModel(Model model) {
         // Retrieve all users from the repository
         List<User> userList = userRepository.findAll();
@@ -835,6 +891,12 @@ public class Dashbaord {
         for (User user : userList) {
             Double latitude = user.getLatitude();
             Double longitude = user.getLongitude();
+
+            // Skip users with missing latitude or longitude
+            if (latitude == null || longitude == null) {
+                continue;
+            }
+
             String state = getStateFromCoordinates(latitude, longitude);
 
             // Add the user to the list corresponding to their state
@@ -854,9 +916,27 @@ public class Dashbaord {
         // Your additional logic if needed
     }
 
+    @GetMapping("/registered-users-monthly")
+    public Map<String, Long> getMonthlyRegisteredUsers(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
+        Map<String, Long> monthlyRegisteredUsers = new HashMap<>();
 
+        List<User> usersBetweenDates = userRepository.findByLocalDateBetween(fromDate, toDate);
 
+        // Grouping users by month and counting them
+        Map<Integer, Long> usersByMonth = usersBetweenDates.stream()
+                .collect(Collectors.groupingBy(user -> user.getLocalDate().getMonthValue(), Collectors.counting()));
+
+        // Formatting month names and putting count into the result map
+        usersByMonth.forEach((monthValue, count) -> {
+            String monthName = LocalDate.of(1, monthValue, 1).getMonth().toString();
+            monthlyRegisteredUsers.put(monthName, count);
+        });
+
+        return monthlyRegisteredUsers;
+    }
 
     @GetMapping("/registered-users-in-month")
     public ResponseEntity<Long> getRegisteredUsersInMonth(@RequestParam int year, @RequestParam int month) {

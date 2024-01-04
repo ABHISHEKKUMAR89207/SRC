@@ -19,6 +19,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,37 @@ public class NIN_2023 implements CommandLineRunner {
                 .setCredentials(googleCredentials).build();
         FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"o2ininprojectofficial");
         return FirebaseMessaging.getInstance(app);
+    }
+
+//    @Bean
+//    public FirebaseApp firebaseApp() throws IOException {
+//        InputStream serviceAccount = new ClassPathResource("firebase-service-account.json").getInputStream();
+//
+//        FirebaseOptions options = new FirebaseOptions.Builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                .setDatabaseUrl("https://o2ininprojectofficial-default-rtdb.firebaseio.com")
+//                .build();
+//
+//        return FirebaseApp.initializeApp(options, "o2ininprojectofficial");
+//    }
+
+
+
+    @Bean
+    public FirebaseApp firebaseApp() throws IOException {
+        List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
+        FirebaseApp app;
+        if (firebaseApps != null && !firebaseApps.isEmpty()) {
+            app = firebaseApps.get(0);
+        } else {
+            InputStream serviceAccount = new ClassPathResource("firebase-service-account.json").getInputStream();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl("https://o2ininprojectofficial-default-rtdb.firebaseio.com")
+                    .build();
+            app = FirebaseApp.initializeApp(options, "o2ininprojectofficial");
+        }
+        return app;
     }
 
 }

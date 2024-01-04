@@ -97,15 +97,11 @@ public class UserProfileController {
 
     // for calculating the age of the user with the given D.O.B
     private Integer calculatedAge(String date) {
-        // Define the date format for the input DOB
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         // Parse the DOB string into a LocalDate object
         LocalDate birthDate = LocalDate.parse(date, formatter);
-
         // Calculate the period (difference) between the birthDate and the current date
         Period age = Period.between(birthDate, LocalDate.now());
-
         // Extract the years from the age period
         int years = age.getYears();
         return years;
@@ -134,35 +130,18 @@ public class UserProfileController {
                 if (updateData.containsKey("weight")) {
                     double newWeight = Double.parseDouble(updateData.get("weight").toString());
                     userProfile.setWeight(newWeight);
-                    // Calculate and update BMI
-                    String str = String.valueOf(userProfile.getHeight());
-                    String[] parts = str.split("\\.");
-                    double befDecimal = Double.parseDouble(parts[0]);
-                    double aftDecimal = Double.parseDouble(parts[1]);
-
-                    double heightInInches = (befDecimal * 12) + aftDecimal;
-                    double heightInMeters = heightInInches * 0.0254; // Convert height to meters
-                    double bmi = newWeight / (heightInMeters * heightInMeters);
-                    String formatedBmi = decimalFormat.format(bmi);
-                    userProfile.setBmi(Double.parseDouble(formatedBmi));
                 }
 
                 if (updateData.containsKey("height")) {
                     double newHeight = Double.parseDouble(updateData.get("height").toString());
                     userProfile.setHeight(newHeight);
-                    // Calculate and update BMI
-                    String str = String.valueOf(newHeight);
-                    String[] parts = str.split("\\.");
-                    double befDecimal = Double.parseDouble(parts[0]);
-                    double aftDecimal = Double.parseDouble(parts[1]);
-
-                    double heightInInches = (befDecimal * 12) + aftDecimal;
-                    double heightInMeters = heightInInches * 0.0254; // Convert height to meters
-                    double bmi = userProfile.getWeight() / ((heightInMeters / 100.0) * (heightInMeters / 100.0));
-                    String formatedBmi = decimalFormat.format(bmi);
-                    userProfile.setBmi(Double.parseDouble(formatedBmi));
                 }
 
+
+                // Recalculate and update BMI based on the updated weight and height
+                if (updateData.containsKey("weight") || updateData.containsKey("height")) {
+                    userProfile.setBmi(userProfileService.calculateBMI(userProfile.getGender(), userProfile.getHeight(), userProfile.getWeight()));
+                }
 
                 // Check if email is present in the updateData and it's different from the current email
                 if (updateData.containsKey("email")) {
@@ -229,4 +208,6 @@ public class UserProfileController {
         UserProfile userProfile1 = this.userProfileService.createUserProfile(userProfile, userId);
         return new ResponseEntity<UserProfile>(userProfile1, HttpStatus.CREATED);
     }
+
+
 }

@@ -45,28 +45,69 @@ public class UserProfileService {
         userProfile.setUser(user);
 
         // Calculate and set the BMI
-        double bmi = calculateBMI(userProfile.getHeight(), userProfile.getWeight());
+        double bmi = calculateBMI(userProfile.getGender(),userProfile.getHeight(), userProfile.getWeight());
         userProfile.setBmi(bmi);
         UserProfile newProfile = this.userProfileRepository.save(userProfile);
         return newProfile;
     }
 
     // to calculate the BMI of the user
-    private double calculateBMI(double heightInFeet, double weight) {
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        String str = String.valueOf(heightInFeet);
-        String[] parts = str.split("\\.");
-        double befDecimal = Double.parseDouble(parts[0]);
-        double aftDecimal =Double.parseDouble(parts[1]);
+//    private double calculateBMI(double heightInFeet, double weight) {
+//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+//        String str = String.valueOf(heightInFeet);
+//        String[] parts = str.split("\\.");
+//        double befDecimal = Double.parseDouble(parts[0]);
+//        double aftDecimal =Double.parseDouble(parts[1]);
+//
+//        double heightInInches = (befDecimal*12) + aftDecimal;
+//        double heightInMeters = heightInInches * 0.0254; // Convert height to meters
+//        double bmis = weight / (heightInMeters * heightInMeters);
+//        String formatedBmi = decimalFormat.format(bmis);
+//        return Double.parseDouble(formatedBmi);
+//    }
 
-        double heightInInches = (befDecimal*12) + aftDecimal;
-        double heightInMeters = heightInInches * 0.0254; // Convert height to meters
-        double bmis = weight / (heightInMeters * heightInMeters);
-        String formatedBmi = decimalFormat.format(bmis);
-        return Double.parseDouble(formatedBmi);
+//    private double calculateBMI(String gender, double heightInFeet, double weight) {
+//        // Convert height from feet to meters
+//        double heightInMeters = heightInFeet * 0.3048; // 1 foot = 0.3048 meters
+//
+//        // Calculate BMI based on gender
+//        double bmi;
+//        if (gender.equalsIgnoreCase("male")) {
+//            bmi = weight / (heightInMeters * heightInMeters);
+//        } else if (gender.equalsIgnoreCase("female")) {
+//            // Adjusted calculation for females
+//            bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
+//        } else {
+//            // Default to a generic BMI calculation if gender is not specified or recognized
+//            bmi = weight / (heightInMeters * heightInMeters);
+//        }
+//        return bmi;
+//    }
+
+    public double calculateBMI(String gender, double heightInFeet, double weight) {
+        // Convert height from feet to centimeters
+        double heightInCM = heightInFeet * 30.48; // 1 foot = 30.48 centimeters
+
+        // Convert height from centimeters to meters for BMI calculation
+        double heightInMeters = heightInCM / 100; // Convert centimeters to meters
+
+        // Calculate BMI based on gender
+        double bmi;
+        if (gender.equalsIgnoreCase("male")) {
+            bmi = weight / (heightInMeters * heightInMeters);
+        } else if (gender.equalsIgnoreCase("female")) {
+            // Adjusted calculation for females
+            bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
+        } else {
+            // Default to a generic BMI calculation if gender is not specified or recognized
+            bmi = weight / (heightInMeters * heightInMeters);
+        }
+        return bmi;
     }
 
-//update user profile
+
+
+    //update user profile
     public UserProfile saveUserProfile(UserProfile userProfile) {
         // This method should save or update the user's profile data in the database
         return userProfileRepository.save(userProfile);
