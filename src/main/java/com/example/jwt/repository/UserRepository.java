@@ -25,4 +25,6 @@ Integer countByUserProfileGender(String gender);
     List<User> findByLocalDateBetween(LocalDate startDateTime, LocalDate endDateTime);
 
     List<User> findByRegistrationTimestampBetween(LocalDateTime startOfMonth, LocalDateTime endOfMonth);
+
+    User findByUserId(Long userId);
 }

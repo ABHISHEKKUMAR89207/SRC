@@ -768,10 +768,21 @@
                                     <td th:text="${user.localDate}"></td>
                                     <td th:text="${user.deviceType}"></td>
                                     <td th:text="${user.address}"></td>
+<!--                                    <td>-->
+<!--                                        <button onclick="checkStatus('${user.userId}')">Check Status</button>-->
+<!--                                        <span id="status-${user.userId}"></span>-->
+<!--                                    </td>-->
                                     <td>
-                                        <button onclick="checkStatus('${user.userId}')">Check Status</button>
-                                        <span id="status-${user.userId}"></span>
+                                        <a th:href="@{/dashboard/userStatus/{userId}(userId=${user.userId})}">
+                                            <button>Check Status</button>
+                                        </a>
                                     </td>
+
+
+                                    <!--                                    <td>-->
+<!--                                    <h1>User Status</h1>-->
+<!--                                    <p>User ID: <span id="userId"></span></p>-->
+<!--                                    </td>-->
 
                                     <!--                  <td th:text="${user.latitude}"></td>-->
                                     <!--                  <td th:text="${user.longitude}"></td>-->
@@ -812,16 +823,51 @@
         </div>
     </div>
 
+<!--    <script>-->
+<!--        // Get the userId from the query parameter-->
+<!--        const queryString = window.location.search;-->
+<!--        const urlParams = new URLSearchParams(queryString);-->
+<!--        const userId = urlParams.get('userId');-->
+
+<!--        // Display the userId on the page-->
+<!--        document.addEventListener('DOMContentLoaded', function () {-->
+<!--            document.getElementById('userId').innerText = userId;-->
+<!--        });-->
+<!--    </script>-->
+
     <script>
         function checkStatus(userId) {
-        // Make an API call or perform logic to fetch status based on the userId
-        // Update the content of the span with the received status
-        const statusSpan = document.getElementById(`status-${userId}`);
-        // Assuming you receive the status as 'Active' or 'Inactive'
-        statusSpan.innerText = 'Active'; // Replace this with the actual status received
-    }
+            const statusSpan = document.getElementById(`status-${userId}`);
+            statusSpan.innerText = 'Active'; // Replace this with the actual status received
 
+            // Redirect to userStatus.html passing the userId as a query parameter
+            window.location.href = `userStatus.html?userId=${userId}`;
+        }
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const userId = urlParams.get('userId');
+            // Use the userId to fetch and display user status details
+            // ...
+        });
+    </script>
+
+
+<!--    <script th:inline="javascript">-->
+<!--        function checkStatus(userId) {-->
+<!--            const statusSpan = document.getElementById(`status-${userId}`);-->
+<!--            statusSpan.innerText = 'Active'; // Replace with actual status received-->
+
+<!--            /* Redirect to userStatus.html passing the userId as a query parameter */-->
+<!--            /* Use Thymeleaf's URL templates to generate the URL */-->
+<!--            const redirectUrl = [[@{/userStatus.html(userId=${userId})}]];-->
+<!--            window.location.href = redirectUrl;-->
+<!--        }-->
+<!--    </script>-->
+
+
     <!--   -->
     <!--  <script th:inline="javascript">-->
     <!--    $(document).ready(function () {-->

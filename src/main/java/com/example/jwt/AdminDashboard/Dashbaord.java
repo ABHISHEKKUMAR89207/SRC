@@ -54,11 +54,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -1296,23 +1294,100 @@ private EntityManager entityManager;
 //        }
 //        return 0; // Return default value or handle null case
 //    }
+//@GetMapping("/user-registration-by-month")
+//public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth() {
+//    List<User> users = userRepository.findAll(); // Retrieve all users
+//
+//    Map<String, Integer> userCountByMonth = new HashMap<>();
+//    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+//
+//    for (User user : users) {
+//        LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
+//        String month = registrationDate.format(monthFormatter);
+//        System.out.println("months   "+month);
+//
+//        // Update the count for the corresponding month
+//        userCountByMonth.put(month, userCountByMonth.getOrDefault(month, 0) + 1);
+//    }
+//
+//    return ResponseEntity.ok(userCountByMonth);
+//}
+//@GetMapping("/user-registration-by-month")
+//public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestParam(name = "year") int year) {
+//    List<User> users = userRepository.findAll(); // Retrieve all users
+//
+//    Map<String, Integer> userCountByMonth = new HashMap<>();
+//    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+//
+//    for (User user : users) {
+//        LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
+//
+//        // Filter users by the selected year
+//        if (registrationDate.getYear() == year) {
+//            String month = registrationDate.format(monthFormatter);
+//            System.out.println("months " + month);
+//
+//            // Update the count for the corresponding month
+//            userCountByMonth.put(month, userCountByMonth.getOrDefault(month, 0) + 1);
+//        }
+//    }
+//
+//    return ResponseEntity.ok(userCountByMonth);
+//}
 @GetMapping("/user-registration-by-month")
-public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth() {
+public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestParam(name = "year") int year) {
     List<User> users = userRepository.findAll(); // Retrieve all users
 
-    Map<String, Integer> userCountByMonth = new HashMap<>();
+    Map<String, Integer> userCountByMonth = new LinkedHashMap<>();
     DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+
+    // Initialize counts for all months to zero
+    for (int month = 1; month <= 12; month++) {
+        String monthName = YearMonth.of(year, month).format(monthFormatter);
+        userCountByMonth.put(monthName, 0);
+    }
 
     for (User user : users) {
         LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
-        String month = registrationDate.format(monthFormatter);
 
-        // Update the count for the corresponding month
-        userCountByMonth.put(month, userCountByMonth.getOrDefault(month, 0) + 1);
+        // Filter users by the selected year
+        if (registrationDate.getYear() == year) {
+            String monthName = registrationDate.format(monthFormatter);
+            userCountByMonth.put(monthName, userCountByMonth.get(monthName) + 1);
+        }
     }
 
     return ResponseEntity.ok(userCountByMonth);
 }
+    @GetMapping("/userStatus.html")
+    public String userStatus(Model model) {
+        List<Feedback> feedbackList = getAllFeedbackData();
+        model.addAttribute("userStatus", feedbackList);
+        return "userStatus";
+    }
+
+
+//        @GetMapping("/userStatus.html")
+//        public String userStatus(Model model, @RequestParam("userId") String userId) {
+//            // Use the userId to fetch specific user details from your data source
+//            User user = userService.getUserById(userId);
+//            model.addAttribute("user", user);
+//            return "userStatus";
+//        }
+
+    @GetMapping("/userStatus/{userId}")
+    public String userStatus(@PathVariable Long userId, Model model) {
+        // Logic to fetch user status details based on userId
+        // Assuming you have a service method to retrieve user status details
+//        User userStatus = userService.getUser(userId);
+
+        User userStatus = userRepository.findByUserId(userId);
+
+        // Add the userStatus data to the model
+        model.addAttribute("userStatus", userStatus);
+
+        return "userStatus"; // Return the Thymeleaf template to display user status
+    }
 
 
 }
