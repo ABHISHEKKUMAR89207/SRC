@@ -35,12 +35,12 @@ public class Review {
     private String username; // New field
 
     private String comment;
-    private int rating;
+    private double rating;
     private String date;
 
     // Constructors, getters, setters, and other methods
 
-    public Review(BookTable book, User user, String username, String comment, int rating, String date) {
+    public Review(BookTable book, User user, String username, String comment, double rating, String date) {
         this.book = book;
         this.user = user;
         this.username = username;

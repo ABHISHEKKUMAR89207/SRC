@@ -17,7 +17,7 @@ public class ReviewDTO {
 //    private Long userId;
     private String username;
     private String comment;
-    private int rating;
+    private double rating;
     private String date;
 
     // Constructors, getters, setters, and other methods

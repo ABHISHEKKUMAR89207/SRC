@@ -25,6 +25,7 @@ public class BookTable {
     private int year;
     private int quantity;
     private double price;
+    private double ratings;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

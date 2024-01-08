@@ -38,7 +38,7 @@ public class ReviewController {
     public ResponseEntity<Review> submitReview(@RequestHeader("Auth") String tokenHeader,
             @RequestParam Long bookId,
             @RequestParam String comment,
-            @RequestParam int rating
+            @RequestParam double rating
     ) {
         System.out.println("api call her==================================");
         String token = tokenHeader.replace("Bearer ", "");
@@ -51,11 +51,14 @@ public class ReviewController {
         if (book == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Order existingOrder = orderRepository.findByUserUserIdAndBookId(userid, bookId);
-        if (existingOrder == null && !"delivered".equalsIgnoreCase(existingOrder.getDeliveryStatus())) {
+        List<Order> userOrders = orderRepository.findByUserUserIdAndBookId(userid, bookId);
 
+        if (userOrders.isEmpty() || userOrders.stream().noneMatch(order -> "delivered".equalsIgnoreCase(order.getDeliveryStatus()))) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+// Rest of your code...
+
 
 //String date="fd";
         // Get the current date and time
@@ -89,9 +92,12 @@ public class ReviewController {
             totalRating += review.getRating();
             numberOfReviews++;
         }
-
+        double rating= numberOfReviews > 0 ? (double) totalRating / numberOfReviews : 0;
+        BookTable book = bookTableRepository.findById(bookId).orElse(null);
+        book.setRatings(rating);
+        bookTableRepository.save(book);
         // Avoid division by zero
-        return numberOfReviews > 0 ? (double) totalRating / numberOfReviews : 0;
+        return rating;
     }
     // Other methods...
 //    @GetMapping("/by-book/{bookId}")
@@ -122,12 +128,12 @@ public class ReviewController {
                     .map(this::convertToDTO)
                     .collect(Collectors.toList());
             double overallRating = getOverallRating(bookId);
-            boolean reviewauth=false;
-            Order existingOrder = orderRepository.findByUserUserIdAndBookId(userid, bookId);
-            if (existingOrder != null && "delivered".equalsIgnoreCase(existingOrder.getDeliveryStatus())) {
+//            boolean reviewauth=false;
+            List<Order> userOrders = orderRepository.findByUserUserIdAndBookId(userid, bookId);
 
-                reviewauth=true;
-            }
+            boolean reviewauth = userOrders.stream()
+                    .anyMatch(order -> "delivered".equalsIgnoreCase(order.getDeliveryStatus()));
+
             OverallReviewDTO reviewsWithRating=new OverallReviewDTO(reviewauth,overallRating,reviewDTOs) ;
             return new ResponseEntity<>(reviewsWithRating, HttpStatus.OK);
         }
@@ -137,13 +143,13 @@ public class ReviewController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
         double overallRating = getOverallRating(bookId);
-        boolean reviewauth=false;
-        Order existingOrder = orderRepository.findByUserUserIdAndBookId(userid, bookId);
-        if (existingOrder != null && "delivered".equalsIgnoreCase(existingOrder.getDeliveryStatus())) {
+//        boolean reviewauth=false;
+        List<Order> userOrders = orderRepository.findByUserUserIdAndBookId(userid, bookId);
 
-            reviewauth=true;
-        }
-OverallReviewDTO reviewsWithRating=new OverallReviewDTO(reviewauth,overallRating,reviewDTOs) ;
+        boolean reviewauth = userOrders.stream()
+                .anyMatch(order -> "delivered".equalsIgnoreCase(order.getDeliveryStatus()));
+
+        OverallReviewDTO reviewsWithRating=new OverallReviewDTO(reviewauth,overallRating,reviewDTOs) ;
         return new ResponseEntity<>(reviewsWithRating, HttpStatus.OK);
     }
 

@@ -11,6 +11,15 @@ import java.util.List;
 public interface NinDataRepository extends JpaRepository<NinData, Long> {
 
     NinData findByFood(String name);
+    @Query("SELECT n FROM NinData n WHERE n.food_code = :foodCode")
+    List<NinData> findByFoodCode(String foodCode);
+
+//    @Query("SELECT n.carbohydrate, n.Energy, n.Total_Fat, n.Total_Dietary_Fibre FROM NinData n WHERE n.food_code = :foodCode")
+//    List<NinData> findByFoodCode(String foodCode);
+
+
+    @Query("SELECT n.carbohydrate, n.Energy, n.Total_Fat, n.Total_Dietary_Fibre FROM NinData n WHERE n.food = :foodName")
+    List<Object[]> findNutrientsByFoodName(String foodName);
 
     List<NinData> findTop10ByOrderByCarbohydrateDesc();
     List<NinData> findTop10ByOrderByCholestrolDesc();
