@@ -97,7 +97,8 @@ public class UserProfileService {
             bmi = weight / (heightInMeters * heightInMeters);
         } else if (gender.equalsIgnoreCase("female")) {
             // Adjusted calculation for females
-            bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
+//            bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
+            bmi = weight / (heightInMeters * heightInMeters);
         } else {
             // Default to a generic BMI calculation if gender is not specified or recognized
             bmi = weight / (heightInMeters * heightInMeters);

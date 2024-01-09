@@ -1,17 +1,4 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.7
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -122,7 +109,7 @@
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '../../../www.google-analytics.com/analytics.js', 'ga');
+        })(window, document, 'script', '../static/js/analytics.js', 'ga');
         ga('create', 'UA-46172202-22', 'auto', {
             allowLinker: true
         });
@@ -146,7 +133,7 @@
                 dl = l != 'dataLayer' ? '&l=' + l : '';
             j.async = true;
             j.src =
-                '../../../www.googletagmanager.com/gtm5445.html?id=' + i + dl;
+                '../static/js/plugins/gtm5445.html?id=' + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-NKDMSK6');
     </script>
@@ -559,74 +546,78 @@
                     <!--<i class="fa fa-bell cursor-pointer"></i>-->
                     <!--</a>-->
 
-                    <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                        <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                <div class="d-flex py-1">
-                                    <div class="my-auto">
-                                        <img src="../static/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="text-sm font-weight-normal mb-1">
-                                            <span class="font-weight-bold">New message</span> from Laur
-                                        </h6>
-                                        <p class="text-xs text-secondary mb-0 ">
-                                            <i class="fa fa-clock me-1"></i>
-                                            13 minutes ago
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                <div class="d-flex py-1">
-                                    <div class="my-auto">
-                                        <img src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="text-sm font-weight-normal mb-1">
-                                            <span class="font-weight-bold">New album</span> by Travis Scott
-                                        </h6>
-                                        <p class="text-xs text-secondary mb-0 ">
-                                            <i class="fa fa-clock me-1"></i>
-                                            1 day
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                <div class="d-flex py-1">
-                                    <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-                                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                            <title>credit-card</title>
-                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                                <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                                                    <g transform="translate(1716.000000, 291.000000)">
-                                                        <g transform="translate(453.000000, 454.000000)">
-                                                            <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
-                                                            <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-                                                        </g>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                    <div class="d-flex flex-column justify-content-center">
-                                        <h6 class="text-sm font-weight-normal mb-1">
-                                            Payment successfully completed
-                                        </h6>
-                                        <p class="text-xs text-secondary mb-0 ">
-                                            <i class="fa fa-clock me-1"></i>
-                                            2 days
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+<!--                    <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">-->
+<!--                        <li class="mb-2">-->
+<!--                            <a class="dropdown-item border-radius-md" href="javascript:;">-->
+<!--                                <div class="d-flex py-1">-->
+<!--                                    <div class="my-auto">-->
+<!--                                        <img src="../static/img/team-2.jpg" class="avatar avatar-sm  me-3 ">-->
+<!--                                    </div>-->
+<!--                                    <div class="d-flex flex-column justify-content-center">-->
+<!--                                        <h6 class="text-sm font-weight-normal mb-1">-->
+<!--                                            <span class="font-weight-bold">New message</span> from Laur-->
+<!--                                        </h6>-->
+<!--                                        <p class="text-xs text-secondary mb-0 ">-->
+<!--                                            <i class="fa fa-clock me-1"></i>-->
+<!--                                            13 minutes ago-->
+<!--                                        </p>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        -->
+<!--&lt;!&ndash;                        <li class="mb-2">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a class="dropdown-item border-radius-md" href="javascript:;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="d-flex py-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="my-auto">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <img src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="d-flex flex-column justify-content-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <h6 class="text-sm font-weight-normal mb-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <span class="font-weight-bold">New album</span> by Travis Scott&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <p class="text-xs text-secondary mb-0 ">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <i class="fa fa-clock me-1"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            1 day&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--                       -->
+<!--&lt;!&ndash;                        <li>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a class="dropdown-item border-radius-md" href="javascript:;">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div class="d-flex py-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <title>credit-card</title>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    <g transform="translate(1716.000000, 291.000000)">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        <g transform="translate(453.000000, 454.000000)">&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                            <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                        </g>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                    </g>&ndash;&gt;-->
+<!--&lt;!&ndash;                                                </g>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            </g>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </svg>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <div class="d-flex flex-column justify-content-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <h6 class="text-sm font-weight-normal mb-1">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            Payment successfully completed&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </h6>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <p class="text-xs text-secondary mb-0 ">&ndash;&gt;-->
+<!--&lt;!&ndash;                                            <i class="fa fa-clock me-1"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                                            2 days&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </p>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </li>&ndash;&gt;-->
+<!--                        -->
+<!--                    </ul>-->
+
                     </li>
                 </ul>
             </div>
@@ -726,39 +717,170 @@
 
     <!-- using js method-->
 
-    <div class="container-fluid py-4">
+<!--    <div class="container-fluid py-4">-->
+<!--        <div class="row">-->
+<!--            <div class="col-12">-->
+<!--                <div class="card mb-4">-->
+<!--                    <div class="card-header pb-0">-->
+<!--                        <h6 colspan="5" style="font-weight: bold;">Registered Users</h6>-->
+<!--                        &lt;!&ndash;              <div class="input-group mt-3">&ndash;&gt;-->
+<!--                        &lt;!&ndash;                  <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>&ndash;&gt;-->
+<!--                        &lt;!&ndash;                  <input type="text" class="form-control" id="userSearch" placeholder="Type here..." oninput="searchUsers()">&ndash;&gt;-->
+<!--                        &lt;!&ndash;              </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="card-body px-0 pt-0 pb-2">-->
+<!--                        &lt;!&ndash;            <div class="table-responsive p-0">&ndash;&gt;-->
+<!--                        <div class="table-responsive p-0 table-container">-->
+
+<!--                            <table class="table align-items-center mb-0">-->
+<!--&lt;!&ndash;                            <table class="table table-striped">&ndash;&gt;-->
+
+<!--                            <thead class="fixed-header">-->
+<!--                                <tr>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User ID</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User Name</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Email</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Mobile No</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Registration Date</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Device Type</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Address</th>-->
+<!--                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Status</th>-->
+<!--                                    &lt;!&ndash;                <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Longitude</th>&ndash;&gt;-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                &lt;!&ndash;                <tbody id="userTableBody">&ndash;&gt;-->
+<!--                                &lt;!&ndash;                <tbody>&ndash;&gt;-->
+<!--                                &lt;!&ndash; Use Thymeleaf to iterate over the user list &ndash;&gt;-->
+<!--                                <tr th:each="user : ${user}">-->
+<!--                                    <td th:text="${user.userId}"></td>-->
+<!--                                    <td th:text="${user.userName}"></td>-->
+<!--                                    <td th:text="${user.email}"></td>-->
+<!--                                    <td th:text="${user.mobileNo}"></td>-->
+<!--                                    <td th:text="${user.localDate}"></td>-->
+<!--                                    <td th:text="${user.deviceType}"></td>-->
+<!--                                    <td th:text="${user.address}"></td>-->
+<!--&lt;!&ndash;                                    <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <button onclick="checkStatus('${user.userId}')">Check Status</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <span id="status-${user.userId}"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </td>&ndash;&gt;-->
+<!--                                    <td>-->
+<!--                                        <a th:href="@{/dashboard/userStatus/{userId}(userId=${user.userId})}">-->
+<!--                                            <button>Check Status</button>-->
+<!--                                        </a>-->
+<!--                                    </td>-->
+
+
+<!--                                    &lt;!&ndash;                                    <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <h1>User Status</h1>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <p>User ID: <span id="userId"></span></p>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </td>&ndash;&gt;-->
+
+<!--                                    &lt;!&ndash;                  <td th:text="${user.latitude}"></td>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                  <td th:text="${user.longitude}"></td>&ndash;&gt;-->
+
+<!--                                    &lt;!&ndash; Call the getAddressFromCoordinates method to get the address &ndash;&gt;-->
+<!--                                    &lt;!&ndash;                    <td th:text="${@GeocodingUtility.getAddressFromCoordinates(user.latitude, user.longitude)}"></td>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                    <td th:text="${T(com.example.jwt.util.GeocodingUtility).getAddressFromCoordinates(user.latitude, user.longitude)}"></td>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                    <td th:text="${@com.example.jwt.AdminDashboard.Dashbaord@getAddressFromCoordinates(user.latitude, user.longitude)}"></td>&ndash;&gt;-->
+<!--                                    &lt;!&ndash; Assuming "user" is an instance of your User class &ndash;&gt;-->
+<!--                                    &lt;!&ndash;                    <td th:text="${@com.example.jwt.AdminDashboard.Dashbaord@getAddressFromCoordinates(user.latitude, user.longitude)}"></td>&ndash;&gt;-->
+
+
+<!--                                </tr>-->
+<!--                                &lt;!&ndash; Add the total users row at the end &ndash;&gt;-->
+
+<!--                                </tbody>-->
+<!--                                &lt;!&ndash;                <tbody style="position: sticky; bottom: 0;  font-weight: bold; font-size: 16px;">&ndash;&gt;-->
+<!--                                &lt;!&ndash;                <tr>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                    <td colspan="5" style="text-align: right;">Total Users:</td>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                    <td th:text="${totalUsers}"></td>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                </tr>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                </tbody>&ndash;&gt;-->
+
+<!--                                <tbody style="display: block;">-->
+<!--                                <tr>-->
+<!--                                    <td colspan="5" style="text-align: right;">Total Users:</td>-->
+<!--                                    <td style="text-align: right; font-weight: bold; font-size: 16px;">-->
+<!--                                        <span th:text="${totalUsers}"></span>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <style>
+        /* Basic styling for the table */
+        body1 {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container1 {
+            width: 100%;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 30px;
+            overflow-x: auto; /* Enable horizontal scrolling */
+        }
+
+        table1 {
+            width: auto; /* Adjust table width */
+            border-collapse: collapse;
+            white-space: nowrap; /* Prevent line breaks in table cells */
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            vertical-align: middle; /* Align content vertically in the middle */
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Example CSS */
+        .custom-header {
+            background-color: lightgreen; /* Set the background color to light green */
+            color: black; /* Set the font color to black */
+        }
+
+    </style>
+
+    <div class="container py-4">
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4">
-                    <div class="card-header pb-0">
-                        <h6 colspan="5" style="font-weight: bold;">Registered Users</h6>
-                        <!--              <div class="input-group mt-3">-->
-                        <!--                  <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>-->
-                        <!--                  <input type="text" class="form-control" id="userSearch" placeholder="Type here..." oninput="searchUsers()">-->
-                        <!--              </div>-->
+                    <div class="card-header bg-dark text-light d-flex justify-content-between align-items-center">
+                        <h6 class="card-title fw-bold m-0" style="color: black; font-size: 20px;">Registered Users</h6>
                     </div>
-                    <div class="card-body px-0 pt-0 pb-2">
-                        <!--            <div class="table-responsive p-0">-->
-                        <div class="table-responsive p-0 table-container">
 
-                            <table class="table align-items-center mb-0">
-<!--                            <table class="table table-striped">-->
-
-                            <thead class="fixed-header">
-                                <tr>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User ID</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >User Name</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Email</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Mobile No</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Registration Date</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Device Type</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Address</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Status</th>
-                                    <!--                <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Longitude</th>-->
+                    <div class="container1 py-0">
+                        <div class="table-responsive">
+                            <table class="table1">
+                                <thead class="table-dark">
+                                <tr class="custom-header">
+                                    <th>User ID</th>
+                                    <th>User Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile No</th>
+                                    <th>Registration Date</th>
+                                    <th>Device Type</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
                                 </tr>
                                 </thead>
-                                <!--                <tbody id="userTableBody">-->
-                                <!--                <tbody>-->
+                                <tbody class="body1">
                                 <!-- Use Thymeleaf to iterate over the user list -->
                                 <tr th:each="user : ${user}">
                                     <td th:text="${user.userId}"></td>
@@ -768,62 +890,31 @@
                                     <td th:text="${user.localDate}"></td>
                                     <td th:text="${user.deviceType}"></td>
                                     <td th:text="${user.address}"></td>
-<!--                                    <td>-->
-<!--                                        <button onclick="checkStatus('${user.userId}')">Check Status</button>-->
-<!--                                        <span id="status-${user.userId}"></span>-->
-<!--                                    </td>-->
                                     <td>
-                                        <a th:href="@{/dashboard/userStatus/{userId}(userId=${user.userId})}">
-                                            <button>Check Status</button>
-                                        </a>
+                                        <a th:href="@{/dashboard/userStatus/{userId}(userId=${user.userId})}" class="btn btn-sm btn-primary">Check Status</a>
                                     </td>
-
-
-                                    <!--                                    <td>-->
-<!--                                    <h1>User Status</h1>-->
-<!--                                    <p>User ID: <span id="userId"></span></p>-->
-<!--                                    </td>-->
-
-                                    <!--                  <td th:text="${user.latitude}"></td>-->
-                                    <!--                  <td th:text="${user.longitude}"></td>-->
-
-                                    <!-- Call the getAddressFromCoordinates method to get the address -->
-                                    <!--                    <td th:text="${@GeocodingUtility.getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
-                                    <!--                    <td th:text="${T(com.example.jwt.util.GeocodingUtility).getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
-                                    <!--                    <td th:text="${@com.example.jwt.AdminDashboard.Dashbaord@getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
-                                    <!-- Assuming "user" is an instance of your User class -->
-                                    <!--                    <td th:text="${@com.example.jwt.AdminDashboard.Dashbaord@getAddressFromCoordinates(user.latitude, user.longitude)}"></td>-->
-
-
                                 </tr>
-                                <!-- Add the total users row at the end -->
-
                                 </tbody>
-                                <!--                <tbody style="position: sticky; bottom: 0;  font-weight: bold; font-size: 16px;">-->
-                                <!--                <tr>-->
-                                <!--                    <td colspan="5" style="text-align: right;">Total Users:</td>-->
-                                <!--                    <td th:text="${totalUsers}"></td>-->
-                                <!--                </tr>-->
-                                <!--                </tbody>-->
-
-                                <tbody style="display: block;">
+                                <tfoot class="table-dark">
                                 <tr>
-                                    <td colspan="5" style="text-align: right;">Total Users:</td>
-                                    <td style="text-align: right; font-weight: bold; font-size: 16px;">
-                                        <span th:text="${totalUsers}"></span>
+                                    <td colspan="7" class="text-end fw-bold" style="color: black;">Total Users:</td> <!-- Style for "Total Users" text -->
+                                    <td class="fw-bold" style="font-size: 16px;">
+                                        <span th:text="${totalUsers}" style="color: black;"></span> <!-- Style for the totalUsers value -->
                                     </td>
                                 </tr>
-                                </tbody>
-
+                                </tfoot>
                             </table>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
     </div>
 
-<!--    <script>-->
+
+    <!--    <script>-->
 <!--        // Get the userId from the query parameter-->
 <!--        const queryString = window.location.search;-->
 <!--        const urlParams = new URLSearchParams(queryString);-->
