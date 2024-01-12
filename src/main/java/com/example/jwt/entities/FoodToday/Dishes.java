@@ -1,11 +1,14 @@
 package com.example.jwt.entities.FoodToday;
 
+import com.example.jwt.entities.FoodToday.Recipe.Recipe;
 import com.example.jwt.entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.JoinColumnsOrFormulas;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+//@Table(name = "dishes", indexes = {@Index(name = "idx_recipe_id", columnList = "recipe_id")})
 public class Dishes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +37,23 @@ public class Dishes {
 
     @OneToMany(mappedBy = "dishes")
     private List<Ingredients> ingredientList;
+
+    // In Dishes entity
+
+    // In Dishes entity
+
+    @ManyToOne
+    @JoinColumn(name = "recipes_id")
+    private Recipe recipe;
+
+
+
+
+
+
+
+
+
 
 
 }

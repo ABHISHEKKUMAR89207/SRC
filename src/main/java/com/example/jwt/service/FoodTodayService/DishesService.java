@@ -87,4 +87,8 @@ public class DishesService {
         }
         return result;
     }
+
+    public Dishes saveDish(Dishes dish) {
+        return dishesRepository.save(dish);
+    }
 }

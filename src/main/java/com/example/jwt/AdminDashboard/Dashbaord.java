@@ -2,14 +2,13 @@ package com.example.jwt.AdminDashboard;
 
 
 
-import com.example.jwt.booksystem1.books.BookTable;
-import com.example.jwt.booksystem1.books.BookTableRepository;
-import com.example.jwt.booksystem1.books.Order;
-import com.example.jwt.booksystem1.books.OrderRepository;
+import com.example.jwt.booksystem1.books.*;
 import com.example.jwt.entities.ContactUs;
 import com.example.jwt.entities.Feedback;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
+import com.example.jwt.entities.dashboardEntity.Activities;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.FeedbackRepository;
 import com.example.jwt.repository.UserProfileRepository;
@@ -54,6 +53,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
@@ -140,12 +141,28 @@ public class Dashbaord {
     @Autowired
     private OrderRepository orderRepository;
 
+
     @GetMapping("/book.html")
     public String books(Model model) {
         List<Order> orders = orderRepository.findAll(); // Assuming you have an Order repository
         model.addAttribute("orders", orders); // Use "orders" instead of "order" to pass the list to the template
         return "book"; // Assuming "book" is the Thymeleaf template name
     }
+
+//
+
+    @GetMapping("/filteredBooks")
+    public String filteredBooks(
+            @RequestParam int year,
+            @RequestParam int month,
+            @RequestParam int date,
+            Model model) {
+
+        List<Order> filteredOrders = orderRepository.findOrdersByDate(year, month, date);
+        model.addAttribute("orders", filteredOrders);
+        return "book"; // Or the name of your Thymeleaf template
+    }
+
 
 
     // Endpoint to handle the form submission for updating order status
@@ -918,6 +935,8 @@ public class Dashbaord {
 
         // Add the map of users grouped by state to the model
         model.addAttribute("usersByState", usersByState);
+        model.addAttribute("userStatusByState", usersByState);
+
 
         // Your additional logic if needed
     }
@@ -1091,7 +1110,7 @@ public class Dashbaord {
 //        return "dashboard"; // Assuming "dashboard" is your Thymeleaf template name
 //    }
 
-//    public Map<String, Integer> getUserGenderCount() {
+    //    public Map<String, Integer> getUserGenderCount() {
 //        Integer maleCount = userRepository.countByUserProfileGender("Male");
 //        Integer femaleCount = userRepository.countByUserProfileGender("Female");
 //
@@ -1101,8 +1120,8 @@ public class Dashbaord {
 //
 //        return genderCount;
 //    }
-@PersistenceContext
-private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
     public Map<String, Long> getGenderCounts() {
 //        String queryString = "SELECT gender, COUNT(*) FROM UserProfile GROUP BY gender";
         String queryString = "SELECT up.gender, COUNT(*) FROM User u JOIN u.userProfile up GROUP BY up.gender";
@@ -1245,7 +1264,7 @@ private EntityManager entityManager;
     }
 
 
-//    public Map<String, Integer> calculateAgeCategoriesCount() {
+    //    public Map<String, Integer> calculateAgeCategoriesCount() {
 //        List<UserProfile> profiles = userProfileRepository.findAll(); // Retrieve all user profiles
 //        Map<String, Integer> ageCategoryCounts = new HashMap<>();
 //
@@ -1334,31 +1353,31 @@ private EntityManager entityManager;
 //
 //    return ResponseEntity.ok(userCountByMonth);
 //}
-@GetMapping("/user-registration-by-month")
-public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestParam(name = "year") int year) {
-    List<User> users = userRepository.findAll(); // Retrieve all users
+    @GetMapping("/user-registration-by-month")
+    public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestParam(name = "year") int year) {
+        List<User> users = userRepository.findAll(); // Retrieve all users
 
-    Map<String, Integer> userCountByMonth = new LinkedHashMap<>();
-    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+        Map<String, Integer> userCountByMonth = new LinkedHashMap<>();
+        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
 
-    // Initialize counts for all months to zero
-    for (int month = 1; month <= 12; month++) {
-        String monthName = YearMonth.of(year, month).format(monthFormatter);
-        userCountByMonth.put(monthName, 0);
-    }
-
-    for (User user : users) {
-        LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
-
-        // Filter users by the selected year
-        if (registrationDate.getYear() == year) {
-            String monthName = registrationDate.format(monthFormatter);
-            userCountByMonth.put(monthName, userCountByMonth.get(monthName) + 1);
+        // Initialize counts for all months to zero
+        for (int month = 1; month <= 12; month++) {
+            String monthName = YearMonth.of(year, month).format(monthFormatter);
+            userCountByMonth.put(monthName, 0);
         }
-    }
 
-    return ResponseEntity.ok(userCountByMonth);
-}
+        for (User user : users) {
+            LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
+
+            // Filter users by the selected year
+            if (registrationDate.getYear() == year) {
+                String monthName = registrationDate.format(monthFormatter);
+                userCountByMonth.put(monthName, userCountByMonth.get(monthName) + 1);
+            }
+        }
+
+        return ResponseEntity.ok(userCountByMonth);
+    }
     @GetMapping("/userStatus.html")
     public String userStatus(Model model) {
         List<Feedback> feedbackList = getAllFeedbackData();
@@ -1375,19 +1394,176 @@ public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestPa
 //            return "userStatus";
 //        }
 
+//    private void setupModel(Model model) {
+//        // Retrieve all users from the repository
+//        List<User> userList = userRepository.findAll();
+//
+//        // Calculate the total number of users
+//        int totalUsers = userList.size();
+//
+//        // Create a map to store users grouped by state
+//        Map<String, List<User>> usersByState = new HashMap<>();
+//
+//        // Iterate through the user list and add the address for each user
+//        for (User user : userList) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//
+//            // Skip users with missing latitude or longitude
+//            if (latitude == null || longitude == null) {
+//                continue;
+//            }
+//
+//            String state = getStateFromCoordinates(latitude, longitude);
+//
+//            // Add the user to the list corresponding to their state
+//            usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(user);
+//
+//            // Set the address for each user (if needed)
+//            user.setAddress(state);
+//        }
+//
+//        // Add the user list and total users to the model
+//        model.addAttribute("user", userList);
+//        model.addAttribute("totalUsers", totalUsers);
+//
+//        // Add the map of users grouped by state to the model
+//        model.addAttribute("usersByState", usersByState);
+//        model.addAttribute("userStatusByState", usersByState);
+//
+//        // Your additional logic if needed
+//    }
+
+    //    @GetMapping("/dashboard.html")
+//    public String showDashboard(Model model) {
+//        setupModel(model);
+//        return "dashboard";
+//    }
     @GetMapping("/userStatus/{userId}")
     public String userStatus(@PathVariable Long userId, Model model) {
-        // Logic to fetch user status details based on userId
-        // Assuming you have a service method to retrieve user status details
-//        User userStatus = userService.getUser(userId);
-
         User userStatus = userRepository.findByUserId(userId);
+
+        // Add the state information to the userStatus object
+        Double latitude = userStatus.getLatitude();
+        Double longitude = userStatus.getLongitude();
+
+        if (latitude != null && longitude != null) {
+            String state = getStateFromCoordinates(latitude, longitude);
+            System.out.println("State =====" + state);
+            userStatus.setAddress(state);
+        }
+
+//    // Calculate age from date of birth
+//    LocalDate dateOfBirth = userStatus.getUserProfile().getDateOfBirth();
+//    if (dateOfBirth != null) {
+//        LocalDate now = LocalDate.now();
+//        int age = Period.between(dateOfBirth, now).getYears();
+//        model.addAttribute("age", age);
+//    }
+        // Calculate age from date of birth
+        UserProfile userProfile = userStatus.getUserProfile();
+        if (userProfile != null) {
+            LocalDate dateOfBirth = userProfile.getDateOfBirth();
+            if (dateOfBirth != null) {
+                LocalDate now = LocalDate.now();
+                int age = Period.between(dateOfBirth, now).getYears();
+                model.addAttribute("age", age);
+            }
+        }
+
+
+        // Get activities for the last week
+        List<Activities> activitiesForLastWeek = getActivitiesForLastWeek(userStatus);
+
+        // Calculate average steps for the last week
+        double averageStepsLastWeek = activitiesForLastWeek.stream()
+                .mapToInt(Activities::getSteps)
+                .average()
+                .orElse(0.0); // Set default value if no activities found
+
+        // Add average steps to the model
+        model.addAttribute("averageStepsLastWeek", averageStepsLastWeek);
+
+
+        // Get sleep durations for the last week
+        List<SleepDuration> sleepDurationsForLastWeek = getSleepDurationsForLastWeek(userStatus);
+
+        // Calculate total sleep duration and number of days within the last week
+        double totalSleepDuration = sleepDurationsForLastWeek.stream()
+                .mapToDouble(SleepDuration::getManualDuration)
+                .sum();
+
+        long numOfDays = sleepDurationsForLastWeek.stream()
+                .map(SleepDuration::getDateOfSleep)
+                .distinct()
+                .count();
+
+        // Calculate average hours of sleep per day
+        double averageHoursOfSleepPerDay = numOfDays > 0 ?
+                totalSleepDuration / numOfDays : 0;
+
+        // Add average hours of sleep to the model
+        model.addAttribute("averageHoursOfSleepPerDay", averageHoursOfSleepPerDay);
+
+//
 
         // Add the userStatus data to the model
         model.addAttribute("userStatus", userStatus);
-
         return "userStatus"; // Return the Thymeleaf template to display user status
     }
+
+
+    public List<Activities> getActivitiesForLastWeek(User user) {
+        // Calculate the date one week ago from now
+        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+
+        // Filter activities for the last week
+        return user.getActivities().stream()
+                .filter(activity -> activity.getActivityDate().isAfter(oneWeekAgo))
+                .collect(Collectors.toList());
+    }
+    public List<SleepDuration> getSleepDurationsForLastWeek(User user) {
+        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+
+        return user.getSleepDurations().stream()
+                .filter(sleep -> sleep.getDateOfSleep().isAfter(oneWeekAgo))
+                .collect(Collectors.toList());
+    }
+
+//@GetMapping("/userDetails/{userId}")
+//public String getUserDetails(@PathVariable Long userId, Model model) {
+//    User user = userRepository.findById(userId).orElse(null);
+//    if (user != null) {
+//        model.addAttribute("user", user);
+//    }
+//    return "userStatus"; // Assuming 'userStatus' is your Thymeleaf template name
+//}
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        @GetMapping("/userDetails/{userId}")
+//        public String getUserDetails(@PathVariable Long userId, Model model) {
+//            User user = userRepository.findById(userId).orElse(null);
+//            if (user != null) {
+//                model.addAttribute("user", user);
+//            }
+//            return "userStatus"; // Assuming 'userStatus' is your Thymeleaf template name
+//        }
 
 
 }

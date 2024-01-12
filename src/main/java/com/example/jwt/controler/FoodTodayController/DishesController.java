@@ -2,6 +2,12 @@ package com.example.jwt.controler.FoodTodayController;
 
 
 import com.example.jwt.dtos.FoodTodayDtos.DishDTO;
+import com.example.jwt.entities.FoodToday.Dishes;
+import com.example.jwt.entities.FoodToday.Recipe.Recipe;
+import com.example.jwt.entities.FoodToday.Recipe.RecipeDTO;
+//import com.example.jwt.entities.FoodToday.Recipe.RecipeService;
+import com.example.jwt.entities.FoodToday.Recipe.RecipeRepository;
+import com.example.jwt.entities.FoodToday.Recipe.RecipeService;
 import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.DishesService;
@@ -26,6 +32,12 @@ public class DishesController {
     private UserService userService;
     @Autowired
     private JwtHelper jwtHelper;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
+
+    @Autowired
+    private RecipeService recipeService;
 
     @PostMapping("/add-dish")
     public void saveDishForUser( @RequestHeader("Auth") String tokenHeader, @RequestBody DishDTO dishDTO) {
@@ -130,6 +142,61 @@ public class DishesController {
         }
     }
 
+
+    @PostMapping("/add-recipe")
+    public ResponseEntity<RecipeDTO> saveCalculation(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam("recipeName") String recipeName,
+            @RequestParam("recipeType") String recipeType,
+            @RequestParam("recipeQuantity") Double recipeQuantity
+    ) {
+        // Your existing code to extract user information from the token
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        // Fetch the recipe data based on the provided recipeName
+        List<Recipe> recipeDataList = recipeService.getRecipeByName(recipeName);
+
+        if (user != null && !recipeDataList.isEmpty()) {
+            Recipe recipeData = recipeDataList.get(0);
+
+            // Your existing calculation logic
+            Double totalProteinContent = recipeData.getProtein() / 100 * recipeQuantity;
+            Double totalEnergyContent = recipeData.getEnergy_joules() / 100 * recipeQuantity;
+            Double totalFatContent = recipeData.getTotal_fat() / 100 * recipeQuantity;
+            Double totalCarbsContent = recipeData.getCarbohydrate() / 100 * recipeQuantity;
+            Double totalFiberContent = recipeData.getTotal_dietary_fibre() / 100 * recipeQuantity;
+
+            // Construct the CalculatedRecipe object using the modified DTO
+            RecipeDTO calculatedValues = new RecipeDTO();
+            calculatedValues.setRecipesId(recipeData.getRecipesId());
+            calculatedValues.setRecipeName(recipeData.getRecipe_name());
+            calculatedValues.setEnergyJoules(totalEnergyContent);
+            calculatedValues.setCarbohydrate(totalCarbsContent);
+            calculatedValues.setTotalDietaryFibre(totalFiberContent);
+            calculatedValues.setTotalFat(totalFatContent);
+            calculatedValues.setProtein(totalProteinContent);
+
+            // Save the calculated values to the Dishes table
+            Dishes dishes = new Dishes();
+            dishes.setDishName(recipeData.getRecipe_name());
+            dishes.setDishQuantity(recipeQuantity);
+            dishes.setMealName(recipeType);
+            dishes.setDate(LocalDate.now());
+            dishes.setFavourite(false);
+            dishes.setMealName(recipeType);
+            dishes.setDishQuantity(recipeQuantity);
+            dishes.setUser(user);
+            dishes.setRecipe(recipeData); // Associate with Recipe
+
+            dishesService.saveDish(dishes);
+
+            return ResponseEntity.ok(calculatedValues);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 }

@@ -1,17 +1,4 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.7
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -710,32 +697,33 @@
 
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col-12">
-                <div class="card mb-4">
-                    <div class="card-header pb-0">
-                        <h6 colspan="5" style="font-weight: bold;">Contact Us</h6>
-                        <!--              <div class="input-group mt-3">-->
-                        <!--                  <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>-->
-                        <!--                  <input type="text" class="form-control" id="userSearch" placeholder="Type here..." oninput="searchUsers()">-->
-                        <!--              </div>-->
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header bg-dark text-white py-3">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h3 class="mb-0" style="color: black;">Contact Us</h3>
+                            </div>
+                            <div class="col-4 text-end">
+                                <button class="btn btn-outline-light btn-sm">Add Contact</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body px-0 pt-0 pb-2">
-                        <!--            <div class="table-responsive p-0">-->
-                        <div class="table-responsive p-0 table-container">
-
+                    <div class="card-body">
+                        <div class="table-responsive">
                             <table class="table align-items-center mb-0">
-                                <thead class="fixed-header">
+                                <thead class="thead-light">
                                 <tr>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >ID</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Name</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Email</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Mobile No</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >LocalDate And Time</th>
-                                    <th style="position: sticky; top: 0; background-color: #000000; color: #ffffff; z-index: 1; font-weight: bold; font-size: 16px;" >Queries</th>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile No</th>
+                                    <th>Date & Time</th>
+                                    <th>Queries</th>
                                 </tr>
                                 </thead>
-                                <!--                <tbody id="userTableBody">-->
-                                <!-- Use Thymeleaf to iterate over the user list -->
+                                <tbody>
+                                <!-- Thymeleaf to iterate over the contact list -->
                                 <tr th:each="contactUs : ${contactUs}">
                                     <td th:text="${contactUs.Id}"></td>
                                     <td th:text="${contactUs.Name}"></td>
@@ -744,16 +732,8 @@
                                     <td th:text="${contactUs.localDateTime}"></td>
                                     <td th:text="${contactUs.queries}"></td>
                                 </tr>
-                                <!-- Add the total users row at the end -->
-
+                                <!-- Total users row can be added here -->
                                 </tbody>
-                                <!--                                <tbody style="position: sticky; bottom: 0;  font-weight: bold; font-size: 16px;">-->
-                                <!--                                <tr>-->
-                                <!--                                    <td colspan="5" style="text-align: right;">Total Users:</td>-->
-                                <!--                                    <td th:text="${totalUsers}"></td>-->
-                                <!--                                </tr>-->
-                                <!--                                </tbody>-->
-
                             </table>
                         </div>
                     </div>
@@ -761,6 +741,7 @@
             </div>
         </div>
     </div>
+
     <!--   -->
     <!--  <script th:inline="javascript">-->
     <!--    $(document).ready(function () {-->

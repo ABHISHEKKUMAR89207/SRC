@@ -23,12 +23,12 @@ import java.util.List;
 @RequestMapping("/api/payment")
 public class checkPaymentStatus {
 
-@Autowired
-private JwtHelper jwtHelper;
-@Autowired
-private  OrderRepository orderRepository;
-@Autowired
-private UserService userService;
+    @Autowired
+    private JwtHelper jwtHelper;
+    @Autowired
+    private  OrderRepository orderRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private OrderRequestCartRepository orderRequestCartRepository;
     @Autowired
@@ -73,11 +73,11 @@ private UserService userService;
                         .body("order id " + orderRequestCart + " is not exist");
 
             }
-           String BookList= orderRequestCart.getOrdesList();
-           String[] ListOfBooks = BookList.split("/");
-           List<BookTable> bookTableList=new ArrayList<>();
-           List<Integer> quantities=new ArrayList<>();
-           for (String book : ListOfBooks) {
+            String BookList= orderRequestCart.getOrdesList();
+            String[] ListOfBooks = BookList.split("/");
+            List<BookTable> bookTableList=new ArrayList<>();
+            List<Integer> quantities=new ArrayList<>();
+            for (String book : ListOfBooks) {
                 String[] parts = book.split("x");
                 if (parts.length == 2) {
                     Long bookId = Long.parseLong(parts[0]);
@@ -110,7 +110,7 @@ private UserService userService;
 
                 Integer amountInteger = payment.get("amount");
                 Date createdAt = payment.get("created_at");
-                String createdAtString = createdAt.toString();
+//                String createdAtString = createdAt.toString();
                 Double amountDouble = amountInteger.doubleValue();
                 int i=0;
                 System.out.println("testlkmbglmgflngmlk");
@@ -122,7 +122,7 @@ private UserService userService;
                             temp,
                             quantities.get(i),  // bookIdList - you can set to null or provide a default value
                             amountDouble,   // amount - you can set to 0 or provide a default value
-                            createdAtString,    // createTimestamp - you can set to 0 or provide a default value
+                            createdAt,    // createTimestamp - you can set to 0 or provide a default value
                             request.getPaymentId(),
                             addressForDelivery,  // deliveryAddress - you can set to null or provide a default value
                             "soon",   // deliveryDate - you can set to null or provide a default value

@@ -60,4 +60,7 @@ public class mealResponse {
         this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
         this.mealEnergy = calories;
     }
+
+
+
 }

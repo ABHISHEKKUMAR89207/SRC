@@ -1,6 +1,8 @@
 package com.example.jwt.controler.FoodTodayController;
 
 import com.example.jwt.entities.FoodToday.NinData;
+import com.example.jwt.entities.FoodToday.Recipe.Recipe;
+import com.example.jwt.entities.FoodToday.Recipe.RecipeRepository;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.security.JwtHelper;
@@ -45,6 +47,28 @@ public class NinDataController {
         if (user != null && user.getUserId().equals(user.getUserId())) {
             List<NinData> foodItems = ninDataRepository.findAll();
             List<String> foodNames = foodItems.stream().map(NinData::getFood).collect(Collectors.toList());
+            return foodNames;
+        } else {
+            throw new AccessDeniedException("Access denied");
+        }
+    }
+
+
+    @Autowired
+    private RecipeRepository recipeRepository;
+    @GetMapping("/all-recipes-list")
+    public List<String> getAllRecipesNames(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        if (user != null && user.getUserId().equals(user.getUserId())) {
+            List<Recipe> foodItems = recipeRepository.findAll();
+            List<String> foodNames = foodItems.stream().map(Recipe::getRecipe_name).collect(Collectors.toList());
             return foodNames;
         } else {
             throw new AccessDeniedException("Access denied");

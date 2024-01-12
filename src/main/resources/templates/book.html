@@ -1,17 +1,4 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.7
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
@@ -801,6 +788,23 @@
             </div>
 
             <div class="card-body pt-4 p-3">
+
+              <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+              <form th:action="@{/dashboard/filteredBooks}" method="get">
+                <select name="year" id="yearSelect">
+                  <!-- Options for years will be populated dynamically -->
+                </select>
+                <select name="month" id="monthSelect">
+                  <!-- Options for months will be populated dynamically -->
+                </select>
+                <select name="date" id="dateSelect">
+                  <!-- Options for dates will be populated dynamically -->
+                </select>
+                <button type="submit">Filter</button>
+              </form>
+
+
               <!--            <div class="card-body pt-4 p-3" style="width: 100%;"> &lt;!&ndash; Adjust width here &ndash;&gt;-->
 
               <ul class="list-group">
@@ -839,8 +843,8 @@
                       <h6 class="mb-3 text-sm" th:text="${order.user.userName}"></h6>
                       <!--                      <h4 class="mb-3 text-sm" th:text="${order.user.email}"></h4>-->
                       <span class="mb-2 text-xs" th:text="'User Email: ' + ${order.user.email}"></span>
-                      <span class="mb-2 text-xs" th:text="'Order ID: ' + ${order.orderId}"></span>
-                      <span class="mb-2 text-xs" th:text="'Book ID: ' + ${order.book.id}"></span>
+                      <!--                      <span class="mb-2 text-xs" th:text="'Order ID: ' + ${order.orderId}"></span>-->
+                      <!--                      <span class="mb-2 text-xs" th:text="'Book ID: ' + ${order.book.id}"></span>-->
                       <span class="mb-2 text-xs" th:text="'Book Name: ' + ${order.book.title}"></span>
                       <span class="mb-2 text-xs" th:text="'Quantity: ' + ${order.quantity}"></span>
                       <span class="mb-2 text-xs" th:text="'Amount: ' + ${order.amount}"></span>
@@ -850,7 +854,7 @@
                       <span class="mb-2 text-xs" th:text="'Contact: ' + ${order.contact}"></span>
                       <span class="mb-2 text-xs" th:text="'Delivery Status: ' + ${order.deliveryStatus}"></span>
                       <!-- Add an option to update delivery status -->
-                      <form th:action="@{/updateOrderStatus}" method="post">
+                      <form th:action="@{/dashboard/updateOrderStatus}" method="post">
                         <input type="hidden" name="orderId" th:value="${order.orderId}" />
                         <select name="newStatus">
                           <option value="Shipped">Shipped</option>
@@ -899,6 +903,68 @@
             </div>
           </div>
         </div>
+
+        <script>
+          // Get current year, month, and day
+          const currentDate = new Date();
+          let currentYear = currentDate.getFullYear();
+          let currentMonth = currentDate.getMonth() + 1; // Month is zero-based, so add 1
+          let currentDay = currentDate.getDate();
+
+          // Populate years
+          const yearSelect = $('#yearSelect');
+          for (let year = currentYear; year > currentYear - 5; year--) {
+            yearSelect.append($('<option>', {
+              value: year,
+              text: year,
+              selected: year === currentYear // Set default selected year
+            }));
+          }
+
+          // Populate months
+          const monthSelect = $('#monthSelect');
+          const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+          ];
+          for (let month = 1; month <= 12; month++) {
+            monthSelect.append($('<option>', {
+              value: month.toString().padStart(2, '0'), // Ensure leading zero for months < 10
+              text: monthNames[month - 1],
+              selected: month === currentMonth // Set default selected month
+            }));
+          }
+
+          // Populate days based on the selected month and year
+          function updateDays() {
+            const selectedYear = $('#yearSelect').val();
+            const selectedMonth = $('#monthSelect').val();
+            const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+            const dateSelect = $('#dateSelect');
+            dateSelect.empty();
+            for (let day = 1; day <= daysInMonth; day++) {
+              dateSelect.append($('<option>', {
+                value: day.toString().padStart(2, '0'), // Ensure leading zero for days < 10
+                text: day,
+                selected: day === currentDay // Set default selected day
+              }));
+            }
+          }
+
+          // Call the function initially to populate days based on the current month and year
+          updateDays();
+
+          // Update days whenever the year or month changes
+          $('#yearSelect, #monthSelect').change(updateDays);
+
+          // Remember user selections
+          $('#yearSelect, #monthSelect, #dateSelect').change(function() {
+            currentYear = $('#yearSelect').val();
+            currentMonth = $('#monthSelect').val();
+            currentDay = $('#dateSelect').val();
+          });
+        </script>
 
 
         <!--        <script>-->

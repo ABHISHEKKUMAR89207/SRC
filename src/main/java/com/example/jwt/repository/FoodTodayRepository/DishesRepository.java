@@ -22,6 +22,8 @@ public interface DishesRepository extends JpaRepository<Dishes, Long> {
     List<Dishes> findDishNameByUserUserIdAndMealName(Long userId, String mealName);
 
     List<Dishes> findDishIdByUserUserIdAndMealNameAndDishName(Long userId, String mealName, String dishName);
+    List<Dishes> findDishIdByUserUserIdAndMealNameAndDishNameAndDate(
+            Long userId, String mealName, String dishName, LocalDate date);
 
     List<Dishes> findDishesByUser_UserIdAndMealNameAndDishNameAndDate(Long userId, String mealName, String dishName, LocalDate date);
 

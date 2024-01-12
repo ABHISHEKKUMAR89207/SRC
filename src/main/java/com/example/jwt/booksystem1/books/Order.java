@@ -5,6 +5,7 @@ import com.example.jwt.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 @Getter
 @Setter
@@ -26,7 +27,7 @@ public class Order {
     private BookTable book;
     private int quantity;
     private double amount;
-    private String createTimestamp;
+    private Date createTimestamp;
     private String paymentId;
     private String deliveryAddress;
     private String deliveryDate;

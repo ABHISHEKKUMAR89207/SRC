@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
+  <title>
+    Nutrify India Now 2.O Dashboard
+  </title>
   <style>
     /* Basic styling for the table */
     body {
@@ -13,23 +15,52 @@
       padding: 0;
     }
 
+    /*.container {*/
+    /*  width: 30%;*/
+    /*  margin: auto;*/
+    /*  padding: 20px;*/
+    /*  background-color: #fff;*/
+    /*  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+    /*  border-radius: 5px;*/
+    /*  margin-top: 50px;*/
+    /*  overflow-x: auto; !* Enable horizontal scrolling *!*/
+    /*}*/
     .container {
-      width: 100%;
-      margin: auto;
+      width: 30%;
+      margin: 50px 0 0 50px; /* Adjust the margin as needed */
       padding: 20px;
       background-color: #fff;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       border-radius: 5px;
-      margin-top: 50px;
-      overflow-x: auto; /* Enable horizontal scrolling */
+      overflow-y: auto; /* Enable vertical scrolling */
+      max-height: 508px; /* Set a max height for the container */
+
     }
 
-    table {
-      width: auto; /* Adjust table width */
-      border-collapse: collapse;
-      white-space: nowrap; /* Prevent line breaks in table cells */
+    .fixed-heading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* Other styles for the fixed heading */
     }
+    /*table {*/
+    /*  width: auto; !* Adjust table width *!*/
+    /*  border-collapse: collapse;*/
+    /*  white-space: nowrap; !* Prevent line breaks in table cells *!*/
+    /*}*/
 
+    /* Additional styles for the vertical layout */
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .user-details p {
+      margin: 0;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
     th,
     td {
       border: 1px solid #dddddd;
@@ -43,99 +74,214 @@
   </style>
 </head>
 <body>
+
 <div class="container">
-  <h2>User Details</h2>
-  <table>
-    <thead>
-    <tr>
-      <th>User Name</th>
-      <th>Age</th>
-      <th>Gender</th>
-      <th>State</th>
-      <th>Occupation</th>
-      <th>Contact Number</th>
-      <th>Email ID</th>
-      <th>BMI</th>
-      <th>Veg/Non-Veg</th>
-      <th>Physical Activity Level</th>
-      <th>Avg. Steps per Day</th>
-      <th>Avg. Hours of Sleep per Day</th>
-      <th>Avg. Water Intake per Day</th>
-      <th>Avg. Calories Burned per Day</th>
-      <th>No. of Meals per Day</th>
-      <th>Avg. Time Spent on Physical Activity per Day</th>
-      <th>Most Frequent Activity</th>
-      <th>Most Frequently Consumed Meal</th>
-      <th>Most Skipped Meal</th>
-      <th>Most Consumed Dish</th>
-      <th>Most Consumed Breakfast</th>
-      <th>Most Consumed Lunch</th>
-      <th>Most Consumed Dinner</th>
-      <th>Most Consumed Snacks</th>
-      <th>Most Consumed Drink</th>
-      <th>Most Consumed Nutrient</th>
-      <th>Least Consumed Nutrient</th>
-      <th>Frequency of Consuming Packaged/Fast Food per Week</th>
-      <th>Most Consumed Packaged/Fast Food</th>
-      <th>Most Consumed Protein-rich Diet</th>
-      <th>Most Consumed Iron-rich Diet</th>
-      <th>Most Consumed Calcium-rich Diet</th>
-      <th>Most Consumed CHO-rich Diet</th>
-      <th>Most Consumed Calorie-rich Diet</th>
-      <th>Foods Causing Allergy</th>
-      <th>Any Specific Medical Condition</th>
-      <th>Wearable App Used</th>
-      <th>No. of Days Monitored</th>
-      <!-- Add more columns as needed -->
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Sample user data - replace this with actual user details fetched from the backend -->
-    <tr>
-      <td>John Doe</td>
-      <td>30</td>
-      <td>Male</td>
-      <td>New York</td>
-      <td>Engineer</td>
-      <td>123-456-7890</td>
-      <td>john@example.com</td>
-      <td>25</td>
-      <td>Vegetarian</td>
-      <td>Moderately Active</td>
-      <td>8000</td>
-      <td>7</td>
-      <td>2L</td>
-      <td>2500</td>
-      <td>3</td>
-      <td>1 hour</td>
-      <td>Running</td>
-      <td>Dinner</td>
-      <td>Breakfast</td>
-      <td>Pasta</td>
-      <td>Eggs</td>
-      <td>Sandwich</td>
-      <td>Pizza</td>
-      <td>Nuts</td>
-      <td>Water</td>
-      <td>Protein</td>
-      <td>Fats</td>
-      <td>3</td>
-      <td>Burger</td>
-      <td>Chicken</td>
-      <td>Spinach</td>
-      <td>Milk</td>
-      <td>Rice</td>
-      <td>Shrimp</td>
-      <td>Peanuts</td>
-      <td>Asthma</td>
-      <td>Fitbit</td>
-      <td>60</td>
-      <!-- Replace with dynamic user data -->
-    </tr>
-    <!-- Repeat this structure for each user -->
-    </tbody>
+  <a href="/dashboard/user.html" class="btn btn-primary" style="position: absolute; top: 10px; left: 10px;">Back</a>
+  <div style="text-align: center;">
+    <h2>User Details</h2>
+  </div>
+  <!--  <table>-->
+  <!--    <thead>-->
+  <!--    <tr>-->
+  <!--      <th>User Name</th>-->
+  <!--      <th>Age</th>-->
+  <!--      <th>Gender</th>-->
+  <!--      <th>State</th>-->
+  <!--      <th>Occupation</th>-->
+  <!--      <th>Contact Number</th>-->
+  <!--      <th>Email ID</th>-->
+  <!--      <th>BMI</th>-->
+  <!--      <th>Veg/Non-Veg</th>-->
+  <!--      <th>Physical Activity Level</th>-->
+  <!--      <th>Avg. Steps per Day</th>-->
+  <!--      <th>Avg. Hours of Sleep per Day</th>-->
+  <!--      <th>Avg. Water Intake per Day</th>-->
+  <!--      <th>Avg. Calories Burned per Day</th>-->
+  <!--      <th>No. of Meals per Day</th>-->
+  <!--      <th>Avg. Time Spent on Physical Activity per Day</th>-->
+  <!--      <th>Most Frequent Activity</th>-->
+  <!--      <th>Most Frequently Consumed Meal</th>-->
+  <!--      <th>Most Skipped Meal</th>-->
+  <!--      <th>Most Consumed Dish</th>-->
+  <!--      <th>Most Consumed Breakfast</th>-->
+  <!--      <th>Most Consumed Lunch</th>-->
+  <!--      <th>Most Consumed Dinner</th>-->
+  <!--      <th>Most Consumed Snacks</th>-->
+  <!--      <th>Most Consumed Drink</th>-->
+  <!--      <th>Most Consumed Nutrient</th>-->
+  <!--      <th>Least Consumed Nutrient</th>-->
+  <!--      <th>Frequency of Consuming Packaged/Fast Food per Week</th>-->
+  <!--      <th>Most Consumed Packaged/Fast Food</th>-->
+  <!--      <th>Most Consumed Protein-rich Diet</th>-->
+  <!--      <th>Most Consumed Iron-rich Diet</th>-->
+  <!--      <th>Most Consumed Calcium-rich Diet</th>-->
+  <!--      <th>Most Consumed CHO-rich Diet</th>-->
+  <!--      <th>Most Consumed Calorie-rich Diet</th>-->
+  <!--      <th>Foods Causing Allergy</th>-->
+  <!--      <th>Any Specific Medical Condition</th>-->
+  <!--      <th>Wearable App Used</th>-->
+  <!--      <th>No. of Days Monitored</th>-->
+  <!--      &lt;!&ndash; Add more columns as needed &ndash;&gt;-->
+  <!--    </tr>-->
+  <!--    </thead>-->
+  <!--    <tbody>-->
+  <!--    <tr>-->
+  <!--      <td>John Doe</td>-->
+  <!--      <td>30</td>-->
+  <!--      <td>Male</td>-->
+  <!--      <td>New York</td>-->
+  <!--      <td>Engineer</td>-->
+  <!--      <td>123-456-7890</td>-->
+  <!--      <td>john@example.com</td>-->
+  <!--      <td>25</td>-->
+  <!--      <td>Vegetarian</td>-->
+  <!--      <td>Moderately Active</td>-->
+  <!--      <td>8000</td>-->
+  <!--      <td>7</td>-->
+  <!--      <td>2L</td>-->
+  <!--      <td>2500</td>-->
+  <!--      <td>3</td>-->
+  <!--      <td>1 hour</td>-->
+  <!--      <td>Running</td>-->
+  <!--      <td>Dinner</td>-->
+  <!--      <td>Breakfast</td>-->
+  <!--      <td>Pasta</td>-->
+  <!--      <td>Eggs</td>-->
+  <!--      <td>Sandwich</td>-->
+  <!--      <td>Pizza</td>-->
+  <!--      <td>Nuts</td>-->
+  <!--      <td>Water</td>-->
+  <!--      <td>Protein</td>-->
+  <!--      <td>Fats</td>-->
+  <!--      <td>3</td>-->
+  <!--      <td>Burger</td>-->
+  <!--      <td>Chicken</td>-->
+  <!--      <td>Spinach</td>-->
+  <!--      <td>Milk</td>-->
+  <!--      <td>Rice</td>-->
+  <!--      <td>Shrimp</td>-->
+  <!--      <td>Peanuts</td>-->
+  <!--      <td>Asthma</td>-->
+  <!--      <td>Fitbit</td>-->
+  <!--      <td>60</td>-->
+  <div class="user-details" th:if="${userStatus != null}">
+    <p><strong>User Name:</strong> <span id="userName" th:text="${userStatus.userName}"></span></p>
+    <p><strong>Email ID:</strong> <span id="email" th:text="${userStatus.email}"></span></p>
+    <p><strong>Date of Birth:</strong> <span id="dateOfBirth" th:text="${userStatus.userProfile?.dateOfBirth} ?: 'N/A'"></span></p>
+    <p><strong>Gender:</strong> <span id="gender" th:text="${userStatus.userProfile?.gender} ?: 'N/A'"></span></p>
+    <p><strong>Age:</strong> <span id="age" th:text="${age}"></span></p>
+
+    <!--    <p><strong>State:</strong> New York</p> <p><strong>State:</strong> New York</p>-->
+
+    <!-- Update this section in your userStatus.html file -->
+    <p><strong>State:</strong> <span id="state" th:text="${userStatus.address}"></span></p>
+
+
+    <p><strong>Occupation:</strong> Need Discussion</p>
+    <p><strong>Contact Number:</strong> <span id="contactNo" th:text="${userStatus.mobileNo}"></span></p>
+    <p><strong>BMI:</strong> <span id="bmi" th:text="${userStatus.userProfile?.bmi} ?: 'N/A'"></span></p>
+
+    <!--    <p><strong>Contact Number:</strong> 123-456-7890</p>-->
+    <!--    <p><strong>BMI:</strong> 25</p>-->
+    <p><strong>Veg/Non-Veg:</strong> Need Discussion</p>
+    <p><strong>Physical Activity Level:</strong> In Progress</p>
+
+    <!--    <p><strong>Avg. Steps per Day:</strong> 8000</p>-->
+    <p><strong>Avg. Steps per Day:</strong> <span id="averageStepsLastWeek" th:text="${averageStepsLastWeek}"></span></p>
+
+    <p><strong>Avg. Hrs of Sleep per Day:</strong> <span id="averageHoursOfSleepPerDay" th:text="${averageHoursOfSleepPerDay}"></span></p>
+
+
+    <!--    <p><strong>Avg. Hours of Sleep per Day:</strong> 7</p>-->
+    <p><strong>Avg. Water Intake per Day:</strong> 2L</p>
+
+    <p><strong>Avg. Calories Burned per Day:</strong> 2500</p>
+    <p><strong>No. of Meals per Day:</strong> 3</p>
+    <p><strong>Avg. Time Spent on Physical Activity per Day:</strong> 1 hour</p>
+    <p><strong>Most Frequent Activity:</strong> Running</p>
+    <p><strong>Most Frequently Consumed Meal:</strong> Dinner</p>
+    <p><strong>Most Skipped Meal:</strong> Breakfast</p>
+    <p><strong>Most Consumed Dish:</strong> Pasta</p>
+    <p><strong>Most Consumed Breakfast:</strong> Eggs</p>
+    <p><strong>Most Consumed Lunch:</strong> Sandwich</p>
+    <p><strong>Most Consumed Dinner:</strong> Pizza</p>
+    <p><strong>Most Consumed Snacks:</strong> Nuts</p>
+    <p><strong>Most Consumed Drink:</strong> Water</p>
+    <p><strong>Most Consumed Nutrient:</strong> Protein</p>
+    <p><strong>Least Consumed Nutrient:</strong> Fats</p>
+    <p><strong>Frequency of Consuming Packaged/Fast Food per Week:</strong> 3</p>
+    <p><strong>Most Consumed Packaged/Fast Food:</strong> Burger</p>
+    <p><strong>Most Consumed Protein-rich Diet:</strong> Chicken</p>
+    <p><strong>Most Consumed Iron-rich Diet:</strong> Spinach</p>
+    <p><strong>Most Consumed Calcium-rich Diet:</strong> Milk</p>
+    <p><strong>Most Consumed CHO-rich Diet:</strong> Rice</p>
+    <p><strong>Most Consumed Calorie-rich Diet:</strong> Shrimp</p>
+    <p><strong>Foods Causing Allergy:</strong> Peanuts</p>
+    <p><strong>Any Specific Medical Condition:</strong> Asthma</p>
+    <p><strong>Wearable App Used:</strong> Fitbit</p>
+    <p><strong>No. of Days Monitored:</strong> 60</p>
+    <!-- Add more user details as needed -->
+  </div>
+  <!-- Replace with dynamic user data -->
+  <!-- Replace with dynamic user data for other attributes -->
+  </tr>
+  <!-- Repeat this structure for each user -->
+  </tbody>
   </table>
 </div>
+<!-- Include necessary scripts here -->
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- ... (existing HTML) ... -->
+
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get('userId');
+
+  function fetchUserDetails(userId) {
+    axios.get('/dashboard/userStatus/' + userId)
+            .then(function (response) {
+              const userDetails = response.data;
+              updateHTML(userDetails); // Call function to update HTML elements
+            })
+            .catch(function (error) {
+              console.error('Error fetching user details:', error);
+            });
+  }
+
+  function updateHTML(userDetails) {
+    document.getElementById('userName').innerText = userDetails.username;
+    document.getElementById('email').innerText = userDetails.email;
+    document.getElementById('gender').innerText = userDetails.userProfile.gender;
+    document.getElementById('state').innerText = userDetails.address;
+    document.getElementById('dateOfBirth').innerText = userDetails.userProfile.dateOfBirth;
+
+    // // Calculate age based on date of birth
+    // const dob = new Date(userDetails.userProfile.dateOfBirth);
+    // const today = new Date();
+    //
+    // console.log('Date of Birth:', dob);
+    // console.log('Today:', today);
+    //
+    // let age = today.getFullYear() - dob.getFullYear();
+    // const monthDiff = today.getMonth() - dob.getMonth();
+    //
+    // if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    //   age--;
+    // }
+    //
+    // document.getElementById('age').innerText = age; // Update age in the HTML
+    document.getElementById('contactNo').innerText = userDetails.mobileNo;
+    document.getElementById('bmi').innerText = userDetails.userProfile.bmi;
+
+    // ... other updates as needed ...
+  }
+
+  fetchUserDetails(userId);
+</script>
+
+<!-- ... (remaining HTML) ... -->
+
 
 </html>
