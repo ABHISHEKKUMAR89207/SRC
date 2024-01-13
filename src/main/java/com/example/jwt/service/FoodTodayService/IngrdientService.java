@@ -257,6 +257,7 @@ public class IngrdientService {
         for (Dishes dish : dishesList) {
             List<Ingredients> ingredients = dish.getIngredientList();
             List<IngredientDTO> ingredientsList = new ArrayList<>();
+            Map<String, Double> mapIngredient = new HashMap<>();
 
             Double totalEnergy = 0.0;
             Double totalProteins = 0.0;
@@ -289,6 +290,14 @@ public class IngrdientService {
             fats = fats + totalFats;
             carbs = carbs + totalCarbs;
             fibers = fibers + totalFibers;
+
+            mapIngredient.put("Energy", energy);
+            mapIngredient.put("Protiens", proteins);
+            mapIngredient.put("carbs", carbs);
+            mapIngredient.put("fat", fats);
+            mapIngredient.put("fibers", fibers);
+            analysisService.setmaps(mapIngredient);
+
 
             // Fetch recipe details based on dish's recipe ID
             Recipe recipe = dish.getRecipe();

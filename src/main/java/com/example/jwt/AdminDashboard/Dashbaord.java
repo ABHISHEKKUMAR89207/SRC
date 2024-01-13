@@ -9,6 +9,7 @@ import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
+import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.FeedbackRepository;
 import com.example.jwt.repository.UserProfileRepository;
@@ -1506,6 +1507,16 @@ public class Dashbaord {
         model.addAttribute("averageHoursOfSleepPerDay", averageHoursOfSleepPerDay);
 
 //
+        // Calculate average water intake per day for the last week
+        List<WaterEntity> waterEntitiesForLastWeek = getWaterEntitiesForLastWeek(userStatus);
+
+        double averageWaterIntakePerDay = waterEntitiesForLastWeek.stream()
+                .mapToDouble(WaterEntity::getWaterIntake)
+                .average()
+                .orElse(0.0);
+
+        // Add average water intake per day to the model
+        model.addAttribute("averageWaterIntakePerDay", averageWaterIntakePerDay);
 
         // Add the userStatus data to the model
         model.addAttribute("userStatus", userStatus);
@@ -1527,6 +1538,14 @@ public class Dashbaord {
 
         return user.getSleepDurations().stream()
                 .filter(sleep -> sleep.getDateOfSleep().isAfter(oneWeekAgo))
+                .collect(Collectors.toList());
+    }
+
+    public List<WaterEntity> getWaterEntitiesForLastWeek(User user) {
+        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+
+        return user.getWaterEntities().stream()
+                .filter(waterEntity -> waterEntity.getLocalDate().isAfter(oneWeekAgo))
                 .collect(Collectors.toList());
     }
 

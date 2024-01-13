@@ -25,5 +25,10 @@ public class WaterEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    // Getter method to calculate waterIntake based on cupCapacity and noOfCups
+    public Double getWaterIntake() {
+        return cupCapacity * noOfCups;
+    }
 }
 

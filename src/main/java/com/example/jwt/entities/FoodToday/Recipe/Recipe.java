@@ -21,7 +21,6 @@ public class Recipe {
     private Long recipesId;
 
 
-
     private String recipe_name;
     private double protein;
     private double total_fat;
@@ -43,7 +42,6 @@ public class Recipe {
     private double sodium;
     private double calcium;
     private double total_saturated_fatty_acids;
-
 
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
