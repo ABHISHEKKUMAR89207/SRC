@@ -34,15 +34,15 @@ public class waterController {
     }
 
     // to get the calculated water intake
-    @GetMapping("/calculate-intake")
-    public ResponseEntity<Double> calculateWaterIntake(@RequestHeader("Auth") String tokenHeader) {
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
-
-        Double waterIntake = waterService.calculateWaterIntake(user);
-        return new ResponseEntity<>(waterIntake, HttpStatus.OK);
-    }
+//    @GetMapping("/calculate-intake")
+//    public ResponseEntity<Double> calculateWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        Double waterIntake = waterService.calculateWaterIntake(user);
+//        return new ResponseEntity<>(waterIntake, HttpStatus.OK);
+//    }
 
     // to get the calculated water intake by date
     @GetMapping("/calculate-intake-by-date")
@@ -51,7 +51,7 @@ public class waterController {
         String username = jwtHelper.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
 
-        Double waterIntake = waterService.calculateWaterIntake(user, date);
+        Double waterIntake = waterService.getWaterIntakeForCurrentDate(user, date);
         return new ResponseEntity<>(waterIntake, HttpStatus.OK);
     }
 

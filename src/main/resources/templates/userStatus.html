@@ -264,7 +264,9 @@
     <p><strong>Most Consumed Calorie-rich Diet:</strong> <span th:text="${mostCalorieRichDiet}"></span></p>
     <p><strong>Foods Causing Allergy:</strong> In Progress Peanuts</p>
     <p><strong>Any Specific Medical Condition:</strong> In Progress Asthma</p>
-    <p><strong>Wearable App Used:</strong>In Progress Fitbit</p>
+<!--    <p><strong>Gender:</strong> <span id="gender" th:text="${userStatus.userProfile?.gender} ?: 'N/A'"></span></p>-->
+
+    <p><strong>Wearable App Used:</strong> <span id="variableType" th:text="${userStatus.userProfile?.variableType} ?: 'N/A'"></span></p>
     <p><strong>No. of Days Monitored:</strong>In Progress 60</p>
     <!-- Add more user details as needed -->
   </div>
@@ -300,6 +302,7 @@
     document.getElementById('userName').innerText = userDetails.username;
     document.getElementById('email').innerText = userDetails.email;
     document.getElementById('gender').innerText = userDetails.userProfile.gender;
+    document.getElementById('variableType').innerText = userDetails.userProfile.variableType;
     document.getElementById('state').innerText = userDetails.address;
     document.getElementById('dateOfBirth').innerText = userDetails.userProfile.dateOfBirth;
 

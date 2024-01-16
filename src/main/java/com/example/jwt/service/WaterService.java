@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -69,20 +66,65 @@ public class WaterService {
         return waterIntakeMap;
     }
 
-// calculate water intake of the user
-    public Double calculateWaterIntake(User user, LocalDate date) {
-        List<WaterEntity> waterEntities = user.getWaterEntities();
 
-        // Assuming you want to calculate the total water intake for the specified date
-        double totalWaterIntake = 0.0;
+//    public Map<String, Double> calculateWaterIntakeForLastWeek(User user) {
+//        List<WaterEntity> waterEntities = user.getWaterEntities();
+//
+//        // Create a map to store water intake for each day with a predictable order starting from Monday
+//        Map<String, Double> waterIntakeMap = new LinkedHashMap<>();
+//
+//        // Calculate the start date of the last week
+//        LocalDate endDate = LocalDate.now();
+//        LocalDate startDate = endDate.minusWeeks(1);
+//
+//        // Create a list to define the order of days starting from Monday
+//        List<String> dayOrder = Arrays.asList("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
+//
+//        // Iterate over each day in the last week
+//        for (String day : dayOrder) {
+//            // Find the corresponding LocalDate for the current day
+//            LocalDate currentDate = startDate;
+//            while (!currentDate.getDayOfWeek().toString().equals(day)) {
+//                currentDate = currentDate.plusDays(1);
+//            }
+//
+//            double totalWaterIntake = 0.0;
+//
+//            // Calculate total water intake for the current day
+//            for (WaterEntity waterEntity : waterEntities) {
+//                if (waterEntity.getLocalDate().isEqual(currentDate)) {
+//                    totalWaterIntake += waterEntity.getWaterIntake();
+//                }
+//            }
+//
+//            // Store the result in the map with the day name
+//            waterIntakeMap.put(currentDate.getDayOfWeek().toString(), totalWaterIntake);
+//        }
+//
+//        return waterIntakeMap;
+//    }
 
-        for (WaterEntity waterEntity : waterEntities) {
-            if (waterEntity.getLocalDate().isEqual(date)) {
-                totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
-            }
-        }
-        return totalWaterIntake;
+
+    public Double getWaterIntakeForCurrentDate(User user, LocalDate currentDate) {
+        WaterEntity waterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
+        return (waterEntity != null) ? waterEntity.getWaterIntake() : 0.0;
     }
+
+
+    // calculate water intake of the user
+//    public Double calculateWaterIntake(User user, LocalDate date) {
+//        List<WaterEntity> waterEntities = user.getWaterEntities();
+//
+//        // Assuming you want to calculate the total water intake for the specified date
+//        double totalWaterIntake = 0.0;
+//
+//        for (WaterEntity waterEntity : waterEntities) {
+//            if (waterEntity.getLocalDate().isEqual(date)) {
+//                totalWaterIntake += waterEntity.getWaterIntake();
+//            }
+//        }
+//        return totalWaterIntake;
+//    }
 
 // to save and update the water data of the user
 //    public WaterEntity saveOrUpdateWaterEntity(String username, WaterEntity waterEntity1) {
