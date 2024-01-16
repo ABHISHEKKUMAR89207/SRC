@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -21,7 +22,15 @@ public class Ingredients {
     private Long ingredientId;
     private String ingredientName;
     private Double ingredientQuantity;
-    private transient List<Double> nutrirnts;
+
+//    private transient List<Double> nutrirnts;
+
+    @ElementCollection
+    @CollectionTable(name = "ingredient_nutrients", joinColumns = @JoinColumn(name = "ingredient_id"))
+    @MapKeyColumn(name = "nutrient_name")
+    @Column(name = "nutrient_value")
+    private Map<String, Double> nutrients;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dish_id")
     private Dishes dishes;

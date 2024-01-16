@@ -57,7 +57,9 @@ public class WaterService {
             // Calculate total water intake for the current day
             for (WaterEntity waterEntity : waterEntities) {
                 if (waterEntity.getLocalDate().isEqual(currentDate)) {
-                    totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
+//                    totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
+                    totalWaterIntake += waterEntity.getWaterIntake();
+
                 }
             }
             // Store the result in the map with the day name
@@ -83,7 +85,40 @@ public class WaterService {
     }
 
 // to save and update the water data of the user
-    public WaterEntity saveOrUpdateWaterEntity(String username, WaterEntity waterEntity1) {
+//    public WaterEntity saveOrUpdateWaterEntity(String username, WaterEntity waterEntity1) {
+//        // Find the user by username
+//        Optional<User> userOptional = userRepository.findByEmail(username);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//
+//            // Find or create the WaterEntity for the specified date and user
+//            LocalDate currentDate = LocalDate.now();
+//            WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
+//
+//            if (existingWaterEntity == null) {
+//                // If no entity exists for the current date and user, create a new one
+//                WaterEntity newWaterEntity = new WaterEntity();
+//                newWaterEntity.setCupCapacity(waterEntity1.getCupCapacity());
+//                newWaterEntity.setNoOfCups(waterEntity1.getNoOfCups());
+//                newWaterEntity.setLocalDate(currentDate);
+//                newWaterEntity.setUser(user);
+//
+//                return waterEntityRepository.save(newWaterEntity);
+//            } else {
+//                // If an entity already exists for the current date and user, update the existing one
+//                existingWaterEntity.setCupCapacity(waterEntity1.getCupCapacity());
+//                existingWaterEntity.setNoOfCups(waterEntity1.getNoOfCups());
+//                return waterEntityRepository.save(existingWaterEntity);
+//            }
+//        } else {
+//            throw new UserNotFoundException("User not found for username: " + username);
+//        }
+//    }
+
+
+
+    public WaterEntity saveOrUpdateWaterEntity(String username, WaterEntity newWaterEntity) {
         // Find the user by username
         Optional<User> userOptional = userRepository.findByEmail(username);
 
@@ -96,21 +131,49 @@ public class WaterService {
 
             if (existingWaterEntity == null) {
                 // If no entity exists for the current date and user, create a new one
-                WaterEntity newWaterEntity = new WaterEntity();
-                newWaterEntity.setCupCapacity(waterEntity1.getCupCapacity());
-                newWaterEntity.setNoOfCups(waterEntity1.getNoOfCups());
-                newWaterEntity.setLocalDate(currentDate);
-                newWaterEntity.setUser(user);
+                WaterEntity waterEntity = new WaterEntity();
+                waterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
+                waterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
+                waterEntity.setLocalDate(currentDate);
+                waterEntity.setUser(user);
 
-                return waterEntityRepository.save(newWaterEntity);
+                // Calculate and set the water intake based on the new data
+                waterEntity.setWaterIntake(calculateWaterIntake(waterEntity));
+
+                // Save the new WaterEntity
+                WaterEntity savedWaterEntity = waterEntityRepository.save(waterEntity);
+
+                // Return the saved WaterEntity
+                return savedWaterEntity;
             } else {
-                // If an entity already exists for the current date and user, update the existing one
-                existingWaterEntity.setCupCapacity(waterEntity1.getCupCapacity());
-                existingWaterEntity.setNoOfCups(waterEntity1.getNoOfCups());
-                return waterEntityRepository.save(existingWaterEntity);
+                // If an entity already exists for the current date and user
+                // Update cup capacity, number of cups, and recalculate water intake
+                existingWaterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
+                existingWaterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
+
+                // Calculate and set the updated water intake
+                existingWaterEntity.setWaterIntake(calculateWaterIntake(existingWaterEntity));
+
+                // Save the updated WaterEntity
+                WaterEntity savedWaterEntity = waterEntityRepository.save(existingWaterEntity);
+
+                // Return the saved WaterEntity
+                return savedWaterEntity;
             }
         } else {
             throw new UserNotFoundException("User not found for username: " + username);
         }
     }
+
+    // Calculate water intake based on cup capacity and updated number of cups
+    private Double calculateWaterIntake(WaterEntity waterEntity) {
+        // Check for null and provide a default value of 0.0
+        Double waterIntake1 = waterEntity.getWaterIntake() != null ? waterEntity.getWaterIntake() : 0.0;
+        return waterIntake1 + (waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0);
+    }
+
+
+
+
+
 }

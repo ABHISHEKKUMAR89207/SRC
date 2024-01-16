@@ -1,17 +1,4 @@
-<!--
-=========================================================
-* Soft UI Dashboard - v1.0.7
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -122,47 +109,98 @@
 
 
 
-    <script>
-        function signIn() {
-            // Get user input (email and password) from the form
-            const email = document.getElementById("emailInput").value;
-            const password = document.getElementById("passwordInput").value;
+<!--    <script>-->
+<!--        function signIn() {-->
+<!--            // Get user input (email and password) from the form-->
+<!--            const email = document.getElementById("emailInput").value;-->
+<!--            const password = document.getElementById("passwordInput").value;-->
 
-            // Create the Basic Authentication header
-            const authHeader = 'Basic ' + btoa(email + ':' + password);
+<!--            // Create the Basic Authentication header-->
+<!--            const authHeader = 'Basic ' + btoa(email + ':' + password);-->
 
-            // Make the API request to your backend
-            fetch('/dashboard/user-login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': authHeader,
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
+<!--            // Make the API request to your backend-->
+<!--            fetch('/dashboard/user-login', {-->
+<!--                method: 'POST',-->
+<!--                headers: {-->
+<!--                    'Content-Type': 'application/json',-->
+<!--                    'Authorization': authHeader,-->
+<!--                },-->
+<!--                body: JSON.stringify({-->
+<!--                    email: email,-->
+<!--                    password: password,-->
+<!--                }),-->
+<!--            })-->
+<!--                .then(response => {-->
+<!--                    if (!response.ok) {-->
+<!--                        throw new Error(`HTTP error! Status: ${response.status}`);-->
+<!--                    }-->
+<!--                    return response.json();-->
+<!--                })-->
+<!--                .then(data => {-->
+<!--                    // Assuming the response contains the JWT token-->
+<!--                    const jwtToken = data.token;-->
+
+<!--                    // Redirect to dashboard.html with the JWT token as a query parameter-->
+<!--                    window.location.href = `./dashboard.html?token=${jwtToken}`;-->
+<!--                })-->
+<!--                .catch(error => {-->
+<!--                    console.error('Error:', error);-->
+<!--                    // Handle error (display a message, redirect, etc.)-->
+<!--                });-->
+<!--        }-->
+<!--    </script>-->
+<script>
+    function signIn() {
+        // Reset previous error messages
+        document.getElementById("emailError").textContent = "";
+        document.getElementById("passwordError").textContent = "";
+
+        // Get user input (email and password) from the form
+        const email = document.getElementById("emailInput").value;
+        const password = document.getElementById("passwordInput").value;
+
+        // Create the Basic Authentication header
+        const authHeader = 'Basic ' + btoa(email + ':' + password);
+
+        // Make the API request to your backend
+        fetch('/dashboard/user-login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authHeader,
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+            }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Assuming the response contains the JWT token
-                    const jwtToken = data.token;
+            .then(data => {
+                // Assuming the response contains the JWT token
+                const jwtToken = data.token;
 
-                    // Redirect to dashboard.html with the JWT token as a query parameter
-                    window.location.href = `./dashboard.html?token=${jwtToken}`;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    // Handle error (display a message, redirect, etc.)
-                });
-        }
-    </script>
+                // Redirect to dashboard.html with the JWT token as a query parameter
+                window.location.href = `./dashboard.html?token=${jwtToken}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
 
+                if (error.message.includes('Incorrect email or password')) {
+                    // Handle incorrect email or password error
+                    document.getElementById("passwordError").textContent = 'Incorrect email or password. Please try again.';
+                } else {
+                    // Handle other errors (display a generic error message, redirect, etc.)
+                    alert('An error occurred. Please try again later.');
+                }
+            });
+    }
+
+</script>
 
 
     <script defer data-site="demos.creative-tim.com" src="../static/js/nepcha-analytics.js"></script>
@@ -246,14 +284,24 @@ Nutrify India Now 2.O
 
 <div class="card-body">
 <form role="form">
-<label>Email</label>
-<div class="mb-3">
-    <input type="email" class="form-control" id="emailInput" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
-</div>
-<label>Password</label>
-<div class="mb-3">
-    <input type="password" class="form-control" id="passwordInput" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
-</div>
+<!--<label>Email</label>-->
+<!--<div class="mb-3">-->
+<!--    <input type="email" class="form-control" id="emailInput" placeholder="Email" aria-label="Email" aria-describedby="email-addon">-->
+<!--</div>-->
+<!--<label>Password</label>-->
+<!--<div class="mb-3">-->
+<!--    <input type="password" class="form-control" id="passwordInput" placeholder="Password" aria-label="Password" aria-describedby="password-addon">-->
+<!--</div>-->
+    <label>Email</label>
+    <div class="mb-3">
+        <input type="email" class="form-control" id="emailInput" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+        <small id="emailError" class="text-danger"></small>
+    </div>
+    <label>Password</label>
+    <div class="mb-3">
+        <input type="password" class="form-control" id="passwordInput" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+        <small id="passwordError" class="text-danger"></small>
+    </div>
 <div class="form-check form-switch">
 <input class="form-check-input" type="checkbox" id="rememberMe" checked>
 <label class="form-check-label" for="rememberMe">Remember me</label>

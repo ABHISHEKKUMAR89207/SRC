@@ -3,6 +3,7 @@ package com.example.jwt.service;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.exception.ResourceNotFoundException;
+import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 
@@ -35,6 +36,23 @@ public class UserProfileService {
     public Optional<UserProfile> getUserProfileById(Long id) {
         return userProfileRepository.findById(id);
     }
+
+
+
+    public UserProfile saveOrUpdateVariableType(String username, String variableType) {
+        // Fetch the UserProfile based on the userId
+        Optional<UserProfile> userProfileOptional = Optional.ofNullable(userProfileRepository.findByUserEmail(username));
+
+        UserProfile userProfile = userProfileOptional.orElseThrow(() ->
+                new UserNotFoundException("User with email " + username + " not found"));
+
+        // Update the variableType
+        userProfile.setVariableType(variableType);
+
+        // Save and return the updated UserProfile
+        return userProfileRepository.save(userProfile);
+    }
+
 
     // to create the user profile
     public UserProfile createUserProfile(UserProfile userProfile, Long userId) throws ParseException {

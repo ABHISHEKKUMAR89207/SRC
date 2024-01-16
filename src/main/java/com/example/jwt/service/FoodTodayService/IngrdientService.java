@@ -535,6 +535,42 @@ public class IngrdientService {
 
 
 
+//    public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
+//        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+//
+//        Map<String, Double> energyByMealType = new HashMap<>();
+//
+//        for (Dishes dish : dishesList) {
+//            String mealType = dish.getMealName();
+//            if (!energyByMealType.containsKey(mealType)) {
+//                energyByMealType.put(mealType, 0.0);
+//            }
+//
+//            if (dish.getMealName().equalsIgnoreCase(mealType)) {
+//                Double totalEnergy = calculateTotalEnergyForDish(dish);
+//                energyByMealType.put(mealType, energyByMealType.get(mealType) + totalEnergy);
+//            }
+//        }
+//
+//        return energyByMealType;
+//    }
+//
+//    private Double calculateTotalEnergyForDish(Dishes dish) {
+//        List<Ingredients> ingredients = dish.getIngredientList();
+//        Double totalEnergy = 0.0;
+//
+//        for (Ingredients ingredient : ingredients) {
+//            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//            Double energy = (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+//            totalEnergy += energy;
+//        }
+//
+//        return totalEnergy;
+//    }
+//
+
+
+
     public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
         List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
 
@@ -556,12 +592,19 @@ public class IngrdientService {
     }
 
     private Double calculateTotalEnergyForDish(Dishes dish) {
-        List<Ingredients> ingredients = dish.getIngredientList();
         Double totalEnergy = 0.0;
 
+        if (dish.getRecipe() != null) {
+            // If the dish has a recipe, get energy directly from the recipe table
+            Recipe recipe = dish.getRecipe();
+            totalEnergy += (recipe.getEnergy_joules()/100)*dish.getDishQuantity();
+        }
+
+        // Calculate energy from ingredients
+        List<Ingredients> ingredients = dish.getIngredientList();
         for (Ingredients ingredient : ingredients) {
             NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
-            Double energy = (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+            Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
             totalEnergy += energy;
         }
 
@@ -569,6 +612,45 @@ public class IngrdientService {
     }
 
 
+
+//public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
+//    List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+//
+//    Map<String, Double> energyByMealType = new HashMap<>();
+//
+//    for (Dishes dish : dishesList) {
+//        String mealType = dish.getMealName();
+//        if (!energyByMealType.containsKey(mealType)) {
+//            energyByMealType.put(mealType, 0.0);
+//        }
+//
+//        Double totalEnergy = calculateTotalEnergyForDish(dish);
+//        energyByMealType.put(mealType, energyByMealType.get(mealType) + totalEnergy);
+//    }
+//
+//    return energyByMealType;
+//}
+//
+//    private Double calculateTotalEnergyForDish(Dishes dish) {
+//        // Check if the dish has a recipe
+//        if (dish.getRecipe() != null) {
+//            // If a recipe exists, use its energy directly
+//            return dish.getRecipe().getEnergy_joules();
+//        } else {
+//            // If no recipe, calculate energy from ingredients
+//            List<Ingredients> ingredients = dish.getIngredientList();
+//            Double totalEnergy = 0.0;
+//
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//                Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//                totalEnergy += energy;
+//            }
+//
+//            return totalEnergy;
+//        }
+//    }
+//
 
 
 

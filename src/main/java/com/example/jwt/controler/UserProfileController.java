@@ -43,6 +43,25 @@ public class UserProfileController {
         this.userService = userService;
     }
 
+
+    @PostMapping("/variable-type")
+    public ResponseEntity<UserProfile> saveOrUpdateVariableType(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam String variableType
+    ) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Fetch the user's data from both User and UserProfile entities
+        User user = userService.findByUsername(username);
+
+        UserProfile userProfile = userProfileService.saveOrUpdateVariableType(username, variableType);
+        return new ResponseEntity<>(userProfile, HttpStatus.OK);
+    }
+
     // to get the user's
     // profile
     @GetMapping("/get-userProfile")

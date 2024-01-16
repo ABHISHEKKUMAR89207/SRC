@@ -3,6 +3,7 @@ package com.example.jwt.controler;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.exception.UserNotFoundException;
+import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
 import com.example.jwt.service.WaterService;
@@ -66,15 +67,31 @@ public class waterController {
     }
 
     // to update the water entity
+//    @PostMapping("/update-water-entity")
+//    public ResponseEntity<String> updateWaterEntity(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity waterEntity) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            waterService.saveOrUpdateWaterEntity(username, waterEntity);
+//            return new ResponseEntity<>("Water entity updated successfully", HttpStatus.OK);
+//        } catch (UserNotFoundException e) {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
+//    }
+    @Autowired
+    private UserRepository userRepository;
     @PostMapping("/update-water-entity")
-    public ResponseEntity<String> updateWaterEntity(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity waterEntity) {
+    public ResponseEntity<String> updateWaterEntity(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity newWaterEntity) {
         try {
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
-            waterService.saveOrUpdateWaterEntity(username, waterEntity);
-            return new ResponseEntity<>("Water entity updated successfully", HttpStatus.OK);
+            WaterEntity updatedWaterEntity = waterService.saveOrUpdateWaterEntity(username, newWaterEntity);
+
+            return new ResponseEntity<>("Water entity updated successfully. New water intake: " + updatedWaterEntity.getWaterIntake(), HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

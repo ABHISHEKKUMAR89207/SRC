@@ -5,6 +5,10 @@ package com.example.jwt.AdminDashboard;
 import com.example.jwt.booksystem1.books.*;
 import com.example.jwt.entities.ContactUs;
 import com.example.jwt.entities.Feedback;
+import com.example.jwt.entities.FoodToday.Dishes;
+import com.example.jwt.entities.FoodToday.Ingredients;
+import com.example.jwt.entities.FoodToday.NinData;
+import com.example.jwt.entities.FoodToday.Recipe.Recipe;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.dashboardEntity.Activities;
@@ -12,12 +16,12 @@ import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.FeedbackRepository;
+import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -29,8 +33,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,21 +46,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -333,6 +328,32 @@ public class Dashbaord {
 //
 
 
+//    @PostMapping("/user-login")
+//    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+//            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//        try {
+//            // Authenticate the user
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            authenticationRequest.getEmail(),
+//                            authenticationRequest.getPassword()
+//                    )
+//            );
+//        } catch (BadCredentialsException e) {
+//            throw new Exception("Incorrect email or password", e);
+//        }
+//
+//        // Load user details
+//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//        // Generate JWT token
+//        final String jwt = jwtUtil.generateToken(userDetails);
+//
+//        // Return the JWT token in the response
+//        AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
+//        return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
+//    }
+
     @PostMapping("/user-login")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
             @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
@@ -345,6 +366,7 @@ public class Dashbaord {
                     )
             );
         } catch (BadCredentialsException e) {
+            // Handle incorrect email or password
             throw new Exception("Incorrect email or password", e);
         }
 
@@ -358,7 +380,6 @@ public class Dashbaord {
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
         return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
     }
-
 
 
 //    @Autowired
@@ -1441,13 +1462,20 @@ public class Dashbaord {
 //        return "dashboard";
 //    }
     @GetMapping("/userStatus/{userId}")
-    public String userStatus(@PathVariable Long userId, Model model) {
+    public String userStatus(@PathVariable Long userId,
+//                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
+                             Model model) {
         User userStatus = userRepository.findByUserId(userId);
 
         // Add the state information to the userStatus object
         Double latitude = userStatus.getLatitude();
         Double longitude = userStatus.getLongitude();
 
+        // Specify the date for which you want to get the dish count
+//        LocalDate specificDate = LocalDate.of(2024, 1, 12); // Update with your specific date
+        LocalDate specificDate = LocalDate.now(); // Update with your specific date
+        // If selectedDate is null, use the current date
+//        LocalDate specificDate = (selectedDate != null) ? selectedDate : LocalDate.now();
         if (latitude != null && longitude != null) {
             String state = getStateFromCoordinates(latitude, longitude);
             System.out.println("State =====" + state);
@@ -1518,6 +1546,122 @@ public class Dashbaord {
         // Add average water intake per day to the model
         model.addAttribute("averageWaterIntakePerDay", averageWaterIntakePerDay);
 
+
+//        // Calculate dish count for the specific date
+        long dishCount = getDishCountForDate(userStatus, specificDate);
+//
+//        // Add dish count to the model
+        model.addAttribute("dishCount", dishCount);
+        // Calculate dish count for the specific date
+//        long dishCount = getDishCountForDate(userStatus, specificDate);
+//
+//        // Add dish count and selected date to the model
+//        model.addAttribute("dishCount", dishCount);
+//        model.addAttribute("selectedDate", specificDate);
+
+
+        // Update the calling code to pass the list of Dishes from the User object
+        String mostFrequentlyConsumedMeal = calculateMostFrequentlyConsumedMeal(userStatus.getDishesList());
+// Add the most frequently consumed meal to the model
+        model.addAttribute("mostFrequentlyConsumedMeal", mostFrequentlyConsumedMeal);
+
+        // Calculate most skipped meal
+        String mostSkippedMeal = calculateMostSkippedMeal(userStatus.getDishesList());
+
+        // Add the most skipped meal to the model
+        model.addAttribute("mostSkippedMeal", mostSkippedMeal);
+
+        // Calculate most consumed dish
+        String mostConsumedDish = calculateMostConsumedDish(userStatus.getDishesList());
+
+        // Add the most consumed dish to the model
+        model.addAttribute("mostConsumedDish", mostConsumedDish);
+        // Calculate most consumed breakfast
+//        String mostConsumedBreakfast = calculateMostConsumedBreakfast(userStatus.getDishesList());
+//
+//        // Add the most consumed breakfast to the model
+//        model.addAttribute("mostConsumedBreakfast", mostConsumedBreakfast);
+//        // Calculate most consumed lunch
+//        String mostConsumedLunch = calculateMostConsumedLunch(userStatus.getDishesList());
+//
+//        // Add the most consumed lunch to the model
+//        model.addAttribute("mostConsumedLunch", mostConsumedLunch);
+//
+//
+//        // Calculate most consumed dinner
+//        String mostConsumedDinner = calculateMostConsumedDinner(userStatus.getDishesList());
+//
+//        // Add the most consumed dinner to the model
+//        model.addAttribute("mostConsumedDinner", mostConsumedDinner);
+//
+//        // Calculate most consumed snacks
+//        String mostConsumedSnacks = calculateMostConsumedSnacks(userStatus.getDishesList());
+//
+//        // Add the most consumed snacks to the model
+//        model.addAttribute("mostConsumedSnacks", mostConsumedSnacks);
+        // Example usage in your controller methods
+        String mostConsumedBreakfast = calculateMostConsumedMeal(userStatus.getDishesList(), "Breakfast");
+        model.addAttribute("mostConsumedBreakfast", mostConsumedBreakfast);
+
+        String mostConsumedLunch = calculateMostConsumedMeal(userStatus.getDishesList(), "Lunch");
+        model.addAttribute("mostConsumedLunch", mostConsumedLunch);
+
+        String mostConsumedDinner = calculateMostConsumedMeal(userStatus.getDishesList(), "Dinner");
+        model.addAttribute("mostConsumedDinner", mostConsumedDinner);
+
+        String mostConsumedSnacks = calculateMostConsumedMeal(userStatus.getDishesList(), "Snacks");
+        model.addAttribute("mostConsumedSnacks", mostConsumedSnacks);
+
+        // Example usage in your controller method
+        String mostConsumedDrink = calculateMostConsumedDrink(userStatus.getWaterEntities());
+        model.addAttribute("mostConsumedDrink", mostConsumedDrink);
+
+        String mostConsumedNutrient = calculateMostConsumedNutrient(userStatus.getDishesList());
+        model.addAttribute("mostConsumedNutrient", mostConsumedNutrient);
+
+        String leastConsumedNutrient = calculateLeastConsumedNutrient(userStatus.getDishesList());
+        model.addAttribute("leastConsumedNutrient", leastConsumedNutrient);
+
+        // Example usage in your controller method
+        String mostProteinRichDiet = calculateMostConsumedProteinRichDiet(userStatus.getDishesList());
+
+// Add the most consumed protein-rich diet to the model
+        model.addAttribute("mostProteinRichDiet", mostProteinRichDiet);
+        // Example usage in your controller method
+        String mostIronRichDiet = calculateMostConsumedIronRichDiet(userStatus.getDishesList());
+
+// Add the most consumed iron-rich diet to the model
+        model.addAttribute("mostIronRichDiet", mostIronRichDiet);
+
+        // Example usage in your controller method
+        String mostCalciumRichDiet = calculateMostConsumedCalciumRichDiet(userStatus.getDishesList());
+
+// Add the most consumed calcium-rich diet to the model
+        model.addAttribute("mostCalciumRichDiet", mostCalciumRichDiet);
+// Example usage in your controller method
+        String mostCalorieRichDiet = calculateMostConsumedCalorieRichDiet(userStatus.getDishesList());
+
+// Add the most consumed calorie-rich diet to the model
+        model.addAttribute("mostCalorieRichDiet", mostCalorieRichDiet);
+
+
+// Example usage in your controller method
+        String mostCHORichDiet = calculateMostConsumedCHORichDiet(userStatus.getDishesList());
+
+// Add the most consumed CHO-rich diet to the model
+        model.addAttribute("mostCHORichDiet", mostCHORichDiet);
+
+
+
+
+
+// Add more calls for other nutrients as needed
+
+
+
+
+
+
         // Add the userStatus data to the model
         model.addAttribute("userStatus", userStatus);
         return "userStatus"; // Return the Thymeleaf template to display user status
@@ -1548,6 +1692,489 @@ public class Dashbaord {
                 .filter(waterEntity -> waterEntity.getLocalDate().isAfter(oneWeekAgo))
                 .collect(Collectors.toList());
     }
+
+    public long getDishCountForDate(User user, LocalDate date) {
+        if (user.getDishesList() == null) {
+            return 0;
+        }
+
+        return user.getDishesList().stream()
+                .filter(dish -> dish.getDate().equals(date))
+                .count();
+    }
+
+    // Update the method signature to accept a list of Dishes
+    public String calculateMostFrequentlyConsumedMeal(List<Dishes> meals) {
+        // Assuming each Meal has a property 'mealName' indicating the type (breakfast, lunch, dinner, etc.)
+
+        // Count occurrences of each meal type
+        Map<String, Long> mealTypeCounts = meals.stream()
+                .collect(Collectors.groupingBy(Dishes::getMealName, Collectors.counting()));
+
+        // Find the meal type with the highest count
+        Optional<Map.Entry<String, Long>> mostFrequentMealEntry = mealTypeCounts.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+
+        // Get the result
+        return mostFrequentMealEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+    }
+    // Add this method to your controller class
+    public String calculateMostSkippedMeal(List<Dishes> meals) {
+        // Assuming each Meal has a property 'mealName' indicating the type (breakfast, lunch, dinner, etc.)
+
+        // Count occurrences of each meal type
+        Map<String, Long> mealTypeCounts = meals.stream()
+                .collect(Collectors.groupingBy(Dishes::getMealName, Collectors.counting()));
+
+        // Find the meal type with the lowest count (most skipped)
+        Optional<Map.Entry<String, Long>> mostSkippedMealEntry = mealTypeCounts.entrySet().stream()
+                .min(Map.Entry.comparingByValue());
+
+        // Get the result
+        return mostSkippedMealEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+    }
+
+    // Add this method to your controller class
+    public String calculateMostConsumedDish(List<Dishes> meals) {
+        // Assuming each Dishes object has a property 'dishName' indicating the dish name.
+
+        // Count occurrences of each dish
+        Map<String, Long> dishCounts = meals.stream()
+                .collect(Collectors.groupingBy(Dishes::getDishName, Collectors.counting()));
+
+        // Find the dish with the highest count (most consumed)
+        Optional<Map.Entry<String, Long>> mostConsumedDishEntry = dishCounts.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+
+        // Get the result
+        return mostConsumedDishEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+    }
+
+@Autowired
+private NinDataRepository ninDataRepository;
+    // Add this method to your controller class
+    public String calculateMostConsumedNutrient(List<Dishes> dishesList) {
+        Map<String, Double> totalNutrientIntake = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+                // Calculate nutrient intake based on ingredient quantity and NinData
+                double nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+                totalNutrientIntake.merge("Energy", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+                totalNutrientIntake.merge("Proteins", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+                totalNutrientIntake.merge("Carbs", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Fat();
+                totalNutrientIntake.merge("Fats", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Dietary_Fibre();
+                totalNutrientIntake.merge("Fibers", nutrientIntake, Double::sum);
+            }
+        }
+
+        // Find the most consumed nutrient
+        Map.Entry<String, Double> mostConsumedNutrientEntry = totalNutrientIntake.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
+
+        // Return the result
+        return mostConsumedNutrientEntry != null ?
+                 mostConsumedNutrientEntry.getKey() :
+                "No data";
+    }
+
+    public String calculateLeastConsumedNutrient(List<Dishes> dishesList) {
+        Map<String, Double> totalNutrientIntake = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+                // Calculate nutrient intake based on ingredient quantity and NinData
+                double nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+                totalNutrientIntake.merge("Energy", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+                totalNutrientIntake.merge("Proteins", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+                totalNutrientIntake.merge("Carbs", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Fat();
+                totalNutrientIntake.merge("Fats", nutrientIntake, Double::sum);
+
+                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Dietary_Fibre();
+                totalNutrientIntake.merge("Fibers", nutrientIntake, Double::sum);
+            }
+        }
+
+        // Find the least consumed nutrient
+        Map.Entry<String, Double> leastConsumedNutrientEntry = totalNutrientIntake.entrySet().stream()
+                .min(Map.Entry.comparingByValue())
+                .orElse(null);
+
+        // Return the result
+        return leastConsumedNutrientEntry != null ?
+                leastConsumedNutrientEntry.getKey() :
+                "No data";
+    }
+
+//    public String calculateMostConsumedProteinRichDiet(List<Dishes> dishesList) {
+//        Map<String, Double> proteinIntakePerDiet = new HashMap<>();
+//
+//        for (Dishes dish : dishesList) {
+//            List<Ingredients> ingredients = dish.getIngredientList();
+//            double totalProteinIntake = 0.0;
+//
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//
+//                // Calculate protein intake based on ingredient quantity and NinData
+//                double proteinIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+//                totalProteinIntake += proteinIntake;
+//            }
+//
+//            // Add total protein intake for the dish to the map
+//            proteinIntakePerDiet.put(dish.getDishName(), totalProteinIntake);
+//        }
+//
+//        // Find the dish with the highest total protein intake
+//        Map.Entry<String, Double> mostProteinRichDietEntry = proteinIntakePerDiet.entrySet().stream()
+//                .max(Map.Entry.comparingByValue())
+//                .orElse(null);
+//
+//        // Return the result
+//        return mostProteinRichDietEntry != null ?
+//                mostProteinRichDietEntry.getKey() :
+//                "No data";
+//    }
+//
+public String calculateMostConsumedProteinRichDiet(List<Dishes> dishesList) {
+    Map<String, Double> proteinIntakePerDiet = new HashMap<>();
+
+    for (Dishes dish : dishesList) {
+        List<Ingredients> ingredients = dish.getIngredientList();
+        double totalProteinIntake = 0.0;
+
+        // Consider direct ingredients
+        for (Ingredients ingredient : ingredients) {
+            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+            // Calculate protein intake based on ingredient quantity and NinData
+            double proteinIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+            totalProteinIntake += proteinIntake;
+        }
+
+        // Consider recipe ingredients
+        Recipe recipe = dish.getRecipe();
+        if (recipe != null) {
+            // Add protein from recipe directly
+            totalProteinIntake += (recipe.getProtein()/100)*dish.getDishQuantity();
+        }
+
+        // Add total protein intake for the dish to the map
+        proteinIntakePerDiet.put(dish.getDishName(), totalProteinIntake);
+    }
+
+    // Find the dish with the highest total protein intake
+    Map.Entry<String, Double> mostProteinRichDietEntry = proteinIntakePerDiet.entrySet().stream()
+            .max(Map.Entry.comparingByValue())
+            .orElse(null);
+
+    // Return the result
+    return mostProteinRichDietEntry != null ?
+            mostProteinRichDietEntry.getKey() :
+            "No data";
+}
+    public String calculateMostConsumedIronRichDiet(List<Dishes> dishesList) {
+        Map<String, Double> ironIntakePerDiet = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+            double totalIronIntake = 0.0;
+
+            // Consider direct ingredients
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+                // Calculate iron intake based on ingredient quantity and NinData
+                double ironIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getIron();
+                totalIronIntake += ironIntake;
+            }
+
+            // Consider recipe ingredients
+            Recipe recipe = dish.getRecipe();
+            if (recipe != null) {
+                // Add iron from recipe directly
+                totalIronIntake += (recipe.getIron()/100)*dish.getDishQuantity();
+            }
+
+            // Add total iron intake for the dish to the map
+            ironIntakePerDiet.put(dish.getDishName(), totalIronIntake);
+        }
+
+        // Find the dish with the highest total iron intake
+        Map.Entry<String, Double> mostIronRichDietEntry = ironIntakePerDiet.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
+
+        // Return the result
+        return mostIronRichDietEntry != null ?
+                mostIronRichDietEntry.getKey() :
+                "No data";
+    }
+
+    public String calculateMostConsumedCalciumRichDiet(List<Dishes> dishesList) {
+        Map<String, Double> calciumIntakePerDiet = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+            double totalCalciumIntake = 0.0;
+
+            // Consider direct ingredients
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+                // Calculate calcium intake based on ingredient quantity and NinData
+                double calciumIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCalcium();
+                totalCalciumIntake += calciumIntake;
+            }
+
+            // Consider recipe ingredients
+            Recipe recipe = dish.getRecipe();
+            if (recipe != null) {
+                // Add calcium from recipe directly
+                totalCalciumIntake += (recipe.getCalcium() / 100) * dish.getDishQuantity();
+            }
+
+            // Add total calcium intake for the dish to the map
+            calciumIntakePerDiet.put(dish.getDishName(), totalCalciumIntake);
+        }
+
+        // Find the dish with the highest total calcium intake
+        Map.Entry<String, Double> mostCalciumRichDietEntry = calciumIntakePerDiet.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
+
+        // Return the result
+        return mostCalciumRichDietEntry != null ?
+                mostCalciumRichDietEntry.getKey() :
+                "No data";
+    }
+
+    public String calculateMostConsumedCalorieRichDiet(List<Dishes> dishesList) {
+        Map<String, Double> calorieIntakePerDiet = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+            double totalCalorieIntake = 0.0;
+
+            // Consider direct ingredients
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+                // Calculate calorie intake based on ingredient quantity and NinData
+                double calorieIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+                totalCalorieIntake += calorieIntake;
+            }
+
+            // Consider recipe ingredients
+            Recipe recipe = dish.getRecipe();
+            if (recipe != null) {
+                // Add calorie from recipe directly
+                totalCalorieIntake += (recipe.getEnergy_joules() / 100) * dish.getDishQuantity();
+            }
+
+            // Add total calorie intake for the dish to the map
+            calorieIntakePerDiet.put(dish.getDishName(), totalCalorieIntake);
+        }
+
+        // Find the dish with the highest total calorie intake
+        Map.Entry<String, Double> mostCalorieRichDietEntry = calorieIntakePerDiet.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
+
+        // Return the result
+        return mostCalorieRichDietEntry != null ?
+                mostCalorieRichDietEntry.getKey() :
+                "No data";
+    }
+
+
+    public String calculateMostConsumedCHORichDiet(List<Dishes> dishesList) {
+        Map<String, Double> choIntakePerDiet = new HashMap<>();
+
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+            double totalCHOIntake = 0.0;
+
+            // Consider direct ingredients
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+
+                // Calculate CHO intake based on ingredient quantity and NinData
+                double choIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+                totalCHOIntake += choIntake;
+            }
+
+            // Consider recipe ingredients
+            Recipe recipe = dish.getRecipe();
+            if (recipe != null) {
+                // Add CHO from recipe directly
+                totalCHOIntake += (recipe.getCarbohydrate() / 100) * dish.getDishQuantity();
+            }
+
+            // Add total CHO intake for the dish to the map
+            choIntakePerDiet.put(dish.getDishName(), totalCHOIntake);
+        }
+
+        // Find the dish with the highest total CHO intake
+        Map.Entry<String, Double> mostCHORichDietEntry = choIntakePerDiet.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
+
+        // Return the result
+        return mostCHORichDietEntry != null ?
+                mostCHORichDietEntry.getKey() :
+                "No data";
+    }
+
+    // Add this method to your controller class
+//    public String calculateMostConsumedBreakfast(List<Dishes> meals) {
+//        // Assuming each Dishes object has a property 'mealType' indicating the type (breakfast, lunch, dinner, etc.)
+//
+//        // Filter meals for breakfast
+//        List<Dishes> breakfastMeals = meals.stream()
+//                .filter(meal -> "Breakfast".equalsIgnoreCase(meal.getMealName()))
+//                .collect(Collectors.toList());
+//
+//        // Count occurrences of each breakfast dish
+//        Map<String, Long> breakfastDishCounts = breakfastMeals.stream()
+//                .collect(Collectors.groupingBy(Dishes::getDishName, Collectors.counting()));
+//
+//        // Find the breakfast dish with the highest count (most consumed)
+//        Optional<Map.Entry<String, Long>> mostConsumedBreakfastEntry = breakfastDishCounts.entrySet().stream()
+//                .max(Map.Entry.comparingByValue());
+//
+//        // Get the result
+//        return mostConsumedBreakfastEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+//    }
+//
+//    // Add this method to your controller class
+//    public String calculateMostConsumedLunch(List<Dishes> meals) {
+//        // Assuming each Dishes object has a property 'mealType' indicating the type (breakfast, lunch, dinner, etc.)
+//
+//        // Filter meals for lunch
+//        List<Dishes> lunchMeals = meals.stream()
+//                .filter(meal -> "Lunch".equalsIgnoreCase(meal.getMealName()))
+//                .collect(Collectors.toList());
+//
+//        // Count occurrences of each lunch dish
+//        Map<String, Long> lunchDishCounts = lunchMeals.stream()
+//                .collect(Collectors.groupingBy(Dishes::getDishName, Collectors.counting()));
+//
+//        // Find the lunch dish with the highest count (most consumed)
+//        Optional<Map.Entry<String, Long>> mostConsumedLunchEntry = lunchDishCounts.entrySet().stream()
+//                .max(Map.Entry.comparingByValue());
+//
+//        // Get the result
+//        return mostConsumedLunchEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+//    }
+//    // Add this method to your controller class
+//    public String calculateMostConsumedDinner(List<Dishes> meals) {
+//        // Assuming each Dishes object has a property 'mealType' indicating the type (breakfast, lunch, dinner, etc.)
+//
+//        // Filter meals for dinner
+//        List<Dishes> dinnerMeals = meals.stream()
+//                .filter(meal -> "Dinner".equalsIgnoreCase(meal.getMealName()))
+//                .collect(Collectors.toList());
+//
+//        // Count occurrences of each dinner dish
+//        Map<String, Long> dinnerDishCounts = dinnerMeals.stream()
+//                .collect(Collectors.groupingBy(Dishes::getDishName, Collectors.counting()));
+//
+//        // Find the dinner dish with the highest count (most consumed)
+//        Optional<Map.Entry<String, Long>> mostConsumedDinnerEntry = dinnerDishCounts.entrySet().stream()
+//                .max(Map.Entry.comparingByValue());
+//
+//        // Get the result
+//        return mostConsumedDinnerEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+//    }
+//
+//    // Add this method to your controller class
+//    public String calculateMostConsumedSnacks(List<Dishes> meals) {
+//        // Assuming each Dishes object has a property 'mealType' indicating the type (breakfast, lunch, dinner, snacks, etc.)
+//
+//        // Filter meals for snacks
+//        List<Dishes> snacksMeals = meals.stream()
+//                .filter(meal -> "Snacks".equalsIgnoreCase(meal.getMealName()))
+//                .collect(Collectors.toList());
+//
+//        // Count occurrences of each snacks dish
+//        Map<String, Long> snacksDishCounts = snacksMeals.stream()
+//                .collect(Collectors.groupingBy(Dishes::getDishName, Collectors.counting()));
+//
+//        // Find the snacks dish with the highest count (most consumed)
+//        Optional<Map.Entry<String, Long>> mostConsumedSnacksEntry = snacksDishCounts.entrySet().stream()
+//                .max(Map.Entry.comparingByValue());
+//
+//        // Get the result
+//        return mostConsumedSnacksEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+//    }
+    public String calculateMostConsumedMeal(List<Dishes> meals, String mealType) {
+        // Assuming each Dishes object has a property 'mealType' indicating the type (breakfast, lunch, dinner, snacks, etc.)
+
+        // Filter meals for the specified meal type
+        List<Dishes> filteredMeals = meals.stream()
+                .filter(meal -> mealType.equalsIgnoreCase(meal.getMealName()))
+                .collect(Collectors.toList());
+
+        // Count occurrences of each dish for the specified meal type
+        Map<String, Long> dishCounts = filteredMeals.stream()
+                .collect(Collectors.groupingBy(Dishes::getDishName, Collectors.counting()));
+
+        // Find the dish with the highest count (most consumed)
+        Optional<Map.Entry<String, Long>> mostConsumedEntry = dishCounts.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+
+        // Get the result
+        return mostConsumedEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
+    }
+
+    public String calculateMostConsumedDrink(List<WaterEntity> drinks) {
+        // Count occurrences of each drink
+        Map<String, Double> drinkIntake = drinks.stream()
+                .collect(Collectors.groupingBy(WaterEntity::getDrinkName, Collectors.summingDouble(WaterEntity::getWaterIntake)));
+
+        // Find the drink with the highest total intake (most consumed)
+        Optional<Map.Entry<String, Double>> mostConsumedDrinkEntry = drinkIntake.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+
+        // Get the result
+        return mostConsumedDrinkEntry.map(entry -> entry.getValue() + " liters)").orElse("No data");
+    }
+//public String calculateMostConsumedDrink(List<WaterEntity> drinks) {
+//    // Calculate the total intake of all drinks
+//    double totalIntake = drinks.stream()
+//            .mapToDouble(WaterEntity::getWaterIntake)
+//            .sum();
+//
+//    // Return the total intake in the desired format
+//    return totalIntake + " L";
+//}
+
+
+
 
 //@GetMapping("/userDetails/{userId}")
 //public String getUserDetails(@PathVariable Long userId, Model model) {

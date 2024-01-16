@@ -199,31 +199,73 @@
     <!-- Existing code... -->
 
 
-    <p><strong>Avg. Calories Burned per Day:</strong> 2500</p>
-    <p><strong>No. of Meals per Day:</strong> 3</p>
-    <p><strong>Avg. Time Spent on Physical Activity per Day:</strong> 1 hour</p>
-    <p><strong>Most Frequent Activity:</strong> Running</p>
-    <p><strong>Most Frequently Consumed Meal:</strong> Dinner</p>
-    <p><strong>Most Skipped Meal:</strong> Breakfast</p>
-    <p><strong>Most Consumed Dish:</strong> Pasta</p>
-    <p><strong>Most Consumed Breakfast:</strong> Eggs</p>
-    <p><strong>Most Consumed Lunch:</strong> Sandwich</p>
-    <p><strong>Most Consumed Dinner:</strong> Pizza</p>
-    <p><strong>Most Consumed Snacks:</strong> Nuts</p>
-    <p><strong>Most Consumed Drink:</strong> Water</p>
-    <p><strong>Most Consumed Nutrient:</strong> Protein</p>
-    <p><strong>Least Consumed Nutrient:</strong> Fats</p>
-    <p><strong>Frequency of Consuming Packaged/Fast Food per Week:</strong> 3</p>
-    <p><strong>Most Consumed Packaged/Fast Food:</strong> Burger</p>
-    <p><strong>Most Consumed Protein-rich Diet:</strong> Chicken</p>
-    <p><strong>Most Consumed Iron-rich Diet:</strong> Spinach</p>
-    <p><strong>Most Consumed Calcium-rich Diet:</strong> Milk</p>
-    <p><strong>Most Consumed CHO-rich Diet:</strong> Rice</p>
-    <p><strong>Most Consumed Calorie-rich Diet:</strong> Shrimp</p>
-    <p><strong>Foods Causing Allergy:</strong> Peanuts</p>
-    <p><strong>Any Specific Medical Condition:</strong> Asthma</p>
-    <p><strong>Wearable App Used:</strong> Fitbit</p>
-    <p><strong>No. of Days Monitored:</strong> 60</p>
+    <p><strong>Avg. Calories Burned per Day:</strong> In Progress</p>
+
+<!--    <p><strong>No. of Meals per Day:</strong> 3</p>-->
+    <!-- Add this section to display dish count for a specific date -->
+    <p><strong>No. of Meals per Day:</strong> <span id="dishCount" th:text="${dishCount}"></span></p>
+
+<!--    <p>-->
+<!--      <strong>Dish Count for Specific Date:</strong>-->
+<!--      <a th:if="${selectedDate != null}" th:href="@{/dashboard/userStatus/{userId}(userId=${userStatus.userId}, selectedDate=${#dates.format(selectedDate, 'yyyy-MM-dd')})}">-->
+<!--        <span id="dishCount" th:text="${dishCount}"></span>-->
+<!--        <span th:if="${selectedDate != null}" th:text="' (' + ${#dates.format(selectedDate, 'yyyy-MM-dd')} + ')'"></span>-->
+<!--      </a>-->
+<!--    </p>-->
+
+
+    <p><strong>Avg. Time Spent on Physical Activity per Day:</strong>In Progress.. 1 hour</p>
+    <p><strong>Most Frequent Activity:</strong>In Progress Running</p>
+
+<!--    <p><strong>Most Frequently Consumed Meal:</strong> Dinner</p>-->
+    <p><strong>Most Frequently Consumed Meal:</strong> <span id="mostFrequentlyConsumedMeal" th:text="${mostFrequentlyConsumedMeal}"></span></p>
+
+<!--    <p><strong>Most Skipped Meal:</strong> Breakfast</p>-->
+    <p><strong>Most Skipped Meal:</strong> <span th:text="${mostSkippedMeal}"></span></p>
+
+
+<!--    <p><strong>Most Consumed Dish:</strong> Pasta</p>-->
+    <p><strong>Most Consumed Dish:</strong> <span th:text="${mostConsumedDish}"></span></p>
+
+
+<!--    <p><strong>Most Consumed Breakfast:</strong> Eggs</p>-->
+
+    <p><strong>Most Consumed Breakfast:</strong> <span th:text="${mostConsumedBreakfast}"></span></p>
+
+<!--    <p><strong>Most Consumed Lunch:</strong> Sandwich</p>-->
+    <p><strong>Most Consumed Lunch:</strong> <span th:text="${mostConsumedLunch}"></span></p>
+
+<!--    <p><strong>Most Consumed Dinner:</strong> Pizza</p>-->
+    <p><strong>Most Consumed Dinner:</strong> <span th:text="${mostConsumedDinner}"></span></p>
+
+
+<!--    <p><strong>Most Consumed Snacks:</strong> Nuts</p>-->
+    <p><strong>Most Consumed Snacks:</strong> <span th:text="${mostConsumedSnacks}"></span></p>
+
+
+<!--    <p><strong>Most Consumed Drink:</strong> Water</p>-->
+    <p><strong>Most Consumed Drink:</strong> <span th:text="${mostConsumedDrink}"></span></p>
+
+<!--    <p th:text="${mostConsumedProtein}"></p>-->
+
+    <!-- Add more lines for other nutrients as needed -->
+
+    <p><strong>Most Consumed Nutrient:</strong> <span th:text="${mostConsumedNutrient}"></span></p>
+    <p><strong>Least Consumed Nutrient:</strong><span th:text="${leastConsumedNutrient}"></span></p>
+    <p><strong>Frequency of Consuming Packaged/Fast Food per Week:</strong>In Progress 3</p>
+    <p><strong>Most Consumed Packaged/Fast Food:</strong> In Progress  Burger</p>
+    <p><strong>Most Consumed Protein-rich Diet:</strong> <span th:text="${mostProteinRichDiet}"></span></p>
+<!--    <p><strong>Most Consumed Iron-rich Diet:</strong> Spinach</p>-->
+    <p><strong>Most Consumed Iron-rich Diet:</strong>  <span th:text="${mostIronRichDiet}"></span></p>
+<!--    <p><strong>Most Consumed Calcium-rich Diet:</strong> ${mostCalciumRichDiet}</p>-->
+
+    <p><strong>Most Consumed Calcium-rich Diet:</strong><span th:text="${mostCalciumRichDiet}"></span></p>
+    <p><strong>Most Consumed CHO-rich Diet:</strong> <span th:text="${mostCHORichDiet}"></span></p>
+    <p><strong>Most Consumed Calorie-rich Diet:</strong> <span th:text="${mostCalorieRichDiet}"></span></p>
+    <p><strong>Foods Causing Allergy:</strong> In Progress Peanuts</p>
+    <p><strong>Any Specific Medical Condition:</strong> In Progress Asthma</p>
+    <p><strong>Wearable App Used:</strong>In Progress Fitbit</p>
+    <p><strong>No. of Days Monitored:</strong>In Progress 60</p>
     <!-- Add more user details as needed -->
   </div>
   <!-- Replace with dynamic user data -->

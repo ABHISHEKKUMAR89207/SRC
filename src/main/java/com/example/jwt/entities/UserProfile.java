@@ -25,6 +25,8 @@ public class UserProfile {
     private String gender;
     private LocalDate dateOfBirth;
 
+    private String variableType;
+
     private double height;
     private double weight;
     private double bmi;

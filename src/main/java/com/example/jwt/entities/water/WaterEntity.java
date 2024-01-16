@@ -27,8 +27,17 @@ public class WaterEntity {
     private User user;
 
     // Getter method to calculate waterIntake based on cupCapacity and noOfCups
-    public Double getWaterIntake() {
-        return cupCapacity * noOfCups;
+//    public Double getWaterIntake1() {
+//        return cupCapacity * noOfCups;
+//    }
+    // Getter method to get the drink name (for example, "Water")
+    public String getDrinkName() {
+        return "Water1";
     }
+    // Getter method to calculate waterIntake based on cupCapacity and noOfCups
+    public void calculateWaterIntake() {
+        this.waterIntake = cupCapacity * noOfCups;
+    }
+
 }
 
