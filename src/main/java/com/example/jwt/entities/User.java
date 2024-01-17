@@ -120,6 +120,12 @@ public class User implements UserDetails {
     @JsonBackReference("notificationSettingsReference")
     private AllToggle allToggle;
 
+    @OneToMany(mappedBy = "user")
+//    @JsonIgnoreProperties("user")
+    @JsonManagedReference // Add this annotation
+
+    private List<Exercise> exercises;
+
     public String getNotificationToken() {
         return this.notificationToken;
     }
