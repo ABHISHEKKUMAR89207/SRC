@@ -33,8 +33,125 @@ public class ActivityController {
     private ActivityRepository activityRepository;
 
     //By steps
+//    @PostMapping("/record-by-steps")
+//    public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null) {
+//            LocalDate currentDate = LocalDate.now();
+//            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+//
+//            if (existingRecord != null) {
+//                // If a record for the user and the current date exists, update it with the new steps.
+//                existingRecord.setSteps(steps);
+//                activityService.updateActivities(existingRecord);
+//                return existingRecord; // Return the updated record
+//            } else {
+//                // If no record exists for the current date, create a new one.
+//                Activities newRecord = new Activities();
+//                newRecord.setUser(user);
+//                newRecord.setSteps(steps);
+//                newRecord.setActivityDate(currentDate);
+//                // Save the new record as a separate row in the database.
+//                activityService.createActivities(newRecord);
+//                return newRecord; // Return the newly created record
+//            }
+//        } else {
+//            // Handle the case where the user with the provided userId is not found.
+//            return null; // Placeholder for error handling
+//        }
+//    }
+
+//    @PostMapping("/record-by-steps")
+//    public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate recordingDate) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null) {
+//            // Use the specified recordingDate instead of the current date
+//            LocalDate currentDate = recordingDate;
+//
+//            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+//
+//            if (existingRecord != null) {
+//                // If a record for the user and the specified date exists, update it with the new steps.
+//                existingRecord.setSteps(steps);
+//                activityService.updateActivities(existingRecord);
+//                return existingRecord; // Return the updated record
+//            } else {
+//                // If no record exists for the specified date, create a new one.
+//                Activities newRecord = new Activities();
+//                newRecord.setUser(user);
+//                newRecord.setSteps(steps);
+//                newRecord.setActivityDate(currentDate);
+//                // Save the new record as a separate row in the database.
+//                activityService.createActivities(newRecord);
+//                return newRecord; // Return the newly created record
+//            }
+//        } else {
+//            // Handle the case where the user with the provided userId is not found.
+//            return null; // Placeholder for error handling
+//        }
+//    }
+
+//    @PostMapping("/record-by-steps")
+//    public List<Activities> recordStepsForWeek(@RequestHeader("Auth") String tokenHeader, @RequestParam List<Integer> stepsList, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        List<Activities> recordedActivities = new ArrayList<>();
+//
+//        if (user != null) {
+//            for (int i = 0; i < stepsList.size(); i++) {
+//                LocalDate currentDate = startDate.plusDays(i);
+//
+//                Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+//
+//                if (existingRecord != null) {
+//                    // If a record for the user and the specified date exists, update it with the new steps.
+//                    existingRecord.setSteps(stepsList.get(i));
+//                    activityService.updateActivities(existingRecord);
+//                    recordedActivities.add(existingRecord); // Add the updated record to the list
+//                } else {
+//                    // If no record exists for the specified date, create a new one.
+//                    Activities newRecord = new Activities();
+//                    newRecord.setUser(user);
+//                    newRecord.setSteps(stepsList.get(i));
+//                    newRecord.setActivityDate(currentDate);
+//                    // Save the new record as a separate row in the database.
+//                    activityService.createActivities(newRecord);
+//                    recordedActivities.add(newRecord); // Add the newly created record to the list
+//                }
+//            }
+//        } else {
+//            // Handle the case where the user with the provided userId is not found.
+//            return null; // Placeholder for error handling
+//        }
+//
+//        return recordedActivities;
+//    }
+
     @PostMapping("/record-by-steps")
-    public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps) {
+    public List<Activities> recordStepsForPreviousWeek(@RequestHeader("Auth") String tokenHeader, @RequestParam List<Integer> stepsList, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
         String token = tokenHeader.replace("Bearer ", "");
 
@@ -44,30 +161,158 @@ public class ActivityController {
         // Use the username to fetch the userId from your user service
         User user = userService.findByUsername(username);
 
-        if (user != null) {
-            LocalDate currentDate = LocalDate.now();
-            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+        List<Activities> recordedActivities = new ArrayList<>();
 
-            if (existingRecord != null) {
-                // If a record for the user and the current date exists, update it with the new steps.
-                existingRecord.setSteps(steps);
-                activityService.updateActivities(existingRecord);
-                return existingRecord; // Return the updated record
-            } else {
-                // If no record exists for the current date, create a new one.
-                Activities newRecord = new Activities();
-                newRecord.setUser(user);
-                newRecord.setSteps(steps);
-                newRecord.setActivityDate(currentDate);
-                // Save the new record as a separate row in the database.
-                activityService.createActivities(newRecord);
-                return newRecord; // Return the newly created record
+        if (user != null) {
+            for (int i = stepsList.size() - 1; i >= 0; i--) {
+                LocalDate currentDate = startDate.minusDays(stepsList.size() - 1 - i);
+
+                Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+
+                if (existingRecord != null) {
+                    // If a record for the user and the specified date exists, update it with the new steps.
+                    existingRecord.setSteps(stepsList.get(i));
+                    activityService.updateActivities(existingRecord);
+                    recordedActivities.add(existingRecord); // Add the updated record to the list
+                } else {
+                    // If no record exists for the specified date, create a new one.
+                    Activities newRecord = new Activities();
+                    newRecord.setUser(user);
+                    newRecord.setSteps(stepsList.get(i));
+                    newRecord.setActivityDate(currentDate);
+                    // Save the new record as a separate row in the database.
+                    activityService.createActivities(newRecord);
+                    recordedActivities.add(newRecord); // Add the newly created record to the list
+                }
             }
         } else {
             // Handle the case where the user with the provided userId is not found.
             return null; // Placeholder for error handling
         }
+
+        return recordedActivities;
     }
+
+
+    @PostMapping("/record-by-calory")
+    public List<Activities> recordCaloryForPreviousWeek(@RequestHeader("Auth") String tokenHeader, @RequestParam List<Integer> stepsList, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        List<Activities> recordedActivities = new ArrayList<>();
+
+        if (user != null) {
+            for (int i = stepsList.size() - 1; i >= 0; i--) {
+                LocalDate currentDate = startDate.minusDays(stepsList.size() - 1 - i);
+
+                Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+
+                if (existingRecord != null) {
+                    // If a record for the user and the specified date exists, update it with the new steps.
+                    existingRecord.setCalory(Double.valueOf(stepsList.get(i)));
+                    activityService.updateActivities(existingRecord);
+                    recordedActivities.add(existingRecord); // Add the updated record to the list
+                } else {
+                    // If no record exists for the specified date, create a new one.
+                    Activities newRecord = new Activities();
+                    newRecord.setUser(user);
+                    newRecord.setCalory(Double.valueOf(stepsList.get(i)));
+                    newRecord.setActivityDate(currentDate);
+                    // Save the new record as a separate row in the database.
+                    activityService.createActivities(newRecord);
+                    recordedActivities.add(newRecord); // Add the newly created record to the list
+                }
+            }
+        } else {
+            // Handle the case where the user with the provided userId is not found.
+            return null; // Placeholder for error handling
+        }
+
+        return recordedActivities;
+    }
+
+
+//    @GetMapping("/weekly-steps")
+//    public Map<String, Integer> getWeeklySteps(@RequestHeader("Auth") String tokenHeader) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Integer> weeklyStepsMap = new LinkedHashMap<>();
+//
+//        if (user != null) {
+//            LocalDate currentDate = LocalDate.now();
+//            DayOfWeek currentDayOfWeek = currentDate.getDayOfWeek();
+//
+//            // Calculate the start date of the current week (assuming Monday is the first day of the week)
+//            LocalDate startOfWeek = currentDate.minusDays(currentDayOfWeek.getValue() - DayOfWeek.MONDAY.getValue());
+//
+//            for (int i = 0; i < 7; i++) {
+//                LocalDate date = startOfWeek.plusDays(i);
+//
+//                Activities activities = activityService.getActivitiesForUserAndDate(user, date);
+//
+//                if (activities != null) {
+//                    weeklyStepsMap.put(date.getDayOfWeek().toString(), activities.getSteps());
+//                } else {
+//                    weeklyStepsMap.put(date.getDayOfWeek().toString(), 0);
+//                }
+//            }
+//        }
+//
+//        return weeklyStepsMap;
+//    }
+@GetMapping("/weekly-steps")
+public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(@RequestHeader("Auth") String tokenHeader) {
+    String token = tokenHeader.replace("Bearer ", "");
+    String username = jwtHelper.getUsernameFromToken(token);
+    User user = userService.findByUsername(username);
+
+    Map<String, Double> waterIntakeMap = calculateWaterIntakeForLastWeek(user);
+    return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
+}
+
+
+    public Map<String, Double> calculateWaterIntakeForLastWeek(User user) {
+        List<Activities> activities = user.getActivities();
+
+        // Create a map to store water intake for each day
+        Map<String, Double> waterIntakeMap = new HashMap<>();
+
+        // Calculate the start date of the last week
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusWeeks(1);
+
+        // Iterate over each day in the last week
+        for (LocalDate currentDate = startDate; currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
+            double totalWaterIntake = 0.0;
+
+            // Calculate total water intake for the current day
+            for (Activities activities1 : activities) {
+                if (activities1.getActivityDate().isEqual(currentDate)) {
+//                    totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
+                    totalWaterIntake += activities1.getSteps();
+
+                }
+            }
+            // Store the result in the map with the day name
+            waterIntakeMap.put(currentDate.getDayOfWeek().toString(), totalWaterIntake);
+        }
+
+        return waterIntakeMap;
+    }
+
 
     // to get the steps of the user by fitbit watch
     @GetMapping("/get-steps")
@@ -92,6 +337,31 @@ public class ActivityController {
             return null;
         }
     }
+
+
+//    @GetMapping("/get-calory")
+//    public Activities getUserCalory(@RequestHeader("Auth") String tokenHeader) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null) {
+//            LocalDate currentDate = LocalDate.now();
+//            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+//
+//            // If no record exists for the current date, return a placeholder or handle it as needed
+//            return existingRecord; // Return the activities record for the user and current date
+//        } else {
+//            // Handle the case where the user with the provided userId is not found.
+//            return null;
+//        }
+//    }
+
 
 //    Get steps by date for export
 

@@ -18,6 +18,10 @@ public class DishesService {
     @Autowired
     private DishesRepository dishesRepository;
 
+    public Long getDishIdByDishNameAndDate(String dishName, LocalDate date) {
+        return dishesRepository.findDishIdByDishNameAndDate(dishName, date);
+    }
+
     // Retrieve all dishes for a user with a specific meal name on the same date
     public void saveDishesForUser(DishDTO dishDTO, User user, LocalDate date) {
         Dishes dish = new Dishes();

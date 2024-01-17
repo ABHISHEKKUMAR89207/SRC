@@ -22,6 +22,7 @@ public class Activities {
     private String activityType;
     private int steps;
     private Double walkingTarget;  //in km
+    private Double calory;
 
     @Column(name = "jogging_duration")
     private Long joggingDurationInSeconds;

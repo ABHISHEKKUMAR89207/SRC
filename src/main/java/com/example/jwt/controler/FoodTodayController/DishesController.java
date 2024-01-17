@@ -9,6 +9,7 @@ import com.example.jwt.entities.FoodToday.Recipe.RecipeDTO;
 import com.example.jwt.entities.FoodToday.Recipe.RecipeRepository;
 import com.example.jwt.entities.FoodToday.Recipe.RecipeService;
 import com.example.jwt.entities.User;
+import com.example.jwt.repository.FoodTodayRepository.DishesRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.DishesService;
 import com.example.jwt.service.UserService;
@@ -37,10 +38,54 @@ public class DishesController {
     private RecipeRepository recipeRepository;
 
     @Autowired
+    private DishesRepository dishesRepository;
+
+    @Autowired
     private RecipeService recipeService;
 
+
+
+
+//    @PostMapping("/add-dish-id")
+//    public void saveDishForUser(@RequestHeader("Auth") String tokenHeader, @RequestBody DishDTO dishDTO) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        // Get the current date
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Retrieve the dish ID based on the dish name and current date
+//        Long dishId = dishesService.getDishIdByDishNameAndDate(dishDTO.getDishName(), currentDate);
+//
+//        // If the dish ID is not found, you can create a new dish
+//        if (dishId == null) {
+//            Dishes newDish = new Dishes();
+//            newDish.setDishName(dishDTO.getDishName());
+//            newDish.setDishQuantity(dishDTO.getDishQuantity());
+//            newDish.setMealName(dishDTO.getMealName());
+//            newDish.setDate(currentDate);
+//            newDish.setUser(user);
+//            dishesRepository.save(newDish);
+//        } else {
+//            // If the dish ID is found, update the existing dish
+//            Dishes existingDish = dishesRepository.findById(dishId).orElse(null);
+//            if (existingDish != null) {
+//                existingDish.setDishQuantity(dishDTO.getDishQuantity());
+//                existingDish.setMealName(dishDTO.getMealName());
+//                dishesRepository.save(existingDish);
+//            }
+//        }
+//    }
+
+
     @PostMapping("/add-dish")
-    public void saveDishForUser( @RequestHeader("Auth") String tokenHeader, @RequestBody DishDTO dishDTO) {
+    public void saveDishForUserId( @RequestHeader("Auth") String tokenHeader, @RequestBody DishDTO dishDTO) {
 
         String token = tokenHeader.replace("Bearer ", "");
 

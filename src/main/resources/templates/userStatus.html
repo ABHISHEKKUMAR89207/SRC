@@ -15,6 +15,24 @@
       padding: 0;
     }
 
+    /*.fixed-heading {*/
+    /*  position: sticky;*/
+    /*  top: 0;*/
+    /*  z-index: 1;*/
+    /*  background-color: #fff;*/
+    /*  text-align: center;*/
+    /*}*/
+
+    .fixed-heading {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      background-color: #fff;
+      text-align: center;
+      padding: 10px 0;
+      margin: 0; /* Add this line to remove margin on the h2 element */
+    }
+
     /*.container {*/
     /*  width: 30%;*/
     /*  margin: auto;*/
@@ -37,13 +55,14 @@
 
     }
 
-    .fixed-heading {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      /* Other styles for the fixed heading */
-    }
+    /*.fixed-heading {*/
+    /*  !*position: fixed;*!*/
+    /*  !*top: 50%;*!*/
+    /*  height: 50;*/
+    /*  !*left: 50%;*!*/
+    /*  !*transform: translate(-50%, -50%);*!*/
+    /*  !* Other styles for the fixed heading *!*/
+    /*}*/
     /*table {*/
     /*  width: auto; !* Adjust table width *!*/
     /*  border-collapse: collapse;*/
@@ -77,8 +96,9 @@
 
 <div class="container">
   <a href="/dashboard/user.html" class="btn btn-primary" style="position: absolute; top: 10px; left: 10px;">Back</a>
-  <div style="text-align: center;">
-    <h2>User Details</h2>
+<!--  <div style="text-align: center;">-->
+  <div class="fixed-heading">
+  <h2>User Details</h2>
   </div>
   <!--  <table>-->
   <!--    <thead>-->
