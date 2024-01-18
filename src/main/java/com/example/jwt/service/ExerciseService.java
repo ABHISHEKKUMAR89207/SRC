@@ -42,27 +42,17 @@ public class ExerciseService {
         this.exerciseRepository = exerciseRepository;
     }
 
-    // Method to calculate duration and calories burned
-    public Exercise calculateAndSaveExercise(Exercise exercise, User user) {
+    public Exercise calculateAndSaveExercise(Exercise exercise, User user, double duration) {
         String activityType = exercise.getActivityType();
-        double duration = exercise.getDuration();
-
-        // Assuming a simple calorie calculation based on activity type
         double caloriesBurned = calculateCaloriesBurned(activityType, duration);
 
-        // Set calculated values
         exercise.setCaloriesBurned(caloriesBurned);
-
-        // Set the user for the exercise
         exercise.setUser(user);
 
-        // Save the exercise entity
         return exerciseRepository.save(exercise);
     }
 
     public List<Exercise> findByUserAndDateAndActivityType(User user, LocalDate date, String activityType) {
-        // Implement the logic to retrieve exercises by user, date, and activityType
-        // You can use your ExerciseRepository or any other method to fetch the data
         return exerciseRepository.findByUserAndDateAndActivityType(user, date, activityType);
     }
 

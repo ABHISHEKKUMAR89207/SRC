@@ -36,24 +36,24 @@ private LocalDate date= LocalDate.now();;
 
 //  getters and setters
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
-        calculateDuration();
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-        calculateDuration();
-    }
-
-    private void calculateDuration() {
-        if (startTime != null && endTime != null) {
-            long milliseconds = endTime.getTime() - startTime.getTime();
-            this.duration = milliseconds / (60.0 * 1000.0); // Convert milliseconds to minutes
-        } else {
-            this.duration = 0;
-        }
-    }
+//    public void setStartTime(Time startTime) {
+//        this.startTime = startTime;
+//        calculateDuration();
+//    }
+//
+//    public void setEndTime(Time endTime) {
+//        this.endTime = endTime;
+//        calculateDuration();
+//    }
+//
+//    private void calculateDuration() {
+//        if (startTime != null && endTime != null) {
+//            long milliseconds = endTime.getTime() - startTime.getTime();
+//            this.duration = milliseconds / (60.0 * 1000.0); // Convert milliseconds to minutes
+//        } else {
+//            this.duration = 0;
+//        }
+//    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")

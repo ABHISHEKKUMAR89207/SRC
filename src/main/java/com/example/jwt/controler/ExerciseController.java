@@ -151,30 +151,27 @@ public class ExerciseController {
             @RequestHeader("Auth") String tokenHeader,
             @RequestParam String activityType,
             @RequestParam String startTime,
-            @RequestParam String endTime
+            @RequestParam String endTime,
+            @RequestParam double duration
     ) {
         try {
-            // Extract the username (email) from the token
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
             User user = userService.findByUsername(username);
 
-            // Convert string to Timestamp
             Time startTimestamp = Time.valueOf(startTime.replace("T", " ").replace("Z", ""));
             Time endTimestamp = Time.valueOf(endTime.replace("T", " ").replace("Z", ""));
 
-            // Set values and associate the exercise with the user
             Exercise exercise = new Exercise();
             exercise.setActivityType(activityType);
             exercise.setStartTime(startTimestamp);
             exercise.setEndTime(endTimestamp);
+            exercise.setDuration(duration);
 
-            // Calculate and save exercise with the associated user
             System.out.println("Before calculateAndSaveExercise");
-            Exercise savedExercise = exerciseService.calculateAndSaveExercise(exercise, user);
+            Exercise savedExercise = exerciseService.calculateAndSaveExercise(exercise, user, duration);
             System.out.println("After calculateAndSaveExercise");
 
-            // Exercise added successfully
             return savedExercise;
         } catch (Exception e) {
             e.printStackTrace();
