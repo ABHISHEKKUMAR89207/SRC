@@ -33,41 +33,79 @@ public class ActivityController {
     private ActivityRepository activityRepository;
 
     //By steps
-//    @PostMapping("/record-by-steps")
-//    public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps) {
-//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//
-//        if (user != null) {
-//            LocalDate currentDate = LocalDate.now();
-//            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
-//
-//            if (existingRecord != null) {
-//                // If a record for the user and the current date exists, update it with the new steps.
-//                existingRecord.setSteps(steps);
-//                activityService.updateActivities(existingRecord);
-//                return existingRecord; // Return the updated record
-//            } else {
-//                // If no record exists for the current date, create a new one.
-//                Activities newRecord = new Activities();
-//                newRecord.setUser(user);
-//                newRecord.setSteps(steps);
-//                newRecord.setActivityDate(currentDate);
-//                // Save the new record as a separate row in the database.
-//                activityService.createActivities(newRecord);
-//                return newRecord; // Return the newly created record
-//            }
-//        } else {
-//            // Handle the case where the user with the provided userId is not found.
-//            return null; // Placeholder for error handling
-//        }
-//    }
+    @PostMapping("/record-by-steps")
+    public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            LocalDate currentDate = LocalDate.now();
+            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+
+            if (existingRecord != null) {
+                // If a record for the user and the current date exists, update it with the new steps.
+                existingRecord.setSteps(steps);
+                activityService.updateActivities(existingRecord);
+                return existingRecord; // Return the updated record
+            } else {
+                // If no record exists for the current date, create a new one.
+                Activities newRecord = new Activities();
+                newRecord.setUser(user);
+                newRecord.setSteps(steps);
+                newRecord.setActivityDate(currentDate);
+                // Save the new record as a separate row in the database.
+                activityService.createActivities(newRecord);
+                return newRecord; // Return the newly created record
+            }
+        } else {
+            // Handle the case where the user with the provided userId is not found.
+            return null; // Placeholder for error handling
+        }
+    }
+
+
+
+    @PostMapping("/record-by-calorie")
+    public Activities recordCalorie(@RequestHeader("Auth") String tokenHeader, @RequestParam Double calorie) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            LocalDate currentDate = LocalDate.now();
+            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+
+            if (existingRecord != null) {
+                // If a record for the user and the current date exists, update it with the new steps.
+                existingRecord.setCalory(calorie);
+                activityService.updateActivities(existingRecord);
+                return existingRecord; // Return the updated record
+            } else {
+                // If no record exists for the current date, create a new one.
+                Activities newRecord = new Activities();
+                newRecord.setUser(user);
+                newRecord.setCalory(calorie);
+                newRecord.setActivityDate(currentDate);
+                // Save the new record as a separate row in the database.
+                activityService.createActivities(newRecord);
+                return newRecord; // Return the newly created record
+            }
+        } else {
+            // Handle the case where the user with the provided userId is not found.
+            return null; // Placeholder for error handling
+        }
+    }
 
 //    @PostMapping("/record-by-steps")
 //    public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate recordingDate) {
@@ -150,7 +188,7 @@ public class ActivityController {
 //        return recordedActivities;
 //    }
 
-    @PostMapping("/record-by-steps")
+    @PostMapping("/record-by-steps-weekly")
     public List<Activities> recordStepsForPreviousWeek(@RequestHeader("Auth") String tokenHeader, @RequestParam List<Integer> stepsList, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
         String token = tokenHeader.replace("Bearer ", "");
@@ -194,7 +232,7 @@ public class ActivityController {
     }
 
 
-    @PostMapping("/record-by-calory")
+    @PostMapping("/record-by-calorie-weekly")
     public List<Activities> recordCaloryForPreviousWeek(@RequestHeader("Auth") String tokenHeader, @RequestParam List<Integer> stepsList, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
         String token = tokenHeader.replace("Bearer ", "");
@@ -273,18 +311,28 @@ public class ActivityController {
 //
 //        return weeklyStepsMap;
 //    }
-@GetMapping("/weekly-steps")
-public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(@RequestHeader("Auth") String tokenHeader) {
-    String token = tokenHeader.replace("Bearer ", "");
-    String username = jwtHelper.getUsernameFromToken(token);
-    User user = userService.findByUsername(username);
+    @GetMapping("/weekly-steps")
+    public ResponseEntity<Map<String, Double>> StepsForLastWeek(@RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
 
-    Map<String, Double> waterIntakeMap = calculateWaterIntakeForLastWeek(user);
-    return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
-}
+        Map<String, Double> waterIntakeMap = StepsForLastWeek(user);
+        return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/weekly-calorie")
+    public ResponseEntity<Map<String, Double>> CalorieLastWeek(@RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        Map<String, Double> waterIntakeMap = CalorieForLastWeek(user);
+        return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
+    }
 
 
-    public Map<String, Double> calculateWaterIntakeForLastWeek(User user) {
+    public Map<String, Double> StepsForLastWeek(User user) {
         List<Activities> activities = user.getActivities();
 
         // Create a map to store water intake for each day
@@ -303,6 +351,36 @@ public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(@Requ
                 if (activities1.getActivityDate().isEqual(currentDate)) {
 //                    totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
                     totalWaterIntake += activities1.getSteps();
+
+                }
+            }
+            // Store the result in the map with the day name
+            waterIntakeMap.put(currentDate.getDayOfWeek().toString(), totalWaterIntake);
+        }
+
+        return waterIntakeMap;
+    }
+
+
+    public Map<String, Double> CalorieForLastWeek(User user) {
+        List<Activities> activities = user.getActivities();
+
+        // Create a map to store water intake for each day
+        Map<String, Double> waterIntakeMap = new HashMap<>();
+
+        // Calculate the start date of the last week
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusWeeks(1);
+
+        // Iterate over each day in the last week
+        for (LocalDate currentDate = startDate; currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
+            double totalWaterIntake = 0.0;
+
+            // Calculate total water intake for the current day
+            for (Activities activities1 : activities) {
+                if (activities1.getActivityDate().isEqual(currentDate)) {
+//                    totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
+                    totalWaterIntake += activities1.getCalory();
 
                 }
             }
