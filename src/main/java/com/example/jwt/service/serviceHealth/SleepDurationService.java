@@ -6,6 +6,7 @@ import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.SleepDurationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,30 @@ public class SleepDurationService {
     public SleepDurationService(SleepDurationRepository sleepDurationRepository) {
         this.sleepDurationRepository = sleepDurationRepository;
     }
+//    public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
+//        return sleepDurationRepository.findByUserAndDateOfSleep(user, date);
+//    }
+public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
+    Optional<SleepDuration> optionalSleepDuration = sleepDurationRepository.findByUserAndDateOfSleep(user, date);
+    return optionalSleepDuration.orElse(null);
+}
 
+    public SleepDuration updateSleep(SleepDuration sleepDuration) {
+        // Check if the sleep duration with the same ID already exists in the database
+        Optional<SleepDuration> existingSleep = sleepDurationRepository.findById(sleepDuration.getId());
+
+        if (existingSleep.isPresent()) {
+            // Update the existing sleep duration
+            return sleepDurationRepository.save(sleepDuration);
+        } else {
+            // Handle the case where the sleep duration with the given ID is not found
+            throw new EntityNotFoundException("Sleep duration with ID " + sleepDuration.getId() + " not found");
+        }
+    }
+
+    public SleepDuration createSleep(SleepDuration sleepDuration) {
+        return sleepDurationRepository.save(sleepDuration);
+    }
     public SleepDuration addOrUpdateSleepDuration(SleepDuration sleepDuration, String username) {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));

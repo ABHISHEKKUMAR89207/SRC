@@ -1,12 +1,17 @@
 package com.example.jwt.controler;
 
 import com.example.jwt.dtos.ActivitiesDTO;
+import com.example.jwt.dtos.UserHealthData;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.Activities;
+import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.repository.ActivityRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.ActivityService;
 import com.example.jwt.service.UserService;
+import com.example.jwt.service.serviceHealth.HeartRateService;
+import com.example.jwt.service.serviceHealth.SleepDurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -393,28 +398,104 @@ public class ActivityController {
 
 
     // to get the steps of the user by fitbit watch
-    @GetMapping("/get-steps")
-    public Activities getUserSteps(@RequestHeader("Auth") String tokenHeader) {
-        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-        String token = tokenHeader.replace("Bearer ", "");
+//    @GetMapping("/get-steps")
+//    public Activities getUserSteps(@RequestHeader("Auth") String tokenHeader) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null) {
+//            LocalDate currentDate = LocalDate.now();
+//            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+//
+//            // If no record exists for the current date, return a placeholder or handle it as needed
+//            return existingRecord; // Return the activities record for the user and current date
+//        } else {
+//            // Handle the case where the user with the provided userId is not found.
+//            return null;
+//        }
+//    }
 
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
+@Autowired
+private HeartRateService heartRateService;
+//    @GetMapping("/get-steps")
+//    public Map<String, Object> getUserData(@RequestHeader("Auth") String tokenHeader) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Object> userData = new HashMap<>();
+//
+//        if (user != null) {
+//            LocalDate currentDate = LocalDate.now();
+//
+//            // Retrieve activities (steps) for the user and current date
+//            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+//
+//            // Retrieve heart rate for the user and current date
+//            HeartRate heartRateRecord = heartRateService.getHeartRateForUserAndDate(user, currentDate);
+//
+//            // Add the retrieved data to the response map
+//            userData.put("activities", existingRecord);
+//            userData.put("heartRate", heartRateRecord);
+//
+//            return userData;
+//        } else {
+//            // Handle the case where the user with the provided userId is not found.
+//            return Collections.singletonMap("error", "User not found");
+//        }
+//    }
 
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
 
-        if (user != null) {
-            LocalDate currentDate = LocalDate.now();
-            Activities existingRecord = activityService.getActivitiesForUserAndDate(user, currentDate);
+    @Autowired
+    private SleepDurationService sleepDurationService;
+@GetMapping("/get-health-data")
+public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
+    // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+    String token = tokenHeader.replace("Bearer ", "");
 
-            // If no record exists for the current date, return a placeholder or handle it as needed
-            return existingRecord; // Return the activities record for the user and current date
-        } else {
-            // Handle the case where the user with the provided userId is not found.
-            return null;
+    // Extract the username (email) from the token
+    String username = jwtHelper.getUsernameFromToken(token);
+
+    // Use the username to fetch the userId from your user service
+    User user = userService.findByUsername(username);
+
+    UserHealthData userHealthData = new UserHealthData();
+
+    if (user != null) {
+        // Get heart rate data
+        HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
+        if (heartRate != null) {
+            userHealthData.setLocalDate(heartRate.getLocalDate());
+            userHealthData.setHeartRateValue(heartRate.getValue());
+        }
+
+        // Get activity data
+        Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+        if (activities != null) {
+            userHealthData.setSteps(activities.getSteps());
+            userHealthData.setCalorie(activities.getCalory());
+        }
+
+        // Get sleep data
+        SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
+        if (sleepDuration != null) {
+            userHealthData.setSleepDuration(sleepDuration.getDuration());
         }
     }
+
+    return userHealthData;
+}
 
 
 //    @GetMapping("/get-calory")

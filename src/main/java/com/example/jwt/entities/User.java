@@ -3,6 +3,7 @@ package com.example.jwt.entities;
 import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
+import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.registration.token.VerificationToken;
@@ -73,6 +74,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<SleepDuration> sleepDurations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<HeartRate> heartRates = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Dishes> dishesList;

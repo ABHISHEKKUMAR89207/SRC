@@ -15,7 +15,7 @@ public interface HeartRateRepository extends JpaRepository<HeartRate, Long> {
 
     HeartRate findAllByLocalDate(LocalDate localDate);
 
-    List<HeartRate> findByUserAndLocalDate(User user, LocalDate date);
-
+//    List<HeartRate> findByUserAndLocalDate(User user, LocalDate date);
+HeartRate findByUserAndLocalDate(User user, LocalDate date);
     List<HeartRate> findByUserAndLocalDateBetween(User user, LocalDate startDate, LocalDate endDate);
 }

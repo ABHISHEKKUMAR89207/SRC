@@ -15,7 +15,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/heart-rates")
@@ -57,22 +61,22 @@ public class HeartRateController {
     }
 
     //get heart rate by date
-    @GetMapping("/get/{date}")
-    public ResponseEntity<List<HeartRate>> getHeartRateForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-
-//        User user = userService.getUserByUsername(username);
-
-        // Find the user by the username, and associate the heart rate with that user
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        List<HeartRate> heartRates = heartRateService.getHeartRateForUserAndDate(user, date);
-        return ResponseEntity.ok(heartRates);
-    }
+//    @GetMapping("/get/{date}")
+//    public ResponseEntity<List<HeartRate>> getHeartRateForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+////        User user = userService.getUserByUsername(username);
+//
+//        // Find the user by the username, and associate the heart rate with that user
+//        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+//        if (user == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        List<HeartRate> heartRates = heartRateService.getHeartRateForUserAndDate(user, date);
+//        return ResponseEntity.ok(heartRates);
+//    }
 
     // to get heath rate of the specific user of one week
     @GetMapping("/get/one-week-ago")
@@ -103,5 +107,93 @@ public class HeartRateController {
 
         List<HeartRate> heartRates = heartRateService.getHeartRateForUserBetweenDates(user, startDate, endDate);
         return ResponseEntity.ok(heartRates);
+    }
+
+
+    @PostMapping("/record-weekly")
+    public Map<LocalDate, HeartRate> recordHeartRateForPreviousWeek(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestBody Map<String, Double> heartRateData) {
+
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        Map<LocalDate, HeartRate> recordedHeartRates = new HashMap<>();
+
+        if (user != null) {
+            for (Map.Entry<String, Double> entry : heartRateData.entrySet()) {
+                LocalDate currentDate = LocalDate.parse(entry.getKey());
+                Double heartRateValue = entry.getValue();
+
+                HeartRate existingRecord =  heartRateService.getHeartRateForUserAndDate(user, currentDate);
+
+                if (existingRecord != null) {
+                    // If a record for the user and the specified date exists, update it with the new heart rate data.
+                    existingRecord.setValue(heartRateValue);
+                    existingRecord.setTimeStamp(LocalDateTime.now());
+                    heartRateService.updateHeartRate(existingRecord);
+                    recordedHeartRates.put(currentDate, existingRecord); // Add the updated record to the map
+                } else {
+                    // If no record exists for the specified date, create a new one.
+                    HeartRate newRecord = new HeartRate();
+                    newRecord.setUser(user);
+                    newRecord.setValue(heartRateValue);
+                    newRecord.setLocalDate(currentDate);
+                    newRecord.setTimeStamp(LocalDateTime.now());
+                    // Save the new record as a separate row in the database.
+                    heartRateService.createHeartRate(newRecord);
+                    recordedHeartRates.put(currentDate, newRecord); // Add the newly created record to the map
+                }
+            }
+        } else {
+            // Handle the case where the user with the provided userId is not found.
+            return Collections.singletonMap(LocalDate.now(), null); // Placeholder for error handling
+        }
+
+        return recordedHeartRates;
+    }
+
+    @GetMapping("/weekly-heart")
+    public ResponseEntity<Map<String, Double>> StepsForLastWeek(@RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        Map<String, Double> heartMap = HeartForLastWeek(user);
+        return new ResponseEntity<>(heartMap, HttpStatus.OK);
+    }
+    public Map<String, Double> HeartForLastWeek(User user) {
+        List<HeartRate> heartRate = user.getHeartRates();
+
+        // Create a map to store water intake for each day
+        Map<String, Double> heartRateMap = new HashMap<>();
+
+        // Calculate the start date of the last week
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusWeeks(1);
+
+        // Iterate over each day in the last week
+        for (LocalDate currentDate = startDate; currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
+            double totalHeartRate = 0.0;
+
+            // Calculate total water intake for the current day
+            for (HeartRate heartRate1 : heartRate) {
+                if (heartRate1.getLocalDate().isEqual(currentDate)) {
+//                    totalWaterIntake += waterEntity.getCupCapacity() * waterEntity.getNoOfCups() / 1000.0;
+                    totalHeartRate += heartRate1.getValue();
+
+                }
+            }
+            // Store the result in the map with the day name
+            heartRateMap.put(currentDate.getDayOfWeek().toString(), totalHeartRate);
+        }
+
+        return heartRateMap;
     }
 }
