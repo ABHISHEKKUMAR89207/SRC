@@ -30,6 +30,7 @@ public class Dishes {
     private String mealName;
     private LocalDate date;
     private boolean favourite;
+    private Double servingSize;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

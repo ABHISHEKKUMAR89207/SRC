@@ -15,4 +15,5 @@ public class DishDTO {
     private String dishName;
     private Double dishQuantity;
     private String mealName;
+    private Double servingSize;
 }

@@ -28,6 +28,7 @@ public class DishesService {
         dish.setDishName(dishDTO.getDishName());
         dish.setDishQuantity(dishDTO.getDishQuantity());
         dish.setMealName(dishDTO.getMealName());
+        dish.setServingSize(dishDTO.getServingSize());
         dish.setDate(date);
         user.setUserId(user.getUserId());
         dish.setUser(user);

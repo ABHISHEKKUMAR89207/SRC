@@ -459,8 +459,8 @@ private HeartRateService heartRateService;
 
     @Autowired
     private SleepDurationService sleepDurationService;
-@GetMapping("/get-health-data")
-public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
+    @GetMapping("/get-health-data")
+    public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
     // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
     String token = tokenHeader.replace("Bearer ", "");
 
