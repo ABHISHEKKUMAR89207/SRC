@@ -89,58 +89,117 @@ public class FoodDataService {
 //        }
 //        return dtos;
 //    }
-public List<NinDataDTO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood, String username) {
-//    List<NinData> entities = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
-    List<NinData> top10Results = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
-    // Create DTOs based on the retrieved entities
-    List<NinDataDTO> dtos = new ArrayList<>();
-    if (top10Results.size() > 10) {
-        top10Results = top10Results.subList(0, 10);
+//public List<NinDataDTO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood, String username) {
+////    List<NinData> entities = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
+//    List<NinData> top10Results = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
+//    // Create DTOs based on the retrieved entities
+//    List<NinDataDTO> dtos = new ArrayList<>();
+//    if (top10Results.size() > 10) {
+//        top10Results = top10Results.subList(0, 10);
+//
+//
+//
+//    for (NinData entity : top10Results) {
+//        NinDataDTO dto = new NinDataDTO();
+//        dto.setId(entity.getNin_data_id());
+//        dto.setName(entity.getFood());
+//
+//        // Set DTO properties based on the selected column
+//        if ("carbohydrate".equalsIgnoreCase(column)) {
+//            dto.setCarbohydrate(entity.getCarbohydrate());
+//        } else if ("total_fat".equalsIgnoreCase(column)) {
+//            dto.setTotal_Fat(entity.getTotal_Fat());
+//        } else if ("cholestrol".equalsIgnoreCase(column)) {
+//            dto.setCholestrol(entity.getCholestrol());
+//        } else if ("sodium".equalsIgnoreCase(column)) {
+//            dto.setSodium(entity.getSodium());
+//        } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
+//            dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
+//        } else if ("calcium".equalsIgnoreCase(column)) {
+//            dto.setCalcium(entity.getCalcium());
+//        } else if ("iron".equalsIgnoreCase(column)) {
+//            dto.setIron(entity.getIron());
+//        } else if ("potassium".equalsIgnoreCase(column)) {
+//            dto.setPotassium(entity.getPotassium());
+//        } else if ("phosphorus".equalsIgnoreCase(column)) {
+//            dto.setPhosphorus(entity.getPhosphorus());
+//        } else if ("magnesium".equalsIgnoreCase(column)) {
+//            dto.setMagnesium(entity.getMagnesium());
+//        } else if ("zinc".equalsIgnoreCase(column)) {
+//            dto.setZinc(entity.getZinc());
+//        } else if ("selenium".equalsIgnoreCase(column)) {
+//            dto.setSelenium(entity.getSelenium());
+//        } else if ("copper".equalsIgnoreCase(column)) {
+//            dto.setCopper(entity.getCopper());
+//        } else if ("manganese".equalsIgnoreCase(column)) {
+//            dto.setManganese(entity.getManganese());
+//        }
+//        // ... add more conditions based on other columns
+//
+//        dtos.add(dto);
+//    }
+//}
+//
+//    return dtos;
+//    }
 
+    public List<NinDataDTO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood, String username) {
+        List<NinData> top10Results;
 
-
-    for (NinData entity : top10Results) {
-        NinDataDTO dto = new NinDataDTO();
-        dto.setId(entity.getNin_data_id());
-        dto.setName(entity.getFood());
-
-        // Set DTO properties based on the selected column
-        if ("carbohydrate".equalsIgnoreCase(column)) {
-            dto.setCarbohydrate(entity.getCarbohydrate());
-        } else if ("total_fat".equalsIgnoreCase(column)) {
-            dto.setTotal_Fat(entity.getTotal_Fat());
-        } else if ("cholestrol".equalsIgnoreCase(column)) {
-            dto.setCholestrol(entity.getCholestrol());
-        } else if ("sodium".equalsIgnoreCase(column)) {
-            dto.setSodium(entity.getSodium());
-        } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
-            dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
-        } else if ("calcium".equalsIgnoreCase(column)) {
-            dto.setCalcium(entity.getCalcium());
-        } else if ("iron".equalsIgnoreCase(column)) {
-            dto.setIron(entity.getIron());
-        } else if ("potassium".equalsIgnoreCase(column)) {
-            dto.setPotassium(entity.getPotassium());
-        } else if ("phosphorus".equalsIgnoreCase(column)) {
-            dto.setPhosphorus(entity.getPhosphorus());
-        } else if ("magnesium".equalsIgnoreCase(column)) {
-            dto.setMagnesium(entity.getMagnesium());
-        } else if ("zinc".equalsIgnoreCase(column)) {
-            dto.setZinc(entity.getZinc());
-        } else if ("selenium".equalsIgnoreCase(column)) {
-            dto.setSelenium(entity.getSelenium());
-        } else if ("copper".equalsIgnoreCase(column)) {
-            dto.setCopper(entity.getCopper());
-        } else if ("manganese".equalsIgnoreCase(column)) {
-            dto.setManganese(entity.getManganese());
+        if ("all".equalsIgnoreCase(typesOfFood)) {
+            top10Results = ninDataRepository.findTop10ByOrderByColumnDesc(column);
+        } else {
+            top10Results = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
         }
-        // ... add more conditions based on other columns
 
-        dtos.add(dto);
-    }
-}
+        // Create DTOs based on the retrieved entities
+        List<NinDataDTO> dtos = new ArrayList<>();
 
-    return dtos;
+        if (top10Results.size() > 10) {
+            top10Results = top10Results.subList(0, 10);
+        }
+
+        for (NinData entity : top10Results) {
+            NinDataDTO dto = new NinDataDTO();
+            dto.setId(entity.getNin_data_id());
+            dto.setName(entity.getFood());
+
+            // Set DTO properties based on the selected column
+            if ("carbohydrate".equalsIgnoreCase(column)) {
+                dto.setCarbohydrate(entity.getCarbohydrate());
+            } else if ("total_fat".equalsIgnoreCase(column)) {
+                dto.setTotal_Fat(entity.getTotal_Fat());
+            } else if ("cholestrol".equalsIgnoreCase(column)) {
+                dto.setCholestrol(entity.getCholestrol());
+            } else if ("sodium".equalsIgnoreCase(column)) {
+                dto.setSodium(entity.getSodium());
+            } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
+                dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
+            } else if ("calcium".equalsIgnoreCase(column)) {
+                dto.setCalcium(entity.getCalcium());
+            } else if ("iron".equalsIgnoreCase(column)) {
+                dto.setIron(entity.getIron());
+            } else if ("potassium".equalsIgnoreCase(column)) {
+                dto.setPotassium(entity.getPotassium());
+            } else if ("phosphorus".equalsIgnoreCase(column)) {
+                dto.setPhosphorus(entity.getPhosphorus());
+            } else if ("magnesium".equalsIgnoreCase(column)) {
+                dto.setMagnesium(entity.getMagnesium());
+            } else if ("zinc".equalsIgnoreCase(column)) {
+                dto.setZinc(entity.getZinc());
+            } else if ("selenium".equalsIgnoreCase(column)) {
+                dto.setSelenium(entity.getSelenium());
+            } else if ("copper".equalsIgnoreCase(column)) {
+                dto.setCopper(entity.getCopper());
+            } else if ("manganese".equalsIgnoreCase(column)) {
+                dto.setManganese(entity.getManganese());
+            }
+            // ... add more conditions based on other columns
+
+            dtos.add(dto);
+        }
+
+        return dtos;
     }
 
 
