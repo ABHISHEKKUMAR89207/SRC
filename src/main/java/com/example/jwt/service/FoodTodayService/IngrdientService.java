@@ -616,30 +616,70 @@ public class IngrdientService {
                     fibers += recipeFibers;
 
                     // Update the response list with recipe details
+//                    responseList.add(new DishWithIngredientsResponse(
+//                            dish.getDishId(),
+//                            dish.getDishName(),
+//                            dish.isFavourite(),
+//                            ingredientsList,
+////                            totalEnergy + recipeEnergy,
+////                            totalProteins + recipeProteins,
+////                            totalCarbs + recipeCarbs,
+////                            totalFats + recipeFats,
+////                            totalFibers + recipeFibers
+//                            onegrmEng + recipeEnergy,
+//                            onegrmPro + recipeProteins,
+//                            onegrmCarb + recipeCarbs,
+//                            onegrmFat + recipeFats,
+//                            onegrmFib + recipeFibers
+//
+//                    ));
                     responseList.add(new DishWithIngredientsResponse(
                             dish.getDishId(),
                             dish.getDishName(),
                             dish.isFavourite(),
                             ingredientsList,
-                            totalEnergy + recipeEnergy,
-                            totalProteins + recipeProteins,
-                            totalCarbs + recipeCarbs,
-                            totalFats + recipeFats,
-                            totalFibers + recipeFibers
-                    ));
-                } else {
-                    // Update the response list without recipe details
-                    responseList.add(new DishWithIngredientsResponse(
-                            dish.getDishId(),
-                            dish.getDishName(),
-                            dish.isFavourite(),
-                            ingredientsList,
-                            totalEnergy,
+                            totalEnergy,  // provide the original total energy here
                             totalProteins,
                             totalCarbs,
                             totalFats,
-                            totalFibers
+                            totalFibers,
+                            dish.getDishQuantity(),  // provide dish quantity here
+                            dish.getServingSize()  // provide serving size here
                     ));
+
+                } else {
+                    // Update the response list without recipe details
+//                    responseList.add(new DishWithIngredientsResponse(
+//                            dish.getDishId(),
+//                            dish.getDishName(),
+//                            dish.isFavourite(),
+//                            ingredientsList,
+////                            totalEnergy,
+//                             onegrmEng,
+//                            totalProteins,
+//                            totalCarbs,
+//                            totalFats,
+//                            totalFibers
+//
+////                            onegrmPro,
+////                            onegrmCarb,
+////                            onegrmFat,
+////                            onegrmFib
+//                    ));
+                    responseList.add(new DishWithIngredientsResponse(
+                            dish.getDishId(),
+                            dish.getDishName(),
+                            dish.isFavourite(),
+                            ingredientsList,
+                            totalEnergy,  // provide the original total energy here
+                            totalProteins,
+                            totalCarbs,
+                            totalFats,
+                            totalFibers,
+                            dish.getDishQuantity(),  // provide dish quantity here
+                            dish.getServingSize()  // provide serving size here
+                    ));
+
                 }
             }
             onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
