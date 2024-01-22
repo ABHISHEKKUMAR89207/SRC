@@ -16,7 +16,7 @@ import lombok.Setter;
 public class NinDataDTO {
     private Long id;
     private String name;
-
+    private String typesoffood;
     private Double carbohydrate;
     private Double Total_Fat;
     private Double cholestrol;
