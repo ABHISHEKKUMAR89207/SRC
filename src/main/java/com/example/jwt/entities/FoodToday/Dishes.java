@@ -1,5 +1,6 @@
 package com.example.jwt.entities.FoodToday;
 
+import com.example.jwt.entities.FoodToday.NewRecipe.Recipen;
 import com.example.jwt.entities.FoodToday.Recipe.Recipe;
 import com.example.jwt.entities.User;
 import jakarta.persistence.*;
@@ -36,7 +37,10 @@ public class Dishes {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "dishes")
+//    @OneToMany(mappedBy = "dishes")
+//    private List<Ingredients> ingredientList;
+
+    @OneToMany(mappedBy = "dishes", cascade = CascadeType.ALL)
     private List<Ingredients> ingredientList;
 
     // In Dishes entity
@@ -46,6 +50,10 @@ public class Dishes {
     @ManyToOne
     @JoinColumn(name = "recipes_id")
     private Recipe recipe;
+
+    @ManyToOne
+    @JoinColumn(name = "uidrecipesn")
+    private Recipen recipen;
 
 
 
