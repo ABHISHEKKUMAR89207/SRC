@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/recipess")
@@ -281,7 +283,46 @@ private JwtHelper jwtHelper;
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving recipe and ingredients.");
         }
     }
+
+//    @Autowired
+//    private RecipeRepositoryN recipeRepositoryN;
+//    @GetMapping("/names")
+//    public List<String> getAllRecipeNames() {
+//        List<Recipen> recipes = recipeRepositoryN.findAll();
+//        return recipes.stream()
+//                .map(Recipen::getItemname)
+//                .collect(Collectors.toList());
+//    }
+
+    @GetMapping("/names")
+    public ResponseEntity<?> getAllRecipeNames(@RequestHeader("Auth") String tokenHeader) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Validate the token and extract the username (email)
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the user from your user service
+        User user = userService.findByUsername(username);
+
+        // Validate user existence and authentication
+        if (user == null || !jwtHelper.validateToken(token, user)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token or user not found.");
+        }
+
+        List<Recipen> recipes = recipeRepositoryN.findAll();
+        List<String> recipeNames = recipes.stream()
+                .map(Recipen::getItemname)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(recipeNames);
+    }
+
+
+
+
 }
+
 
 //package com.example.jwt.entities.FoodToday.NewRecipe;
 //

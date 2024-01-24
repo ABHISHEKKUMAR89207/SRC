@@ -459,43 +459,94 @@ private HeartRateService heartRateService;
 
     @Autowired
     private SleepDurationService sleepDurationService;
+//    @GetMapping("/get-health-data")
+//    public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
+//    // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//    String token = tokenHeader.replace("Bearer ", "");
+//
+//    // Extract the username (email) from the token
+//    String username = jwtHelper.getUsernameFromToken(token);
+//
+//    // Use the username to fetch the userId from your user service
+//    User user = userService.findByUsername(username);
+//
+//    UserHealthData userHealthData = new UserHealthData();
+//
+//    if (user != null) {
+//        // Get heart rate data
+//        HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
+//        if (heartRate != null) {
+//            userHealthData.setLocalDate(heartRate.getLocalDate());
+//            userHealthData.setHeartRateValue(heartRate.getValue());
+//        }
+//
+//        // Get activity data
+//        Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+//        if (activities != null) {
+//            userHealthData.setSteps(activities.getSteps());
+//            userHealthData.setCalorie(activities.getCalory());
+//        }
+//
+//        // Get sleep data
+//        SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
+//        if (sleepDuration != null) {
+//            userHealthData.setSleepDuration(sleepDuration.getDuration());
+//        }
+//    }
+//
+//    return userHealthData;
+//}
+
     @GetMapping("/get-health-data")
     public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
-    // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-    String token = tokenHeader.replace("Bearer ", "");
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
 
-    // Extract the username (email) from the token
-    String username = jwtHelper.getUsernameFromToken(token);
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
 
-    // Use the username to fetch the userId from your user service
-    User user = userService.findByUsername(username);
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
 
-    UserHealthData userHealthData = new UserHealthData();
+        UserHealthData userHealthData = new UserHealthData();
 
-    if (user != null) {
-        // Get heart rate data
-        HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
-        if (heartRate != null) {
-            userHealthData.setLocalDate(heartRate.getLocalDate());
-            userHealthData.setHeartRateValue(heartRate.getValue());
+        if (user != null) {
+            // Get heart rate data
+            HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
+            if (heartRate != null) {
+                userHealthData.setLocalDate(heartRate.getLocalDate());
+                userHealthData.setHeartRateValue(heartRate.getValue());
+            } else {
+                // Set default values when no data is available
+                userHealthData.setLocalDate(LocalDate.now());
+                userHealthData.setHeartRateValue(0.0); // You may set a default value if needed
+            }
+
+            // Get activity data
+            Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+            if (activities != null) {
+                userHealthData.setSteps(activities.getSteps());
+//                userHealthData.setCalorie(activities.getCalory());
+                userHealthData.setCalorie(activities.getCalory() != null ? activities.getCalory() : 0.0);
+
+            } else {
+                // Set default values when no data is available
+                userHealthData.setSteps(0); // You may set a default value if needed
+                userHealthData.setCalorie(0.0); // You may set a default value if needed
+            }
+
+            // Get sleep data
+            SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
+            if (sleepDuration != null) {
+                userHealthData.setSleepDuration(sleepDuration.getDuration());
+            } else {
+                // Set default values when no data is available
+                userHealthData.setSleepDuration(0);
+            }
         }
 
-        // Get activity data
-        Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
-        if (activities != null) {
-            userHealthData.setSteps(activities.getSteps());
-            userHealthData.setCalorie(activities.getCalory());
-        }
-
-        // Get sleep data
-        SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
-        if (sleepDuration != null) {
-            userHealthData.setSleepDuration(sleepDuration.getDuration());
-        }
+        return userHealthData;
     }
-
-    return userHealthData;
-}
 
 
 //    @GetMapping("/get-calory")
