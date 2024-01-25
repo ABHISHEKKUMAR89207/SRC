@@ -1,5 +1,6 @@
 package com.example.jwt.FoodTodayResponse;
 
+import com.example.jwt.dtos.FoodTodayDtos.IngredientRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class IngredientRequest {
-    private List<com.example.jwt.entities.FoodToday.NewRecipe.Ing.IngredientRequest> ingredients;
+public class IngredientRequestt {
+    private List<IngredientRequest> ingredients;
 
     // getters and setters
 }

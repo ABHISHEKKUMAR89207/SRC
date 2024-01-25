@@ -2,6 +2,7 @@ package com.example.jwt.controler.FoodTodayController;
 
 import com.example.jwt.FoodTodayResponse.*;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
+import com.example.jwt.dtos.FoodTodayDtos.IngredientRequest;
 import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.IngrdientService;
@@ -168,7 +169,7 @@ public class IngredientController {
 
 //    @PostMapping("/calculate")
 //    public ResponseEntity<List<NutritionalInfoResponse>> calculateNutritionalInfo(
-//            @RequestBody IngredientRequest ingredientRequest,
+//            @RequestBody IngredientRequestt ingredientRequest,
 //            @RequestHeader("Auth") String authorizationHeader) {
 //
 //        try {
@@ -183,7 +184,7 @@ public class IngredientController {
 //
 //            List<NutritionalInfoResponse> nutritionalInfoList = new ArrayList<>();
 //
-//            for (com.example.jwt.entities.FoodToday.NewRecipe.Ing.IngredientRequest ingredientInfo : ingredientRequest.getIngredients()) {
+//            for (com.example.jwt.entities.FoodToday.NewRecipe.Ing.IngredientRequestt ingredientInfo : ingredientRequest.getIngredients()) {
 //                // Call the service method to get nutritional information for each ingredient
 //                NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(
 //                        ingredientInfo.getIngredientName(), ingredientInfo.getWeight());
@@ -200,7 +201,7 @@ public class IngredientController {
 
     @PostMapping("/calculate-nutrition")
     public ResponseEntity<AggregatedNutritionalInfoResponse> calculateNutritionalInfo(
-            @RequestBody IngredientRequest ingredientRequest,
+            @RequestBody IngredientRequestt ingredientRequest,
             @RequestHeader("Auth") String authorizationHeader) {
 
         try {
@@ -215,10 +216,10 @@ public class IngredientController {
 
             List<NutritionalInfoResponse> nutritionalInfoList = new ArrayList<>();
 
-            for (com.example.jwt.entities.FoodToday.NewRecipe.Ing.IngredientRequest ingredientInfo : ingredientRequest.getIngredients()) {
+            for (IngredientRequest ingredientInfo : ingredientRequest.getIngredients()) {
                 // Call the service method to get nutritional information for each ingredient
                 NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(
-                        ingredientInfo.getIngredientName(), ingredientInfo.getWeight());
+                        ingredientInfo.getIngredientName(), ingredientInfo.getIngredientQuantity());
                 nutritionalInfoList.add(nutritionalInfo);
             }
 
