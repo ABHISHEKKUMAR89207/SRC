@@ -2,6 +2,7 @@ package com.example.jwt.service.FoodTodayService;
 
 import com.example.jwt.FoodTodayResponse.DishWithIngredientsResponse;
 import com.example.jwt.FoodTodayResponse.IngredientsResponse;
+import com.example.jwt.FoodTodayResponse.NutritionalInfoResponse;
 import com.example.jwt.FoodTodayResponse.mealResponse;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.entities.FoodToday.Dishes;
@@ -916,5 +917,22 @@ public class IngrdientService {
             }
         }
         return nutritionByMealAndDate;
+    }
+
+
+    public NutritionalInfoResponse getNutritionalInfo(String ingredientName, Double ingredientQuantity) {
+        NinData ninData = ninDataRepository.findByFood(ingredientName);
+
+        if (ninData != null) {
+            Double energy = (ingredientQuantity / 100) * ninData.getEnergy();
+            Double protein = (ingredientQuantity / 100) * ninData.getProtein();
+            Double fat = (ingredientQuantity / 100) * ninData.getTotal_Fat();
+            Double carbohydrates = (ingredientQuantity / 100) * ninData.getCarbohydrate();
+            Double fiber = (ingredientQuantity / 100) * ninData.getTotal_Dietary_Fibre();
+
+            return new NutritionalInfoResponse(energy, protein, fat, carbohydrates, fiber);
+        } else {
+            return new NutritionalInfoResponse(0.0, 0.0, 0.0, 0.0, 0.0);
+        }
     }
 }

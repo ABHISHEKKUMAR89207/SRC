@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class IngredientRequest {
-    private String ingredientName;
+        private String ingredientName;
     private Double weight;
     // getters and setters
     public Double getWeight() {
