@@ -1,6 +1,7 @@
 package com.example.jwt.AdminDashboard;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.example.jwt.booksystem1.books.*;
 import com.example.jwt.entities.ContactUs;
@@ -30,6 +31,8 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -49,12 +52,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.nio.file.FileVisitResult;
 import java.util.stream.Collectors;
 
 
@@ -380,6 +390,32 @@ public class Dashbaord {
         AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
         return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
     }
+//@PostMapping("/user-login")
+//public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+//        @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//    try {
+//        // Authenticate the user
+//        authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        authenticationRequest.getEmail(),
+//                        authenticationRequest.getPassword()
+//                )
+//        );
+//    } catch (BadCredentialsException e) {
+//        // Handle incorrect email or password
+//        throw new Exception("Incorrect email or password", e);
+//    }
+//
+//    // Load user details
+//    final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//    // Generate JWT tokens
+//    final String tokens = jwtUtil.generateTokens(userDetails);
+//
+//    // Return the JWT tokens in the response
+//    AuthenticationResponse authenticationResponse = new AuthenticationResponse(tokens);
+//    return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
+//}
 
 
 //    @Autowired
@@ -842,10 +878,228 @@ public class Dashbaord {
         return "user";
     }
 
+//    @GetMapping("/dashboard.html")
+//    public String showDashboard(Model model) {
+//        setupModel(model);
+//        return "dashboard";
+//    }
+
+//    @Autowired
+//    private static final Logger logger = (Logger) LoggerFactory.getLogger(Dashbaord.class);
+
+//    @GetMapping("/dashboard.html")
+//    public String showDashboard(Model model) {
+//        setupModel(model);
+//
+//        // Assuming you have logs in the 'app.log' file, you can read them here
+//        List<String> logs = readLogsFromFiles();
+//        model.addAttribute("logs", logs);
+//
+//        return "dashboard";
+//    }
+//@GetMapping("/dashboard.html")
+//public String showDashboard(Model model) {
+//    setupModel(model);
+//
+//    // Assuming you have logs in the 'app.log' file, you can read them here
+//    List<String> logs = readAllLogsFromDirectory("../log/");
+//    model.addAttribute("logs", logs);
+//
+//    return "dashboard";
+//}
+
+
     @GetMapping("/dashboard.html")
     public String showDashboard(Model model) {
         setupModel(model);
+
+        List<Path> logFiles = getLogFiles("../log/");
+
+        // Convert Path objects to strings
+        List<String> logFileNames = logFiles.stream()
+                .map(Path::toString)
+                .collect(Collectors.toList());
+
+        model.addAttribute("logFiles", logFileNames);
+
         return "dashboard";
+    }
+    private List<Path> getLogFiles(String directoryPath) {
+        try {
+            // List all files in the directory matching the pattern 'app.log.*' or 'app.log'
+            List<Path> logFiles = Files.list(Paths.get(directoryPath))
+                    .filter(path -> path.getFileName().toString().matches("app\\.log(\\.\\d{4}-\\d{2}-\\d{2})?"))
+                    .sorted(Comparator.comparing(Path::getFileName)) // Sort by file name (including the date suffix)
+                    .collect(Collectors.toList());
+
+            return logFiles;
+        } catch (IOException e) {
+            logger.error("Error listing log files from directory: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+
+
+//    @GetMapping("/viewLog")
+//    public String viewLog(@RequestParam String filePath, Model model) {
+//        try {
+//            // Read content from the selected log file
+//            List<String> logContent = Files.readAllLines(Paths.get(filePath));
+//            model.addAttribute("logContent", logContent);
+//        } catch (IOException e) {
+//            logger.error("Error reading logs from file '{}': {}", filePath, e.getMessage());
+//            model.addAttribute("logContent", Collections.singletonList("Error reading log file."));
+//        }
+//
+//        return "viewLog";
+//    }
+
+    //    @GetMapping("/viewLog")
+//    public String viewLog(@RequestParam String filePath, Model model) {
+//        try {
+//            // Read content from the selected log file
+//            List<String> logContent = Files.readAllLines(Paths.get(filePath));
+//
+//            // Extract the date from the file path
+//            String logDate = extractDateFromFilePath(filePath);
+//
+//            // Add attributes to the model
+//            model.addAttribute("logDate", logDate);
+//            model.addAttribute("logContent", logContent);
+//        } catch (IOException e) {
+//            logger.error("Error reading logs from file '{}': {}", filePath, e.getMessage());
+//            model.addAttribute("logContent", Collections.singletonList("Error reading log file."));
+//        }
+//
+//        return "viewLog";
+//    }
+    @GetMapping("/viewLog")
+    public String viewLog(@RequestParam String filePath, Model model) {
+        try {
+            // Read content from the selected log file
+            List<String> logContent = Files.readAllLines(Paths.get(filePath));
+
+            // Extract the date and file name from the file path
+            String logDate = extractDateFromFilePath(filePath);
+            String logFileName = extractFileNameFromFilePath(filePath);
+
+            // Add attributes to the model
+            model.addAttribute("logDate", logDate);
+            model.addAttribute("logFileName", logFileName);
+            model.addAttribute("logContent", logContent);
+        } catch (IOException e) {
+            logger.error("Error reading logs from file '{}': {}", filePath, e.getMessage());
+            model.addAttribute("logContent", Collections.singletonList("Error reading log file."));
+        }
+
+        return "viewLog";
+    }
+
+    private String extractFileNameFromFilePath(String filePath) {
+        // Extract the file name from the file path
+        return Paths.get(filePath).getFileName().toString();
+    }
+    //    private String extractDateFromFilePath(String filePath) {
+//        // Assuming the date is in the format 'YYYY-MM-dd'
+//        String[] parts = filePath.split("\\.");
+//        for (int i = parts.length - 1; i >= 0; i--) {
+//            if (parts[i].matches("\\d{4}-\\d{2}-\\d{2}")) {
+//                return parts[i];
+//            }
+//        }
+//        return "Unknown Date";
+//    }
+    private String extractDateFromFilePath(String filePath) {
+        // Check if the file name is 'app.log'
+        String fileName = Paths.get(filePath).getFileName().toString();
+        if ("app.log".equals(fileName)) {
+            // Return the current date
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateFormat.format(new Date());
+        }
+
+        // Assuming the date is in the format 'YYYY-MM-dd'
+        String[] parts = filePath.split("\\.");
+        for (int i = parts.length - 1; i >= 0; i--) {
+            if (parts[i].matches("\\d{4}-\\d{2}-\\d{2}")) {
+                return parts[i];
+            }
+        }
+        return "Unknown Date";
+    }
+
+    private List<String> readAllLogsFromDirectory(String directoryPath) {
+        try {
+            // List all files in the directory matching the pattern 'app.log.*'
+            List<Path> logFiles = Files.list(Paths.get(directoryPath))
+                    .filter(path -> path.getFileName().toString().matches("app\\.log\\.\\d{4}-\\d{2}-\\d{2}"))
+                    .sorted(Comparator.reverseOrder()) // Sort in descending order (most recent first)
+                    .collect(Collectors.toList());
+
+            // Read content from all log files
+            return logFiles.stream()
+                    .map(this::readLogsFromFile)
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+        } catch (IOException e) {
+            logger.error("Error reading log files from directory: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+    private List<String> readLogsFromFile(Path logFilePath) {
+        try {
+            // Read all lines from the log file
+            return Files.readAllLines(logFilePath);
+        } catch (IOException e) {
+            logger.error("Error reading logs from file '{}': {}", logFilePath, e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+    private static final Logger logger = LoggerFactory.getLogger(Dashbaord.class);
+
+//    private List<String> readLogsFromFile() {
+//        // Specify the path to your 'app.log' file
+//        Path logFilePath = Paths.get("../log/app.log");
+//
+//        try {
+//            // Read all lines from the log file
+//            return Files.readAllLines(logFilePath);
+//        } catch (IOException e) {
+//            // Handle the exception, log an error, or return an empty list
+//            logger.error("Error reading logs from file: {}", e.getMessage());
+//            return Collections.emptyList();
+//        }
+//    }
+
+//    private List<String> readLogsFromFiles() {
+//        // Specify the directory where log files are stored
+//        Path logDirectoryPath = Paths.get("../log");
+//
+//        List<String> allLogs = new ArrayList<>();
+//
+//        try (DirectoryStream<Path> stream = Files.newDirectoryStream(logDirectoryPath, "app*.log*")) {
+//            for (Path filePath : stream) {
+//                // Read all lines from each log file
+//                List<String> logsFromFile = Files.readAllLines(filePath);
+//                allLogs.addAll(logsFromFile);
+//            }
+//        } catch (IOException e) {
+//            // Handle the exception, log an error, or return an empty list
+//            logger.error("Error reading logs from files: {}", e.getMessage());
+//            return Collections.emptyList();
+//        }
+//
+//        return allLogs;
+//    }
+
+
+    private void setupModel1(Model model) {
+        // Add data to the model that you want to display on the dashboard.html page
+        model.addAttribute("pageTitle", "Dashboard Page");
+        model.addAttribute("welcomeMessage", "Welcome to the dashboard!");
+
+        // You can add more attributes as needed for your specific use case
     }
 
 //    private void setupModel(Model model) {
@@ -1750,8 +2004,8 @@ public class Dashbaord {
         return mostConsumedDishEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
     }
 
-@Autowired
-private NinDataRepository ninDataRepository;
+    @Autowired
+    private NinDataRepository ninDataRepository;
     // Add this method to your controller class
     public String calculateMostConsumedNutrient(List<Dishes> dishesList) {
         Map<String, Double> totalNutrientIntake = new HashMap<>();
@@ -1787,7 +2041,7 @@ private NinDataRepository ninDataRepository;
 
         // Return the result
         return mostConsumedNutrientEntry != null ?
-                 mostConsumedNutrientEntry.getKey() :
+                mostConsumedNutrientEntry.getKey() :
                 "No data";
     }
 
@@ -1829,7 +2083,7 @@ private NinDataRepository ninDataRepository;
                 "No data";
     }
 
-//    public String calculateMostConsumedProteinRichDiet(List<Dishes> dishesList) {
+    //    public String calculateMostConsumedProteinRichDiet(List<Dishes> dishesList) {
 //        Map<String, Double> proteinIntakePerDiet = new HashMap<>();
 //
 //        for (Dishes dish : dishesList) {
@@ -1859,43 +2113,43 @@ private NinDataRepository ninDataRepository;
 //                "No data";
 //    }
 //
-public String calculateMostConsumedProteinRichDiet(List<Dishes> dishesList) {
-    Map<String, Double> proteinIntakePerDiet = new HashMap<>();
+    public String calculateMostConsumedProteinRichDiet(List<Dishes> dishesList) {
+        Map<String, Double> proteinIntakePerDiet = new HashMap<>();
 
-    for (Dishes dish : dishesList) {
-        List<Ingredients> ingredients = dish.getIngredientList();
-        double totalProteinIntake = 0.0;
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredients = dish.getIngredientList();
+            double totalProteinIntake = 0.0;
 
-        // Consider direct ingredients
-        for (Ingredients ingredient : ingredients) {
-            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+            // Consider direct ingredients
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
 
-            // Calculate protein intake based on ingredient quantity and NinData
-            double proteinIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
-            totalProteinIntake += proteinIntake;
+                // Calculate protein intake based on ingredient quantity and NinData
+                double proteinIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+                totalProteinIntake += proteinIntake;
+            }
+
+            // Consider recipe ingredients
+            Recipe recipe = dish.getRecipe();
+            if (recipe != null) {
+                // Add protein from recipe directly
+                totalProteinIntake += (recipe.getProtein()/100)*dish.getDishQuantity();
+            }
+
+            // Add total protein intake for the dish to the map
+            proteinIntakePerDiet.put(dish.getDishName(), totalProteinIntake);
         }
 
-        // Consider recipe ingredients
-        Recipe recipe = dish.getRecipe();
-        if (recipe != null) {
-            // Add protein from recipe directly
-            totalProteinIntake += (recipe.getProtein()/100)*dish.getDishQuantity();
-        }
+        // Find the dish with the highest total protein intake
+        Map.Entry<String, Double> mostProteinRichDietEntry = proteinIntakePerDiet.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .orElse(null);
 
-        // Add total protein intake for the dish to the map
-        proteinIntakePerDiet.put(dish.getDishName(), totalProteinIntake);
+        // Return the result
+        return mostProteinRichDietEntry != null ?
+                mostProteinRichDietEntry.getKey() :
+                "No data";
     }
-
-    // Find the dish with the highest total protein intake
-    Map.Entry<String, Double> mostProteinRichDietEntry = proteinIntakePerDiet.entrySet().stream()
-            .max(Map.Entry.comparingByValue())
-            .orElse(null);
-
-    // Return the result
-    return mostProteinRichDietEntry != null ?
-            mostProteinRichDietEntry.getKey() :
-            "No data";
-}
     public String calculateMostConsumedIronRichDiet(List<Dishes> dishesList) {
         Map<String, Double> ironIntakePerDiet = new HashMap<>();
 
