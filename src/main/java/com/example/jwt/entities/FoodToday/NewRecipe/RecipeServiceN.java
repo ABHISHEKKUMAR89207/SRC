@@ -201,13 +201,53 @@ public class RecipeServiceN {
 //}
 
 
-    public Optional<RecipeWithIngredientsResponse> getRecipeByName(String itemname,User user) {
+//    public Optional<RecipeWithIngredientsResponse> getRecipeByName(String itemname,User user) {
+//        Optional<Recipen> recipeOptional = recipeRepositoryN.findByItemname(itemname);
+//
+//        return recipeOptional.map(recipeN -> {
+//            RecipeWithIngredientsResponse response = new RecipeWithIngredientsResponse();
+//            response.setRecipeId(recipeN.getUidrecipesn());
+//            response.setRecipeName(recipeN.getItemname());
+//
+//            double servingMeasure = Double.parseDouble(recipeN.getServingMeasure());
+//            double result = recipeN.getOneServingWtG() / servingMeasure;
+//
+//
+////            recipeN.getOneServingWtG()/recipeN.getServingMeasure();
+//
+//            // Map source_recipe to IngredientResponse
+//            List<IngredientResponse> ingredients = recipeN.getIngredients().stream()
+//                    .map(this::mapToIngredientResponse)
+//                    .collect(Collectors.toList());
+//
+//            response.setIngredients(ingredients);
+//
+//            // Extract source_recipe from each ingredient and add to the response
+//            List<String> sourceRecipes = ingredients.stream()
+//                    .map(IngredientResponse::getIngredientName)
+//                    .collect(Collectors.toList());
+////            response.setSourceRecipes(sourceRecipes);
+//
+//            return response;
+//        });
+//    }
+
+
+    public Optional<RecipeWithIngredientsResponse> getRecipeByName(String itemname, User user) {
         Optional<Recipen> recipeOptional = recipeRepositoryN.findByItemname(itemname);
 
         return recipeOptional.map(recipeN -> {
             RecipeWithIngredientsResponse response = new RecipeWithIngredientsResponse();
             response.setRecipeId(recipeN.getUidrecipesn());
             response.setRecipeName(recipeN.getItemname());
+
+            // Calculate the result
+            double servingMeasure = Double.parseDouble(recipeN.getServingMeasure());
+            double result = recipeN.getOneServingWtG() / servingMeasure;
+
+            // Set the result in the response
+            response.setValueForOneUnit(result);
+            response.setUnit(recipeN.getServingUnit());
 
             // Map source_recipe to IngredientResponse
             List<IngredientResponse> ingredients = recipeN.getIngredients().stream()
@@ -220,11 +260,14 @@ public class RecipeServiceN {
             List<String> sourceRecipes = ingredients.stream()
                     .map(IngredientResponse::getIngredientName)
                     .collect(Collectors.toList());
-//            response.setSourceRecipes(sourceRecipes);
+
+            // Set the source recipes in the response if needed
+            // response.setSourceRecipes(sourceRecipes);
 
             return response;
         });
     }
+
 
     private IngredientResponse mapToIngredientResponse(Ingredientn ingredient) {
         IngredientResponse response = new IngredientResponse();

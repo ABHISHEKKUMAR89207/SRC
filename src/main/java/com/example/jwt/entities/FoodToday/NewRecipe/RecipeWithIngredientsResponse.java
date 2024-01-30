@@ -16,7 +16,12 @@ public class RecipeWithIngredientsResponse {
     private String recipeName;
 //    private String mealType;
 //    private Double dishQuantity;
+    private String unit;
+private double valueForOneUnit;
     private List<IngredientResponse> ingredients;
+
+//    public void setUnit() {
+//    }
 //    private List<Ingredientn> ingredients;
 //private List<String> sourceRecipes; // Adjust the type based on what source_recipe represents
 

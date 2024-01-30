@@ -7,6 +7,7 @@ import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.registration.token.VerificationToken;
+import com.example.jwt.security.Refresh.RefreshToken;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,6 +48,10 @@ public class User implements UserDetails {
     private LocalDate localDate = LocalDate.now();
     private boolean emailVerified = false;
     private String notificationToken;
+
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
+    private RefreshToken refreshToken;
 
     @Column(name = "registration_timestamp")
     private LocalDateTime registrationTimestamp = LocalDateTime.now();

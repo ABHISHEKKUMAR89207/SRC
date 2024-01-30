@@ -46,6 +46,7 @@ public class securityConfig {
                         auth.requestMatchers("/home/**")
                                 .authenticated()
                                 .requestMatchers("/auth/login").permitAll()
+                                .requestMatchers("/auth/refresh-token").permitAll()
                                 .requestMatchers("/auth/health-trends/**").authenticated()
                                 .requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()

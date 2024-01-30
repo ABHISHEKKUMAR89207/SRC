@@ -1,12 +1,16 @@
 package com.example.jwt.controler;
 
+import com.example.jwt.booksystem1.books.Response;
 import com.example.jwt.entities.User;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.model.JwtRequest;
 import com.example.jwt.model.JwtResponse;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.request.ChangePasswordRequest;
+import com.example.jwt.request.RefreshTokenRequest;
 import com.example.jwt.security.JwtHelper;
+import com.example.jwt.security.Refresh.RefreshToken;
+import com.example.jwt.security.Refresh.RefreshTokenService;
 import com.example.jwt.service.UserService;
 import com.example.jwt.service.serviceHealth.HealthTrendsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,6 +54,8 @@ public class AuthController {
     private JwtHelper jwtHelper;
     @Autowired
     private HealthTrendsService healthTrendsService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 // for user's login
@@ -61,12 +67,15 @@ public class AuthController {
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         String token = this.helper.generateToken(userDetails);
 
-      Optional<User> user = userDao.findByEmail(request.getEmail());
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
+
+        Optional<User> user = userDao.findByEmail(request.getEmail());
 
       User usr = user.get();
 
         JwtResponse response = JwtResponse.builder()
                 .jwtToken(token)
+                .refreshToken(refreshToken.getRefreshToken())
                 .userId(usr.getUserId().toString())
                 .username(userDetails.getUsername()).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -115,4 +124,48 @@ public class AuthController {
             return new ResponseEntity<>("Unauthorized. Please provide a valid JWT token.", HttpStatus.UNAUTHORIZED);
         }
     }
+
+
+//    @PostMapping("/refresh")
+//    public ResponseEntity<?> refreshJwtToken(@RequestBody RefreshTokenRequest request){
+//
+////        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+//
+//        RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(request.getRefreshToken());
+//
+//        User user = refreshToken.getUser();
+//
+//        String token = this.helper.generateToken(user);
+//
+//        return   JwtResponse.builder()
+//                .jwtToken(token)
+//                .refreshToken(refreshToken.getRefreshToken())
+//                .userId(user.getUserId().toString())
+//                .username(userDetails.getUsername())
+//                .build();
+//
+//
+//    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<JwtResponse> refreshJwtToken(@RequestBody RefreshTokenRequest request){
+
+        RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(request.getRefreshToken());
+
+        User user = refreshToken.getUser();
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail()); // Assuming email is the username
+
+        String token = this.helper.generateToken(userDetails);
+
+        JwtResponse response = JwtResponse.builder()
+                .jwtToken(token)
+                .refreshToken(refreshToken.getRefreshToken())
+                .userId(user.getUserId().toString())
+                .username(userDetails.getUsername())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
