@@ -65,6 +65,8 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.nio.file.FileVisitResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -909,11 +911,33 @@ public class Dashbaord {
 //}
 
 
+//    @GetMapping("/dashboard.html")
+//    public String showDashboard(Model model) {
+//        setupModel(model);
+//
+//        List<Path> logFiles = getLogFiles("../log/");
+//
+//        // Convert Path objects to strings
+//        List<String> logFileNames = logFiles.stream()
+//                .map(Path::toString)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("logFiles", logFileNames);
+//
+//        return "dashboard";
+//    }
+
     @GetMapping("/dashboard.html")
     public String showDashboard(Model model) {
         setupModel(model);
 
         List<Path> logFiles = getLogFiles("../log/");
+
+        // Move the last element to the first position
+        if (!logFiles.isEmpty()) {
+            Path lastLogFile = logFiles.remove(logFiles.size() - 1);
+            logFiles.add(0, lastLogFile);
+        }
 
         // Convert Path objects to strings
         List<String> logFileNames = logFiles.stream()
@@ -924,12 +948,28 @@ public class Dashbaord {
 
         return "dashboard";
     }
+
+//    private List<Path> getLogFiles(String directoryPath) {
+//        try {
+//            // List all files in the directory matching the pattern 'app.log.*' or 'app.log'
+//            List<Path> logFiles = Files.list(Paths.get(directoryPath))
+//                    .filter(path -> path.getFileName().toString().matches("app\\.log(\\.\\d{4}-\\d{2}-\\d{2})?"))
+//                    .sorted(Comparator.comparing(Path::getFileName)) // Sort by file name (including the date suffix)
+//                    .collect(Collectors.toList());
+//
+//            return logFiles;
+//        } catch (IOException e) {
+//            logger.error("Error listing log files from directory: {}", e.getMessage());
+//            return Collections.emptyList();
+//        }
+//    }
+
     private List<Path> getLogFiles(String directoryPath) {
         try {
             // List all files in the directory matching the pattern 'app.log.*' or 'app.log'
             List<Path> logFiles = Files.list(Paths.get(directoryPath))
                     .filter(path -> path.getFileName().toString().matches("app\\.log(\\.\\d{4}-\\d{2}-\\d{2})?"))
-                    .sorted(Comparator.comparing(Path::getFileName)) // Sort by file name (including the date suffix)
+                    .sorted(Comparator.comparing(Path::getFileName).reversed()) // Sort in reverse order by file name (including the date suffix)
                     .collect(Collectors.toList());
 
             return logFiles;
@@ -939,8 +979,15 @@ public class Dashbaord {
         }
     }
 
-
-
+    private String extractDateFromFilePath(Path filePath) {
+        // Extract the date from the file name
+        String fileName = filePath.getFileName().toString();
+        Matcher matcher = Pattern.compile("\\d{4}-\\d{2}-\\d{2}").matcher(fileName);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return "";
+    }
 //    @GetMapping("/viewLog")
 //    public String viewLog(@RequestParam String filePath, Model model) {
 //        try {

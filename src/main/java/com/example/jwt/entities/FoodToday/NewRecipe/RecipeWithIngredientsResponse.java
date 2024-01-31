@@ -16,6 +16,7 @@ public class RecipeWithIngredientsResponse {
     private String recipeName;
 //    private String mealType;
 //    private Double dishQuantity;
+    private Double totalCookedQuantity;
     private String unit;
 private double valueForOneUnit;
     private List<IngredientResponse> ingredients;
