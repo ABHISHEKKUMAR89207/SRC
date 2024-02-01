@@ -248,7 +248,7 @@ public class RecipeServiceN {
             // Set the result in the response
             response.setValueForOneUnit(result);
             response.setUnit(recipeN.getServingUnit());
-            response.setTotalCookedQuantity(recipeN.getTotalCookedWtG()/servingMeasure);
+            response.setTotalCookedQuantity(recipeN.getTotalCookedWtG());
 
             // Map source_recipe to IngredientResponse
             List<IngredientResponse> ingredients = recipeN.getIngredients().stream()
