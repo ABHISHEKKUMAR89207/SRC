@@ -273,7 +273,7 @@ public class RecipeServiceN {
     private IngredientResponse mapToIngredientResponse(Ingredientn ingredient) {
         IngredientResponse response = new IngredientResponse();
         response.setIngredientName(ingredient.getIngredients());
-        response.setWeight(ingredient.getWeight());
+        response.setIngredientQuantity(ingredient.getWeight());
         // Set other necessary fields in IngredientResponse
         return response;
     }
@@ -468,7 +468,7 @@ public void saveRecipeAndIngredients(RecipeRequest request, User user) {
             .map(ingredientRequest -> {
                 Ingredients ingredient = new Ingredients();
                 ingredient.setIngredientName(ingredientRequest.getIngredientName());
-                ingredient.setIngredientQuantity(ingredientRequest.getWeight());
+                ingredient.setIngredientQuantity(ingredientRequest.getIngredientQuantity());
                 // Set other necessary fields in the ingredient
                 ingredient.setDishes(newDish); // Set the reference to Dishes
                 return ingredient;

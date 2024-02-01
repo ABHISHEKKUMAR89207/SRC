@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class IngredientResponse {
     private String ingredientName;
-    private Double weight;
+    private Double ingredientQuantity;
 //    private Map<String, Double> nutrients;
 
     // ... getters and setters

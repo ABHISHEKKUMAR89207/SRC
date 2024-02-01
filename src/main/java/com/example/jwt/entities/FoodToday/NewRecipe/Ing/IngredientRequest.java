@@ -11,14 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 public class IngredientRequest {
         private String ingredientName;
-    private Double weight;
+    private Double ingredientQuantity;
     // getters and setters
-    public Double getWeight() {
-        return weight;
+    public Double getIngredientQuantity() {
+        return ingredientQuantity;
     }
 
-    public void setWeight(Double weight) {
-        this.weight = weight;
+    public void setIngredientQuantity(Double ingredientQuantity) {
+        this.ingredientQuantity = ingredientQuantity;
     }
 
     // getters and setters
