@@ -68,7 +68,7 @@ public class PersonalController {
                 personal.getDate(),
                 personal.getItemname(),
                 personal.getTotalCookedWtG(),
-                personal.getOneServingWtG(),
+                personal.getOneUnitSize(),
 //                personal.getServingMeasure(),
                 personal.getServingUnit(),
                 convertToIngredientsDTOList(personal.getIngredientList())

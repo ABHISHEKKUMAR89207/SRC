@@ -19,6 +19,7 @@ public class PersonalRequest {
     private double totalCookedQuantity;
     private double oneUnitSize;
 //    private Double servingMeasure;
+    private Double valueForOneUnit;
     private String servingUnit;
 //    private Long userId;  // Assuming you need the user ID in the request
 //    private Long recipenId;  // Assuming you need the recipe ID in the request

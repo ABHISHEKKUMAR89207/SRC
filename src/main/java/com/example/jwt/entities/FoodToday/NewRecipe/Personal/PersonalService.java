@@ -26,7 +26,7 @@ public class PersonalService {
         newDish.setItemname(request.getRecipeName());
         newDish.setTotalCookedWtG(request.getTotalCookedQuantity());
 //        newDish.setMealName(request.getMealType());
-        newDish.setOneUnitSize(request.getOneUnitSize());
+        newDish.setOneUnitSize(request.getValueForOneUnit());
         // Set other necessary fields in the newDish
 //        newDish.setServingMeasure(request.getServingMeasure());
         newDish.setServingUnit(request.getServingUnit());
