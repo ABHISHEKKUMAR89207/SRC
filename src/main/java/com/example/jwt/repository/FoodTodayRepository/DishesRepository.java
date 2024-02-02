@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DishesRepository extends JpaRepository<Dishes, Long> {
@@ -41,4 +42,6 @@ public interface DishesRepository extends JpaRepository<Dishes, Long> {
 
     @Query("SELECT d.dishId FROM Dishes d WHERE d.dishName = :dishName AND d.date = :date")
     Long findDishIdByDishNameAndDate(@Param("dishName") String dishName, @Param("date") LocalDate date);
+
+//    Optional<Dishes> findByPersonalDish(String personalDish);
 }

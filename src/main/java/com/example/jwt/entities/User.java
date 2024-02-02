@@ -1,6 +1,7 @@
 package com.example.jwt.entities;
 
 import com.example.jwt.entities.FoodToday.Dishes;
+import com.example.jwt.entities.FoodToday.NewRecipe.Personal.Personal;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
 import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
@@ -85,6 +86,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Dishes> dishesList;
+
+    @OneToMany(mappedBy = "user")
+    private List<Personal> personals;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

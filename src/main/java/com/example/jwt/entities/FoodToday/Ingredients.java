@@ -1,5 +1,6 @@
 package com.example.jwt.entities.FoodToday;
 
+import com.example.jwt.entities.FoodToday.NewRecipe.Personal.Personal;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,4 +38,9 @@ public class Ingredients {
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<NinData> ninDataList = new HashSet<>();
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "dish_id")
+    private Personal personal;
 }

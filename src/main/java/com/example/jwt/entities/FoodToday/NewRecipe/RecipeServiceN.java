@@ -483,6 +483,50 @@ public void saveRecipeAndIngredients(RecipeRequest request, User user) {
 }
 
 
+
+//    @Transactional
+//    public void saveRecipeAndIngredientsp(RecipeRequest request, User user) {
+//        Dishes newDish = new Dishes();
+//        newDish.setDishName(request.getRecipeName());
+//        newDish.setDishQuantity(request.getDishQuantity());
+//        newDish.setMealName(request.getMealType());
+//        newDish.setServingSize(request.getServingSize());
+//        // Set other necessary fields in the newDish
+//        newDish.setPersonalDish(request.getPersonalDish());
+//        newDish.setNoOfServing(request.getNoOfServing());
+//
+//        newDish.setUser(user);
+//
+//
+//        // Set creation date to the current date
+//        newDish.setDate(LocalDate.now());
+//
+//        Recipen recipen = new Recipen();
+//        recipen.setUidrecipesn(request.getRecipeId());
+//        newDish.setRecipen(recipen);
+//
+//        List<Ingredients> ingredients = request.getIngredients().stream()
+//                .map(ingredientRequest -> {
+//                    Ingredients ingredient = new Ingredients();
+//                    ingredient.setIngredientName(ingredientRequest.getIngredientName());
+//                    ingredient.setIngredientQuantity(ingredientRequest.getIngredientQuantity());
+//                    // Set other necessary fields in the ingredient
+//                    ingredient.setDishes(newDish); // Set the reference to Dishes
+//                    return ingredient;
+//                })
+//                .collect(Collectors.toList());
+//
+//
+//        newDish.setIngredientList(ingredients);
+////    ingredientsRepository.save(newDish)
+//
+//        dishesRepository.save(newDish);
+//    }
+//
+//    public Dishes getDishByPersonalDish(String personalDish) {
+//        Optional<Dishes> optionalDishes = dishesRepository.findByPersonalDish(personalDish);
+//        return optionalDishes.orElse(null);
+//    }
 }
 
 //package com.example.jwt.entities.FoodToday.NewRecipe;
