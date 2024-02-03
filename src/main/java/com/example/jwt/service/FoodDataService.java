@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -161,7 +160,7 @@ public class FoodDataService {
 
         for (NinData entity : top10Results) {
             NinDataDTO dto = new NinDataDTO();
-            dto.setId(entity.getNin_data_id());
+            dto.setId(entity.getNinDataId());
             dto.setName(entity.getFood());
 
             // Set DTO properties based on the selected column

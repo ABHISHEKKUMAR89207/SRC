@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface NinDataRepository extends JpaRepository<NinData, Long> {
-
+    List<NinData> findByNinDataId(Long ninDataId);
     NinData findByFood(String name);
     @Query("SELECT n FROM NinData n WHERE n.food_code = :foodCode")
     List<NinData> findByFoodCode(String foodCode);

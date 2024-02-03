@@ -17,7 +17,9 @@ public class NinDataDTO {
     private Long id;
     private String name;
     private String typesoffood;
+    private Double energy;
     private Double carbohydrate;
+    private Double protein;
     private Double Total_Fat;
     private Double cholestrol;
     private Double  sodium;

@@ -22,7 +22,7 @@ public class NinData {
     @GeneratedValue(strategy = GenerationType.AUTO)
 //    @Column(name = "nin_data_id")
     @Index(name = "idx_nin_data_id")
-    private Long nin_data_id;
+    private Long ninDataId;
 
 //    @Column(name = "food")
     private String food;

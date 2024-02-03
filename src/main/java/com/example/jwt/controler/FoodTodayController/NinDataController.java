@@ -1,18 +1,17 @@
 package com.example.jwt.controler.FoodTodayController;
 
+import com.example.jwt.dtos.NinDataDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.FoodToday.Recipe.Recipe;
 import com.example.jwt.entities.FoodToday.Recipe.RecipeRepository;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.security.JwtHelper;
+import com.example.jwt.service.FoodTodayService.NinDataService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -73,5 +72,15 @@ public class NinDataController {
         } else {
             throw new AccessDeniedException("Access denied");
         }
+    }
+
+
+
+    @Autowired
+    private NinDataService ninDataService;
+
+    @GetMapping("/ing-details")
+    public List<NinDataDTO> getNutritionalData(@RequestParam Long foodId) {
+        return ninDataService.getNutritionalDataByFood(foodId);
     }
 }
