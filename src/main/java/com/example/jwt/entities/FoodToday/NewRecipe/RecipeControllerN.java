@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -265,7 +267,7 @@ private JwtHelper jwtHelper;
     @Autowired
     private UserService userService;
     @PostMapping("/save-dish-ing")
-    public ResponseEntity<String> saveRecipeAndIngredients(@RequestBody RecipeRequest request,@RequestHeader("Auth") String tokenHeader) {
+    public ResponseEntity<String> saveRecipeAndIngredients(@RequestParam LocalDate date, @RequestBody RecipeRequest request, @RequestHeader("Auth") String tokenHeader) {
         try {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
@@ -276,7 +278,7 @@ private JwtHelper jwtHelper;
             // Use the username to fetch the userId from your user service
             User user = userService.findByUsername(username);
 
-            recipeService.saveRecipeAndIngredients(request, user);
+            recipeService.saveRecipeAndIngredients(request, user, date);
 
             return ResponseEntity.ok("Recipe and ingredients saved successfully.");
         } catch (Exception e) {

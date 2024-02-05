@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -446,7 +447,7 @@ public class RecipeServiceN {
 //        dishesRepository.save(newDish);
 //    }
 @Transactional
-public void saveRecipeAndIngredients(RecipeRequest request, User user) {
+public void saveRecipeAndIngredients(RecipeRequest request, User user, LocalDate date) {
     Dishes newDish = new Dishes();
     newDish.setDishName(request.getRecipeName());
     newDish.setDishQuantity(request.getDishQuantity());
@@ -458,7 +459,8 @@ public void saveRecipeAndIngredients(RecipeRequest request, User user) {
 
 
     // Set creation date to the current date
-    newDish.setDate(LocalDate.now());
+//    newDish.setDate(LocalDate.now());
+    newDish.setDate(date);
 
     Recipen recipen = new Recipen();
     recipen.setUidrecipesn(request.getRecipeId());

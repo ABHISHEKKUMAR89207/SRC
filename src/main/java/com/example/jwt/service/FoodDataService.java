@@ -162,6 +162,7 @@ public class FoodDataService {
             NinDataDTO dto = new NinDataDTO();
             dto.setId(entity.getNinDataId());
             dto.setName(entity.getFood());
+            dto.setCategory(entity.getCategory());
 
             // Set DTO properties based on the selected column
             if ("carbohydrate".equalsIgnoreCase(column)) {
@@ -192,6 +193,9 @@ public class FoodDataService {
                 dto.setCopper(entity.getCopper());
             } else if ("manganese".equalsIgnoreCase(column)) {
                 dto.setManganese(entity.getManganese());
+            }
+            else if ("protein".equalsIgnoreCase(column)) {
+                dto.setProtein(entity.getProtein());
             }
             // ... add more conditions based on other columns
 

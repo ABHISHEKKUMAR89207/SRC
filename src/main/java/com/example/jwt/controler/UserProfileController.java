@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +66,7 @@ public class UserProfileController {
     // to get the user's
     // profile
     @GetMapping("/get-userProfile")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
         try {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")

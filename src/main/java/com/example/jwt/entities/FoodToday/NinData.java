@@ -27,6 +27,7 @@ public class NinData {
 //    @Column(name = "food")
     private String food;
     private String food_code;
+    private String category;
     private Double Energy;
     private Double carbohydrate;
     private String Typesoffood;
