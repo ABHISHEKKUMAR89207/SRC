@@ -150,6 +150,110 @@
 <!--        }-->
 <!--    </script>-->
 <script>
+
+    // Example usage in your API request function
+    function makeApiRequest() {
+        // Get the JWT token from cookies
+        const jwtToken = getCookie('jwtToken');
+        console.log('JWT Token:', jwtToken);
+
+        // Make the API request with the token in the Auth header
+        fetch('/dashboard/dashboard.html', {
+            method: 'GET',
+            headers: {
+                'Auth': 'Bearer ' + jwtToken,
+                'Content-Type': 'application/json', // Include other necessary headers if needed
+                // 'Accept': 'application/json',
+            },
+        })
+            .then(response => {
+                // Handle the response
+                console.log('API Response:', response);
+
+                // Check if the response is successful (status code 2xx)
+                if (response.ok) {
+                    // Redirect to the dashboard.html page with the JWT token as a query parameter
+                    window.location.href = `./dashboard.html`;
+                } else {
+                    // Handle non-successful response (optional)
+                    console.error('API request failed with status:', response.status);
+                    alert('API request failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during API request. Please try again later.');
+            });
+    }
+
+
+    // function makeApiRequest() {
+    //     // Get the JWT token from cookies
+    //     const jwtToken = getCookie('jwtToken');
+    //     console.log('JWT Token:', jwtToken);
+    //
+    //     // Make the API request with the token in the Auth header
+    //     fetch('/dashboard/dashboard.html', {
+    //         method: 'GET',
+    //         headers: {
+    //             'Auth': 'Bearer ' + jwtToken,
+    //             'Content-Type': 'application/json',
+    //             'Accept': 'application/json',
+    //         },
+    //     })
+    //         .then(response => {
+    //             // Handle the response
+    //             console.log('API Response:', response);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         });
+    //
+    //     window.location.href = `./dashboard.html?token=${jwtToken}`;
+    // }
+
+
+    // Function to set a cookie with a given name and value
+    function setCookie(name, value) {
+        document.cookie = `${name}=${value}; path=/`;
+    }
+
+    // Function to get the value of a cookie by name
+    // function getCookie(name) {
+    //     const cookieName = `${name}=`;
+    //     const decodedCookies = decodeURIComponent(document.cookie);
+    //     const cookieArray = decodedCookies.split(';');
+    //
+    //     for (let i = 0; i < cookieArray.length; i++) {
+    //         let cookie = cookieArray[i].trim();
+    //
+    //         if (cookie.indexOf(cookieName) === 0) {
+    //             return cookie.substring(cookieName.length, cookie.length);
+    //         }
+    //     }
+    //
+    //     return null;
+    // }
+
+    // Function to get the value of a cookie by name
+    // Function to get the value of a cookie by name
+    function getCookie(name) {
+        const cookieName = `${name}=`;
+        const decodedCookies = decodeURIComponent(document.cookie);
+        const cookieArray = decodedCookies.split(';');
+
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i].trim();
+
+            if (cookie.indexOf(cookieName) === 0) {
+                return cookie.substring(cookieName.length, cookie.length);
+            }
+        }
+
+        return null;
+    }
+
+
     function signIn() {
         // Reset previous error messages
         document.getElementById("emailError").textContent = "";
@@ -159,15 +263,11 @@
         const email = document.getElementById("emailInput").value;
         const password = document.getElementById("passwordInput").value;
 
-        // Create the Basic Authentication header
-        const authHeader = 'Basic ' + btoa(email + ':' + password);
-
         // Make the API request to your backend
         fetch('/dashboard/user-login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': authHeader,
             },
             body: JSON.stringify({
                 email: email,
@@ -178,14 +278,19 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => {
-                // Assuming the response contains the JWT token
-                const jwtToken = data.token;
 
-                // Redirect to dashboard.html with the JWT token as a query parameter
+                // Access the JWT token from the response headers
+                const jwtToken = response.headers.get('Auth').split(' ')[1];
+
+                console.log('JWT Token:', jwtToken);
+
+                // Save the token in cookies
+                setCookie('jwtToken', jwtToken);
+
+                // // Redirect to the dashboard with the JWT token
                 window.location.href = `./dashboard.html?token=${jwtToken}`;
+                // Make the API request and redirect after a successful login
+                // makeApiRequest();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -199,6 +304,37 @@
                 }
             });
     }
+
+    // document.getElementById("loginForm").addEventListener("submit", function(event) {
+    //     event.preventDefault(); // Prevent form submission
+    //
+    //     const formData = new FormData(this); // Get form data
+    //
+    //     // Send POST request to API endpoint
+    //     fetch("/dashboard/user-login", {
+    //         method: "POST",
+    //         body: formData
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error("Network response was not ok");
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             // Assuming API returns a token upon successful login
+    //             const token = data.token;
+    //             // Store token in local storage or session storage
+    //             localStorage.setItem("token", token);
+    //             // Redirect user to another page or perform any other action
+    //             window.location.href = "dashboard.html";
+    //         })
+    //         .catch(error => {
+    //             document.getElementById("message").innerText = "Login failed. Please try again.";
+    //             console.error("There was a problem with the login:", error);
+    //         });
+    // });
+
 
 </script>
 
@@ -256,11 +392,11 @@ Nutrify India Now 2.O
 <!--</li>-->
 </ul>
 <li class="nav-item d-flex align-items-center">
-<a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">Download for Android</a>
+<a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" target="_blank" href="https://play.google.com/store/apps/details?id=com.ionicframework.myapp863035&hl=en_IN&gl=US&pli=1">Download for Android</a>
 </li>
 <ul class="navbar-nav d-lg-block d-none">
 <li class="nav-item">
-<a href="https://www.creative-tim.com/product/soft-ui-dashboard" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">Download for IOS</a>
+<a href="https://play.google.com/store/apps/details?id=com.ionicframework.myapp863035&hl=en_IN&gl=US&pli=1" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-dark">Download for IOS</a>
 </li>
 </ul>
 </div>

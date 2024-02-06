@@ -320,6 +320,7 @@ public class IngrdientService {
                 responseList.add(new DishWithIngredientsResponse(
                         dish.getDishId(),
                         dish.getDishName(),
+                        dish.getMealName(),
                         dish.isFavourite(),
                         ingredientsList,
                         totalEnergy + recipeEnergy,
@@ -333,6 +334,7 @@ public class IngrdientService {
                 responseList.add(new DishWithIngredientsResponse(
                         dish.getDishId(),
                         dish.getDishName(),
+                        dish.getMealName(),
                         dish.isFavourite(),
                         ingredientsList,
                         totalEnergy,
@@ -629,6 +631,7 @@ public class IngrdientService {
                     responseList.add(new DishWithIngredientsResponse(
                             dish.getDishId(),
                             dish.getDishName(),
+                            dish.getMealName(),
                             dish.isFavourite(),
                             ingredientsList,
                             totalEnergy,

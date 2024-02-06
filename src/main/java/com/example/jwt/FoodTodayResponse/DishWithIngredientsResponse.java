@@ -16,6 +16,7 @@ public class DishWithIngredientsResponse {
 
     private Long dishId;
     private String dishName;
+    private String mealType;
     private Double dishQuantity;
     private Double servingSize;
     private boolean favourite;
@@ -28,6 +29,7 @@ public class DishWithIngredientsResponse {
 //    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
+                                       String mealType,
                                        boolean favourite,
                                        List<IngredientDTO> ingredients,
                                        Double totalEnergy,
@@ -37,6 +39,7 @@ public class DishWithIngredientsResponse {
                                        Double totalFibers) {
         this.dishId=dishId;
         this.dishName = dishName;
+        this.mealType = mealType;
         this.favourite = favourite;
         this.ingredients = ingredients;
         this.totalEnergy = totalEnergy;

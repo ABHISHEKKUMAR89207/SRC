@@ -35,6 +35,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -56,6 +57,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -74,33 +76,136 @@ import java.util.stream.Collectors;
 public class Dashbaord1 {
 
 
-    @PostMapping("/user-login")
+//    @PostMapping("/user-login")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+//            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//        try {
+//            // Authenticate the user
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            authenticationRequest.getEmail(),
+//                            authenticationRequest.getPassword()
+//                    )
+//            );
+//        } catch (BadCredentialsException e) {
+//            // Handle incorrect email or password
+//            throw new Exception("Incorrect email or password", e);
+//        }
+//
+//        // Load user details
+//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//        // Generate JWT token
+//        final String jwt = jwtUtil.generateToken(userDetails);
+//        System.out.println("Generated JWT Token: " + jwt);
+//
+//        // Return the JWT token in the response
+//        AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
+//        return ResponseEntity.status(HttpStatus.OK).header("Auth", "Bearer " + jwt).body(authenticationResponse);
+//    }
+
+    @PostMapping("/user-login")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
             @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         try {
             // Authenticate the user
-            authenticationManager.authenticate(
+            Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             authenticationRequest.getEmail(),
                             authenticationRequest.getPassword()
                     )
             );
+
+            // Check if the authenticated user has the ROLE_ADMIN role
+            if (authentication.getAuthorities().stream()
+                    .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
+
+                // Load user details
+                final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+
+                // Generate JWT token
+                final String jwt = jwtUtil.generateToken(userDetails);
+                System.out.println("Generated JWT Token: " + jwt);
+
+                // Return the JWT token in the response
+                AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
+                return ResponseEntity.status(HttpStatus.OK).header("Auth", "Bearer " + jwt).body(authenticationResponse);
+            } else {
+                // User does not have the required role
+                throw new AccessDeniedException("Insufficient privileges");
+            }
         } catch (BadCredentialsException e) {
             // Handle incorrect email or password
             throw new Exception("Incorrect email or password", e);
         }
-
-        // Load user details
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-
-        // Generate JWT token
-        final String jwt = jwtUtil.generateToken(userDetails);
-
-        // Return the JWT token in the response
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
-        return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
     }
+
+
+//    @PostMapping("/user-login")
+//    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+//            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//        try {
+//            // Authenticate the user
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            authenticationRequest.getEmail(),
+//                            authenticationRequest.getPassword()
+//                    )
+//            );
+//        } catch (BadCredentialsException e) {
+//            // Handle incorrect email or password
+//            throw new Exception("Incorrect email or password", e);
+//        }
+//
+//        // Load user details
+//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//        // Generate JWT token
+//        final String jwt = jwtUtil.generateToken(userDetails);
+//        System.out.println("Generated JWT Token: " + jwt);
+//
+//        // Return the JWT token in the response
+//        AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
+//        return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
+//    }
+
+
+
+//    @PostMapping("/user-login")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+//            @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorizationHeader,
+//            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//
+//        try {
+//            // Extract the token from the Authorization header
+//            String jwtToken = authorizationHeader.replace("Bearer ", "");
+//
+//            // Validate and process the token
+//            if (jwtUtil.validateToken(jwtToken)) {
+//                // Token is valid, proceed with user details and response
+//
+//                // Load user details
+//                final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//                // Additional validation or checks if needed (e.g., user account status, roles, etc.)
+//
+//                // Generate JWT token (you may want to validate the token here as well)
+//                final String jwt = jwtUtil.generateToken(userDetails);
+//
+//                // Return the JWT token in the response
+//                AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
+//                return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
+//            } else {
+//                // Token is invalid
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//            }
+//        } catch (Exception e) {
+//            // Handle any exceptions (e.g., token validation failure, user not found, etc.)
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Adjust the response status as needed
+//        }
+//    }
 
 
     @GetMapping("/monthly")
@@ -326,14 +431,22 @@ public class Dashbaord1 {
 
     @GetMapping("/user.html")
     public String showUser(Model model) {
-        setupModel(model);
+//        setupModel(model);
         return "user";
     }
 
 
 
     @GetMapping("/dashboard.html")
+//    @PreAuthorize("isAuthenticated()")
     public String showDashboard(Model model) {
+//        logger.info("Received Headers: " + tokenHeader);
+
+//        String token = tokenHeader.replace("Bearer ", "");
+//        System.out.println("sdsds   "+token);
+        // Extract the username (email) from the token using your jwtHelper (replace jwtHelper with your actual class/method)
+//        String username = jwtHelper.getUsernameFromToken(token);
+
         setupModel(model);
 
         List<Path> logFiles = getLogFiles("../log/");
@@ -353,6 +466,65 @@ public class Dashbaord1 {
 
         return "dashboard";
     }
+//    @GetMapping("/dashboard.html")
+//
+////    @PreAuthorize("isAuthenticated()") // Uncomment this line to secure the endpoint
+//    public String showDashboard(Model model, @RequestHeader("Auth") String tokenHeader) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token using your jwtHelper
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        setupModel(model,username);
+//
+//        List<Path> logFiles = getLogFiles("../log/");
+//
+//        // Move the last element to the first position
+//        if (!logFiles.isEmpty()) {
+//            Path lastLogFile = logFiles.remove(logFiles.size() - 1);
+//            logFiles.add(0, lastLogFile);
+//        }
+//
+//        // Convert Path objects to strings
+//        List<String> logFileNames = logFiles.stream()
+//                .map(Path::toString)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("logFiles", logFileNames);
+//
+//        return "dashboard";
+//    }
+
+//    @GetMapping("/dashboard.html")
+//    public String showDashboard(Model model, @RequestHeader("Authorization") String tokenHeader) {
+//        // Extract the token from the header
+//        String jwtToken = tokenHeader.replace("Bearer ", "");
+//
+//        // Assuming you have a jwtHelper class to get the username from the token
+//        String username = jwtHelper.getUsernameFromToken(jwtToken);
+//
+//        // Rest of your showDashboard method...
+//
+//        setupModel(model, username);
+//
+//        List<Path> logFiles = getLogFiles("../log/");
+//
+//        // Move the last element to the first position
+//        if (!logFiles.isEmpty()) {
+//            Path lastLogFile = logFiles.remove(logFiles.size() - 1);
+//            logFiles.add(0, lastLogFile);
+//        }
+//
+//        // Convert Path objects to strings
+//        List<String> logFileNames = logFiles.stream()
+//                .map(Path::toString)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("logFiles", logFileNames);
+//
+//        return "dashboard";
+//    }
 
 
     private List<Path> getLogFiles(String directoryPath) {
@@ -511,6 +683,7 @@ public class Dashbaord1 {
         model.addAttribute("usersByState", usersByState);
         model.addAttribute("userStatusByState", usersByState);
 
+//        model.addAttribute("username", username);
 
         // Your additional logic if needed
     }
