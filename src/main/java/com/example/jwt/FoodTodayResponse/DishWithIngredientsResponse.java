@@ -50,6 +50,7 @@ public class DishWithIngredientsResponse {
     }
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
+                                       String mealType,
                                        boolean favourite,
                                        List<IngredientDTO> ingredients,
                                        Double totalEnergy,
@@ -61,6 +62,7 @@ public class DishWithIngredientsResponse {
                                        Double servingSize) {
         this.dishId = dishId;
         this.dishName = dishName;
+        this.mealType = mealType;
         this.dishQuantity=dishQuantity;
         this.servingSize=servingSize;
         this.favourite = favourite;
