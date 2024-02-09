@@ -1,5 +1,6 @@
 package com.example.jwt.repository.FoodTodayRepository;
 
+import com.example.jwt.dtos.NinDataDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,6 +12,10 @@ import java.util.List;
 @Repository
 public interface NinDataRepository extends JpaRepository<NinData, Long> {
     List<NinData> findByNinDataId(Long ninDataId);
+    @Query("SELECT n FROM NinData n WHERE LOWER(n.Typesoffood) = LOWER(:typesoffood)")
+    List<NinData> findByTypesoffoodIgnoreCase(@Param("typesoffood") String typesoffood);
+
+
     NinData findByFood(String name);
 
     NinData findByFoodCode(String name);

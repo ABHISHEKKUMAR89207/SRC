@@ -886,7 +886,7 @@
 ////    }
 //
 ////    @Autowired
-////    private static final Logger logger = (Logger) LoggerFactory.getLogger(Dashbaord1.class);
+////    private static final Logger logger = (Logger) LoggerFactory.getLogger(DashbaordController.class);
 //
 ////    @GetMapping("/dashboard.html")
 ////    public String showDashboard(Model model) {
@@ -1102,7 +1102,7 @@
 //            return Collections.emptyList();
 //        }
 //    }
-//    private static final Logger logger = LoggerFactory.getLogger(Dashbaord1.class);
+//    private static final Logger logger = LoggerFactory.getLogger(DashbaordController.class);
 //
 ////    private List<String> readLogsFromFile() {
 ////        // Specify the path to your 'app.log' file

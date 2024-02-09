@@ -20,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -85,21 +86,21 @@ private AllToggleRepository allToggleRepository;
     }
 
     private NotificationDetailsDTO convertToDTO(NotificationEntity notificationEntity) {
+        // Format LocalTime fields as strings
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
         return new NotificationDetailsDTO(
                 notificationEntity.getId(),
                 notificationEntity.getRecipientToken(),
                 notificationEntity.getTitle(),
                 notificationEntity.getBody(),
-                notificationEntity.getStartTime(),
-                notificationEntity.getLastTime(),
+                notificationEntity.getStartTime() != null ? notificationEntity.getStartTime().format(timeFormatter) : null,
+                notificationEntity.getLastTime() != null ? notificationEntity.getLastTime().format(timeFormatter) : null,
                 notificationEntity.getNotificationType(),
                 notificationEntity.isNotificationOn()
                 // Add other fields as needed
         );
     }
-
-
-
 
 //    @Transactional
 //@Transactional
