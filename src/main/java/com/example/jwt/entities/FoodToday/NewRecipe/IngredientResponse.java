@@ -11,6 +11,7 @@ import lombok.Setter;
 public class IngredientResponse {
     private String ingredientName;
     private Double ingredientQuantity;
+    private String foodCode;
 //    private Map<String, Double> nutrients;
 
     // ... getters and setters

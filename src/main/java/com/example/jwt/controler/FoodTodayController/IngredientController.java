@@ -80,19 +80,19 @@ public class IngredientController {
 
 
     //get dish with ingreddient using mealName
-    @GetMapping("/getDishesWithIngredientss")
-    public List<mealResponse> getDishesWithIngredientsByDateAndMealTypee(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {
-
-
-        String token = tokenHeader.replace("Bearer ", "");
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-        return ingrdientService.getDishesWithIngredientsByDateAndMealTypee(user, date, mealType);
-    }
+//    @GetMapping("/getDishesWithIngredientss")
+//    public List<mealResponse> getDishesWithIngredientsByDateAndMealTypee(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {
+//
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        return ingrdientService.getDishesWithIngredientsByDateAndMealTypee(user, date, mealType);
+//    }
 
 
     @GetMapping("/get-calories-with-date")

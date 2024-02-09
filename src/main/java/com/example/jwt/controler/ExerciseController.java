@@ -197,7 +197,7 @@ public class ExerciseController {
             // Exercises retrieved successfully
             return exercises;
         } catch (Exception e) {
-            e.printStackTrace();
+             e.printStackTrace();
             throw e;
         }
     }

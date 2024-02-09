@@ -242,6 +242,7 @@ public class RecipeServiceN {
             response.setRecipeId(recipeN.getUidrecipesn());
             response.setRecipeName(recipeN.getItemname());
 
+
             // Calculate the result
             double servingMeasure = Double.parseDouble(recipeN.getServingMeasure());
             double result = recipeN.getOneServingWtG() / servingMeasure;
@@ -275,6 +276,7 @@ public class RecipeServiceN {
         IngredientResponse response = new IngredientResponse();
         response.setIngredientName(ingredient.getIngredients());
         response.setIngredientQuantity(ingredient.getWeight());
+        response.setFoodCode(ingredient.getIfctNvifCode());
         // Set other necessary fields in IngredientResponse
         return response;
     }
@@ -471,6 +473,7 @@ public void saveRecipeAndIngredients(RecipeRequest request, User user, LocalDate
                 Ingredients ingredient = new Ingredients();
                 ingredient.setIngredientName(ingredientRequest.getIngredientName());
                 ingredient.setIngredientQuantity(ingredientRequest.getIngredientQuantity());
+                ingredient.setFoodCode(ingredientRequest.getFoodCode());
                 // Set other necessary fields in the ingredient
                 ingredient.setDishes(newDish); // Set the reference to Dishes
                 return ingredient;

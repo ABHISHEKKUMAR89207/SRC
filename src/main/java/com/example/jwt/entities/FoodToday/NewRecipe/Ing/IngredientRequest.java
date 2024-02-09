@@ -12,6 +12,7 @@ import lombok.Setter;
 public class IngredientRequest {
         private String ingredientName;
     private Double ingredientQuantity;
+    private String foodCode;
     // getters and setters
     public Double getIngredientQuantity() {
         return ingredientQuantity;

@@ -12,12 +12,14 @@ import java.util.List;
 public interface NinDataRepository extends JpaRepository<NinData, Long> {
     List<NinData> findByNinDataId(Long ninDataId);
     NinData findByFood(String name);
-    @Query("SELECT n FROM NinData n WHERE n.food_code = :foodCode")
-    List<NinData> findByFoodCode(String foodCode);
+
+    NinData findByFoodCode(String name);
+//    @Query("SELECT n FROM NinData n WHERE n.food_code = :foodCode")
+//    List<NinData> findByFoodCodee(String foodCode);
 
 //    @Query("SELECT n.carbohydrate, n.Energy, n.Total_Fat, n.Total_Dietary_Fibre FROM NinData n WHERE n.food_code = :foodCode")
 //    List<NinData> findByFoodCode(String foodCode);
-@Query("SELECT n FROM NinData n WHERE n.food_code = :foodCode AND n.Typesoffood = :foodType")
+@Query("SELECT n FROM NinData n WHERE n.foodCode = :foodCode AND n.Typesoffood = :foodType")
 List<NinData> findByFoodCodeAndType(String foodCode, String foodType);
 
 

@@ -20,9 +20,9 @@ public class NinDataService {
         this.ninDataRepository = ninDataRepository;
     }
 
-    public List<NinData> getNinDataByFoodCode(String foodCode) {
-        return ninDataRepository.findByFoodCode(foodCode);
-    }
+//    public List<NinData> getNinDataByFoodCode(String foodCode) {
+//        return ninDataRepository.findByFoodCode(foodCode);
+//    }
 
 
     public List<NinDataDTO> getNutritionalDataByFood(Long foodId) {

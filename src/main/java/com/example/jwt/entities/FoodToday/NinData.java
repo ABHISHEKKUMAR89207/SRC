@@ -26,7 +26,7 @@ public class NinData {
 
 //    @Column(name = "food")
     private String food;
-    private String food_code;
+    private String foodCode;
     private String category;
     private Double Energy;
     private Double carbohydrate;
@@ -47,6 +47,11 @@ public class NinData {
     private Double selenium;
     private Double copper;
     private Double manganese;
+
+//    private Double niacin;
+//    private Double riboflavin;
+//    private Double thiamine;
+
     
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")

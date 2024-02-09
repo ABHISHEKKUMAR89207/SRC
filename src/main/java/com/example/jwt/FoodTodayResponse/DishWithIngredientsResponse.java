@@ -26,6 +26,10 @@ public class DishWithIngredientsResponse {
     private Double totalCarbs;
     private Double totalFats;
     private Double totalFibers;
+    private Double totalCalcium;
+    private Double totalIron;
+    private Double totalZinc;
+    private Double totalMagnesium;
 //    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
@@ -36,7 +40,11 @@ public class DishWithIngredientsResponse {
                                        Double totalProteins,
                                        Double totalCarbs,
                                        Double totalFats,
-                                       Double totalFibers) {
+                                       Double totalFibers,
+                                       Double totalMagnesium,
+                                       Double totalZinc,
+                                       Double totalIron,
+                                       Double totalCalcium) {
         this.dishId=dishId;
         this.dishName = dishName;
         this.mealType = mealType;
@@ -47,6 +55,10 @@ public class DishWithIngredientsResponse {
         this.totalCarbs = totalCarbs;
         this.totalFats = totalFats;
         this.totalFibers = totalFibers;
+        this.totalMagnesium = totalMagnesium;
+        this.totalZinc = totalZinc;
+        this.totalIron = totalIron;
+        this.totalCalcium = totalCalcium;
     }
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
@@ -57,6 +69,10 @@ public class DishWithIngredientsResponse {
                                        Double totalCarbs,
                                        Double totalFats,
                                        Double totalFibers,
+                                       Double totalMagnesium,
+                                       Double totalZinc,
+                                       Double totalIron,
+                                       Double totalCalcium,
                                        Double dishQuantity,
                                        Double servingSize) {
         this.dishId = dishId;
@@ -65,6 +81,7 @@ public class DishWithIngredientsResponse {
         this.servingSize=servingSize;
         this.favourite = favourite;
 
+
         this.ingredients = ingredients;
 
         this.totalEnergy = calculateTotalEnergy(totalEnergy, dishQuantity, servingSize);
@@ -72,6 +89,10 @@ public class DishWithIngredientsResponse {
         this.totalCarbs = calculateTotalCarbs(totalCarbs, dishQuantity, servingSize);
         this.totalFats = calculateTotalFats(totalFats, dishQuantity, servingSize);
         this.totalFibers = calculateTotalFibers(totalFibers, dishQuantity, servingSize);
+        this.totalMagnesium = calculateTotalMagnesium(totalMagnesium, dishQuantity, servingSize);
+        this.totalZinc = calculateTotalZinc(totalZinc, dishQuantity, servingSize);
+        this.totalIron = calculateTotalIron(totalIron, dishQuantity, servingSize);
+        this.totalCalcium = calculateTotalCalcium(totalCalcium, dishQuantity, servingSize);
     }
 
     // Add a new method to calculate total energy based on dish quantity and serving size
@@ -96,6 +117,21 @@ public class DishWithIngredientsResponse {
         return (fibers / dishQuantity) * servingSize;
     }
 
+    private Double calculateTotalMagnesium(Double magnesium, Double dishQuantity, Double servingSize) {
+        return (magnesium / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalZinc(Double zinc, Double dishQuantity, Double servingSize) {
+        return (zinc / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalIron(Double iron, Double dishQuantity, Double servingSize) {
+        return (iron / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalCalcium(Double calcium, Double dishQuantity, Double servingSize) {
+        return (calcium / dishQuantity) * servingSize;
+    }
 
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,

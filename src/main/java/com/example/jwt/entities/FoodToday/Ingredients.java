@@ -23,6 +23,7 @@ public class Ingredients {
     private Long ingredientId;
     private String ingredientName;
     private Double ingredientQuantity;
+    private String foodCode;
 
 //    private transient List<Double> nutrirnts;
 

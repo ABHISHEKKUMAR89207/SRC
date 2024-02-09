@@ -1,5 +1,6 @@
 package com.example.jwt.controler.FoodTodayController;
 
+import com.example.jwt.dtos.FoodDTO;
 import com.example.jwt.dtos.NinDataDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.FoodToday.Recipe.Recipe;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,8 +36,27 @@ public class NinDataController {
     private UserService userService;
 
     // to get all the food items in order
+//    @GetMapping("/all-food-list")
+//    public List<String> getAllFoodNames(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null && user.getUserId().equals(user.getUserId())) {
+//            List<NinData> foodItems = ninDataRepository.findAll();
+//            List<String> foodNames = foodItems.stream().map(NinData::getFood).collect(Collectors.toList());
+//            return foodNames;
+//        } else {
+//            throw new AccessDeniedException("Access denied");
+//        }
+//    }
+
     @GetMapping("/all-food-list")
-    public List<String> getAllFoodNames(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
+    public List<FoodDTO> getAllFoodNamesAndCodes(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
         String token = tokenHeader.replace("Bearer ", "");
 
         // Extract the username (email) from the token
@@ -45,13 +67,14 @@ public class NinDataController {
 
         if (user != null && user.getUserId().equals(user.getUserId())) {
             List<NinData> foodItems = ninDataRepository.findAll();
-            List<String> foodNames = foodItems.stream().map(NinData::getFood).collect(Collectors.toList());
-            return foodNames;
+            List<FoodDTO> foodList = foodItems.stream()
+                    .map(foodItem -> new FoodDTO(foodItem.getFood(), foodItem.getFoodCode()))
+                    .collect(Collectors.toList());
+            return foodList;
         } else {
             throw new AccessDeniedException("Access denied");
         }
     }
-
 
     @Autowired
     private RecipeRepository recipeRepository;
