@@ -227,6 +227,7 @@ public class FoodDataService {
             NinDataDTO dto = new NinDataDTO();
             dto.setId(entity.getNinDataId());
             dto.setName(entity.getFood());
+            dto.setFoodCode(entity.getFoodCode());
             dto.setCategory(entity.getCategory());
 
             // Set DTO properties based on the selected column
@@ -290,6 +291,7 @@ public class FoodDataService {
                     NinDataDTO dto = new NinDataDTO();
                     dto.setId(entity.getNinDataId());
                     dto.setName(entity.getFood());
+                    dto.setFoodCode(entity.getFoodCode());
                     dto.setCategory(entity.getCategory());
                     dto.setEnergy(entity.getEnergy());
                     dto.setProtein(entity.getProtein());
