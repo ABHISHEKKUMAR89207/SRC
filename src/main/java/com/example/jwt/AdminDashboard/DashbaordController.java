@@ -89,6 +89,98 @@ public class DashbaordController {
     private BookTableRepository bookTableRepository;
 
 
+//    @PostMapping("/user-login")
+//    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
+//            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//        try {
+//            // Authenticate the user
+//            Authentication authentication = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            authenticationRequest.getEmail(),
+//                            authenticationRequest.getPassword()
+//                    )
+//            );
+//
+//            // Check if the authenticated user has the ROLE_ADMIN role
+//            if (authentication.getAuthorities().stream()
+//                    .anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"))) {
+//
+//                // Load user details
+//                final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//                // Generate JWT token
+//                final String jwt = jwtUtil.generateToken(userDetails);
+//                System.out.println("Generated JWT Token: " + jwt);
+//
+//                // Return the JWT token in the response
+//                AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
+//                return ResponseEntity.status(HttpStatus.OK).header("Auth", "Bearer " + jwt).body(authenticationResponse);
+//            } else {
+//                // User does not have the required role
+//                throw new AccessDeniedException("Insufficient privileges");
+//            }
+//        } catch (BadCredentialsException e) {
+//            // Handle incorrect email or password
+//            throw new Exception("Incorrect email or password", e);
+//        }
+//    }
+
+//
+    @GetMapping("/dashboard.html")
+    public String showDashboard(Model model) {
+        dashboardService.setupModel(model);
+
+        List<Path> logFiles = dashboardService.getLogFiles("../log/");
+
+        // Move the last element to the first position
+        if (!logFiles.isEmpty()) {
+            Path lastLogFile = logFiles.remove(logFiles.size() - 1);
+            logFiles.add(0, lastLogFile);
+        }
+
+        // Convert Path objects to strings
+        List<String> logFileNames = logFiles.stream()
+                .map(Path::toString)
+                .collect(Collectors.toList());
+
+        model.addAttribute("logFiles", logFileNames);
+
+        return "dashboard";
+    }
+
+//    @GetMapping("/dashboard.html")
+//    public String showDashboard(Model model, HttpServletRequest request, Authentication authentication) {
+//        // Extract JWT token from the Authorization header
+//        String token = request.getHeader("Auth");
+//        System.out.println("token......."+token);
+//        // Validate the token using UserDetails from Authentication
+//        if (authentication != null && authentication.isAuthenticated() && jwtHelper.validateToken(token, (UserDetails) authentication.getPrincipal())) {
+//            // Proceed with serving the dashboard page
+//            dashboardService.setupModel(model);
+//
+//            List<Path> logFiles = dashboardService.getLogFiles("../log/");
+//
+//            // Move the last element to the first position
+//            if (!logFiles.isEmpty()) {
+//                Path lastLogFile = logFiles.remove(logFiles.size() - 1);
+//                logFiles.add(0, lastLogFile);
+//            }
+//
+//            // Convert Path objects to strings
+//            List<String> logFileNames = logFiles.stream()
+//                    .map(Path::toString)
+//                    .collect(Collectors.toList());
+//
+//            model.addAttribute("logFiles", logFileNames);
+//
+//            return "dashboard";
+//        } else {
+//            // Invalid token or not authenticated, handle accordingly (redirect to login, show error, etc.)
+//            return "redirect:/auth/login"; // Redirect to login page
+//        }
+//    }
+
+
     @GetMapping("/monthly")
     public String showMonthlyDashboard(Model model) {
         Map<String, Integer> monthlyRegistrations = dashboardService.getMonthlyUserRegistrations();
@@ -175,33 +267,6 @@ public class DashbaordController {
     }
 
 
-//    @PostMapping("/user-login")
-//    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
-//            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-//        try {
-//            // Authenticate the user
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            authenticationRequest.getEmail(),
-//                            authenticationRequest.getPassword()
-//                    )
-//            );
-//        } catch (BadCredentialsException e) {
-//            // Handle incorrect email or password
-//            throw new Exception("Incorrect email or password", e);
-//        }
-//
-//        // Load user details
-//        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-//
-//        // Generate JWT token
-//        final String jwt = jwtUtil.generateToken(userDetails);
-//
-//        // Return the JWT token in the response
-//        AuthenticationResponse authenticationResponse = new AuthenticationResponse(jwt);
-//        return ResponseEntity.status(HttpStatus.OK).body(authenticationResponse);
-//    }
-
     @PostMapping("/user-login")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
             @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
@@ -237,6 +302,40 @@ public class DashbaordController {
             throw new Exception("Incorrect email or password", e);
         }
     }
+
+
+//    @GetMapping("/dashboard.html")
+//    public String showDashboard(@RequestHeader("Auth") String tokenHeader,Model model) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//        System.out.println("Token.........."+token);
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        System.out.println("User Name........."+username);
+//
+//        User user = userService.findByUsername(username);
+//
+//        System.out.println("User........"+user);
+//
+//        dashboardService.setupModel(model);
+//
+//        List<Path> logFiles = dashboardService.getLogFiles("../log/");
+//
+//        // Move the last element to the first position
+//        if (!logFiles.isEmpty()) {
+//            Path lastLogFile = logFiles.remove(logFiles.size() - 1);
+//            logFiles.add(0, lastLogFile);
+//        }
+//
+//        // Convert Path objects to strings
+//        List<String> logFileNames = logFiles.stream()
+//                .map(Path::toString)
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("logFiles", logFileNames);
+//
+//        return "dashboard";
+//    }
 
     @GetMapping("/sign-up.html")
     public String signUp() {
@@ -285,27 +384,6 @@ public class DashbaordController {
         return "user";
     }
 
-    @GetMapping("/dashboard.html")
-    public String showDashboard(Model model) {
-        dashboardService.setupModel(model);
-
-        List<Path> logFiles = dashboardService.getLogFiles("../log/");
-
-        // Move the last element to the first position
-        if (!logFiles.isEmpty()) {
-            Path lastLogFile = logFiles.remove(logFiles.size() - 1);
-            logFiles.add(0, lastLogFile);
-        }
-
-        // Convert Path objects to strings
-        List<String> logFileNames = logFiles.stream()
-                .map(Path::toString)
-                .collect(Collectors.toList());
-
-        model.addAttribute("logFiles", logFileNames);
-
-        return "dashboard";
-    }
 
 
 

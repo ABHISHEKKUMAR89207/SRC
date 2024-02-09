@@ -18,15 +18,15 @@ public class NotificationDetailsDTO {
     private String recipientToken;
     private String title;
     private String body;
-    private LocalTime startTime;
-    private LocalTime lastTime;
+        private String startTime;
+    private String lastTime;
     private String notificationType;
     private boolean notificationOn;
 
     // Constructor, getters, and setters
 
     public NotificationDetailsDTO(Long id, String recipientToken, String title, String body,
-                                  LocalTime startTime, LocalTime lastTime, String notificationType,Boolean notificationOn) {
+                                  String startTime, String lastTime, String notificationType,Boolean notificationOn) {
         this.id = id;
         this.recipientToken = recipientToken;
         this.title = title;
