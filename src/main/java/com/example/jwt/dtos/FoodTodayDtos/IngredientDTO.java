@@ -30,10 +30,11 @@ public class IngredientDTO {
 
     public IngredientDTO(String ingredientName,
                          Double ingredientQuantity,
-                         Double energy) {
+                         String foodCode) {
         this.ingredientName = ingredientName;
         this.ingredientQuantity = ingredientQuantity;
-        this.energy =energy;
+        this.foodCode =foodCode;
+
 
     }
     public IngredientDTO(String ingredientName, Double ingredientQuantity, Double energy,

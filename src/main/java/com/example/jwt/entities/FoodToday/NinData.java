@@ -28,29 +28,38 @@ public class NinData {
     private String food;
     private String foodCode;
     private String category;
-    private Double Energy;
-    private Double carbohydrate;
     private String Typesoffood;
-
-//    @Column(name = "Protein")
+    private Double Energy;
     private Double Protein;
     private Double Total_Fat;
     private Double Total_Dietary_Fibre;
+    private Double carbohydrate;
+    private Double calcium;
+    private Double magnesium;
+    private Double iron;
+    private Double zinc;
+
+        private Double thiamine_B1;
+        private Double riboflavin_B2;
+        private Double niacin_B3;
+//    private Double vitaminB6;
+    private Double totalFolates_B9;
+        private Double retinolVit_A;
+    //    private Double vitaminD;
+
+
+
     private Double  cholestrol;
     private Double  sodium;
-    private Double calcium;
-    private Double iron;
     private Double potassium;
     private Double phosphorus;
-    private Double magnesium;
-    private Double zinc;
     private Double selenium;
     private Double copper;
     private Double manganese;
 
-//    private Double niacin;
-//    private Double riboflavin;
-//    private Double thiamine;
+
+
+
 
     
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

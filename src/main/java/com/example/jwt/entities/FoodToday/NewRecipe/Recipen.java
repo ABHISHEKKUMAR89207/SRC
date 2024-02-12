@@ -44,10 +44,10 @@ public class Recipen {
     private List<Ingredientn> ingredients = new ArrayList<>();
 
     @OneToMany(mappedBy = "recipen", cascade = CascadeType.ALL)
-    private List<Dishes> recipes = new ArrayList<>();
+    private List<Dishes> dishes = new ArrayList<>();
 
     // Constructor with a parameter
-    public Recipen(Long uidrecipesn) {
-        this.uidrecipesn = uidrecipesn;
-    }
+//    public Recipen(Long uidrecipesn) {
+//        this.uidrecipesn = uidrecipesn;
+//    }
 }

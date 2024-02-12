@@ -77,7 +77,7 @@ public class PersonalController {
 
     private List<IngredientDTO> convertToIngredientsDTOList(List<Ingredients> ingredientsList) {
         return ingredientsList.stream()
-                .map(ingredient -> new IngredientDTO(ingredient.getIngredientName(), ingredient.getIngredientQuantity()))
+                .map(ingredient -> new IngredientDTO(ingredient.getIngredientName(), ingredient.getIngredientQuantity(), ingredient.getFoodCode()))
                 .collect(Collectors.toList());
     }
 
