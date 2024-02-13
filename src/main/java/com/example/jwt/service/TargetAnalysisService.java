@@ -44,16 +44,50 @@ public class TargetAnalysisService {
         List<Map<String, Double>> listOfMaps = new ArrayList<>();
         // Check if targetData is null
         if (targetData != null) {
+//            Double targetCalories = targetData.getTargetCalories();
+//            System.out.println("t caloryyy    " + targetCalories);
+//            Double targetProteins = targetData.getTargetProteins();
+//            System.out.println("t protein    " + targetProteins);
+//            Double targetCarbs = targetData.getTargetCarbs();
+//            System.out.println("t carbs    " + targetCarbs);
+//            Double targetFat = targetData.getTargetFat();
+//            System.out.println("t fat    " + targetFat);
+//            Double targetFibers = targetData.getTargetFibers();
+//            System.out.println("t fibers    " + targetFibers);
+//
+//            Double targetMagnesium = targetData.getTargetCalories();
+//            System.out.println("t caloryyy    " + targetCalories);
+//            Double targetZinc = targetData.getTargetProteins();
+//            System.out.println("t protein    " + targetProteins);
+//            Double targetIron = targetData.getTargetCarbs();
+//            System.out.println("t carbs    " + targetCarbs);
+//            Double targetCalcium = targetData.getTargetFat();
+//            System.out.println("t fat    " + targetFat);
+//            Double targetThiamine_B1 = targetData.getTargetFibers();
+//            System.out.println("t fibers    " + targetFibers);
+//            Double targetRetinol_Vit_A = targetData.getTargetCalories();
+//            System.out.println("t caloryyy    " + targetCalories);
+//            Double targetRiboflavin_B2 = targetData.getTargetProteins();
+//            System.out.println("t protein    " + targetProteins);
+//            Double targetNiacin_B3 = targetData.getTargetCarbs();
+//            System.out.println("t carbs    " + targetCarbs);
+//            Double targetFolates_B9 = targetData.getTargetFat();
+//            System.out.println("t fat    " + targetFat);
             Double targetCalories = targetData.getTargetCalories();
-            System.out.println("t caloryyy    " + targetCalories);
             Double targetProteins = targetData.getTargetProteins();
-            System.out.println("t protein    " + targetProteins);
             Double targetCarbs = targetData.getTargetCarbs();
-            System.out.println("t carbs    " + targetCarbs);
             Double targetFat = targetData.getTargetFat();
-            System.out.println("t fat    " + targetFat);
             Double targetFibers = targetData.getTargetFibers();
-            System.out.println("t fibers    " + targetFibers);
+            Double targetMagnesium = targetData.getTargetMagnesium();
+            Double targetZinc = targetData.getTargetZinc();
+            Double targetIron = targetData.getTargetIron();
+            Double targetCalcium = targetData.getTargetCalcium();
+            Double targetThiamine_B1 = targetData.getTargetThiamine_B1();
+            Double targetRetinol_Vit_A = targetData.getTargetRetinol_Vit_A();
+            Double targetRiboflavin_B2 = targetData.getTargetRiboflavin_B2();
+            Double targetNiacin_B3 = targetData.getTargetNiacin_B3();
+            Double targetFolates_B9 = targetData.getTargetFolates_B9();
+
 
             Set<Map.Entry<String, Double>> entrySet = myMap.entrySet();
             List<Double> ansList = new ArrayList<>();
@@ -63,11 +97,20 @@ public class TargetAnalysisService {
                 ansList.add(value);
             }
 
-            calculatedMap.put("Left Calories: ", targetCalories != null ? Math.abs(targetCalories - ansList.get(0)) : null);
-            calculatedMap.put("Left Proteins: ", targetProteins != null ? Math.abs(targetProteins - ansList.get(1)) : null);
-            calculatedMap.put("Left Carbs: ", targetCarbs != null ? Math.abs(targetCarbs - ansList.get(2)) : null);
-            calculatedMap.put("Left Fats: ", targetFat != null ? Math.abs(targetFat - ansList.get(3)) : null);
-            calculatedMap.put("Left Fibers: ", targetFibers != null ? Math.abs(targetFibers - ansList.get(4)) : null);
+            calculatedMap.put("Left Calories", targetCalories != null ? Math.abs(targetCalories - ansList.get(0)) : 0);
+            calculatedMap.put("Left Proteins", targetProteins != null ? Math.abs(targetProteins - ansList.get(1)) : 0);
+            calculatedMap.put("Left Carbs", targetCarbs != null ? Math.abs(targetCarbs - ansList.get(2)) : 0);
+            calculatedMap.put("Left Fats", targetFat != null ? Math.abs(targetFat - ansList.get(3)) : 0);
+            calculatedMap.put("Left Fibers", targetFibers != null ? Math.abs(targetFibers - ansList.get(4)) : 0);
+            calculatedMap.put("Left Magnesium", targetMagnesium != null ? Math.abs(targetMagnesium - ansList.get(5)) : 0);
+            calculatedMap.put("Left Zinc", targetZinc != null ? Math.abs(targetZinc - ansList.get(6)) : 0);
+            calculatedMap.put("Left Iron", targetIron != null ? Math.abs(targetIron - ansList.get(7)) : 0);
+            calculatedMap.put("Left Calcium", targetCalcium != null ? Math.abs(targetCalcium - ansList.get(8)) : 0);
+            calculatedMap.put("Left Thiamine_B1", targetThiamine_B1 != null ? Math.abs(targetThiamine_B1 - ansList.get(9)) : 0);
+            calculatedMap.put("Left Retinol_Vit_A", targetRetinol_Vit_A != null ? Math.abs(targetRetinol_Vit_A - ansList.get(10)) : 0);
+            calculatedMap.put("Left Riboflavin_B2", targetRiboflavin_B2 != null ? Math.abs(targetRiboflavin_B2 - ansList.get(11)) : 0);
+            calculatedMap.put("Left Niacin_B3", targetNiacin_B3 != null ? Math.abs(targetNiacin_B3 - ansList.get(12)) : 0);
+            calculatedMap.put("Left Folates_B9", targetFolates_B9 != null ? Math.abs(targetFolates_B9 - ansList.get(13)) : 0);
         } else {
             System.out.println("targetData is null");
         }
@@ -91,6 +134,16 @@ public class TargetAnalysisService {
             newTargetData.setTargetFat(request.getFats());
             newTargetData.setTargetProteins(request.getProteins());
             newTargetData.setTargetFibers(request.getFiber());
+            // Set the rest of the nutrient properties
+            newTargetData.setTargetMagnesium(request.getMagnesium());
+            newTargetData.setTargetZinc(request.getZinc());
+            newTargetData.setTargetIron(request.getIron());
+            newTargetData.setTargetCalcium(request.getCalcium());
+            newTargetData.setTargetThiamine_B1(request.getThiamine_B1());
+            newTargetData.setTargetRetinol_Vit_A(request.getRetinol_Vit_A());
+            newTargetData.setTargetRiboflavin_B2(request.getRiboflavin_B2());
+            newTargetData.setTargetNiacin_B3(request.getNiacin_B3());
+            newTargetData.setTargetFolates_B9(request.getFolates_B9());
 
             // Save the new target data
             return targetDataRepository.save(newTargetData);
@@ -109,6 +162,34 @@ public class TargetAnalysisService {
             }
             if (request.getFiber() != null) {
                 existingData.setTargetFibers(request.getFiber());
+            }
+            // Set the rest of the nutrient properties
+            if (request.getMagnesium() != null) {
+                existingData.setTargetMagnesium(request.getMagnesium());
+            }
+            if (request.getZinc() != null) {
+                existingData.setTargetZinc(request.getZinc());
+            }
+            if (request.getIron() != null) {
+                existingData.setTargetIron(request.getIron());
+            }
+            if (request.getCalcium() != null) {
+                existingData.setTargetCalcium(request.getCalcium());
+            }
+            if (request.getThiamine_B1() != null) {
+                existingData.setTargetThiamine_B1(request.getThiamine_B1());
+            }
+            if (request.getRetinol_Vit_A() != null) {
+                existingData.setTargetRetinol_Vit_A(request.getRetinol_Vit_A());
+            }
+            if (request.getRiboflavin_B2() != null) {
+                existingData.setTargetRiboflavin_B2(request.getRiboflavin_B2());
+            }
+            if (request.getNiacin_B3() != null) {
+                existingData.setTargetNiacin_B3(request.getNiacin_B3());
+            }
+            if (request.getFolates_B9() != null) {
+                existingData.setTargetFolates_B9(request.getFolates_B9());
             }
 
             // Save the updated target data

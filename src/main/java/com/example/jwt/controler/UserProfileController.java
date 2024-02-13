@@ -98,6 +98,13 @@ public class UserProfileController {
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
                 response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
 
+                response.put("Android App Link","https://play.google.com/store/apps/details?id=com.icmr.amr_treatment_guidelines&hl=en_IN&gl=US");
+                response.put("IOS App Link","https://play.google.com/store/apps/details?id=com.icmr.amr_treatment_guidelines&hl=en_IN&gl=US");
+                response.put("App message","\uD83C\uDF1F Elevate your health with Nutrify India Now 2.0! \uD83D\uDE80\n" +
+                        "\uD83C\uDF4F Personalized insights, fitness tracking, nutrition guidance, and more! \n" +
+                        "#NIN2Point0 #WellnessRevolution \n" +
+                        "\uD83D\uDD17 Download Now :");
+
                 // Convert dateOfBirth to "yyyy-MM-dd" format
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 String dobString1 = userProfile.getDateOfBirth().format(formatter);

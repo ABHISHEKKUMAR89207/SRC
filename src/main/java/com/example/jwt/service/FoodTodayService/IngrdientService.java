@@ -462,6 +462,16 @@ public class IngrdientService {
             mapIngredient.put("carbs", carbs);
             mapIngredient.put("fat", fats);
             mapIngredient.put("fibers", fibers);
+            mapIngredient.put("Magnesium", magnesium);
+            mapIngredient.put("Zinc", zinc);
+            mapIngredient.put("Iron", iron);
+            mapIngredient.put("Calcium", calcium);
+            mapIngredient.put("Thiamine-B1", thiamine_B1);
+            mapIngredient.put("Retinol-Vit-A", retinolVit_A);
+            mapIngredient.put("Riboflavin-B2", riboflavin_B2);
+            mapIngredient.put("Niacin-B3", niacin_B3);
+            mapIngredient.put("Folates-B9", folates_B9);
+
             analysisService.setmaps(mapIngredient);
 
 
