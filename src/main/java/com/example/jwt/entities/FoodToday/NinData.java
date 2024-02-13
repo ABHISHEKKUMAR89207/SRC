@@ -39,18 +39,18 @@ public class NinData {
     private Double iron;
     private Double zinc;
 
-        private Double thiamine_B1;
-        private Double riboflavin_B2;
-        private Double niacin_B3;
-//    private Double vitaminB6;
+    private Double thiamine_B1;
+    private Double riboflavin_B2;
+    private Double niacin_B3;
+//  private Double vitaminB6;
     private Double totalFolates_B9;
-        private Double retinolVit_A;
-    //    private Double vitaminD;
+    private Double retinolVit_A;
+//  private Double vitaminD;
 
 
 
-    private Double  cholestrol;
-    private Double  sodium;
+    private Double cholestrol;
+    private Double sodium;
     private Double potassium;
     private Double phosphorus;
     private Double selenium;

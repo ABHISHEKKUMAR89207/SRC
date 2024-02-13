@@ -57,6 +57,11 @@ public class IngrdientService {
         Double totalCarbs = 0.0;
         Double totalFats = 0.0;
         Double totalFibers = 0.0;
+        Double totalThiamine_B1 = 0.0;
+        Double totalRiboflavin_B2 = 0.0;
+        Double totalNiacin_B3 = 0.0;
+        Double totalFolates_B9 = 0.0;
+        Double totalRetinolVit_A = 0.0;
         for (Dishes dish : dishesList) {
 // Clear the existing list of ingredients associated with the dish
             dish.getIngredientList().clear();
@@ -78,10 +83,19 @@ public class IngrdientService {
                             (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat(),
                             (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate(),
                             (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre(),
-                    (ingredient.getIngredientQuantity()/100) * ninData.getMagnesium(),
+                            (ingredient.getIngredientQuantity()/100) * ninData.getMagnesium(),
                             (ingredient.getIngredientQuantity()/100) * ninData.getZinc(),
                             (ingredient.getIngredientQuantity()/100) * ninData.getIron(),
-                            (ingredient.getIngredientQuantity()/100) * ninData.getCalcium()));
+                            (ingredient.getIngredientQuantity()/100) * ninData.getCalcium(),
+                            (ingredient.getIngredientQuantity()/100) * ninData.getTotalFolates_B9(),
+                        (ingredient.getIngredientQuantity()/100) * ninData.getNiacin_B3(),
+                    (ingredient.getIngredientQuantity()/100) * ninData.getThiamine_B1(),
+                    (ingredient.getIngredientQuantity()/100) * ninData.getRetinolVit_A(),
+                    (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin_B2()
+
+
+
+                    ));
 
                     totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
                     totalProtiens += (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
@@ -206,33 +220,33 @@ public class IngrdientService {
             return 0.0;
         }
     }
-//
-//    private Double calculateThiamin(Ingredients ingredient) {
-//        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
-//        if (ninData != null) {
-//            return (ingredient.getIngredientQuantity()/100) * ninData.getThiamine();
-//        } else {
-//            return 0.0;
-//        }
-//    }
-//
-//    private Double calculateRiboflavin(Ingredients ingredient) {
-//        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
-//        if (ninData != null) {
-//            return (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin();
-//        } else {
-//            return 0.0;
-//        }
-//    }
-//
-//    private Double calculateNiacin(Ingredients ingredient) {
-//        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
-//        if (ninData != null) {
-//            return (ingredient.getIngredientQuantity()/100) * ninData.getNiacin();
-//        } else {
-//            return 0.0;
-//        }
-//    }
+
+    private Double calculateThiamin(Ingredients ingredient) {
+        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+        if (ninData != null) {
+            return (ingredient.getIngredientQuantity()/100) * ninData.getThiamine_B1();
+        } else {
+            return 0.0;
+        }
+    }
+
+    private Double calculateRiboflavin(Ingredients ingredient) {
+        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+        if (ninData != null) {
+            return (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin_B2();
+        } else {
+            return 0.0;
+        }
+    }
+
+    private Double calculateNiacin(Ingredients ingredient) {
+        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+        if (ninData != null) {
+            return (ingredient.getIngredientQuantity()/100) * ninData.getNiacin_B3();
+        } else {
+            return 0.0;
+        }
+    }
 //
 //    private Double calculateVitaminB6(Ingredients ingredient) {
 //        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
@@ -243,23 +257,23 @@ public class IngrdientService {
 //        }
 //    }
 //
-//    private Double calculateTotalFolates(Ingredients ingredient) {
-//        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
-//        if (ninData != null) {
-//            return (ingredient.getIngredientQuantity()/100) * ninData.getF;
-//        } else {
-//            return 0.0;
-//        }
-//    }
-//
-//    private Double calculateVitaminA(Ingredients ingredient) {
-//        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
-//        if (ninData != null) {
-//            return (ingredient.getIngredientQuantity()/100) * ninData.get;
-//        } else {
-//            return 0.0;
-//        }
-//    }
+    private Double calculateTotalFolates(Ingredients ingredient) {
+        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+        if (ninData != null) {
+            return (ingredient.getIngredientQuantity()/100) * ninData.getTotalFolates_B9();
+        } else {
+            return 0.0;
+        }
+    }
+
+    private Double calculateVitaminA(Ingredients ingredient) {
+        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+        if (ninData != null) {
+            return (ingredient.getIngredientQuantity()/100) * ninData.getRetinolVit_A();
+        } else {
+            return 0.0;
+        }
+    }
 //
 //    private Double calculateVitaminD(Ingredients ingredient) {
 //        NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
@@ -360,6 +374,12 @@ public class IngrdientService {
         Double iron = 0.0;
         Double zinc = 0.0;
         Double calcium = 0.0;
+        Double thiamine_B1 = 0.0;
+        Double riboflavin_B2 = 0.0;
+        Double niacin_B3 = 0.0;
+        Double folates_B9 = 0.0;
+        Double retinolVit_A = 0.0;
+
 
         for (Dishes dish : dishesList) {
             List<Ingredients> ingredients = dish.getIngredientList();
@@ -375,6 +395,12 @@ public class IngrdientService {
             Double totalIron = 0.0;
             Double totalZinc = 0.0;
             Double totalCalcium = 0.0;
+            Double totalThiamine_B1 = 0.0;
+            Double totalRiboflavin_B2 = 0.0;
+            Double totalNiacin_B3 = 0.0;
+            Double totalFolates_B9 = 0.0;
+            Double totalRetinolVit_A = 0.0;
+
 
             for (Ingredients ingredient : ingredients) {
                 NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
@@ -390,7 +416,12 @@ public class IngrdientService {
                         calculateMagnesium(ingredient),
                         calculateZinc(ingredient),
                         calculateCalcium(ingredient),
-                        calculateIron(ingredient)
+                        calculateIron(ingredient),
+                        calculateThiamin(ingredient),
+                        calculateNiacin(ingredient),
+                        calculateRiboflavin(ingredient),
+                        calculateTotalFolates(ingredient),
+                        calculateVitaminA(ingredient)
                 ));
 
                 totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
@@ -402,6 +433,12 @@ public class IngrdientService {
                 totalZinc += (ingredient.getIngredientQuantity()/100) * ninData.getZinc();
                 totalIron += (ingredient.getIngredientQuantity()/100) * ninData.getIron();
                 totalCalcium += (ingredient.getIngredientQuantity()/100) * ninData.getCalcium();
+                totalFolates_B9 += (ingredient.getIngredientQuantity()/100) * ninData.getTotalFolates_B9();
+                totalNiacin_B3 += (ingredient.getIngredientQuantity()/100) * ninData.getNiacin_B3();
+                totalThiamine_B1 += (ingredient.getIngredientQuantity()/100) * ninData.getThiamine_B1();
+                totalRetinolVit_A += (ingredient.getIngredientQuantity()/100) * ninData.getRetinolVit_A();
+                totalRiboflavin_B2 += (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin_B2();
+
             }
 
             energy = energy + totalEnergy;
@@ -413,6 +450,12 @@ public class IngrdientService {
             zinc = zinc + totalZinc;
             iron = iron + totalIron;
             calcium = calcium + totalCalcium;
+            thiamine_B1 = thiamine_B1 + totalThiamine_B1;
+            retinolVit_A = retinolVit_A + totalRetinolVit_A;
+            riboflavin_B2 = riboflavin_B2 + totalRiboflavin_B2;
+            niacin_B3 = niacin_B3 + totalNiacin_B3;
+            folates_B9 = folates_B9 + totalFolates_B9;
+
 
             mapIngredient.put("Energy", energy);
             mapIngredient.put("Protiens", proteins);
@@ -468,7 +511,14 @@ public class IngrdientService {
                         totalMagnesium,
                         totalZinc,
                         totalIron,
-                        totalCalcium
+                        totalCalcium,
+                        totalThiamine_B1,
+                        totalRiboflavin_B2,
+                        totalNiacin_B3,
+                        totalFolates_B9,
+                        totalRetinolVit_A,
+                        dish.getDishQuantity(),  // provide dish quantity here
+                        dish.getServingSize()  // provide serving size here
                 ));
 
 //            }
@@ -483,7 +533,7 @@ public class IngrdientService {
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
         }
 
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, energy, proteins, carbs, fats, fibers,magnesium,zinc,iron,calcium));
+        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, energy, proteins, carbs, fats, fibers,magnesium,zinc,iron,calcium,thiamine_B1, riboflavin_B2,niacin_B3,folates_B9,retinolVit_A));
         return finalResponseList;
     }
 
@@ -821,6 +871,11 @@ public class IngrdientService {
         Double onegrmIron = 0.0;
         Double onegrmZinc = 0.0;
         Double onegrmCalcium = 0.0;
+        Double onegramThiamine_B1=0.0;
+        Double onegrmRiboflavin_B2 = 0.0;
+        Double onegrmNiacin_B3 = 0.0;
+        Double onegrmFolates_B9 = 0.0;
+        Double onegrmRetinolVit_A = 0.0;
 
         Double energy = 0.0;
         Double proteins = 0.0;
@@ -831,6 +886,11 @@ public class IngrdientService {
         Double iron = 0.0;
         Double zinc = 0.0;
         Double calcium = 0.0;
+        Double thiamine_B1 = 0.0;
+        Double riboflavin_B2 = 0.0;
+        Double niacin_B3 = 0.0;
+        Double folates_B9 = 0.0;
+        Double retinolVit_A = 0.0;
 
 
         for (Dishes dish : dishesList) {
@@ -849,6 +909,11 @@ public class IngrdientService {
                 Double totalIron = 0.0;
                 Double totalZinc = 0.0;
                 Double totalCalcium = 0.0;
+                Double totalThiamine_B1 = 0.0;
+                Double totalRiboflavin_B2 = 0.0;
+                Double totalNiacin_B3 = 0.0;
+                Double totalFolates_B9 = 0.0;
+                Double totalRetinolVit_A = 0.0;
 
                 for (Ingredients ingredient : ingredients) {
                     NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
@@ -863,7 +928,11 @@ public class IngrdientService {
                             calculateIron(ingredient),
                             calculateCalcium(ingredient),
                             calculateMagnesium(ingredient),
-                            calculateZinc(ingredient)
+                            calculateZinc(ingredient),                        calculateThiamin(ingredient),
+                            calculateNiacin(ingredient),
+                            calculateRiboflavin(ingredient),
+                            calculateTotalFolates(ingredient),
+                            calculateVitaminA(ingredient)
 
                     ));
 
@@ -880,6 +949,12 @@ public class IngrdientService {
                     totalZinc += (ingredient.getIngredientQuantity()/100) * ninData.getZinc();
                     totalIron += (ingredient.getIngredientQuantity()/100) * ninData.getIron();
                     totalCalcium += (ingredient.getIngredientQuantity()/100) * ninData.getCalcium();
+                    totalFolates_B9 += (ingredient.getIngredientQuantity()/100) * ninData.getTotalFolates_B9();
+                    totalNiacin_B3 += (ingredient.getIngredientQuantity()/100) * ninData.getNiacin_B3();
+                    totalThiamine_B1 += (ingredient.getIngredientQuantity()/100) * ninData.getThiamine_B1();
+                    totalRetinolVit_A += (ingredient.getIngredientQuantity()/100) * ninData.getRetinolVit_A();
+                    totalRiboflavin_B2 += (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin_B2();
+
                 }
 
                 energy = energy + totalEnergy;
@@ -891,6 +966,12 @@ public class IngrdientService {
                 zinc = zinc + totalZinc;
                 iron = iron + totalIron;
                 calcium = calcium + totalCalcium;
+                thiamine_B1 = thiamine_B1 + totalThiamine_B1;
+                retinolVit_A = retinolVit_A + totalRetinolVit_A;
+                riboflavin_B2 = riboflavin_B2 + totalRiboflavin_B2;
+                niacin_B3 = niacin_B3 + totalNiacin_B3;
+                folates_B9 = folates_B9 + totalFolates_B9;
+
 
 
                 // Fetch recipe details based on dish's recipe ID
@@ -942,6 +1023,12 @@ public class IngrdientService {
                             totalZinc,
                             totalIron,
                             totalCalcium,
+                            totalThiamine_B1,
+                            totalRiboflavin_B2,
+                            totalNiacin_B3,
+                            totalFolates_B9,
+                            totalRetinolVit_A,
+
                             dish.getDishQuantity(),  // provide dish quantity here
                             dish.getServingSize()  // provide serving size here
                     ));
@@ -980,6 +1067,12 @@ public class IngrdientService {
                             totalZinc,
                             totalIron,
                             totalCalcium,
+                            totalThiamine_B1,
+                            totalRiboflavin_B2,
+                            totalNiacin_B3,
+                            totalFolates_B9,
+                            totalRetinolVit_A,
+
                             dish.getDishQuantity(),  // provide dish quantity here
                             dish.getServingSize()  // provide serving size here
                     ));
@@ -995,6 +1088,13 @@ public class IngrdientService {
             onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
             onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
             onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
+
+            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
+            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
+            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
+            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
+
 
 
 //            System.out.println("serving Energy  "+onegrmEng);
@@ -1013,7 +1113,7 @@ public class IngrdientService {
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
         }
 
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium));
+        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9));
         return finalResponseList;
     }
 

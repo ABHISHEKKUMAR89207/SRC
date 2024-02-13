@@ -25,6 +25,11 @@ public class mealResponse {
     private Double mealIron;
     private Double mealZinc;
     private Double mealMagnesium;
+    private Double mealThiamine_B1;
+    private Double mealRiboflavin_B2;
+    private Double mealNiacin_B3;
+    private Double mealFolates_B9;
+    private Double mealRetinolVit_A;
    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     // to get the type of meal response we want
     public mealResponse(  List<DishWithIngredientsResponse> rList,
@@ -68,7 +73,12 @@ public class mealResponse {
                           Double mealCalcium,
                           Double mealIron,
                           Double mealZinc,
-                          Double mealMagnesium){
+                          Double mealMagnesium,
+                          Double mealThiamine_B1,
+                          Double mealRiboflavin_B2,
+                          Double mealNiacin_B3,
+                          Double mealFolates_B9,
+                          Double mealRetinolVit_A){
         this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
         this.rList = rList;
         this.mealEnergy = mealEnergy;
@@ -80,6 +90,11 @@ public class mealResponse {
         this.mealZinc = mealZinc;
         this.mealIron = mealIron;
         this.mealCalcium = mealCalcium;
+        this.mealThiamine_B1 = mealThiamine_B1;
+        this.mealRiboflavin_B2 = mealRiboflavin_B2;
+        this.mealNiacin_B3 = mealNiacin_B3;
+        this.mealFolates_B9 = mealFolates_B9;
+        this.mealRetinolVit_A = mealRetinolVit_A;
 
     }
 

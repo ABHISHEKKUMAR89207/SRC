@@ -30,6 +30,11 @@ public class DishWithIngredientsResponse {
     private Double totalIron;
     private Double totalZinc;
     private Double totalMagnesium;
+    private Double totalThiamine_B1;
+    private Double totalRiboflavin_B2;
+    private Double totalNiacin_B3;
+    private Double totalFolates_B9;
+    private Double totalRetinolVit_A;
 //    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
@@ -74,8 +79,14 @@ public class DishWithIngredientsResponse {
                                        Double totalZinc,
                                        Double totalIron,
                                        Double totalCalcium,
+                                       Double totalThiamine_B1,
+                                       Double totalRiboflavin_B2,
+                                       Double totalNiacin_B3,
+                                       Double totalFolates_B9,
+                                       Double totalRetinolVit_A,
                                        Double dishQuantity,
-                                       Double servingSize) {
+                                       Double servingSize
+                               ) {
         this.dishId = dishId;
         this.dishName = dishName;
         this.mealType = mealType;
@@ -95,6 +106,11 @@ public class DishWithIngredientsResponse {
         this.totalZinc = calculateTotalZinc(totalZinc, dishQuantity, servingSize);
         this.totalIron = calculateTotalIron(totalIron, dishQuantity, servingSize);
         this.totalCalcium = calculateTotalCalcium(totalCalcium, dishQuantity, servingSize);
+        this.totalThiamine_B1 = calculateTotalThiamine_B1(totalThiamine_B1, dishQuantity, servingSize);
+        this.totalRiboflavin_B2 = calculateTotalRiboflavin_B2(totalRiboflavin_B2, dishQuantity, servingSize);
+        this.totalNiacin_B3 = calculateTotalNiacin_B3(totalNiacin_B3, dishQuantity, servingSize);
+        this.totalFolates_B9 = calculateTotalFolates_B9(totalFolates_B9, dishQuantity, servingSize);
+        this.totalRetinolVit_A = calculateTotalRetinolVit_A(totalRetinolVit_A, dishQuantity, servingSize);
     }
 
     // Add a new method to calculate total energy based on dish quantity and serving size
@@ -133,6 +149,26 @@ public class DishWithIngredientsResponse {
 
     private Double calculateTotalCalcium(Double calcium, Double dishQuantity, Double servingSize) {
         return (calcium / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalThiamine_B1(Double thiamine_B1, Double dishQuantity, Double servingSize) {
+        return (thiamine_B1 / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalRiboflavin_B2(Double riboflavin_B2, Double dishQuantity, Double servingSize) {
+        return (riboflavin_B2 / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalNiacin_B3(Double niacin_B3, Double dishQuantity, Double servingSize) {
+        return (niacin_B3 / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalFolates_B9(Double folates_B9, Double dishQuantity, Double servingSize) {
+        return (folates_B9 / dishQuantity) * servingSize;
+    }
+
+    private Double calculateTotalRetinolVit_A(Double retinolVit_A, Double dishQuantity, Double servingSize) {
+        return (retinolVit_A / dishQuantity) * servingSize;
     }
 
     public DishWithIngredientsResponse(Long dishId,

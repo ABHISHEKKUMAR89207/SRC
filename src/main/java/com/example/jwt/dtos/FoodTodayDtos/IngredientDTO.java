@@ -27,6 +27,11 @@ public class IngredientDTO {
     private Double iron;
     private Double zinc;
     private Double magnesium;
+    private Double thiamine_B1;
+    private Double riboflavin_B2;
+    private Double niacin_B3;
+    private Double folates_B9;
+    private Double retinolVit_A;
 
     public IngredientDTO(String ingredientName,
                          Double ingredientQuantity,
@@ -37,9 +42,22 @@ public class IngredientDTO {
 
 
     }
-    public IngredientDTO(String ingredientName, Double ingredientQuantity, Double energy,
-                         Double proteins, Double fats, Double carbs, Double fibers, Double magnesium, Double zinc,Double calcium,
-    Double iron) {
+    public IngredientDTO(String ingredientName,
+                         Double ingredientQuantity,
+                         Double energy,
+                         Double proteins,
+                         Double fats,
+                         Double carbs,
+                         Double fibers,
+                         Double magnesium,
+                         Double zinc,
+                         Double calcium,
+                         Double iron,
+                         Double thiamine_B1,
+                         Double riboflavin_B2,
+                         Double niacin_B3,
+                         Double folates_B9,
+                         Double retinolVit_A) {
         this.ingredientName = ingredientName;
         this.ingredientQuantity = ingredientQuantity;
         this.energy = energy;
@@ -51,6 +69,12 @@ public class IngredientDTO {
         this.iron = iron;
         this.zinc = zinc;
         this.magnesium = magnesium;
+        this.thiamine_B1 = thiamine_B1;
+        this.riboflavin_B2 = riboflavin_B2;
+        this.niacin_B3 = niacin_B3;
+        this.folates_B9 = folates_B9;
+        this.retinolVit_A =retinolVit_A;
+
     }
 
     public IngredientDTO(String ingredientName, Double ingredientQuantity) {
