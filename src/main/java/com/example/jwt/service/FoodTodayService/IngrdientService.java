@@ -364,7 +364,7 @@ public class IngrdientService {
         List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
         List<DishWithIngredientsResponse> responseList = new ArrayList<>();
         List<mealResponse> finalResponseList = new ArrayList<>();
-
+        LocalDate datee = date;  // or LocalDate.now() or any other default value
         Double energy = 0.0;
         Double proteins = 0.0;
         Double fats = 0.0;
@@ -385,6 +385,7 @@ public class IngrdientService {
             List<Ingredients> ingredients = dish.getIngredientList();
             List<IngredientDTO> ingredientsList = new ArrayList<>();
             Map<String, Double> mapIngredient = new HashMap<>();
+//            datee = dish.getDate(); // Assign the value here
 
             Double totalEnergy = 0.0;
             Double totalProteins = 0.0;
@@ -441,6 +442,9 @@ public class IngrdientService {
 
             }
 
+            datee = dish.getDate(); // Assign the value here
+
+//            datee=dish.getDate();
             energy = energy + totalEnergy;
             proteins = proteins + totalProteins;
             fats = fats + totalFats;
@@ -543,7 +547,26 @@ public class IngrdientService {
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
         }
 
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, energy, proteins, carbs, fats, fibers,magnesium,zinc,iron,calcium,thiamine_B1, riboflavin_B2,niacin_B3,folates_B9,retinolVit_A));
+        finalResponseList.add(new mealResponse(
+                        nutrientsNameWithSIUnit,
+                        responseList,
+                        energy,
+                        proteins,
+                        carbs,
+                        fats,
+                        fibers,
+                        magnesium,
+                        zinc,
+                        iron,
+                        calcium,
+                        thiamine_B1,
+                        riboflavin_B2,
+                        niacin_B3,
+                        folates_B9,
+                        retinolVit_A,
+                        datee
+                )
+        );
         return finalResponseList;
     }
 

@@ -62,6 +62,59 @@ public class IngredientController {
         return ingrdientService.getDishesWithIngredientsByDate(user, date);
     }
 
+
+//    @GetMapping("/getDishesWithIngredients-by-date-range")
+//    public List<mealResponse> getDishesWithIngredientsByDateRange(@RequestHeader("Auth") String tokenHeader,
+//                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        List<mealResponse> finalResponseList = new ArrayList<>();
+//
+//        // Loop through the date range
+//        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+//            List<mealResponse> dailyResponse = ingrdientService.getDishesWithIngredientsByDate(user, date);
+//            finalResponseList.addAll(dailyResponse);
+//        }
+//
+//        return finalResponseList;
+//    }
+
+    @GetMapping("/getDishesWithIngredients-by-date-range")
+    public List<mealResponse> getDishesWithIngredientsByDateRange(@RequestHeader("Auth") String tokenHeader,
+                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        List<mealResponse> finalResponseList = new ArrayList<>();
+
+        // Loop through the date range
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            List<mealResponse> dailyResponse = ingrdientService.getDishesWithIngredientsByDate(user, date);
+
+            // Check if there are dishes for the current date
+            if (!dailyResponse.isEmpty()) {
+                finalResponseList.addAll(dailyResponse);
+            }
+        }
+
+        return finalResponseList;
+    }
+
     //get dish with ingreddient using mealName
     @GetMapping("/getDishesWithIngredients")
     public List<mealResponse> getDishesWithIngredientsByDateAndMealType(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {

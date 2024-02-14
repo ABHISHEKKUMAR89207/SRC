@@ -113,6 +113,22 @@ public class TargetAnalysisService {
             calculatedMap.put("Left Folates_B9", targetFolates_B9 != null ? Math.abs(targetFolates_B9 - ansList.get(13)) : 0);
         } else {
             System.out.println("targetData is null");
+
+            // If targetData is null, create a new Map with all values set to 0
+            calculatedMap.put("Left Calories", 0.0);
+            calculatedMap.put("Left Proteins", 0.0);
+            calculatedMap.put("Left Carbs", 0.0);
+            calculatedMap.put("Left Fats", 0.0);
+            calculatedMap.put("Left Fibers", 0.0);
+            calculatedMap.put("Left Magnesium", 0.0);
+            calculatedMap.put("Left Zinc", 0.0);
+            calculatedMap.put("Left Iron", 0.0);
+            calculatedMap.put("Left Calcium", 0.0);
+            calculatedMap.put("Left Thiamine_B1", 0.0);
+            calculatedMap.put("Left Retinol_Vit_A", 0.0);
+            calculatedMap.put("Left Riboflavin_B2", 0.0);
+            calculatedMap.put("Left Niacin_B3", 0.0);
+            calculatedMap.put("Left Folates_B9", 0.0);
         }
         listOfMaps.add(myMap);
         listOfMaps.add(calculatedMap);
@@ -199,9 +215,32 @@ public class TargetAnalysisService {
 
     // target get
     public TargetData getTargetData(String username) {
-
         User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));
-        return targetDataRepository.findByUser(user);
+
+        TargetData targetData = targetDataRepository.findByUser(user);
+
+        // If target data is not present, create a new TargetData object with all values set to 0
+        if (targetData == null) {
+            targetData = new TargetData();
+            targetData.setUser(user);
+            targetData.setTargetCalories(0.0);
+            targetData.setTargetProteins(0.0);
+            targetData.setTargetCarbs(0.0);
+            targetData.setTargetFat(0.0);
+            targetData.setTargetFibers(0.0);
+            targetData.setTargetMagnesium(0.0);
+            targetData.setTargetZinc(0.0);
+            targetData.setTargetIron(0.0);
+            targetData.setTargetCalcium(0.0);
+            targetData.setTargetThiamine_B1(0.0);
+            targetData.setTargetRetinol_Vit_A(0.0);
+            targetData.setTargetRiboflavin_B2(0.0);
+            targetData.setTargetNiacin_B3(0.0);
+            targetData.setTargetFolates_B9(0.0);
+        }
+
+        return targetData;
     }
+
 }
 
