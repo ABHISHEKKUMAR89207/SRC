@@ -3,6 +3,8 @@ package com.example.jwt.controler;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 
+import com.example.jwt.entities.error.Error;
+import com.example.jwt.entities.error.ErrorRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserProfileService;
 import com.example.jwt.service.UserService;
@@ -19,8 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,11 +67,15 @@ public class UserProfileController {
         return new ResponseEntity<>(userProfile, HttpStatus.OK);
     }
 
+    @Autowired
+    private ErrorRepository errorRepository;
     // to get the user's
     // profile
     @GetMapping("/get-userProfile")
 //    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
+        User user = null; // Declare the user variable outside the try block
+
         try {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
@@ -77,7 +85,7 @@ public class UserProfileController {
             logger.info("Hello ...");
 
             // Fetch the user's data from both User and UserProfile entities
-            User user = userService.findByUsername(username);
+            user = userService.findByUsername(username);
             UserProfile userProfile = userProfileService.findByUsername(username);
             String dobString = String.valueOf(userProfile.getDateOfBirth());
             Integer age = calculatedAge(dobString);
@@ -115,9 +123,21 @@ public class UserProfileController {
 
                 return ResponseEntity.ok(response);
             } else {
+                Error error = new Error();
+                error.setUser(user);
+                error.setExceptionMessage("User Profile Not Created");
+                error.setLocalDateTime(LocalDateTime.now()); // Set current date
+                errorRepository.save(error);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
             }
         } catch (Exception e) {
+
+            Error error = new Error();
+            error.setUser(user); // Set the user if available
+            error.setExceptionMessage("Exception occurred: " + e.getMessage());
+            error.setStackTrace(Arrays.toString(e.getStackTrace()));
+            error.setLocalDateTime(LocalDateTime.now()); // Set current date
+            errorRepository.save(error);
             // Handle any exceptions, e.g., token validation failure
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
         }

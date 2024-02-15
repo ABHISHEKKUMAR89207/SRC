@@ -7,7 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 
@@ -29,6 +34,8 @@ public class ContactUs {
     private String number;
     private String email;
     private String queries;
+
+    private String imageUrl;
 
     // Getters and Setters
 
@@ -71,4 +78,8 @@ public class ContactUs {
     public void queries(String queries) {
         this.queries = queries;
     }
+
+
+
+
 }
