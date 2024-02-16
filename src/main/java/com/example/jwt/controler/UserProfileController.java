@@ -143,6 +143,8 @@ public class UserProfileController {
         }
     }
 
+
+
     // for calculating the age of the user with the given D.O.B
     private Integer calculatedAge(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

@@ -10,4 +10,7 @@ import java.util.List;
 public interface WaterEntityRepository extends JpaRepository<WaterEntity, Long> {
     List<WaterEntity> findByUser(User user);
     WaterEntity findByUserAndLocalDate(User user, LocalDate localDate);
+    List<WaterEntity> findAllByLocalDate(LocalDate localDate);
+
+    List<WaterEntity> findByLocalDate(LocalDate localDate);
 }

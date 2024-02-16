@@ -61,22 +61,22 @@ public class HeartRateController {
     }
 
     //get heart rate by date
-//    @GetMapping("/get/{date}")
-//    public ResponseEntity<List<HeartRate>> getHeartRateForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-////        User user = userService.getUserByUsername(username);
-//
-//        // Find the user by the username, and associate the heart rate with that user
-//        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
-//        if (user == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        List<HeartRate> heartRates = heartRateService.getHeartRateForUserAndDate(user, date);
-//        return ResponseEntity.ok(heartRates);
-//    }
+    @GetMapping("/get/{date}")
+    public ResponseEntity<List<HeartRate>> getHeartRateForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+//        User user = userService.getUserByUsername(username);
+
+        // Find the user by the username, and associate the heart rate with that user
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<HeartRate> heartRates = heartRateService.getHeartRateForUserAndDatee(user, date);
+        return ResponseEntity.ok(heartRates);
+    }
 
     // to get heath rate of the specific user of one week
     @GetMapping("/get/one-week-ago")

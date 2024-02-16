@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -169,7 +171,15 @@ public class WaterService {
 
             // Find or create the WaterEntity for the specified date and user
             LocalDate currentDate = LocalDate.now();
+            LocalTime localTime = LocalTime.now();
             WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
+            LocalTime currentTime = LocalTime.now();
+
+            // Define the format for 12-hour clock
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+
+            // Format the current time using the defined format
+            String formattedTime = currentTime.format(formatter);
 
             if (existingWaterEntity == null) {
                 // If no entity exists for the current date and user, create a new one
@@ -177,6 +187,7 @@ public class WaterService {
                 waterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
                 waterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
                 waterEntity.setLocalDate(currentDate);
+                waterEntity.setLocalTime(formattedTime);
                 waterEntity.setUser(user);
 
                 // Calculate and set the water intake based on the new data

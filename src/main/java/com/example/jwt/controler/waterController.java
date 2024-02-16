@@ -1,9 +1,11 @@
 package com.example.jwt.controler;
 
+import com.example.jwt.dtos.WaterIntakeResponse;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
+import com.example.jwt.repository.WaterEntityRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
 import com.example.jwt.service.WaterService;
@@ -14,7 +16,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/water")
@@ -93,5 +99,55 @@ public class waterController {
         }
     }
 
+    @Autowired
+    private WaterEntityRepository waterEntityRepository;
+//    @GetMapping("/daily-intake")
+//    public List<WaterIntakeResponse> getDailyWaterIntake() {
+//        // Retrieve all water entities for the current date
+//        List<WaterEntity> waterEntities = waterEntityRepository.findByLocalDate(LocalDate.now());
+//
+//        // Process the water entities and create the response
+//        List<WaterIntakeResponse> response = processWaterEntities(waterEntities);
+//
+//        return response;
+//    }
+
+
+    @GetMapping("/intake")
+    public List<WaterIntakeResponse> getWaterIntake() {
+        LocalDate currentDate = LocalDate.now();
+
+        List<WaterEntity> waterEntities = waterEntityRepository.findAllByLocalDate(currentDate);
+
+        return waterEntities.stream()
+                .map(this::mapToWaterIntakeResponse)
+                .collect(Collectors.toList());
+    }
+
+    private WaterIntakeResponse mapToWaterIntakeResponse(WaterEntity waterEntity) {
+        // Ensure water intake is calculated before mapping
+        waterEntity.calculateWaterIntake();
+
+        // Format local time as needed (you can adjust this logic based on your requirements)
+        String formattedLocalTime = formatLocalTime(waterEntity.getLocalTime());
+
+        // Format water intake (assuming waterEntity.getWaterIntake() is in milliliters)
+        String formattedWaterIntake = formatWaterIntake(waterEntity.getWaterIntake());
+
+        return new WaterIntakeResponse(formattedLocalTime, formattedWaterIntake);
+    }
+
+    private String formatLocalTime(String localTime) {
+        // Assuming localTime is in the format "5:24 pm"
+        LocalTime parsedLocalTime = LocalTime.parse(localTime, DateTimeFormatter.ofPattern("h:mm a"));
+
+        // Format as "h:mm a" (e.g., "5:24 pm")
+        return parsedLocalTime.format(DateTimeFormatter.ofPattern("h:mm a"));
+    }
+
+    private String formatWaterIntake(Double waterIntake) {
+        // Assuming waterIntake is in milliliters
+        return String.format("%.0fml", waterIntake);
+    }
 
 }

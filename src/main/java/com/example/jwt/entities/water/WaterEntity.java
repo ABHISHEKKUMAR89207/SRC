@@ -20,6 +20,7 @@ public class WaterEntity {
     private Double cupCapacity;
     private int noOfCups;
     private Double waterIntake;
+    private String localTime;
     private LocalDate localDate = LocalDate.now();
 
     @ManyToOne

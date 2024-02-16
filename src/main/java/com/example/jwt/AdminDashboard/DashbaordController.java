@@ -21,8 +21,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -457,11 +461,67 @@ public class DashbaordController {
     }
 
 
+//    @GetMapping("/contactUs.html")
+//    public String showContactUs(Model model) {
+//        List<ContactUs> contactUsList = dashboardService.getAllContactUsData();
+//        System.out.println(contactUsList);
+//        model.addAttribute("contactUs", contactUsList);
+//        return "contactUs";
+//    }
+
     @GetMapping("/contactUs.html")
     public String showContactUs(Model model) {
         List<ContactUs> contactUsList = dashboardService.getAllContactUsData();
+
+        // Print each ContactUs object in the list
+        for (ContactUs contactUs : contactUsList) {
+            System.out.println(contactUs);
+        }
+
         model.addAttribute("contactUs", contactUsList);
         return "contactUs";
+    }
+
+
+    @GetMapping("/contactUs/viewImage/{imageName}")
+    public ResponseEntity<Resource> viewImage(@PathVariable String imageName) {
+        try {
+            // Create the path to the image file based on the relative path to the "images" directory
+            Path imagePath = Paths.get("images", imageName);
+
+            System.out.println("Image Path: " + imagePath);
+
+            // Check if the image file exists
+            if (!Files.exists(imagePath)) {
+                return ResponseEntity.notFound().build();
+            }
+
+            // Load the image content as a byte array
+            byte[] imageContent = Files.readAllBytes(imagePath);
+
+            // Determine content type based on file extension
+            String contentType = Files.probeContentType(imagePath);
+
+            // Create HttpHeaders to set the content type and other headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(contentType));
+            headers.setContentLength(imageContent.length);
+            headers.setContentDispositionFormData("attachment", imageName);
+
+            // Wrap the byte array in a ByteArrayResource to return it as a Resource
+            ByteArrayResource resource = new ByteArrayResource(imageContent);
+
+            // Return a ResponseEntity with the image content, headers, and status OK
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(imageContent.length)
+                    .body(resource);
+        } catch (IOException e) {
+            // Log the error
+            e.printStackTrace();
+            // Return an error response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 

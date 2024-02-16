@@ -35,7 +35,7 @@ public class ContactUs {
     private String email;
     private String queries;
 
-    private String imageUrl;
+    private String imageData;
 
     // Getters and Setters
 
@@ -79,6 +79,9 @@ public class ContactUs {
         this.queries = queries;
     }
 
+    public void setImageData(String imageData) {
+        this.imageData = imageData;
+    }
 
 
 

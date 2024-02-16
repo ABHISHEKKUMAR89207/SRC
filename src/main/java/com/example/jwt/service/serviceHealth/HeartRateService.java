@@ -6,6 +6,7 @@ import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.HealthTrendsRepository;
 import com.example.jwt.repository.repositoryHealth.HeartRateRepository;
+import com.example.jwt.repository.repositoryHealth.HeartRateRepositoryy;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,13 +53,16 @@ public class HeartRateService {
             throw new UserNotFoundException("User not found for username: " + username);
         }
     }
-
+@Autowired
+private HeartRateRepositoryy heartRateRepositoryy;
     //get heart rate by user and date
     public HeartRate getHeartRateForUserAndDate(User user, LocalDate date) {
         return heartRateRepository.findByUserAndLocalDate(user, date);
     }
 
-
+    public   List<HeartRate> getHeartRateForUserAndDatee(User user, LocalDate date) {
+        return heartRateRepositoryy.findByUserAndLocalDate(user, date);
+    }
     //get heart rate by user beween dates
     public List<HeartRate> getHeartRateForUserBetweenDates(User user, LocalDate startDate, LocalDate endDate) {
         return heartRateRepository.findByUserAndLocalDateBetween(user, startDate, endDate);

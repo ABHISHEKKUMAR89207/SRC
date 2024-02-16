@@ -20,8 +20,7 @@ public class ContactUsController {
     @Autowired
     private ContactUsService contactUsService;
 
-    @Value("${project.image}")
-    private String path;
+
 
 
 //    @PostMapping("/upload")
@@ -57,7 +56,8 @@ public class ContactUsController {
 //
 //        return new ResponseEntity<>(new FileResponse(fileName, "Image is Successfully Uploaded"), HttpStatus.OK);
 //    }
-
+@Value("${project.image}")
+private String path;
     @PostMapping("/upload")
     public ResponseEntity<FileResponse> fileUpload(
             @RequestParam("image") MultipartFile image,
@@ -75,7 +75,8 @@ public class ContactUsController {
             contactUs.setNumber(number);
             contactUs.setEmail(email);
             contactUs.setQueries(queries);
-            contactUs.setImageUrl(fileName);
+//            contactUs.setImageUrl(fileName); // Set the image URL
+            contactUs.setImageData(fileName);
 
             // Save the ContactUs entity to the database
             this.contactUsService.saveContactUs(contactUs);
@@ -87,12 +88,11 @@ public class ContactUsController {
         return new ResponseEntity<>(new FileResponse(fileName, "Image is Successfully Uploaded"), HttpStatus.OK);
     }
 
-
-    @PostMapping
-    public ResponseEntity<ContactUs> saveContactUs(@RequestBody ContactUs contactUs) {
-        ContactUs savedContactUs = contactUsService.saveContactUs(contactUs);
-        return new ResponseEntity<>(savedContactUs, HttpStatus.CREATED);
-    }
+//    @PostMapping
+//    public ResponseEntity<ContactUs> saveContactUs(@RequestBody ContactUs contactUs) {
+//        ContactUs savedContactUs = contactUsService.saveContactUs(contactUs);
+//        return new ResponseEntity<>(savedContactUs, HttpStatus.CREATED);
+//    }
 
 //    @GetMapping("/{id}")
 //    public ResponseEntity<ContactUs> getContactUsById(@PathVariable Long id) {

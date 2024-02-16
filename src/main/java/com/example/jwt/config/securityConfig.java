@@ -60,7 +60,9 @@ public class securityConfig {
                                 .requestMatchers("/api/sleep-logs").permitAll()
                                 .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
                                 .requestMatchers("/dashboard/**").permitAll()
+                                .requestMatchers("/dashboard//contactUs/viewImage/{imageName}").permitAll()
 //                                .requestMatchers("/dashboard/dashboard.html").authenticated()
+                                .requestMatchers("/api/water/intake").permitAll()
 
                                 .requestMatchers("/recipes/all").permitAll()
                                 .requestMatchers("/foods/ing-details").permitAll()
