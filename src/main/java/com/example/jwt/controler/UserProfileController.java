@@ -98,7 +98,9 @@ public class UserProfileController {
                 response.put("gender", userProfile.getGender());
                 response.put("email", user.getEmail());
                 response.put("mobile", user.getMobileNo());
-                response.put("height", userProfile.getHeight());
+//                response.put("height", userProfile.getHeight());
+                response.put("heightFt", userProfile.getHeightFt());
+                response.put("heightIn", userProfile.getHeightIn());
                 response.put("weight", userProfile.getWeight());
                 response.put("bmi", userProfile.getBmi());
                 response.put("googleAccountLink", userProfile.getGoogleAccountLink());
