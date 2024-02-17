@@ -182,15 +182,22 @@ public class UserProfileController {
                     userProfile.setWeight(newWeight);
                 }
 
-                if (updateData.containsKey("height")) {
-                    double newHeight = Double.parseDouble(updateData.get("height").toString());
-                    userProfile.setHeight(newHeight);
+//                if (updateData.containsKey("height")) {
+//                    double newHeight = Double.parseDouble(updateData.get("height").toString());
+//                    userProfile.setHeight(newHeight);
+//                }
+                if (updateData.containsKey("heightFt") && updateData.containsKey("heightIn")) {
+                    int newHeightFt = Integer.parseInt(updateData.get("heightFt").toString());
+                    int newHeightIn = Integer.parseInt(updateData.get("heightIn").toString());
+                    userProfile.setHeightFt(newHeightFt);
+                    userProfile.setHeightIn(newHeightIn);
                 }
+
 
 
                 // Recalculate and update BMI based on the updated weight and height
                 if (updateData.containsKey("weight") || updateData.containsKey("height")) {
-                    userProfile.setBmi(userProfileService.calculateBMI(userProfile.getGender(), userProfile.getHeight(), userProfile.getWeight()));
+                    userProfile.setBmi(userProfileService.calculateBMI(userProfile.getGender(), userProfile.getHeightFt(), userProfile.getHeightIn(), userProfile.getWeight()));
                 }
 
                 // Check if email is present in the updateData and it's different from the current email

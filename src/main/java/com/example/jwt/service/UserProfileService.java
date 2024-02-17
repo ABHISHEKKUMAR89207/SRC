@@ -63,7 +63,10 @@ public class UserProfileService {
         userProfile.setUser(user);
 
         // Calculate and set the BMI
-        double bmi = calculateBMI(userProfile.getGender(),userProfile.getHeight(), userProfile.getWeight());
+        double heightInInches = userProfile.getHeightFt() * 12 + userProfile.getHeightIn();
+        double heightInDecimal = heightInInches / 12.0; // Convert total inches to feet in decimal format
+         System.out.println("height in decimal .........."+heightInDecimal);
+        double bmi = calculateBMI(userProfile.getGender(),userProfile.getHeightFt(),userProfile.getHeightIn(), userProfile.getWeight());
         userProfile.setBmi(bmi);
         UserProfile newProfile = this.userProfileRepository.save(userProfile);
         return newProfile;
@@ -102,9 +105,32 @@ public class UserProfileService {
 //        return bmi;
 //    }
 
-    public double calculateBMI(String gender, double heightInFeet, double weight) {
-        // Convert height from feet to centimeters
-        double heightInCM = heightInFeet * 30.48; // 1 foot = 30.48 centimeters
+//    public double calculateBMI(String gender, double heightInFeet, double weight) {
+//        // Convert height from feet to centimeters
+//        double heightInCM = heightInFeet * 30.48; // 1 foot = 30.48 centimeters
+//
+//        // Convert height from centimeters to meters for BMI calculation
+//        double heightInMeters = heightInCM / 100; // Convert centimeters to meters
+//
+//        // Calculate BMI based on gender
+//        double bmi;
+//        if (gender.equalsIgnoreCase("male")) {
+//            bmi = weight / (heightInMeters * heightInMeters);
+//        } else if (gender.equalsIgnoreCase("female")) {
+//            // Adjusted calculation for females
+////            bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
+//            bmi = weight / (heightInMeters * heightInMeters);
+//        } else {
+//            // Default to a generic BMI calculation if gender is not specified or recognized
+//            bmi = weight / (heightInMeters * heightInMeters);
+//        }
+//        return bmi;
+//    }
+//
+
+    public double calculateBMI(String gender, int heightFt, int heightIn, double weight) {
+        // Convert height to centimeters
+        double heightInCM = (heightFt * 12 + heightIn) * 2.54; // 1 inch = 2.54 centimeters
 
         // Convert height from centimeters to meters for BMI calculation
         double heightInMeters = heightInCM / 100; // Convert centimeters to meters
@@ -115,7 +141,7 @@ public class UserProfileService {
             bmi = weight / (heightInMeters * heightInMeters);
         } else if (gender.equalsIgnoreCase("female")) {
             // Adjusted calculation for females
-//            bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
+            // bmi = (weight / (heightInMeters * heightInMeters)) * 1.07 - (148 * (weight / heightInMeters)) + 4.5;
             bmi = weight / (heightInMeters * heightInMeters);
         } else {
             // Default to a generic BMI calculation if gender is not specified or recognized
@@ -123,7 +149,6 @@ public class UserProfileService {
         }
         return bmi;
     }
-
 
 
     //update user profile

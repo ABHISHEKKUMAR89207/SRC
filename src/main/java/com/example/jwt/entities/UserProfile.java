@@ -28,6 +28,10 @@ public class UserProfile {
     private String variableType;
 
     private double height;
+    private Integer heightFt;
+    private Integer heightIn;
+
+
     private double weight;
     private double bmi;
     private String googleAccountLink;

@@ -364,6 +364,30 @@ public class IngrdientService {
         List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
         List<DishWithIngredientsResponse> responseList = new ArrayList<>();
         List<mealResponse> finalResponseList = new ArrayList<>();
+
+
+
+        Double div = 0.0;
+        Double totalIng=0.0;
+        Double onegrmEng=0.0;
+        Double onegrmPro=0.0;
+        Double onegrmFat=0.0;
+        Double onegrmCarb=0.0;
+        Double onegrmFib=0.0;
+        Double onegrmMagnesium = 0.0;
+        Double onegrmIron = 0.0;
+        Double onegrmZinc = 0.0;
+        Double onegrmCalcium = 0.0;
+        Double onegramThiamine_B1=0.0;
+        Double onegrmRiboflavin_B2 = 0.0;
+        Double onegrmNiacin_B3 = 0.0;
+        Double onegrmFolates_B9 = 0.0;
+        Double onegrmRetinolVit_A = 0.0;
+
+
+
+
+
         LocalDate datee = date;  // or LocalDate.now() or any other default value
         Double energy = 0.0;
         Double proteins = 0.0;
@@ -536,6 +560,21 @@ public class IngrdientService {
                 ));
 
 //            }
+            onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
+            onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
+            onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();
+            onegrmMagnesium = (magnesium/dish.getDishQuantity())*dish.getServingSize();
+            onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
+            onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
+            onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
+
+            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
+            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
+            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
+            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
         }
 
         Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
@@ -547,26 +586,28 @@ public class IngrdientService {
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
         }
 
-        finalResponseList.add(new mealResponse(
-                        nutrientsNameWithSIUnit,
-                        responseList,
-                        energy,
-                        proteins,
-                        carbs,
-                        fats,
-                        fibers,
-                        magnesium,
-                        zinc,
-                        iron,
-                        calcium,
-                        thiamine_B1,
-                        riboflavin_B2,
-                        niacin_B3,
-                        folates_B9,
-                        retinolVit_A,
-                        datee
-                )
-        );
+//        finalResponseList.add(new mealResponse(
+//                        nutrientsNameWithSIUnit,
+//                        responseList,
+//                        energy,
+//                        proteins,
+//                        carbs,
+//                        fats,
+//                        fibers,
+//                        magnesium,
+//                        zinc,
+//                        iron,
+//                        calcium,
+//                        thiamine_B1,
+//                        riboflavin_B2,
+//                        niacin_B3,
+//                        folates_B9,
+//                        retinolVit_A,
+//                        datee
+//                )
+//        );
+        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
+
         return finalResponseList;
     }
 
@@ -893,6 +934,8 @@ public class IngrdientService {
         List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
         List<DishWithIngredientsResponse> responseList = new ArrayList<>();
         List<mealResponse> finalResponseList = new ArrayList<>();
+        LocalDate datee = date;  // or LocalDate.now() or any other default value
+
         Double div = 0.0;
         Double totalIng=0.0;
         Double onegrmEng=0.0;
@@ -989,6 +1032,9 @@ public class IngrdientService {
                     totalRiboflavin_B2 += (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin_B2();
 
                 }
+
+                datee = dish.getDate(); // Assign the value here
+
 
                 energy = energy + totalEnergy;
                 proteins = proteins + totalProteins;
@@ -1146,7 +1192,7 @@ public class IngrdientService {
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
         }
 
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9));
+        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
         return finalResponseList;
     }
 
