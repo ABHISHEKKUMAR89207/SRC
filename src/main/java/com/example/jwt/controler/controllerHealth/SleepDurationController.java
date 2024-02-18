@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -72,8 +73,37 @@ public class SleepDurationController {
     }
 
 
+//    @GetMapping("/getSleepByDate")
+//    public ResponseEntity<SleepDuration> getSleepLogsByDate(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Call service method to get sleep logs by date
+//            Optional<SleepDuration> sleepDurationOptional = sleepDurationService.getSleepLogsByDate(username, date);
+//
+//            if (sleepDurationOptional.isPresent()) {
+//                // Return sleep logs if present
+//                SleepDuration sleepDuration = sleepDurationOptional.get();
+//                return new ResponseEntity<>(sleepDuration, HttpStatus.OK);
+//            } else {
+//                // Return a not found response if sleep logs are not present
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error: " + e);
+//            // Handle exceptions, e.g., validation errors or database errors
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
     @GetMapping("/getSleepByDate")
-    public ResponseEntity<SleepDuration> getSleepLogsByDate(
+    public ResponseEntity<Double> getSleepLogsByDate(
             @RequestHeader("Auth") String tokenHeader,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         try {
@@ -86,20 +116,22 @@ public class SleepDurationController {
             // Call service method to get sleep logs by date
             Optional<SleepDuration> sleepDurationOptional = sleepDurationService.getSleepLogsByDate(username, date);
 
+            double totalSleep = 0.0; // Default value
+
             if (sleepDurationOptional.isPresent()) {
-                // Return sleep logs if present
+                // If sleep logs are present, calculate total sleep duration
                 SleepDuration sleepDuration = sleepDurationOptional.get();
-                return new ResponseEntity<>(sleepDuration, HttpStatus.OK);
-            } else {
-                // Return a not found response if sleep logs are not present
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                totalSleep = sleepDuration.getDuration() + sleepDuration.getManualDuration();
             }
+
+            return new ResponseEntity<>(totalSleep, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: " + e);
             // Handle exceptions, e.g., validation errors or database errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 //    @GetMapping("/getSleepByLastWeek")
 //    public ResponseEntity<List<SleepDuration>> getSleepLogsForLastWeek(
@@ -138,6 +170,56 @@ public class SleepDurationController {
         Map<String, Double> waterIntakeMap = sleepDurationService.sleepForLastWeek(user);
         return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
     }
+
+
+    @GetMapping("/get-sleep-duration/custom-range")
+    public ResponseEntity<List<Map<String, Object>>> getUserSleepDurationForCustomRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestHeader("Auth") String tokenHeader) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+            if (user != null) {
+                // Get sleep durations for the custom date range and user
+                List<SleepDuration> sleepDurations = sleepDurationService.findByUserAndDateOfSleepBetween(user, startDate, endDate);
+
+                // Create a list to store sleep details for each day
+                List<Map<String, Object>> sleepForRange = new ArrayList<>();
+
+                // Convert each sleep duration to a map with formatted date and total sleep duration
+                for (LocalDate currentDate = startDate; currentDate.isBefore(endDate.plusDays(1)); currentDate = currentDate.plusDays(1)) {
+                    // Create a final variable to capture the value of currentDate within the lambda expression
+                    final LocalDate finalCurrentDate = currentDate;
+
+                    double totalSleep = sleepDurations.stream()
+                            .filter(sleepEntity -> sleepEntity.getDateOfSleep().isEqual(finalCurrentDate))
+                            .mapToDouble(sleepEntity -> sleepEntity.getDuration() + sleepEntity.getManualDuration())
+                            .sum();
+
+                    Map<String, Object> sleepMap = new HashMap<>();
+                    sleepMap.put("date", finalCurrentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    sleepMap.put("value", totalSleep);
+                    sleepForRange.add(sleepMap);
+                }
+
+                return ResponseEntity.ok(sleepForRange);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 //    @PostMapping("/record-by-steps-weekly")
 //    public List<Activities> recordStepsForPreviousWeek(@RequestHeader("Auth") String tokenHeader, @RequestParam List<Integer> stepsList, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {

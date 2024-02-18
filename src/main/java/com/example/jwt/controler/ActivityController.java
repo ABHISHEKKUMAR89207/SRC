@@ -37,6 +37,47 @@ public class ActivityController {
     @Autowired
     private ActivityRepository activityRepository;
 
+
+
+    @GetMapping("/steps-for-date-range")
+    public ResponseEntity<Map<String, Double>> StepsForDateRange(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        Map<String, Double> stepsData = StepsForDateRange(user, startDate, endDate);
+        return new ResponseEntity<>(stepsData, HttpStatus.OK);
+    }
+
+    public Map<String, Double> StepsForDateRange(User user, LocalDate startDate, LocalDate endDate) {
+        List<Activities> activities = user.getActivities();
+
+        // Create a map to store steps for each day in the date range
+        Map<String, Double> stepsData = new HashMap<>();
+
+        // Iterate over each day in the specified date range
+        for (LocalDate currentDate = startDate; currentDate.isBefore(endDate.plusDays(1)); currentDate = currentDate.plusDays(1)) {
+            double totalSteps = 0.0;
+
+            // Calculate total steps for the current day
+            for (Activities activity : activities) {
+                if (activity.getActivityDate().isEqual(currentDate)) {
+                    totalSteps += activity.getSteps();
+                }
+            }
+
+            // Store the result in the map with the formatted date
+            stepsData.put(currentDate.toString(), totalSteps);
+        }
+
+        return stepsData;
+    }
+
+
     //By steps
     @PostMapping("/record-by-steps")
     public Activities recordStep(@RequestHeader("Auth") String tokenHeader, @RequestParam int steps) {
@@ -670,8 +711,148 @@ private HeartRateService heartRateService;
 //        }
 //    }
 
-    @GetMapping("/get-steps/custom-range")
-    public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
+//    @GetMapping("/get-steps/custom-range")
+//    public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the custom date range and user
+//                List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+//
+//                // Create a list to store activity details for each day
+//                List<Map<String, Object>> activitiesForRange = new ArrayList<>();
+//
+//                // Convert each activity to a map with formatted activityDate and steps
+//                for (Activities activity : activitiesList) {
+//                    Map<String, Object> activityMap = new HashMap<>();
+//
+//                    // Format the activityDate
+//                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//                    activityMap.put("activityDate", formattedActivityDate);
+//                    activityMap.put("steps", activity.getSteps());
+//
+//                    activitiesForRange.add(activityMap);
+//                }
+//
+//                return ResponseEntity.ok(activitiesForRange);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+@GetMapping("/get-steps/custom-range")
+public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        @RequestHeader("Auth") String tokenHeader) {
+    try {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            // Get activities for the custom date range and user
+            List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+
+            // Create a list to store activity details for each day
+            List<Map<String, Object>> activitiesForRange = new ArrayList<>();
+
+            // Iterate over each day in the date range
+            for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+                final LocalDate finalCurrentDate = currentDate; // Declare a final variable
+
+                // Check if there is an activity for the current date
+                Activities activityForDate = activitiesList.stream()
+                        .filter(activity -> activity.getActivityDate().equals(finalCurrentDate))
+                        .findFirst()
+                        .orElse(null);
+
+                // Create a map with formatted activityDate and steps (set to 0 if no activity)
+                Map<String, Object> activityMap = new HashMap<>();
+                String formattedActivityDate = finalCurrentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                activityMap.put("date", formattedActivityDate);
+                activityMap.put("value", (activityForDate != null) ? activityForDate.getSteps() : 0);
+
+                activitiesForRange.add(activityMap);
+            }
+
+            return ResponseEntity.ok(activitiesForRange);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+}
+
+
+//    @GetMapping("/get-calories/custom-range")
+//    public ResponseEntity<List<Map<String, Object>>> getUserCaloriesForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the custom date range and user
+//                List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+//
+//                // Create a list to store activity details for each day
+//                List<Map<String, Object>> activitiesForRange = new ArrayList<>();
+//
+//                // Convert each activity to a map with formatted activityDate and calories
+//                for (Activities activity : activitiesList) {
+//                    Map<String, Object> activityMap = new HashMap<>();
+//
+//                    // Format the activityDate
+//                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//
+//                    activityMap.put("activityDate", formattedActivityDate);
+//                    activityMap.put("calories", activity.getCalory() != null ? activity.getCalory() : 0.0);
+//                    activitiesForRange.add(activityMap);
+//                }
+//
+//                return ResponseEntity.ok(activitiesForRange);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
+    @GetMapping("/get-calories/custom-range")
+    public ResponseEntity<List<Map<String, Object>>> getUserCaloriesForCustomRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestHeader("Auth") String tokenHeader) {
@@ -692,15 +873,21 @@ private HeartRateService heartRateService;
                 // Create a list to store activity details for each day
                 List<Map<String, Object>> activitiesForRange = new ArrayList<>();
 
-                // Convert each activity to a map with formatted activityDate and steps
-                for (Activities activity : activitiesList) {
+                // Iterate over each day in the date range
+                for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+                    final LocalDate finalCurrentDate = currentDate; // Declare a final variable
+
+                    // Check if there is an activity for the current date
+                    Activities activityForDate = activitiesList.stream()
+                            .filter(activity -> activity.getActivityDate().equals(finalCurrentDate))
+                            .findFirst()
+                            .orElse(null);
+
+                    // Create a map with formatted activityDate and calories (set to 0.0 if no activity)
                     Map<String, Object> activityMap = new HashMap<>();
-
-                    // Format the activityDate
-                    String formattedActivityDate = activity.getActivityDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-                    activityMap.put("activityDate", formattedActivityDate);
-                    activityMap.put("steps", activity.getSteps());
+                    String formattedActivityDate = finalCurrentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    activityMap.put("date", formattedActivityDate);
+                    activityMap.put("value", (activityForDate != null && activityForDate.getCalory() != null) ? activityForDate.getCalory() : 0.0);
                     activitiesForRange.add(activityMap);
                 }
 
@@ -713,6 +900,7 @@ private HeartRateService heartRateService;
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 //    @GetMapping("/get-steps/week")
 //    public ResponseEntity<Map<String, Object>> getUserStepsForWeek(
@@ -956,4 +1144,8 @@ private HeartRateService heartRateService;
 
         return activityService.calculateCaloriesBurned(user, parsedDate);
     }
+
+
+
+
 }

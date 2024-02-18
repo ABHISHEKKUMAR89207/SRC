@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/heart-rates")
@@ -93,6 +92,62 @@ public class HeartRateController {
         return ResponseEntity.ok(heartRates);
     }
 
+    @GetMapping("/get-heart-rate/custom-range")
+    public ResponseEntity<List<Map<String, Object>>> getHeartRateForCustomRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestHeader("Auth") String tokenHeader) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+            if (user != null) {
+                // Get heart rates for the custom date range and user
+                List<HeartRate> heartRates = heartRateService.getHeartRateForUserBetweenDates(user, startDate, endDate);
+
+                // Create a map to store average heart rate for each day
+                Map<LocalDate, Double> averageHeartRateMap = new HashMap<>();
+
+                // Initialize the map with all dates in the range
+                startDate.datesUntil(endDate.plusDays(1)).forEach(date -> averageHeartRateMap.put(date, 0.0));
+
+                // Calculate the average heart rate for each available day
+                for (HeartRate heartRate : heartRates) {
+                    LocalDate date = heartRate.getLocalDate();
+                    double value = heartRate.getValue();
+
+                    // Update the average heart rate for the day
+                    averageHeartRateMap.merge(date, value, (existingValue, newValue) -> (existingValue + newValue) / 2);
+                }
+
+                // Create a list to store results
+                List<Map<String, Object>> result = new ArrayList<>();
+
+                // Convert the averageHeartRateMap to the desired format
+                averageHeartRateMap.forEach((date, averageHeartRate) -> {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    resultMap.put("date", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    resultMap.put("value", averageHeartRate);
+                    result.add(resultMap);
+                });
+
+                return ResponseEntity.ok(result);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
     // to get  heath rate of the specific user of one month
     @GetMapping("/get/one-month-ago")
     public ResponseEntity<List<HeartRate>> getHeartRateForUserOneMonthAgo(@RequestHeader("Auth") String tokenHeader) {
@@ -136,7 +191,7 @@ public class HeartRateController {
                 if (existingRecord != null) {
                     // If a record for the user and the specified date exists, update it with the new heart rate data.
                     existingRecord.setValue(heartRateValue);
-                    existingRecord.setTimeStamp(LocalDateTime.now());
+                    existingRecord.setTimeStamp(LocalTime.now());
                     heartRateService.updateHeartRate(existingRecord);
                     recordedHeartRates.put(currentDate, existingRecord); // Add the updated record to the map
                 } else {
@@ -145,7 +200,7 @@ public class HeartRateController {
                     newRecord.setUser(user);
                     newRecord.setValue(heartRateValue);
                     newRecord.setLocalDate(currentDate);
-                    newRecord.setTimeStamp(LocalDateTime.now());
+                    newRecord.setTimeStamp(LocalTime.now());
                     // Save the new record as a separate row in the database.
                     heartRateService.createHeartRate(newRecord);
                     recordedHeartRates.put(currentDate, newRecord); // Add the newly created record to the map

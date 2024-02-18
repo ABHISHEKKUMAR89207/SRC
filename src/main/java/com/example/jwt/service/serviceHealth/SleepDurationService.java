@@ -35,6 +35,9 @@ public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
     return optionalSleepDuration.orElse(null);
 }
 
+    public List<SleepDuration> findByUserAndDateOfSleepBetween(User user, LocalDate startDate, LocalDate endDate) {
+        return sleepDurationRepository.findByUserAndDateOfSleepBetween(user, startDate, endDate);
+    }
     public SleepDuration updateSleep(SleepDuration sleepDuration) {
         // Check if the sleep duration with the same ID already exists in the database
         Optional<SleepDuration> existingSleep = sleepDurationRepository.findById(sleepDuration.getId());

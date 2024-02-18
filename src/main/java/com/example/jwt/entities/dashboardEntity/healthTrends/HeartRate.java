@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "heartRate")
 public class HeartRate {
-    LocalDateTime timeStamp = LocalDateTime.now();
+    LocalTime timeStamp = LocalTime.now();
     LocalDate localDate = LocalDate.now();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Use identity strategy for auto-generation

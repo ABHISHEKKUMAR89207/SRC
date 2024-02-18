@@ -1,5 +1,7 @@
 package com.example.jwt.entities.water;
 
+import com.example.jwt.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +26,11 @@ public class WaterEntry {
     @ManyToOne
     @JoinColumn(name = "water_entity_id")
     private WaterEntity waterEntity;
+
+//    @ManyToOne
+//    @JsonIgnore
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     public void calculateWaterIntake() {
         this.waterIntake = waterIntake;

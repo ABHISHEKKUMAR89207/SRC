@@ -11,6 +11,7 @@ public interface WaterEntityRepository extends JpaRepository<WaterEntity, Long> 
     List<WaterEntity> findByUser(User user);
     WaterEntity findByUserAndLocalDate(User user, LocalDate localDate);
     List<WaterEntity> findAllByLocalDate(LocalDate localDate);
+    List<WaterEntity> findByUserAndLocalDateBetween(User user, LocalDate startDate, LocalDate endDate);
 
     List<WaterEntity> findByLocalDate(LocalDate localDate);
 }

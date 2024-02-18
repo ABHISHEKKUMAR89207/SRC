@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -101,6 +100,46 @@ public class waterController {
         }
     }
 
+
+    @GetMapping("/get-water-intake/custom-range")
+    public ResponseEntity<Map<LocalDate, Double>> getWaterIntakeForCustomRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestHeader("Auth") String tokenHeader) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            Optional<User> userOptional = userRepository.findByEmail(username);
+
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+
+                // Retrieve water entries within the custom date range
+                List<WaterEntity> waterEntries = waterEntityRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
+
+                // Create a map to store water intake for each date
+                Map<LocalDate, Double> waterIntakeMap = new HashMap<>();
+
+                // Populate the water intake map with data from the retrieved entities
+                for (WaterEntity waterEntity : waterEntries) {
+                    waterIntakeMap.put(waterEntity.getLocalDate(), waterEntity.calculateTotalWaterIntake());
+                }
+
+                return ResponseEntity.ok(waterIntakeMap);
+            } else {
+                throw new UserNotFoundException("User not found for username: " + username);
+            }
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+
     @PostMapping("/update-water-entity1")
     public ResponseEntity<String> updateWaterEntity1(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity newWaterEntity) {
         try {
@@ -130,16 +169,92 @@ public class waterController {
 
     @Autowired
     private WaterEntryRepository waterEntryRepository;
+//    @GetMapping("/intake")
+//    public List<WaterIntakeResponse> getWaterIntake() {
+//        LocalDate currentDate = LocalDate.now();
+//
+//        List<WaterEntry> waterEntities = waterEntryRepository.findAllByLocalDate(currentDate);
+//
+//        return waterEntities.stream()
+//                .map(this::mapToWaterIntakeResponse)
+//                .collect(Collectors.toList());
+//    }
+//@GetMapping("/intake")
+//public ResponseEntity<List<WaterIntakeResponse>> getWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+//    try {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Call a method to verify the user or perform additional authentication logic if needed
+//        // Example: userService.verifyUser(username);
+//
+//        LocalDate currentDate = LocalDate.now();
+//
+//        List<WaterEntry> waterEntities = waterEntryRepository.findAllByLocalDate(currentDate);
+//
+//        List<WaterIntakeResponse> waterIntakeResponses = waterEntities.stream()
+//                .map(this::mapToWaterIntakeResponse)
+//                .collect(Collectors.toList());
+//
+//        return new ResponseEntity<>(waterIntakeResponses, HttpStatus.OK);
+//    } catch (Exception e) {
+//        // Handle authentication or other exceptions
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//    }
+//}
+
     @GetMapping("/intake")
-    public List<WaterIntakeResponse> getWaterIntake() {
-        LocalDate currentDate = LocalDate.now();
+    public ResponseEntity<List<WaterIntakeResponse>> getWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
 
-        List<WaterEntry> waterEntities = waterEntryRepository.findAllByLocalDate(currentDate);
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
 
-        return waterEntities.stream()
-                .map(this::mapToWaterIntakeResponse)
-                .collect(Collectors.toList());
+            // Call a method to verify the user or perform additional authentication logic if needed
+            // Example: userService.verifyUser(username);
+
+            // Find the user by username
+            User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+            // Get the WaterEntity for the user and current date
+            LocalDate currentDate = LocalDate.now();
+            WaterEntity waterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
+
+            // Check if WaterEntity exists for the current date
+            if (waterEntity != null) {
+                // Fetch WaterEntries for the WaterEntity
+                List<WaterEntry> waterEntries = waterEntity.getWaterEntries();
+
+                // Map WaterEntries to WaterIntakeResponse
+                List<WaterIntakeResponse> waterIntakeResponses = waterEntries.stream()
+                        .map(this::mapToWaterIntakeResponse)
+                        .collect(Collectors.toList());
+
+                return new ResponseEntity<>(waterIntakeResponses, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            // Handle authentication or other exceptions
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
+
+
+//    private WaterIntakeResponse mapToWaterIntakeResponse(WaterEntry waterEntry) {
+//        // Map WaterEntry to WaterIntakeResponse as needed
+//        // Example:
+//        // WaterIntakeResponse response = new WaterIntakeResponse();
+//        // response.setAmount(waterEntry.getAmount());
+//        // response.setTimestamp(waterEntry.getTimestamp());
+//        // return response;
+//    }
+
 
     private WaterIntakeResponse mapToWaterIntakeResponse(WaterEntry waterEntity) {
         // Ensure water intake is calculated before mapping
