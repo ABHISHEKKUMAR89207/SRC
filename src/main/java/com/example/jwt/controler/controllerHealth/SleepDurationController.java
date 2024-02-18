@@ -73,37 +73,8 @@ public class SleepDurationController {
     }
 
 
-//    @GetMapping("/getSleepByDate")
-//    public ResponseEntity<SleepDuration> getSleepLogsByDate(
-//            @RequestHeader("Auth") String tokenHeader,
-//            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-//        try {
-//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//            String token = tokenHeader.replace("Bearer ", "");
-//
-//            // Extract the username (email) from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Call service method to get sleep logs by date
-//            Optional<SleepDuration> sleepDurationOptional = sleepDurationService.getSleepLogsByDate(username, date);
-//
-//            if (sleepDurationOptional.isPresent()) {
-//                // Return sleep logs if present
-//                SleepDuration sleepDuration = sleepDurationOptional.get();
-//                return new ResponseEntity<>(sleepDuration, HttpStatus.OK);
-//            } else {
-//                // Return a not found response if sleep logs are not present
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error: " + e);
-//            // Handle exceptions, e.g., validation errors or database errors
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
-
     @GetMapping("/getSleepByDate")
-    public ResponseEntity<Double> getSleepLogsByDate(
+    public ResponseEntity<SleepDuration> getSleepLogsByDate(
             @RequestHeader("Auth") String tokenHeader,
             @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         try {
@@ -116,21 +87,50 @@ public class SleepDurationController {
             // Call service method to get sleep logs by date
             Optional<SleepDuration> sleepDurationOptional = sleepDurationService.getSleepLogsByDate(username, date);
 
-            double totalSleep = 0.0; // Default value
-
             if (sleepDurationOptional.isPresent()) {
-                // If sleep logs are present, calculate total sleep duration
+                // Return sleep logs if present
                 SleepDuration sleepDuration = sleepDurationOptional.get();
-                totalSleep = sleepDuration.getDuration() + sleepDuration.getManualDuration();
+                return new ResponseEntity<>(sleepDuration, HttpStatus.OK);
+            } else {
+                // Return a not found response if sleep logs are not present
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-
-            return new ResponseEntity<>(totalSleep, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("Error: " + e);
             // Handle exceptions, e.g., validation errors or database errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+//    @GetMapping("/getSleepByDate")
+//    public ResponseEntity<Double> getSleepLogsByDate(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Call service method to get sleep logs by date
+//            Optional<SleepDuration> sleepDurationOptional = sleepDurationService.getSleepLogsByDate(username, date);
+//
+//            double totalSleep = 0.0; // Default value
+//
+//            if (sleepDurationOptional.isPresent()) {
+//                // If sleep logs are present, calculate total sleep duration
+//                SleepDuration sleepDuration = sleepDurationOptional.get();
+//                totalSleep = sleepDuration.getDuration() + sleepDuration.getManualDuration();
+//            }
+//
+//            return new ResponseEntity<>(totalSleep, HttpStatus.OK);
+//        } catch (Exception e) {
+//            System.out.println("Error: " + e);
+//            // Handle exceptions, e.g., validation errors or database errors
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 
 
 //    @GetMapping("/getSleepByLastWeek")
