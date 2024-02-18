@@ -1016,7 +1016,9 @@ public class IngrdientService {
                     System.out.println("Total Ing quantity   "+totalIng);
                     div = dish.getServingSize()/dish.getDishQuantity();
 
+                    //firstly one gram nutrient calculate according to database
                     totalEnergy += ((ingredient.getIngredientQuantity()/100) * ninData.getEnergy());
+                    System.out.println("Nutrients...."+totalEnergy);
                     totalProteins += (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
                     totalCarbs += (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate();
                     totalFats += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat();

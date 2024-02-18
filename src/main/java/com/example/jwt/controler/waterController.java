@@ -3,6 +3,8 @@ package com.example.jwt.controler;
 import com.example.jwt.dtos.WaterIntakeResponse;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.water.WaterEntity;
+import com.example.jwt.entities.water.WaterEntry;
+import com.example.jwt.entities.water.WaterEntryRepository;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.WaterEntityRepository;
@@ -99,6 +101,19 @@ public class waterController {
         }
     }
 
+    @PostMapping("/update-water-entity1")
+    public ResponseEntity<String> updateWaterEntity1(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity newWaterEntity) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            WaterEntity updatedWaterEntity = waterService.saveOrUpdateWaterEntity1(username, newWaterEntity);
+
+            return new ResponseEntity<>("Water entity updated successfully. New water intake: " + updatedWaterEntity.getWaterIntake(), HttpStatus.OK);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
     @Autowired
     private WaterEntityRepository waterEntityRepository;
 //    @GetMapping("/daily-intake")
@@ -113,18 +128,20 @@ public class waterController {
 //    }
 
 
+    @Autowired
+    private WaterEntryRepository waterEntryRepository;
     @GetMapping("/intake")
     public List<WaterIntakeResponse> getWaterIntake() {
         LocalDate currentDate = LocalDate.now();
 
-        List<WaterEntity> waterEntities = waterEntityRepository.findAllByLocalDate(currentDate);
+        List<WaterEntry> waterEntities = waterEntryRepository.findAllByLocalDate(currentDate);
 
         return waterEntities.stream()
                 .map(this::mapToWaterIntakeResponse)
                 .collect(Collectors.toList());
     }
 
-    private WaterIntakeResponse mapToWaterIntakeResponse(WaterEntity waterEntity) {
+    private WaterIntakeResponse mapToWaterIntakeResponse(WaterEntry waterEntity) {
         // Ensure water intake is calculated before mapping
         waterEntity.calculateWaterIntake();
 
