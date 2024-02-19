@@ -47,4 +47,7 @@ public class WaterEntry {
 //                .mapToDouble(WaterEntry::getWaterIntake)
 //                .sum();
 //    }
+public String getDrinkName() {
+    return "Water1";
+}
 }

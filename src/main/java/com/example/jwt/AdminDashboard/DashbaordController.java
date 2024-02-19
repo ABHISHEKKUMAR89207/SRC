@@ -1,5 +1,6 @@
 package com.example.jwt.AdminDashboard;
 
+import com.example.jwt.entities.water.WaterEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -673,10 +674,10 @@ public class DashbaordController {
 
 //
         // Calculate average water intake per day for the last week
-        List<WaterEntity> waterEntitiesForLastWeek = dashboardService.getWaterEntitiesForLastWeek(userStatus);
+        List<WaterEntry> waterEntriesForLastWeek = dashboardService.getWaterEntriesForLastWeek(userStatus);
 
-        double averageWaterIntakePerDay = waterEntitiesForLastWeek.stream()
-                .mapToDouble(WaterEntity::getWaterIntake)
+        double averageWaterIntakePerDay = waterEntriesForLastWeek.stream()
+                .mapToDouble(WaterEntry::getWaterIntake)
                 .average()
                 .orElse(0.0);
 
@@ -731,7 +732,11 @@ public class DashbaordController {
         model.addAttribute("mostConsumedSnacks", mostConsumedSnacks);
 
         // Example usage in your controller method
-        String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(userStatus.getWaterEntities());
+//        String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(userStatus.getWaterEntities());
+//        model.addAttribute("mostConsumedDrink", mostConsumedDrink);
+//        List<WaterEntry> waterEntriesForLastWeek = dashboardService.getWaterEntriesForLastWeek(userStatus);
+
+        String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(waterEntriesForLastWeek);
         model.addAttribute("mostConsumedDrink", mostConsumedDrink);
 
         String mostConsumedNutrient = dashboardService.calculateMostConsumedNutrient(userStatus.getDishesList());

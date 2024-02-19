@@ -12,6 +12,7 @@ import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.entities.water.WaterEntity;
+import com.example.jwt.entities.water.WaterEntry;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.FeedbackRepository;
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
@@ -428,13 +429,21 @@ public class DashboardService {
                 .collect(Collectors.toList());
     }
 
-    public List<WaterEntity> getWaterEntitiesForLastWeek(User user) {
-        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+//    public List<WaterEntity> getWaterEntitiesForLastWeek(User user) {
+//        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+//
+//        return user.getWaterEntities().stream()
+//                .filter(waterEntity -> waterEntity.getLocalDate().isAfter(oneWeekAgo))
+//                .collect(Collectors.toList());
+//    }
+public List<WaterEntry> getWaterEntriesForLastWeek(User user) {
+    LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
 
-        return user.getWaterEntities().stream()
-                .filter(waterEntity -> waterEntity.getLocalDate().isAfter(oneWeekAgo))
-                .collect(Collectors.toList());
-    }
+    return user.getWaterEntities().stream()
+            .flatMap(waterEntity -> waterEntity.getWaterEntries().stream())
+            .filter(waterEntry -> waterEntry.getLocalDate().isAfter(oneWeekAgo))
+            .collect(Collectors.toList());
+}
 
     public long getDishCountForDate(User user, LocalDate date) {
         if (user.getDishesList() == null) {
@@ -748,18 +757,30 @@ public class DashboardService {
         return mostConsumedEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
     }
 
-    public String calculateMostConsumedDrink(List<WaterEntity> drinks) {
-        // Count occurrences of each drink
-        Map<String, Double> drinkIntake = drinks.stream()
-                .collect(Collectors.groupingBy(WaterEntity::getDrinkName, Collectors.summingDouble(WaterEntity::getWaterIntake)));
+//    public String calculateMostConsumedDrink(List<WaterEntity> drinks) {
+//        // Count occurrences of each drink
+//        Map<String, Double> drinkIntake = drinks.stream()
+//                .collect(Collectors.groupingBy(WaterEntity::getDrinkName, Collectors.summingDouble(WaterEntity::getWaterIntake)));
+//
+//        // Find the drink with the highest total intake (most consumed)
+//        Optional<Map.Entry<String, Double>> mostConsumedDrinkEntry = drinkIntake.entrySet().stream()
+//                .max(Map.Entry.comparingByValue());
+//
+//        // Get the result
+//        return mostConsumedDrinkEntry.map(entry -> entry.getValue() + " liters)").orElse("No data");
+//    }
+public String calculateMostConsumedDrink(List<WaterEntry> drinks) {
+    // Count occurrences of each drink
+    Map<String, Double> drinkIntake = drinks.stream()
+            .collect(Collectors.groupingBy(WaterEntry::getDrinkName, Collectors.summingDouble(WaterEntry::getWaterIntake)));
 
-        // Find the drink with the highest total intake (most consumed)
-        Optional<Map.Entry<String, Double>> mostConsumedDrinkEntry = drinkIntake.entrySet().stream()
-                .max(Map.Entry.comparingByValue());
+    // Find the drink with the highest total intake (most consumed)
+    Optional<Map.Entry<String, Double>> mostConsumedDrinkEntry = drinkIntake.entrySet().stream()
+            .max(Map.Entry.comparingByValue());
 
-        // Get the result
-        return mostConsumedDrinkEntry.map(entry -> entry.getValue() + " liters)").orElse("No data");
-    }
+    // Get the result
+    return mostConsumedDrinkEntry.map(entry -> entry.getKey() + " (" + entry.getValue() + " liters)").orElse("No data");
+}
 
     public String calculateMostConsumedNutrient(List<Dishes> dishesList) {
         Map<String, Double> totalNutrientIntake = new HashMap<>();
