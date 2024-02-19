@@ -29,6 +29,7 @@ public class NinData {
     private String foodCode;
     private String category;
     private String Typesoffood;
+
     private Double Energy;
     private Double Protein;
     private Double Total_Fat;
@@ -38,7 +39,6 @@ public class NinData {
     private Double magnesium;
     private Double iron;
     private Double zinc;
-
     private Double thiamine_B1;
     private Double riboflavin_B2;
     private Double niacin_B3;

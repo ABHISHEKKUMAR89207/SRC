@@ -1,43 +1,50 @@
-//package com.example.jwt.entities.FoodToday.ear;
-//
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.GeneratedValue;
-//import jakarta.persistence.GenerationType;
-//import jakarta.persistence.Id;
-//import lombok.AllArgsConstructor;
-//import lombok.Getter;
-//import lombok.NoArgsConstructor;
-//import lombok.Setter;
-//
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Entity
-//public class Ear {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long earId;
-//
-//    private String group;
-//    private String workLevel;
-//    private int age;
-//    private double bodyWt;
-//    private double energy;
-//    private boolean fatsOilsVisible;
-//    private double protein;
-//    private double calcium;
-//    private double magnesium;
-//    private double iron;
-//    private double zinc;
-//    private double iodine;
-//    private double thiamine;
-//    private double riboflavin;
-//    private double niacin;
+package com.example.jwt.entities.FoodToday.ear;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Ear {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long earId;
+
+    private String group;
+    private String workLevel;
+    private int age;
+    private double bodyWt;
+
+    private double energy;
+    private double protein;
+    private boolean fatsOilsVisible;
+    private double fiber;
+    private double calcium;
+    private double magnesium;
+    private double iron;
+    private double zinc;
+    private double thiamine;
+    private double riboflavin;
+    private double niacin;
 //    private double vitB6;
-//    private double folate;
-//    private double vitB12;
-//    private double vitC;
-//
-//}
+    private double folate;
+    private double vitA;
+//    private double vitD;
+
+
+    private double iodine;
+    private double vitB12;
+    private double vitC;
+    private double carbohyderate;
+
+}

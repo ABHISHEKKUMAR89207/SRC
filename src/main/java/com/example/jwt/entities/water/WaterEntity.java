@@ -25,7 +25,7 @@ public class WaterEntity {
 
     private Double waterIntake;
     private String localTime;
-    private LocalDate localDate = LocalDate.now();
+    private LocalDate localDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

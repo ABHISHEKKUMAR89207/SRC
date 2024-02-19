@@ -271,7 +271,7 @@ private WaterEntryRepository waterEntryRepository;
             User user = userOptional.get();
 
             // Find or create the WaterEntity for the specified date and user
-            LocalDate currentDate = LocalDate.now();
+            LocalDate currentDate;
             LocalTime currentTime = LocalTime.now();
 
             // Define the format for 12-hour clock
@@ -280,18 +280,19 @@ private WaterEntryRepository waterEntryRepository;
             // Format the current time using the defined format
             String formattedTime = currentTime.format(formatter);
 
-            WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
+            WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, newWaterEntity.getLocalDate());
 
             if (existingWaterEntity == null) {
                 // If no entity exists for the current date and user, create a new one
                 WaterEntity waterEntity = new WaterEntity();
                 waterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
                 waterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
+                waterEntity.setLocalDate(newWaterEntity.getLocalDate());
                 waterEntity.setUser(user);
 
                 // Create a new WaterEntry
                 WaterEntry entry = new WaterEntry();
-                entry.setLocalDate(currentDate);
+                entry.setLocalDate(newWaterEntity.getLocalDate());
                 entry.setLocalTime(formattedTime);
                 entry.setWaterIntake(calculateWaterIntake(waterEntity));
 
@@ -307,7 +308,7 @@ private WaterEntryRepository waterEntryRepository;
                 // If an entity already exists for the current date and user
                 // Create a new WaterEntry for the current time
                 WaterEntry entry = new WaterEntry();
-                entry.setLocalDate(currentDate);
+                entry.setLocalDate(newWaterEntity.getLocalDate());
                 entry.setLocalTime(formattedTime);
 
                 // Update cup capacity and number of cups

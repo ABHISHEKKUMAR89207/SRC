@@ -122,8 +122,69 @@ public class AllTargetController {
 
 
 
-    @GetMapping("/get-water-goal")
-    public ResponseEntity<WaterGoalAndIntakeResponse> getUserWaterGoal(@RequestHeader("Auth") String tokenHeader) {
+//    @GetMapping("/get-water-goal")
+//    public ResponseEntity<WaterGoalAndIntakeResponse> getUserWaterGoal(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null && user.getAllTarget() != null) {
+//            LocalDate currentDate = LocalDate.now();
+//
+//            // Retrieve water intake from the WaterEntity table for the current date
+//            Double waterIntakeForCurrentDate = waterService.getWaterIntakeForCurrentDate(user, currentDate);
+//
+//            // Get water goal from AllTarget
+//            Double waterGoal = user.getAllTarget().getWaterGoal();
+//
+//            if (waterGoal != null) {
+//                WaterGoalAndIntakeResponse response = new WaterGoalAndIntakeResponse();
+//                response.setWaterGoal(waterGoal);
+//                response.setWaterIntakeForCurrentDate(waterIntakeForCurrentDate);
+//
+//                return new ResponseEntity<>(response, HttpStatus.OK);
+//            } else {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+//    @GetMapping("/get-water-goal")
+//    public ResponseEntity<WaterGoalAndIntakeResponse> getUserWaterGoal(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null && user.getAllTarget() != null) {
+//            LocalDate currentDate = LocalDate.now();
+//
+//            // Retrieve water intake from the WaterEntity table for the current date
+//            Double waterIntakeForCurrentDate = waterService.getWaterIntakeForCurrentDate(user, currentDate);
+//
+//            // Get water goal from AllTarget
+//            Double waterGoal = user.getAllTarget().getWaterGoal();
+//
+//            WaterGoalAndIntakeResponse response = new WaterGoalAndIntakeResponse();
+//
+//            if (waterGoal != null) {
+//                response.setWaterGoal(waterGoal);
+//            } else {
+//                // Handle the case where waterGoal is null
+//                response.setWaterGoal(0.0);
+//            }
+//
+//            response.setWaterIntakeForCurrentDate(waterIntakeForCurrentDate);
+//
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+@GetMapping("/get-water-goal")
+public ResponseEntity<WaterGoalAndIntakeResponse> getUserWaterGoal(@RequestHeader("Auth") String tokenHeader) {
+    try {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
@@ -137,19 +198,26 @@ public class AllTargetController {
             // Get water goal from AllTarget
             Double waterGoal = user.getAllTarget().getWaterGoal();
 
-            if (waterGoal != null) {
-                WaterGoalAndIntakeResponse response = new WaterGoalAndIntakeResponse();
-                response.setWaterGoal(waterGoal);
-                response.setWaterIntakeForCurrentDate(waterIntakeForCurrentDate);
+            WaterGoalAndIntakeResponse response = new WaterGoalAndIntakeResponse();
 
-                return new ResponseEntity<>(response, HttpStatus.OK);
+            if (waterGoal != null) {
+                response.setWaterGoal(waterGoal);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                // Handle the case where waterGoal is null
+                response.setWaterGoal(0.0);
             }
+
+            response.setWaterIntakeForCurrentDate(waterIntakeForCurrentDate);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    } catch (Exception e) {
+        // Handle any exceptions that may occur (e.g., token parsing error, database error)
+        return new ResponseEntity<>(new WaterGoalAndIntakeResponse(0.0, 0.0), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
 
 }
