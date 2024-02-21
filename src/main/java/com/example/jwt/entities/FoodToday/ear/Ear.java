@@ -58,6 +58,7 @@ public class Ear {
 
 
 }
+<<<<<<< HEAD
 
 //package com.example.jwt.entities.FoodToday.ear;
 //
@@ -110,3 +111,5 @@ public class Ear {
 //
 //}
 
+=======
+>>>>>>> 2074c6ee35ddcdd0adcbd1bbec4aa266ea1690e4
