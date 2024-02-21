@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -363,22 +364,42 @@ public Ear findEars(String age, String gender, String HGroup) {
 
         // Calculate age from dateOfBirth
         LocalDate dateOfBirth = userProfile.getDateOfBirth();
-        String ageString = calculateAge(dateOfBirth);
+        int age = calculateAgee(dateOfBirth);
+        System.out.println("Age calculated from user profile: " + age);
+
+        // String workLevel = userProfile.getWorkLevel();
+//        String workLevel = "NoLeavel";
+//        System.out.println("Work level from user profile: " + workLevel);
+
+
+        // Calculate age from dateOfBirth
+        LocalDate dateOfBirth1 = userProfile.getDateOfBirth();
+        String ageString = calculateAge(dateOfBirth1);
         System.out.println("Age String calculated from user profile ......"+ageString);
 
-//        String workLevel = userProfile.getWorkLevel();
-        String workLevel = "Sedentary";
-        System.out.println("work level from user profile.... "+workLevel);
+        List<Ear> matchingEars = new ArrayList<>();
 
-        // Find HGroup based on ageString
-// Find HGroup based on ageString
-        String hGroup = earRepository.findHgroupByGenderAndWorkLevel(gender, workLevel);
-        System.out.println("Fetching H Group based on user profile gender and work level: " + hGroup);
+        if (age < 18) {
+            String workLevel1 = "NoLeavel";
+            matchingEars = earRepository.findAllByAgeAndGenderAndWorkLevel(ageString, gender, workLevel1);
+        } else if(age>60){
+            String workLevel2 = "NoLeavel";
+            matchingEars = earRepository.findAllByGenderAndWorkLevelAndAge(gender,workLevel2,ageString);
 
-// Retrieve ears based on age, HGroup, and workLevel
-        List<Ear> matchingEars = earRepository.findAllByAgeAndHgroupAndWorkLevel(ageString, hGroup, workLevel);
+        }
+        else {
+//            String workLevel = "Sedentary";
+            // Find HGroup based on age
+            String workLevel = userProfile.getWorkLevel();
+            System.out.println("Get workLevel from User Profile... "+workLevel);
+            String hGroup = earRepository.findHgroupByGenderAndWorkLevel(gender, workLevel);
+            System.out.println("Fetching H Group based on user profile gender and work level: " + hGroup);
 
-// Generate response based on matching ears
+            // Retrieve ears based on age, HGroup, and workLevel
+            matchingEars = earRepository.findAllByHgroupAndWorkLevel(hGroup, workLevel);
+        }
+
+        // Generate response based on matching ears
         if (!matchingEars.isEmpty()) {
             System.out.println("Match found in Ear table:");
 
@@ -388,7 +409,6 @@ public Ear findEars(String age, String gender, String HGroup) {
             // Print matching details
             System.out.println("Ear Age from Ear table: " + matchingEar.getAge() + " years onwards");
             System.out.println("Ear Gender from Ear table: " + matchingEar.getGender());
-            System.out.println("Ear Group from Ear table: " + hGroup);
             System.out.println("Ear Work Level from Ear table: " + matchingEar.getWorkLevel());
 
             // Return specific nutrient values directly from Ear table
@@ -403,28 +423,105 @@ public Ear findEars(String age, String gender, String HGroup) {
         return null;
     }
 
-
-//    private int calculateAge(LocalDate dateOfBirth) {
-//        LocalDate currentDate = LocalDate.now();
-//        return Period.between(dateOfBirth, currentDate).getYears();
+//    public EarResponse getEarGroupAndWorkLevel(UserProfile userProfile) {
+//        // Extract gender from profile
+//        String gender = userProfile.getGender();
+//        System.out.println("User Profile Gender: " + gender);
+//
+//        LocalDate dateOfBirth1 = userProfile.getDateOfBirth();
+//        String ageString1 = calculateAge(dateOfBirth1);
+//
+//
+//        // Calculate age from dateOfBirth
+//        LocalDate dateOfBirth = userProfile.getDateOfBirth();
+//        String ageString = calculateAge(dateOfBirth);
+//        System.out.println("Age String calculated from user profile ......"+ageString);
+//
+////        String workLevel = userProfile.getWorkLevel();
+//        String workLevel = "NoLeavel";
+//        System.out.println("work level from user profile.... "+workLevel);
+//
+//
+//
+//
+//        // Find HGroup based on ageString
+//// Find HGroup based on ageString
+////        String hGroup = earRepository.findHgroupByGenderAndWorkLevel(gender, workLevel);
+////        System.out.println("Fetching H Group based on user profile gender and work level: " + hGroup);
+//
+//// Retrieve ears based on age, HGroup, and workLevel
+//        List<Ear> matchingEars = earRepository.findAllByAgeAndGenderAndWorkLevel(ageString, gender, workLevel);
+////        List<Ear> matchingEars = earRepository.findAllByHgroupAndWorkLevel( hGroup, workLevel);
+//
+//// Generate response based on matching ears
+//        if (!matchingEars.isEmpty()) {
+//            System.out.println("Match found in Ear table:");
+//
+//            // Assuming you want to consider the first matching Ear
+//            Ear matchingEar = matchingEars.get(0);
+//
+//            // Print matching details
+//            System.out.println("Ear Age from Ear table: " + matchingEar.getAge() + " years onwards");
+//            System.out.println("Ear Gender from Ear table: " + matchingEar.getGender());
+////            System.out.println("Ear Group from Ear table: " + hGroup);
+//            System.out.println("Ear Work Level from Ear table: " + matchingEar.getWorkLevel());
+//
+//            // Return specific nutrient values directly from Ear table
+//            return new EarResponse(matchingEar.getGender(), matchingEar.getAge(), matchingEar.getHgroup(), matchingEar.getWorkLevel(),
+//                    matchingEar.getEnergy(), matchingEar.getProtein(), matchingEar.isFatsOilsVisible(),
+//                    matchingEar.getFiber(), matchingEar.getCalcium(), matchingEar.getMagnesium(),
+//                    matchingEar.getIron(), matchingEar.getZinc(), matchingEar.getThiamine(),
+//                    matchingEar.getRiboflavin(), matchingEar.getNiacin());
+//        }
+//
+//        // Return null or an appropriate default EarResponse instance
+//        return null;
 //    }
-private String calculateAge(LocalDate dateOfBirth) {
-    LocalDate currentDate = LocalDate.now();
-    Period period = Period.between(dateOfBirth, currentDate);
 
-    int years = period.getYears();
-    int months = period.getMonths();
 
-    if (years == 0) {
-        if (months == 0) {
-            return "0 years"; // If both years and months are zero
-        } else {
-            return months + " months"; // If years is zero but there are some months
-        }
-    } else {
-        return years + " years onwards"; // If there are some years
+    private int calculateAgee(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(dateOfBirth, currentDate).getYears();
     }
-}
+//private String calculateAge(LocalDate dateOfBirth) {
+//    LocalDate currentDate = LocalDate.now();
+//    Period period = Period.between(dateOfBirth, currentDate);
+//
+//    int years = period.getYears();
+//    int months = period.getMonths();
+//
+//    if (years == 0) {
+//        if (months == 0) {
+//            return "0 years"; // If both years and months are zero
+//        } else {
+//            return months + " months"; // If years is zero but there are some months
+//        }
+//    } else {
+//        return years + " years onwards"; // If there are some years
+//    }
+//}
+
+    private String calculateAge(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        Period period = Period.between(dateOfBirth, currentDate);
+
+        int years = period.getYears();
+        int months = period.getMonths();
+
+        if (years == 0) {
+            if (months == 0) {
+                return "0 years"; // If both years and months are zero
+            } else {
+                return months + " months"; // If years is zero but there are some months
+            }
+        } else if (years < 18) {
+            return years + " years"; // If there are some years, but less than 18
+        } else if (years >= 60) {
+            return "above " + 60 + " years"; // If the age is 60 years or more
+        } else {
+            return years + " years onwards"; // If there are some years and at least 18 but less than 60
+        }
+    }
 
 
 

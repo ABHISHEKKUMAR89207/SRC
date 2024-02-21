@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package com.example.jwt.entities.FoodToday.ear;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,17 +36,21 @@ String findHgroupByAge(@Param("age") String age);
 
 //    List<Ear> findAllByAgeAndHgroupAndWorkLevel(String age,String hgroup, String worklevel);
 
-    @Query("SELECT e FROM Ear e " +
-            "WHERE (:ageCategory = '18 years onwards' AND e.age = '18 years onwards') " +
-            "OR (:ageCategory = '60 years onwards' AND e.age = '60 years onwards') " +
-            "AND e.gender = :gender AND e.workLevel = :workLevel")
-    List<Ear> findAllByAgeAndHgroupAndWorkLevel(@Param("ageCategory") String ageCategory,
-                                                @Param("gender") String gender,
-                                                @Param("workLevel") String workLevel);
+//    @Query("SELECT e FROM Ear e " +
+//            "WHERE (:ageCategory = '18 years onwards' AND e.age = '18 years onwards') " +
+//            "OR (:ageCategory = '60 years onwards' AND e.age = '60 years onwards') " +
+//            "AND e.gender = :gender AND e.workLevel = :workLevel")
+//    List<Ear> findAllByAgeAndHgroupAndWorkLevel(@Param("ageCategory") String ageCategory,
+//                                                @Param("gender") String gender,
+//                                                @Param("workLevel") String workLevel);
+List<Ear> findAllByAgeAndGenderAndWorkLevel(String age, String gender, String workLevel);
 
+List<Ear> findAllByHgroupAndWorkLevel(String hgroup, String workLevel);
+
+List<Ear> findAllByGenderAndWorkLevelAndAge(String gender, String workLevel, String age);
 
 }
-=======
+
 //package com.example.jwt.entities.FoodToday.ear;
 //
 //import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,4 +63,4 @@ String findHgroupByAge(@Param("age") String age);
 //    List<Ear> findByAgeGreaterThan(int age);
 //    // Add more custom queries as needed
 //}
->>>>>>> c0739d4c53ab96c402b9581dde8e089089cc2370
+

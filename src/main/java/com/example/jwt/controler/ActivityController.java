@@ -9,6 +9,7 @@ import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
 import com.example.jwt.repository.ActivityRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.ActivityService;
+import com.example.jwt.service.ExerciseService;
 import com.example.jwt.service.UserService;
 import com.example.jwt.service.serviceHealth.HeartRateService;
 import com.example.jwt.service.serviceHealth.SleepDurationService;
@@ -900,6 +901,79 @@ public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+
+    @Autowired
+    private ExerciseService exerciseService;
+
+//    @GetMapping("/get-calories/custom-range")
+//    public ResponseEntity<List<Map<String, Object>>> getUserCaloriesForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the custom date range and user
+//                List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+//
+//                // Get exercises for the custom date range and user
+//                List<Exercise> exerciseList = exerciseService.getExercisesForUserAndCustomRange(user, startDate, endDate);
+//
+//                // Create a list to store activity details for each day
+//                List<Map<String, Object>> activitiesForRange = new ArrayList<>();
+//
+//                // Iterate over each day in the date range
+//                for (LocalDateTime currentDateTime = startDate.atStartOfDay(); !currentDateTime.isAfter(endDate.atStartOfDay()); currentDateTime = currentDateTime.plusDays(1)) {
+//                    final LocalDateTime finalCurrentDateTime = currentDateTime; // Declare a final variable
+//
+//                    // Check if there is an exercise for the current date
+//                    Exercise exerciseForDate = exerciseList.stream()
+//                            .filter(exercise -> exercise.getDate().atStartOfDay().equals(finalCurrentDateTime))
+//                            .findFirst()
+//                            .orElse(null);
+//
+//                    // Check if there is an activity for the current date
+//                    Activities activityForDate = activitiesList.stream()
+//                            .filter(activity -> activity.getActivityDate().atStartOfDay().equals(finalCurrentDateTime))
+//                            .findFirst()
+//                            .orElse(null);
+//
+//                    System.out.println("Activity Calories...." + (activityForDate != null ? activityForDate.getCalory() : "No activity"));
+//                    System.out.println("Exercise Calories ...." + (exerciseForDate != null ? exerciseForDate.getCaloriesBurned() : "No exercise"));
+//
+//                    // Calculate the total calories for the current date by adding caloriesBurned and calory
+//                    double totalCalories = (exerciseForDate != null ? exerciseForDate.getCaloriesBurned() : 0.0)
+//                            + (activityForDate != null && activityForDate.getCalory() != null ? activityForDate.getCalory() : 0.0);
+//
+//                    // Create a map with formatted activityDate and total calories
+//                    Map<String, Object> activityMap = new HashMap<>();
+//                    String formattedActivityDate = finalCurrentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//                    activityMap.put("date", formattedActivityDate);
+//                    activityMap.put("value", totalCalories);
+//                    activitiesForRange.add(activityMap);
+//                }
+//
+//
+//                return ResponseEntity.ok(activitiesForRange);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
+
 
 
 //    @GetMapping("/get-steps/week")

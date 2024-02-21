@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package com.example.jwt.entities.FoodToday.ear;
 
 import com.example.jwt.entities.UserProfile;
@@ -58,7 +58,7 @@ public class Ear {
 
 
 }
-=======
+
 //package com.example.jwt.entities.FoodToday.ear;
 //
 //import jakarta.persistence.Entity;
@@ -109,4 +109,4 @@ public class Ear {
 //    private double carbohyderate;
 //
 //}
->>>>>>> c0739d4c53ab96c402b9581dde8e089089cc2370
+
