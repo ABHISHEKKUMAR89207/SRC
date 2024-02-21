@@ -126,5 +126,10 @@ public class ExerciseService {
         return caloriesPerHour * (duration / 60); // Convert duration to hours
     }
 
+
+    public List<Exercise> getExercisesForUserAndCustomRange(User user, LocalDate startDate, LocalDate endDate) {
+        // Implement the logic to fetch exercises for the user and date range from the repository
+        return exerciseRepository.findByUserAndDateBetween(user, startDate, endDate);
+    }
     // You can add more service methods as needed
 }

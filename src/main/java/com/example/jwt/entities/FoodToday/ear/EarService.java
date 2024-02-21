@@ -19,22 +19,10 @@ public class EarService {
         this.earRepository = earRepository;
     }
 
-    public List<Ear> getAllEars() {
-        return earRepository.findAll();
-    }
 
-    public Optional<Ear> getEarById(Long earId) {
-        return earRepository.findById(earId);
-    }
 
-    public Ear saveEar(Ear ear) {
-        return earRepository.save(ear);
+    public Optional<Ear> findById(Long id) {
+        return earRepository.findById(id);
     }
-
-    public void deleteEar(Long earId) {
-        earRepository.deleteById(earId);
-    }
-
-    // Add more methods as needed for your business logic
 
 }

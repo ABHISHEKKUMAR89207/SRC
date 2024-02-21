@@ -205,6 +205,58 @@ public class waterController {
 //        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 //    }
 //}
+@GetMapping("/get-water/custom-range")
+public ResponseEntity<List<Map<String, Object>>> getUserWaterIntakeForCustomRange(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        @RequestHeader("Auth") String tokenHeader) {
+    try {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            // Get water entries for the custom date range and user
+            List<WaterEntity> waterEntriesList = waterService.getWaterEntriesForUserAndCustomRange(user, startDate, endDate);
+
+            // Create a map to store water entry details for each day
+            Map<LocalDate, Double> waterEntriesMap = new HashMap<>();
+
+            // Populate the map with existing water entries
+            for (WaterEntity waterEntry : waterEntriesList) {
+                waterEntriesMap.put(waterEntry.getLocalDate(), waterEntry.calculateTotalWaterIntake());
+            }
+
+            // Create a list to store water entry details for each day
+            List<Map<String, Object>> waterEntriesForRange = new ArrayList<>();
+
+            // Iterate over each day in the date range
+            for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+                // Create a map with formatted localDate and waterIntake
+                Map<String, Object> waterEntryMap = new HashMap<>();
+                String formattedLocalDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                waterEntryMap.put("date", formattedLocalDate);
+                waterEntryMap.put("value", waterEntriesMap.getOrDefault(currentDate, 0.0));
+
+                waterEntriesForRange.add(waterEntryMap);
+            }
+
+            return ResponseEntity.ok(waterEntriesForRange);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+}
+
+
 
     @GetMapping("/intake")
     public ResponseEntity<List<WaterIntakeResponse>> getWaterIntake(@RequestHeader("Auth") String tokenHeader) {

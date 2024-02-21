@@ -1,9 +1,7 @@
 package com.example.jwt.entities.FoodToday.ear;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.jwt.entities.UserProfile;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +12,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "ear")
 public class Ear {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long earId;
 
-    private String group;
+    private String hgroup;
     private String workLevel;
-    private int age;
+    private String gender;
+    private String age;
     private double bodyWt;
 
     private double energy;
@@ -46,5 +46,14 @@ public class Ear {
     private double vitB12;
     private double vitC;
     private double carbohyderate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_profile_id")
+    private UserProfile userProfile;
+
+    public String getAge() {
+        return this.age; // Replace with the actual field name if different
+    }
+
 
 }

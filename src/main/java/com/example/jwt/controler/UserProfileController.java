@@ -1,10 +1,15 @@
 package com.example.jwt.controler;
 
+import com.example.jwt.entities.FoodToday.ear.Ear;
+import com.example.jwt.entities.FoodToday.ear.EarResponse;
+import com.example.jwt.entities.FoodToday.ear.EarService;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 
 import com.example.jwt.entities.error.Error;
 import com.example.jwt.entities.error.ErrorRepository;
+import com.example.jwt.repository.UserProfileRepository;
+import com.example.jwt.request.WorkLevelRequest;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserProfileService;
 import com.example.jwt.service.UserService;
@@ -24,10 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -268,5 +270,107 @@ public class UserProfileController {
         return new ResponseEntity<UserProfile>(userProfile1, HttpStatus.CREATED);
     }
 
+    @Autowired
+    private EarService earService;
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+    @PostMapping("/save-update-work-level")
+    public ResponseEntity<UserProfile> saveOrUpdateWorkLevelForUserProfile(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam String workLevel) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User user = userService.findByUsername(username);
+        UserProfile userProfile = userProfileService.findByUsername(username);
+
+        if (userProfile != null) {
+            userProfile.setWorkLevel(workLevel);
+            UserProfile updatedUserProfile = userProfileRepository.save(userProfile);
+
+            return ResponseEntity.ok().build(); // Return an empty ResponseEntity with status 200
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @DeleteMapping("/delete-work-level")
+    public ResponseEntity<Void> deleteWorkLevelForUserProfile(
+            @RequestHeader("Auth") String tokenHeader) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User user = userService.findByUsername(username);
+        UserProfile userProfile = userProfileService.findByUsername(username);
+
+        if (userProfile != null) {
+            userProfile.setWorkLevel(null); // Set workLevel to null or handle the deletion logic as needed
+            userProfileRepository.save(userProfile);
+
+            return ResponseEntity.ok().build(); // Return an empty ResponseEntity with status 200
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+
+
+    @GetMapping("/ear")
+    public ResponseEntity<EarResponse> getEarGroupAndWorkLevel(@RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            // Fetch UserProfile based on the userId (Assuming you have a service for this)
+            Optional<UserProfile> userProfileOptional = userProfileService.getUserProfileById(user.getUserId());
+
+            if (userProfileOptional.isPresent()) {
+                UserProfile userProfile = userProfileOptional.get();
+                // Use the ProfileService to get Ear group and work level
+                EarResponse earResponse = userProfileService.getEarGroupAndWorkLevel(userProfile);
+
+                if (earResponse != null) {
+                    return new ResponseEntity<>(earResponse, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+//@GetMapping("/ear")
+//@ResponseBody
+//public ResponseEntity<String> getEarGroupAndWorkLevel(@RequestHeader("Auth") String tokenHeader) {
+//    String token = tokenHeader.replace("Bearer ", "");
+//    String username = jwtHelper.getUsernameFromToken(token);
+//
+//    User user = userService.findByUsername(username);
+//
+//    if (user != null) {
+//        // Fetch UserProfile based on the userId (Assuming you have a service for this)
+//        Optional<UserProfile> userProfileOptional = userProfileService.getUserProfileById(user.getUserId());
+//
+//        if (userProfileOptional.isPresent()) {
+//            UserProfile userProfile = userProfileOptional.get();
+//            // Use the ProfileService to get Ear group and work level
+//            String result = userProfileService.getEarGroupAndWorkLevel(userProfile);
+//            return ResponseEntity.ok("Result: " + result);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("UserProfile not found for userId: " + user.getUserId());
+//        }
+//    } else {
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found for username: " + username);
+//    }
+//}
 
 }

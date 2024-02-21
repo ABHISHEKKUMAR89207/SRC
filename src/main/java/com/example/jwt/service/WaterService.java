@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -26,8 +27,15 @@ public class WaterService {
     public WaterService(WaterEntityRepository waterEntityRepository) {
         this.waterEntityRepository = waterEntityRepository;
     }
+//@Autowired
+//private Wa
 
-// for calculating the water intake of the user based on the parameters
+    // Inside WaterService class
+    public List<WaterEntity> getWaterEntriesForUserAndCustomRange(User user, LocalDate startDate, LocalDate endDate) {
+        return waterEntityRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
+    }
+
+    // for calculating the water intake of the user based on the parameters
     public Double calculateWaterIntake(User user) {
         List<WaterEntity> waterEntities = user.getWaterEntities();
 
@@ -270,14 +278,45 @@ private WaterEntryRepository waterEntryRepository;
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
+
+
+
+            // Find or create the WaterEntity for the specified date and user
+//            LocalDate currentDate;
+//            LocalTime currentTime = LocalTime.now();
+//
+//            // Get user's timezone (you need to have a field in the User entity to store the timezone)
+//            ZoneId userTimeZone = user.getTimeZone() != null ? ZoneId.of(user.getTimeZone()) : ZoneId.systemDefault();
+//
+//            // Get the current time in the user's timezone
+//            ZonedDateTime currentTimeInUserTimeZone = ZonedDateTime.of(LocalDateTime.of(LocalDate.now(), currentTime), ZoneId.systemDefault())
+//                    .withZoneSameInstant(userTimeZone);
+//
+//            // Define the format for 12-hour clock
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+//
+//            // Format the current time using the defined format
+//            String formattedTime = currentTimeInUserTimeZone.format(formatter);
+
             // Find or create the WaterEntity for the specified date and user
             LocalDate currentDate;
-            LocalTime currentTime = LocalTime.now();
+//            LocalTime currentTime = LocalTime.now();
+//
+//            // Define the format for 12-hour clock
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+//
+//            // Format the current time using the defined format
+//            String formattedTime = currentTime.format(formatter);
+            // Get the ZoneId for "Asia/Kolkata"
+            ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
 
-            // Define the format for 12-hour clock
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+        // Get the current time in the specified time zone
+            LocalTime currentTime = LocalTime.now(indianTimeZone);
 
-            // Format the current time using the defined format
+        // ... rest of your code ...
+
+        // Format the current time using the defined format and time zone
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a").withZone(indianTimeZone);
             String formattedTime = currentTime.format(formatter);
 
             WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, newWaterEntity.getLocalDate());

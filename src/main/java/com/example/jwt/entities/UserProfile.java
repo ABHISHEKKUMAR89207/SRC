@@ -1,5 +1,6 @@
 package com.example.jwt.entities;
 
+import com.example.jwt.entities.FoodToday.ear.Ear;
 import com.example.jwt.entities.dashboardEntity.healthTrends.MenstrualCycle;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,11 +30,14 @@ public class UserProfile {
     private String variableType;
 
     private double height;
+    private double weight;
     private Integer heightFt;
     private Integer heightIn;
 
+    private String workLevel;
 
-    private double weight;
+
+
     private double bmi;
     private String googleAccountLink;
     private String facebookAccountLink;
@@ -47,4 +52,7 @@ public class UserProfile {
     @OneToOne(mappedBy = "userProfile")
     @JsonIgnore
     private MenstrualCycle menstrualCycle;
+
+    @OneToMany(mappedBy = "userProfile")
+    private List<Ear> ears;
 }
