@@ -56,6 +56,10 @@ public class ExerciseService {
         return exerciseRepository.findByUserAndDateAndActivityType(user, date, activityType);
     }
 
+    public List<Exercise> findByUserAndDate(User user, LocalDate date) {
+        return exerciseRepository.findByUserAndDate(user, date);
+    }
+
     private double calculateCaloriesBurned(String activityType, double duration) {
         // Simple assumption: Calories burned per hour for different activities
         double caloriesPerHour;

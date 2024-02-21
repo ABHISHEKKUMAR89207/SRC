@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package com.example.jwt.entities.FoodToday.ear;
 
 
@@ -27,7 +27,7 @@ public class EarService {
     }
 
 }
-=======
+
 //package com.example.jwt.entities.FoodToday.ear;
 //
 //
@@ -68,4 +68,4 @@ public class EarService {
 //    // Add more methods as needed for your business logic
 //
 //}
->>>>>>> c0739d4c53ab96c402b9581dde8e089089cc2370
+

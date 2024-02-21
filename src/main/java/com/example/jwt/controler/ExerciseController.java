@@ -202,4 +202,24 @@ public class ExerciseController {
         }
     }
 
+    @GetMapping("/getByDate")
+    public List<Exercise> getExercisesByDate(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    ) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            List<Exercise> exercises = exerciseService.findByUserAndDate(user, date);
+
+            return exercises;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+
 }

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 package com.example.jwt.entities.FoodToday.ear;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,7 +46,7 @@ String findHgroupByAge(@Param("age") String age);
 
 
 }
-=======
+
 //package com.example.jwt.entities.FoodToday.ear;
 //
 //import org.springframework.data.jpa.repository.JpaRepository;
@@ -59,4 +59,3 @@ String findHgroupByAge(@Param("age") String age);
 //    List<Ear> findByAgeGreaterThan(int age);
 //    // Add more custom queries as needed
 //}
->>>>>>> c0739d4c53ab96c402b9581dde8e089089cc2370
