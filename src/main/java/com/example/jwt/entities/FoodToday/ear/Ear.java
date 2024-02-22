@@ -28,7 +28,7 @@ public class Ear {
 
     private double energy;
     private double protein;
-    private boolean fatsOilsVisible;
+    private boolean fats;
     private double fiber;
     private double calcium;
     private double magnesium;
