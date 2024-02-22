@@ -63,7 +63,4 @@ List<Ear> findAllByGenderAndWorkLevelAndAge(String gender, String workLevel, Str
 //    List<Ear> findByAgeGreaterThan(int age);
 //    // Add more custom queries as needed
 //}
-<<<<<<< HEAD
 
-=======
->>>>>>> 2074c6ee35ddcdd0adcbd1bbec4aa266ea1690e4
