@@ -142,4 +142,34 @@ public ResponseEntity<String> saveRecipeAndIngredientsp(@RequestBody PersonalReq
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving recipe and ingredients.");
     }
 }
+
+
+    @DeleteMapping("/{personalRecipeId}")
+    public ResponseEntity<String> deletePersonalRecipe(@PathVariable Long personalRecipeId, @RequestHeader("Auth") String tokenHeader) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        personalService.deletePersonalRecipe(personalRecipeId);
+        return ResponseEntity.ok("Personal recipe deleted successfully");
+    }
+
+    @DeleteMapping("/dish/{dishId}")
+    public ResponseEntity<String> deleteDish(@PathVariable Long dishId,@RequestHeader("Auth") String tokenHeader) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+        personalService.deleteDish(dishId);
+        return ResponseEntity.ok("Dish and associated ingredients deleted successfully");
+    }
 }

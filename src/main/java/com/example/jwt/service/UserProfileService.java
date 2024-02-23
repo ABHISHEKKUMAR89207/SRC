@@ -416,7 +416,7 @@ public Ear findEars(String age, String gender, String HGroup) {
                     matchingEar.getEnergy(), matchingEar.getProtein(), matchingEar.isFats(),
                     matchingEar.getFiber(), matchingEar.getCalcium(), matchingEar.getMagnesium(),
                     matchingEar.getIron(), matchingEar.getZinc(), matchingEar.getThiamine(),
-                    matchingEar.getRiboflavin(), matchingEar.getNiacin());
+                    matchingEar.getRiboflavin(), matchingEar.getNiacin(),matchingEar.getFolate(),matchingEar.getVitA(), matchingEar.getCarbohyderate());
         }
 
         // Return null or an appropriate default EarResponse instance

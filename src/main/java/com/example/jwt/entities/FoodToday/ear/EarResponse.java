@@ -28,5 +28,10 @@ public class EarResponse {
     private double niacin;
 
 
+    private double folate;
+    private double vitA;
+    private double carbohyderate;
+
+
 }
 
