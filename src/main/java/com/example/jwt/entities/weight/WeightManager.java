@@ -1,6 +1,7 @@
 package com.example.jwt.entities.weight;
 
 import com.example.jwt.entities.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,14 +22,15 @@ public class WeightManager {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long weightId;
 
-    private Double water;
+    private Double weight;
 
-    private String localTime;
+//    private String localTime;
     private LocalDate localDate;
 
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
 
