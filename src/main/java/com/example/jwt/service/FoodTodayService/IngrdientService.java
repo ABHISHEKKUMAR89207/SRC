@@ -1256,25 +1256,53 @@ public class IngrdientService {
         return energyByMealType;
     }
 
+//    private Double calculateTotalEnergyForDish(Dishes dish) {
+//        Double totalEnergy = 0.0;
+//
+//        if (dish.getRecipe() != null) {
+//            // If the dish has a recipe, get energy directly from the recipe table
+//            Recipe recipe = dish.getRecipe();
+//            totalEnergy += (recipe.getEnergy_joules()/100)*dish.getDishQuantity();
+//        }
+//
+//        // Calculate energy from ingredients
+//        List<Ingredients> ingredients = dish.getIngredientList();
+//        for (Ingredients ingredient : ingredients) {
+//            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//            Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//            totalEnergy += energy;
+//        }
+//
+//        return totalEnergy;
+//    }
+
     private Double calculateTotalEnergyForDish(Dishes dish) {
         Double totalEnergy = 0.0;
 
         if (dish.getRecipe() != null) {
             // If the dish has a recipe, get energy directly from the recipe table
             Recipe recipe = dish.getRecipe();
-            totalEnergy += (recipe.getEnergy_joules()/100)*dish.getDishQuantity();
+            totalEnergy += (recipe.getEnergy_joules() / 100) * dish.getDishQuantity();
         }
 
         // Calculate energy from ingredients
         List<Ingredients> ingredients = dish.getIngredientList();
         for (Ingredients ingredient : ingredients) {
             NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
-            Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
-            totalEnergy += energy;
+
+            // Check if ninData is not null before accessing its methods
+            if (ninData != null) {
+                Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+                totalEnergy += energy;
+            } else {
+                // Handle the case when ninData is null (e.g., log a warning or handle it accordingly)
+                System.out.println("Warning: ninData is null for ingredient " + ingredient.getIngredientName());
+            }
         }
 
         return totalEnergy;
     }
+
 
 
 

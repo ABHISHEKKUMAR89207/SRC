@@ -319,34 +319,63 @@ public class UserProfileController {
 
 
 
-    @GetMapping("/ear")
-    public ResponseEntity<EarResponse> getEarGroupAndWorkLevel(@RequestHeader("Auth") String tokenHeader) {
+//    @GetMapping("/ear")
+//    public ResponseEntity<EarResponse> getEarGroupAndWorkLevel(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null) {
+//            System.out.println("dsdsdfds");
+//            // Fetch UserProfile based on the userId (Assuming you have a service for this)
+//            Optional<UserProfile> userProfileOptional = userProfileService.getUserProfileById(user.getUserId());
+//
+//            if (userProfileOptional.isPresent()) {
+//                System.out.println("lllllllllll");
+//                UserProfile userProfile = userProfileOptional.get();
+//                // Use the ProfileService to get Ear group and work level
+//                EarResponse earResponse = userProfileService.getEarGroupAndWorkLevel(userProfile);
+//
+//                if (earResponse != null) {
+//                    return new ResponseEntity<>(earResponse, HttpStatus.OK);
+//                } else {
+//                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//                }
+//            } else {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            }
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+@GetMapping("/ear")
+public ResponseEntity<EarResponse> getEarGroupAndWorkLevel(@RequestHeader("Auth") String tokenHeader) {
+    try {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
 
         User user = userService.findByUsername(username);
 
         if (user != null) {
-            // Fetch UserProfile based on the userId (Assuming you have a service for this)
-            Optional<UserProfile> userProfileOptional = userProfileService.getUserProfileById(user.getUserId());
+            UserProfile userProfile = userProfileRepository.findByUserUserId(user.getUserId());
 
-            if (userProfileOptional.isPresent()) {
-                UserProfile userProfile = userProfileOptional.get();
-                // Use the ProfileService to get Ear group and work level
+            if (userProfile != null) {
                 EarResponse earResponse = userProfileService.getEarGroupAndWorkLevel(userProfile);
 
                 if (earResponse != null) {
                     return new ResponseEntity<>(earResponse, HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } catch (Exception e) {
+        e.printStackTrace();  // Log or print the exception for debugging purposes
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
+
 
 //@GetMapping("/ear")
 //@ResponseBody

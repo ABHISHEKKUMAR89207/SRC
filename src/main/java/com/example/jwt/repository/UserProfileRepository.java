@@ -13,4 +13,6 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
     UserProfile findByUserEmail(String email);
     List<UserProfile> findAllUserByGender(String gender);
     Integer countByGender(String gender);
+
+    UserProfile findByUserUserId(Long id);
 }
