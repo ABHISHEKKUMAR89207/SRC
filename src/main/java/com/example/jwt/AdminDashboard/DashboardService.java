@@ -105,8 +105,48 @@ public class DashboardService {
     }
 
 
-    public Map<String, Integer> calculateAgeCategoriesCount() {
-        List<UserProfile> profiles = userProfileRepository.findAll(); // Retrieve all user profiles
+//    public Map<String, Integer> calculateAgeCategoriesCount(User user) {
+//        List<UserProfile> profiles = userProfileRepository.findAllByUser(user); // Retrieve all user profiles
+//        Map<String, Integer> ageCategoryCounts = new HashMap<>();
+//
+//        // Initialize counters for different age categories
+//        int category1Count = 0; // <15 yrs
+//        int category2Count = 0; // 15-29 yrs
+//        int category3Count = 0; // 30-44 yrs
+//        int category4Count = 0; // 45-59 yrs
+//        int category5Count = 0; // >60 yrs
+//
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Calculate age and categorize users
+//        for (UserProfile profile : profiles) {
+//            LocalDate dob = profile.getDateOfBirth();
+//            int age = Period.between(dob, currentDate).getYears();
+//
+//            if (age < 15) {
+//                category1Count++;
+//            } else if (age >= 15 && age <= 29) {
+//                category2Count++;
+//            } else if (age >= 30 && age <= 44) {
+//                category3Count++;
+//            } else if (age >= 45 && age <= 59) {
+//                category4Count++;
+//            } else {
+//                category5Count++;
+//            }
+//        }
+//
+//        // Put counts into the map
+//        ageCategoryCounts.put("<15 yrs", category1Count);
+//        ageCategoryCounts.put("15-29 yrs", category2Count);
+//        ageCategoryCounts.put("30-44 yrs", category3Count);
+//        ageCategoryCounts.put("45-59 yrs", category4Count);
+//        ageCategoryCounts.put(">60 yrs", category5Count);
+//
+//        return ageCategoryCounts;
+//    }
+
+    public Map<String, Integer> calculateAgeCategoriesCount(List<UserProfile> profiles) {
         Map<String, Integer> ageCategoryCounts = new HashMap<>();
 
         // Initialize counters for different age categories
@@ -147,19 +187,40 @@ public class DashboardService {
     }
 
 
+//    public List<Integer> getBMICategoriesByGender(String gender) {
+//        List<UserProfile> profiles = userProfileRepository.findByGender(gender);
+//        return calculateBMICategoriesCount(profiles);
+//    }
+//
+//    public List<Integer> getMaleBMICategories() {
+//        List<UserProfile> maleProfiles = userProfileRepository.findByGender("Male");
+//        List<Integer> bmiCategoriesCount = calculateBMICategoriesCount(maleProfiles);
+//        return bmiCategoriesCount;
+//    }
 
-    public List<Integer> getBMICategoriesByGender(String gender) {
-        List<UserProfile> profiles = userProfileRepository.findByGender(gender);
-        return calculateBMICategoriesCount(profiles);
-    }
+//    private List<Integer> calculateBMICategoriesCount(List<UserProfile> profiles) {
+//        int underweightCount = 0;
+//        int normalCount = 0;
+//        int overweightCount = 0;
+//        int obeseCount = 0;
+//
+//        for (UserProfile profile : profiles) {
+//            double bmi = profile.getBmi();
+//            if (bmi < 18.5) {
+//                underweightCount++;
+//            } else if (bmi >= 18.5 && bmi < 25) {
+//                normalCount++;
+//            } else if (bmi >= 25 && bmi < 30) {
+//                overweightCount++;
+//            } else {
+//                obeseCount++;
+//            }
+//        }
+//
+//        return Arrays.asList(underweightCount, normalCount, overweightCount, obeseCount);
+//    }
 
-    public List<Integer> getMaleBMICategories() {
-        List<UserProfile> maleProfiles = userProfileRepository.findByGender("Male");
-        List<Integer> bmiCategoriesCount = calculateBMICategoriesCount(maleProfiles);
-        return bmiCategoriesCount;
-    }
-
-    private List<Integer> calculateBMICategoriesCount(List<UserProfile> profiles) {
+    public Map<String, Integer> calculateBMICategoriesCount(List<UserProfile> profiles) {
         int underweightCount = 0;
         int normalCount = 0;
         int overweightCount = 0;
@@ -178,11 +239,59 @@ public class DashboardService {
             }
         }
 
-        return Arrays.asList(underweightCount, normalCount, overweightCount, obeseCount);
+        Map<String, Integer> bmiCategoriesCount = new HashMap<>();
+        bmiCategoriesCount.put("underweightCount", underweightCount);
+        bmiCategoriesCount.put("normalCount", normalCount);
+        bmiCategoriesCount.put("overweightCount", overweightCount);
+        bmiCategoriesCount.put("obeseCount", obeseCount);
+
+        return bmiCategoriesCount;
+    }
+    public Map<String, Integer> calculateBMICategoriesCount(List<UserProfile> profiles, User currentUser) {
+        int underweightCount = 0;
+        int normalCount = 0;
+        int overweightCount = 0;
+        int obeseCount = 0;
+
+        for (UserProfile profile : profiles) {
+            double bmi = profile.getBmi();
+            if (bmi < 18.5) {
+                underweightCount++;
+            } else if (bmi >= 18.5 && bmi < 25) {
+                normalCount++;
+            } else if (bmi >= 25 && bmi < 30) {
+                overweightCount++;
+            } else {
+                obeseCount++;
+            }
+        }
+
+        Map<String, Integer> bmiCategoriesCount = new HashMap<>();
+        bmiCategoriesCount.put("underweightCount", underweightCount);
+        bmiCategoriesCount.put("normalCount", normalCount);
+        bmiCategoriesCount.put("overweightCount", overweightCount);
+        bmiCategoriesCount.put("obeseCount", obeseCount);
+
+        return bmiCategoriesCount;
     }
 
+    //    public Map<String, Integer> getBMICategoriesByGender(String gender, User currentUser) {
+//        List<UserProfile> profiles = userProfileRepository.findAllUserByGender(gender);
+//        return calculateBMICategoriesCount(profiles, currentUser);
+//    }
+    public Map<String, Integer> getBMICategoriesByGender(String gender) {
+        List<UserProfile> profiles = userProfileRepository.findAllUserByGender(gender);
+        return calculateBMICategoriesCount(profiles);
+    }
 
-
+    //    public Map<String, Integer> getMaleBMICategories(User currentUser) {
+//        List<UserProfile> maleProfiles = userProfileRepository.findAllUserByGender("Male");
+//        return calculateBMICategoriesCount(maleProfiles, currentUser);
+//    }
+    public Map<String, Integer> getMaleBMICategories() {
+        List<UserProfile> maleProfiles = userProfileRepository.findAllUserByGender("Male");
+        return calculateBMICategoriesCount(maleProfiles);
+    }
 
 
     public Map<String, Integer> getMonthlyUserRegistrations() {
@@ -429,21 +538,21 @@ public class DashboardService {
                 .collect(Collectors.toList());
     }
 
-//    public List<WaterEntity> getWaterEntitiesForLastWeek(User user) {
+    //    public List<WaterEntity> getWaterEntitiesForLastWeek(User user) {
 //        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
 //
 //        return user.getWaterEntities().stream()
 //                .filter(waterEntity -> waterEntity.getLocalDate().isAfter(oneWeekAgo))
 //                .collect(Collectors.toList());
 //    }
-public List<WaterEntry> getWaterEntriesForLastWeek(User user) {
-    LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+    public List<WaterEntry> getWaterEntriesForLastWeek(User user) {
+        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
 
-    return user.getWaterEntities().stream()
-            .flatMap(waterEntity -> waterEntity.getWaterEntries().stream())
-            .filter(waterEntry -> waterEntry.getLocalDate().isAfter(oneWeekAgo))
-            .collect(Collectors.toList());
-}
+        return user.getWaterEntities().stream()
+                .flatMap(waterEntity -> waterEntity.getWaterEntries().stream())
+                .filter(waterEntry -> waterEntry.getLocalDate().isAfter(oneWeekAgo))
+                .collect(Collectors.toList());
+    }
 
     public long getDishCountForDate(User user, LocalDate date) {
         if (user.getDishesList() == null) {
@@ -757,7 +866,7 @@ public List<WaterEntry> getWaterEntriesForLastWeek(User user) {
         return mostConsumedEntry.map(Map.Entry::getKey).orElse("No data"); // or any default value
     }
 
-//    public String calculateMostConsumedDrink(List<WaterEntity> drinks) {
+    //    public String calculateMostConsumedDrink(List<WaterEntity> drinks) {
 //        // Count occurrences of each drink
 //        Map<String, Double> drinkIntake = drinks.stream()
 //                .collect(Collectors.groupingBy(WaterEntity::getDrinkName, Collectors.summingDouble(WaterEntity::getWaterIntake)));
@@ -769,18 +878,18 @@ public List<WaterEntry> getWaterEntriesForLastWeek(User user) {
 //        // Get the result
 //        return mostConsumedDrinkEntry.map(entry -> entry.getValue() + " liters)").orElse("No data");
 //    }
-public String calculateMostConsumedDrink(List<WaterEntry> drinks) {
-    // Count occurrences of each drink
-    Map<String, Double> drinkIntake = drinks.stream()
-            .collect(Collectors.groupingBy(WaterEntry::getDrinkName, Collectors.summingDouble(WaterEntry::getWaterIntake)));
+    public String calculateMostConsumedDrink(List<WaterEntry> drinks) {
+        // Count occurrences of each drink
+        Map<String, Double> drinkIntake = drinks.stream()
+                .collect(Collectors.groupingBy(WaterEntry::getDrinkName, Collectors.summingDouble(WaterEntry::getWaterIntake)));
 
-    // Find the drink with the highest total intake (most consumed)
-    Optional<Map.Entry<String, Double>> mostConsumedDrinkEntry = drinkIntake.entrySet().stream()
-            .max(Map.Entry.comparingByValue());
+        // Find the drink with the highest total intake (most consumed)
+        Optional<Map.Entry<String, Double>> mostConsumedDrinkEntry = drinkIntake.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
 
-    // Get the result
-    return mostConsumedDrinkEntry.map(entry -> entry.getKey() + " (" + entry.getValue() + " liters)").orElse("No data");
-}
+        // Get the result
+        return mostConsumedDrinkEntry.map(entry -> entry.getKey() + " (" + entry.getValue() + " liters)").orElse("No data");
+    }
 
     public String calculateMostConsumedNutrient(List<Dishes> dishesList) {
         Map<String, Double> totalNutrientIntake = new HashMap<>();
@@ -818,6 +927,16 @@ public String calculateMostConsumedDrink(List<WaterEntry> drinks) {
         return mostConsumedNutrientEntry != null ?
                 mostConsumedNutrientEntry.getKey() :
                 "No data";
+    }
+
+    public TotalUsersDTO getTotalUsers() {
+        TotalUsersDTO totalUsersDTO = new TotalUsersDTO();
+
+        // Fetch total number of users
+        long totalUsers = userRepository.count();
+        totalUsersDTO.setTotalUsers(totalUsers);
+
+        return totalUsersDTO;
     }
 
 }

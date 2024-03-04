@@ -27,13 +27,13 @@ public class SleepDurationService {
     public SleepDurationService(SleepDurationRepository sleepDurationRepository) {
         this.sleepDurationRepository = sleepDurationRepository;
     }
-//    public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
+    //    public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
 //        return sleepDurationRepository.findByUserAndDateOfSleep(user, date);
 //    }
-public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
-    Optional<SleepDuration> optionalSleepDuration = sleepDurationRepository.findByUserAndDateOfSleep(user, date);
-    return optionalSleepDuration.orElse(null);
-}
+    public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
+        Optional<SleepDuration> optionalSleepDuration = sleepDurationRepository.findByUserAndDateOfSleep(user, date);
+        return optionalSleepDuration.orElse(null);
+    }
 
     public List<SleepDuration> findByUserAndDateOfSleepBetween(User user, LocalDate startDate, LocalDate endDate) {
         return sleepDurationRepository.findByUserAndDateOfSleepBetween(user, startDate, endDate);
@@ -166,5 +166,9 @@ public SleepDuration getSleepForUserAndDate(User user, LocalDate date) {
         return sleepMap;
     }
 
+
+    public List<SleepDuration> getSleepDurationsForToday(LocalDate today) {
+        return sleepDurationRepository.findByDateOfSleep(today);
+    }
 }
 

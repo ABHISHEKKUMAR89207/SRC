@@ -1,6 +1,7 @@
 package com.example.jwt.AdminDashboard;
 
 import com.example.jwt.entities.water.WaterEntry;
+import com.example.jwt.repository.UserProfileRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +57,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/dashboard")
+@CrossOrigin(origins = "http://localhost:3000")
 public class DashbaordController {
 
     private static final Logger logger = LoggerFactory.getLogger(DashbaordController.class);
@@ -78,6 +80,9 @@ public class DashbaordController {
 
     @Autowired
     private UserRepository userRepository;
+
+
+
 
 
 
@@ -130,7 +135,7 @@ public class DashbaordController {
 //        }
 //    }
 
-//
+    //
     @GetMapping("/dashboard.html")
     public String showDashboard(Model model) {
         dashboardService.setupModel(model);
@@ -383,6 +388,7 @@ public class DashbaordController {
     }
 
 
+
     @GetMapping("/user.html")
     public String showUser(Model model) {
         dashboardService.setupModel(model);
@@ -536,33 +542,82 @@ public class DashbaordController {
 
 
 
+//    @GetMapping("/gender-count")
+//    public ResponseEntity<Map<String, Long>> getGenderCountss(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Long> genderCounts = dashboardService.getGenderCounts();
+//        return ResponseEntity.ok(genderCounts);
+//    }
+
     @GetMapping("/gender-count")
-    public ResponseEntity<Map<String, Long>> getGenderCountss() {
+    public ResponseEntity<Map<String, Long>> getGenderCountss( ) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+
         Map<String, Long> genderCounts = dashboardService.getGenderCounts();
         return ResponseEntity.ok(genderCounts);
     }
 
 
+//    @GetMapping("/male-categories")
+//    public ResponseEntity<List<Integer>> getMaleBMICategoriess() {
+//        // Fetch BMI counts for males by category from your service
+//        List<Integer> maleBMICategories = dashboardService.getMaleBMICategories();
+//
+//        return ResponseEntity.ok(maleBMICategories);
+//    }
+//    @GetMapping("/female-categories")
+//    public ResponseEntity<List<Integer>> getFemaleBMICategories() {
+//        List<Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female");
+//        return ResponseEntity.ok(femaleBMICategories);
+//    }
 
-    @GetMapping("/male-categories")
-    public ResponseEntity<List<Integer>> getMaleBMICategoriess() {
-        // Fetch BMI counts for males by category from your service
-        List<Integer> maleBMICategories = dashboardService.getMaleBMICategories();
 
-        return ResponseEntity.ok(maleBMICategories);
+
+    //calculate bmi by gender wise
+    @GetMapping("/combined-bmi-categories")
+//    public ResponseEntity<Map<String, Map<String, Integer>>> getCombinedBMICategories(@RequestHeader("Auth") String tokenHeader) {
+    public ResponseEntity<Map<String, Map<String, Integer>>> getCombinedBMICategories() {
+
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+
+//        Map<String, Integer> maleBMICategories = dashboardService.getMaleBMICategories(user);
+//        Map<String, Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female", user);
+        Map<String, Integer> maleBMICategories = dashboardService.getMaleBMICategories();
+        Map<String, Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female");
+        Map<String, Map<String, Integer>> combinedCategories = new HashMap<>();
+        combinedCategories.put("maleCategories", maleBMICategories);
+        combinedCategories.put("femaleCategories", femaleBMICategories);
+
+        return ResponseEntity.ok(combinedCategories);
     }
-    @GetMapping("/female-categories")
-    public ResponseEntity<List<Integer>> getFemaleBMICategories() {
-        List<Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female");
-        return ResponseEntity.ok(femaleBMICategories);
-    }
 
 
+
+    @Autowired
+    private UserProfileRepository userProfileRepository;
+    //Age category wise
     @GetMapping("/age-categories")
+//    public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount(@RequestHeader("Auth") String tokenHeader) {
     public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount() {
-        Map<String, Integer> ageCategoryCounts = dashboardService.calculateAgeCategoriesCount();
+
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+
+        List<UserProfile> allUserProfiles = userProfileRepository.findAll(); // Fetch all user profiles
+        Map<String, Integer> ageCategoryCounts = dashboardService.calculateAgeCategoriesCount(allUserProfiles);
+
         return ResponseEntity.ok(ageCategoryCounts);
     }
+
+
 
 
     @GetMapping("/user-registration-by-month")
@@ -779,6 +834,9 @@ public class DashbaordController {
         model.addAttribute("userStatus", userStatus);
         return "userStatus"; // Return the Thymeleaf template to display user status
     }
+
+
+
 
 
 

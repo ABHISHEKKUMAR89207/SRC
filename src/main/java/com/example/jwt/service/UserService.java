@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public class UserService implements IUserService {
         return userRepository.findAll();
     }
 
-//    public Page<User> getAllUsers(Pageable pageable) {
+    //    public Page<User> getAllUsers(Pageable pageable) {
 //        return userRepository.findAll(pageable);
 //    }
     public User saveUser(User user) {
@@ -189,5 +190,11 @@ public class UserService implements IUserService {
         return userRepository.findById(userId);
     }
 
+    public List<User> getUsersWhoSleptToday(LocalDate today) {
+        // Implement the logic to retrieve users who slept today from the repository
+        // For example, you might have a method in UserRepository like findBySleepDate or similar
+        return userRepository.findByLocalDateBetween(today, today);
 
+
+    }
 }

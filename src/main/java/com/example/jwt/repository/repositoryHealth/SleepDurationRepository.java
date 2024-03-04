@@ -16,4 +16,5 @@ public interface SleepDurationRepository extends JpaRepository<SleepDuration,Lon
 
     List<SleepDuration> findByUserAndDateOfSleepBetween(User user, LocalDate startDate, LocalDate endDate);
 
+    List<SleepDuration> findByDateOfSleep(LocalDate today);
 }
