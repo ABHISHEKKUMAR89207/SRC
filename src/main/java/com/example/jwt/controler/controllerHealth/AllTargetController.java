@@ -136,6 +136,40 @@ public class AllTargetController {
     }
 
 
+    @PutMapping("/weight-goal")
+    public ResponseEntity<AllTarget> setOrUpdateWeightGoal(@RequestHeader("Auth") String tokenHeader, @RequestBody AllTarget weightGoal) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+            // Use the extracted username to associate the heart rate data with the user
+            weightGoal = allTargetService.weightGoal(weightGoal, username);
+            System.out.println("Username is " + username);
+            return new ResponseEntity<>(weightGoal, HttpStatus.CREATED);
+        } catch (Exception e) {
+            System.out.println("Username is " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/get-weight-goal")
+    public ResponseEntity<String> getUserWeightGoal(@RequestHeader("Auth") String tokenHeader) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            if (user != null && user.getAllTarget() != null) {
+                return new ResponseEntity<>(user.getAllTarget().getWeightGoal(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            // Handle any exceptions that may occur (e.g., token parsing error, database error)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 
 

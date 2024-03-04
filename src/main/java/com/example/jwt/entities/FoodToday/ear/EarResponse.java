@@ -17,7 +17,7 @@ public class EarResponse {
 
     private double energy;
     private double protein;
-    private boolean fatsOilsVisible;
+    private double fatsOilsVisible;
     private double fiber;
     private double calcium;
     private double magnesium;

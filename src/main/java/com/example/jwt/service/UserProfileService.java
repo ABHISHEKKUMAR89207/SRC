@@ -413,7 +413,7 @@ public Ear findEars(String age, String gender, String HGroup) {
 
             // Return specific nutrient values directly from Ear table
             return new EarResponse(matchingEar.getGender(), matchingEar.getAge(), matchingEar.getHgroup(), matchingEar.getWorkLevel(),
-                    matchingEar.getEnergy(), matchingEar.getProtein(), matchingEar.isFats(),
+                    matchingEar.getEnergy(), matchingEar.getProtein(), matchingEar.getFats(),
                     matchingEar.getFiber(), matchingEar.getCalcium(), matchingEar.getMagnesium(),
                     matchingEar.getIron(), matchingEar.getZinc(), matchingEar.getThiamine(),
                     matchingEar.getRiboflavin(), matchingEar.getNiacin(),matchingEar.getFolate(),matchingEar.getVitA(), matchingEar.getCarbohyderate());

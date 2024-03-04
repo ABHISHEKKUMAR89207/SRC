@@ -20,6 +20,8 @@ public class AllTarget {
     private int sleepTarget;
     private Double waterGoal;
 
+    private String weightGoal;
+
     @OneToOne
     @JsonIgnore
     @JoinColumn(name = "user_id")
