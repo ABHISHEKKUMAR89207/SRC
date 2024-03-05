@@ -1,7 +1,10 @@
 package com.example.jwt.AdminDashboard;
 
 import com.example.jwt.entities.water.WaterEntry;
+import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.UserProfileRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +33,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -488,7 +494,94 @@ public class DashbaordController {
         model.addAttribute("contactUs", contactUsList);
         return "contactUs";
     }
+    @Autowired
+    private JavaMailSender mailSender;
 
+    // ... (other imports)
+
+    @PostMapping("/send-email")
+    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) {
+        Optional<ContactUs> contactUsOptional = contactUsRepository.findById(emailRequest.getContactUsId());
+
+        if (contactUsOptional.isPresent()) {
+            ContactUs contactUs = contactUsOptional.get();
+            String to = contactUs.getEmail();
+            String subject = "Query from " + contactUs.getName();
+//            String body = "Name: " + contactUs.getName() + "\n"
+//                    + "Number: " + contactUs.getNumber() + "\n"
+//                    + "Email: " + contactUs.getEmail() + "\n"
+//                    + "Query: " + contactUs.getQueries();
+            String body = "Name: " + contactUs.getName() + "\n"
+                    + "Number: " + contactUs.getNumber() + "\n"
+                    + "Email: " + contactUs.getEmail() + "\n"
+                    + "Query: " + contactUs.getQueries() + "\n"
+                    + "Additional Message: " + emailRequest.getMessage();
+
+
+            // Add the additional message
+            String additionalMessage = "This is an additional message.";
+
+            try {
+                sendEmail(to, subject, body + "\n\n" + additionalMessage);
+                return new ResponseEntity<>("Email sent successfully!", HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Failed to send email: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>("ContactUs entry not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private void sendEmail(String to, String subject, String body) throws MailException, MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body);
+
+        mailSender.send(message);
+    }
+
+// ... (other code)
+
+
+    //    @PostMapping("/send-email")
+//    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest emailRequest) {
+//        Optional<ContactUs> contactUsOptional = contactUsRepository.findById(emailRequest.getContactUsId());
+//
+//        if (contactUsOptional.isPresent()) {
+//            ContactUs contactUs = contactUsOptional.get();
+//            String to = contactUs.getEmail();
+//            String subject = "Query from " + contactUs.getName();
+//            String body = "Name: " + contactUs.getName() + "\n"
+//                    + "Number: " + contactUs.getNumber() + "\n"
+//                    + "Email: " + contactUs.getEmail() + "\n"
+//                    + "Query: " + contactUs.getQueries();
+//
+//            try {
+//                sendEmail(to, subject, body);
+//                return new ResponseEntity<>("Email sent successfully!", HttpStatus.OK);
+//            } catch (Exception e) {
+//                return new ResponseEntity<>("Failed to send email: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//        } else {
+//            return new ResponseEntity<>("ContactUs entry not found", HttpStatus.NOT_FOUND);
+//        }
+//    }
+//
+//    private void sendEmail(String to, String subject, String body) throws MailException, MessagingException {
+//        MimeMessage message = mailSender.createMimeMessage();
+//        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//
+//        helper.setTo(to);
+//        helper.setSubject(subject);
+//        helper.setText(body);
+//
+//        mailSender.send(message);
+//    }
+    @Autowired
+    private ContactUsRepository contactUsRepository;
 
     @GetMapping("/contactUs/viewImage/{imageName}")
     public ResponseEntity<Resource> viewImage(@PathVariable String imageName) {
