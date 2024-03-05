@@ -17,6 +17,7 @@ import java.util.Optional;
 public interface WeightManagerRepository extends JpaRepository<WeightManager, Long> {
     Optional<WeightManager> findByLocalDateAndUser(LocalDate localDate, User user);
     List<WeightManager> findByUserAndLocalDateBetween(User user, LocalDate startDate, LocalDate endDate);
+    WeightManager findByUserAndLocalDate(User user, LocalDate localDate);
 
     @Query("SELECT w FROM WeightManager w WHERE w.user = :user ORDER BY w.localDate DESC")
     List<WeightManager> findLatestWeightByUser(@Param("user") User user);

@@ -29,6 +29,34 @@ public class WeightManagerController {
     private JwtHelper jwtHelper;
 
     // Save weight entry for a user on a specific date
+//    @PostMapping("/save-weight")
+//    public ResponseEntity<WeightManager> saveWeightEntry(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam Double weight,
+//            @RequestParam String date
+//    ) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            // Parse the date string to LocalDate
+//            LocalDate localDate = LocalDate.parse(date);
+//
+//            // Create a new WeightManager object
+//            WeightManager weightManager = new WeightManager();
+//            weightManager.setWeight(weight);
+//            weightManager.setLocalDate(localDate);
+//            weightManager.setUser(user);
+//
+//            // Save the weight entry
+//            WeightManager savedWeightEntry = weightManagerService.saveWeightEntry(weightManager);
+//
+//            return new ResponseEntity<>(savedWeightEntry, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
     @PostMapping("/save-weight")
     public ResponseEntity<WeightManager> saveWeightEntry(
             @RequestHeader("Auth") String tokenHeader,
@@ -43,20 +71,37 @@ public class WeightManagerController {
             // Parse the date string to LocalDate
             LocalDate localDate = LocalDate.parse(date);
 
-            // Create a new WeightManager object
-            WeightManager weightManager = new WeightManager();
-            weightManager.setWeight(weight);
-            weightManager.setLocalDate(localDate);
-            weightManager.setUser(user);
+            // Check if an entry already exists for the given date
+            WeightManager existingWeightEntry = weightManagerService.getWeightByUserAndDate(user, localDate);
 
-            // Save the weight entry
-            WeightManager savedWeightEntry = weightManagerService.saveWeightEntry(weightManager);
+            if (existingWeightEntry != null) {
+                // Update the existing entry with the new weight
+                existingWeightEntry.setWeight(weight);
+                WeightManager updatedWeightEntry = weightManagerService.saveWeightEntry(existingWeightEntry);
+                return new ResponseEntity<>(updatedWeightEntry, HttpStatus.OK);
+            } else {
+                // Create a new WeightManager object
+                WeightManager weightManager = new WeightManager();
+                weightManager.setWeight(weight);
+                weightManager.setLocalDate(localDate);
+                weightManager.setUser(user);
 
-            return new ResponseEntity<>(savedWeightEntry, HttpStatus.CREATED);
+                // Save the weight entry
+                WeightManager savedWeightEntry = weightManagerService.saveWeightEntry(weightManager);
+
+                return new ResponseEntity<>(savedWeightEntry, HttpStatus.CREATED);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @Autowired
+    private WeightManagerRepository weightManagerRepository;
+    public WeightManager getWeightByUserAndDate(User user, LocalDate date) {
+        return weightManagerRepository.findByUserAndLocalDate(user, date);
+    }
+
 
 //    // Get all weight entries for a user
 //    @GetMapping("/get-all-weights")

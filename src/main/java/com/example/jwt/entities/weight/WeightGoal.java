@@ -19,6 +19,7 @@
 //    private Long weightGoalId;
 //
 //    private String weightGoal;
+//    private Double weightChange;
 //
 //    @ManyToOne
 //    @JoinColumn(name = "user_id")

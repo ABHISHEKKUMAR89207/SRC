@@ -47,7 +47,7 @@ public class AllTargetService {
     }
 
     // To set the sleep target of a particular user
-    public AllTarget weightGoal(AllTarget weightGoal, String username) {
+    public AllTarget weightGoal(AllTarget allTarget, String username) {
         // Find the user by the username, and associate the sleep duration with that user
         User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
 
@@ -57,12 +57,13 @@ public class AllTargetService {
 
             if (existingWeightGoal != null) {
                 // Update the sleep target for the existing sleep duration
-                existingWeightGoal.setWeightGoal(weightGoal.getWeightGoal());
+                existingWeightGoal.setWeightGoal(allTarget.getWeightGoal());
+                existingWeightGoal.setWeightChange(allTarget.getWeightChange());
                 return allTargetRepository.save(existingWeightGoal);
             } else {
                 // If no existing sleep duration found, create a new one and set the sleep target
-                weightGoal.setUser(user);
-                return allTargetRepository.save(weightGoal);
+                allTarget.setUser(user);
+                return allTargetRepository.save(allTarget);
             }
         } else {
             // Handle the case where the user is not found

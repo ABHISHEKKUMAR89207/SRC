@@ -21,6 +21,7 @@ public class AllTarget {
     private Double waterGoal;
 
     private String weightGoal;
+    private Double weightChange;
 
     @OneToOne
     @JsonIgnore

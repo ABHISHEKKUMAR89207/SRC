@@ -2,6 +2,7 @@ package com.example.jwt.controler.controllerHealth;//package com.practice.spring
 
 import com.example.jwt.dtos.WaterGoalAndIntakeResponse;
 import com.example.jwt.dtos.WaterGoalDto;
+import com.example.jwt.dtos.WeightGoalResponse;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
 import com.example.jwt.entities.water.WaterEntity;
@@ -152,23 +153,44 @@ public class AllTargetController {
         }
     }
 
-    @GetMapping("/get-weight-goal")
-    public ResponseEntity<String> getUserWeightGoal(@RequestHeader("Auth") String tokenHeader) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-            User user = userService.findByUsername(username);
+//    @GetMapping("/get-weight-goal")
+//    public ResponseEntity<String> getUserWeightGoal(@RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null && user.getAllTarget() != null) {
+//                return new ResponseEntity<>(user.getAllTarget().getWeightGoal(), HttpStatus.OK);
+//            } else {
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            }
+//        } catch (Exception e) {
+//            // Handle any exceptions that may occur (e.g., token parsing error, database error)
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+@GetMapping("/get-weight-goal")
+public ResponseEntity<WeightGoalResponse> getUserWeightGoal(@RequestHeader("Auth") String tokenHeader) {
+    try {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
 
-            if (user != null && user.getAllTarget() != null) {
-                return new ResponseEntity<>(user.getAllTarget().getWeightGoal(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            // Handle any exceptions that may occur (e.g., token parsing error, database error)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        if (user != null && user.getAllTarget() != null) {
+            WeightGoalResponse response = new WeightGoalResponse(
+                    user.getAllTarget().getWeightGoal(),
+                    user.getAllTarget().getWeightChange()
+            );
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    } catch (Exception e) {
+        // Handle any exceptions that may occur (e.g., token parsing error, database error)
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
 }
 

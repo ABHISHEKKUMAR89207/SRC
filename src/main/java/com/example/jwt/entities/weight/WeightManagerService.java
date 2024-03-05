@@ -24,6 +24,9 @@ public class WeightManagerService {
     public WeightManager saveWeightEntry(WeightManager weightManager) {
         return weightManagerRepository.save(weightManager);
     }
+    public WeightManager getWeightByUserAndDate(User user, LocalDate date) {
+        return weightManagerRepository.findByUserAndLocalDate(user, date);
+    }
     // WeightManagerService.java
 //    public List<WeightResponseDto> getWeightByUserAndDateRange(User user, LocalDate startDate, LocalDate endDate) {
 //        List<WeightManager> weightManagers = weightManagerRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
