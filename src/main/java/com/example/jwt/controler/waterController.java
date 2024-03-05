@@ -329,9 +329,16 @@ public ResponseEntity<List<Map<String, Object>>> getUserWaterIntakeForCustomRang
         return parsedLocalTime.format(DateTimeFormatter.ofPattern("h:mm a"));
     }
 
-    private String formatWaterIntake(Double waterIntake) {
-        // Assuming waterIntake is in milliliters
-        return String.format("%.0fml", waterIntake);
+//    private String formatWaterIntake(Double waterIntake) {
+//        // Assuming waterIntake is in milliliters
+//        return String.format("%.0fl", waterIntake);
+//    }
+
+    private String formatWaterIntake(Double waterIntakeInMilliliters) {
+        // Assuming waterIntakeInMilliliters is already in milliliters
+        return String.format("%.1fL", waterIntakeInMilliliters);
     }
+
+
 
 }
