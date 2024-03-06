@@ -104,6 +104,17 @@ public class FoodDataController {
     }
 
 
+
+
+
+
+
+
+
+    @GetMapping("/all-row-food")
+    public List<NinDataDTO> getAllNinData() {
+        return foodDataService.getAllNinData();
+    }
 }
 
 

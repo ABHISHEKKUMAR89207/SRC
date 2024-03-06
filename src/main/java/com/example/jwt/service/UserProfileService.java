@@ -5,6 +5,7 @@ import com.example.jwt.entities.FoodToday.ear.EarRepository;
 import com.example.jwt.entities.FoodToday.ear.EarResponse;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
+import com.example.jwt.entities.UserProfileResponse;
 import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserProfileRepository;
@@ -551,8 +552,22 @@ public Ear findEars(String age, String gender, String HGroup) {
 
 
 
+    public UserProfileResponse getUserProfileDetails(Long userId) {
+        UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
 
+        if (userProfile == null) {
+            // Handle error: User not found
+            throw new RuntimeException("User not found for userId: " + userId);
+        }
 
+        // Check for null values and handle it appropriately
+        if (userProfile.getWorkLevel() == null || userProfile.getOccupation() == null) {
+            // You can throw an exception or return a default response
+            throw new RuntimeException("WorkLevel or Occupation is null for userId: " + userId);
+        }
+
+        return new UserProfileResponse(userProfile.getWorkLevel(), userProfile.getOccupation());
+    }
 
 
 }

@@ -35,6 +35,7 @@ public class UserProfile {
     private Integer heightIn;
 
     private String workLevel;
+    private String occupation;
 
 
 

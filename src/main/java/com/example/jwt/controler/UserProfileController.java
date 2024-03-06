@@ -1,6 +1,7 @@
 package com.example.jwt.controler;
 
 import com.example.jwt.entities.FoodToday.ear.Ear;
+import com.example.jwt.entities.FoodToday.ear.EarRepository;
 import com.example.jwt.entities.FoodToday.ear.EarResponse;
 import com.example.jwt.entities.FoodToday.ear.EarService;
 import com.example.jwt.entities.User;
@@ -30,6 +31,7 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -376,6 +378,23 @@ public ResponseEntity<EarResponse> getEarGroupAndWorkLevel(@RequestHeader("Auth"
     }
 }
 
+@Autowired
+private EarRepository earRepository;
+
+//    @GetMapping("/get-all-ear")
+//    public List<Ear> getAllEars() {
+//        return earRepository.findAll();
+//    }
+
+
+    @GetMapping("/get-all-ear")
+    public List<EarResponse> getAllEars() {
+        List<Ear> ears = earRepository.findAll();
+        List<EarResponse> earResponses = ears.stream()
+                .map(EarResponse::new)
+                .collect(Collectors.toList());
+        return earResponses;
+    }
 
 //@GetMapping("/ear")
 //@ResponseBody

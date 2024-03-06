@@ -64,13 +64,15 @@ public class securityConfig {
                                 .requestMatchers("/dashboard//contactUs/viewImage/{imageName}").permitAll()
 //                                .requestMatchers("/dashboard/dashboard.html").authenticated()
                                 .requestMatchers("/api/water/intake").permitAll()
-
+                                .requestMatchers("/api/profile/get-all-ear").permitAll()
                                 .requestMatchers("/recipes/all").permitAll()
                                 .requestMatchers("/foods/ing-details").permitAll()
                                 .requestMatchers("/dashboard/user-gender-count").permitAll()
                                 .requestMatchers("/dashboard/user-login").permitAll()
                                 .requestMatchers("/dashboard/all").permitAll()
                                 .requestMatchers("/api/booktables/{id}").permitAll()
+                                .requestMatchers("/api/food/all-row-food").permitAll()
+
                                 .requestMatchers("/api/booktables").permitAll()
                                 .requestMatchers("/api/contact-us/**").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()

@@ -26,6 +26,10 @@ public class EarService {
         return earRepository.findById(id);
     }
 
+    public List<Ear> getAllEarData() {
+        return earRepository.findAll();
+    }
+
 }
 
 //package com.example.jwt.entities.FoodToday.ear;

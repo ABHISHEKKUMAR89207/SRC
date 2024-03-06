@@ -5,7 +5,12 @@ import com.example.jwt.dtos.NinDataDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
+import jakarta.persistence.EntityManager;
+
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -304,6 +309,33 @@ public class FoodDataService {
 
         return dtos;
     }
+
+
+
+
+
+
+
+
+
+
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<NinDataDTO> getAllNinData() {
+        Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
+                "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
+                "nd.Energy, nd.carbohydrate, nd.Protein, nd.Total_Fat, " +
+                "nd.cholestrol, nd.sodium, nd.Total_Dietary_Fibre, " +
+                "nd.calcium, nd.iron, nd.potassium, nd.phosphorus, " +
+                "nd.magnesium, nd.zinc, nd.selenium, " +
+                "nd.copper, nd.manganese) FROM NinData nd");
+        return query.getResultList();
+    }
+
+
+
 
 
 
