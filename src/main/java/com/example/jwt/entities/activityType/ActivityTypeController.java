@@ -71,4 +71,16 @@ private UserProfileService userProfileService;
             return ResponseEntity.badRequest().body(null); // Adjust error handling as needed
         }
     }
+
+
+    @GetMapping("/get-all-occupations")
+    public ResponseEntity<List<String>> getAllOccupations() {
+        try {
+            List<String> occupations = activityTypeService.getAllOccupations();
+            return ResponseEntity.ok(occupations);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null); // Adjust error handling as needed
+        }
+    }
+
 }

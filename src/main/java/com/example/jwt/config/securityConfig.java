@@ -64,6 +64,7 @@ public class securityConfig {
                                 .requestMatchers("/dashboard//contactUs/viewImage/{imageName}").permitAll()
 //                                .requestMatchers("/dashboard/dashboard.html").authenticated()
                                 .requestMatchers("/api/water/intake").permitAll()
+                                .requestMatchers("/api/activity-types/get-all-occupations").permitAll()
                                 .requestMatchers("/api/profile/get-all-ear").permitAll()
                                 .requestMatchers("/recipes/all").permitAll()
                                 .requestMatchers("/foods/ing-details").permitAll()

@@ -75,8 +75,81 @@ public class UserProfileController {
     private ErrorRepository errorRepository;
     // to get the user's
     // profile
+//    @GetMapping("/get-userProfile")
+////    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
+//        User user = null; // Declare the user variable outside the try block
+//
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            logger.info("Hello ...");
+//
+//            // Fetch the user's data from both User and UserProfile entities
+//            user = userService.findByUsername(username);
+//            UserProfile userProfile = userProfileService.findByUsername(username);
+//            String dobString = String.valueOf(userProfile.getDateOfBirth());
+//            Integer age = calculatedAge(dobString);
+//
+//
+//            if (user != null && userProfile != null) {
+//                Map<String, Object> response = new HashMap<>();
+//                response.put("firstName", userProfile.getFirstName());
+//                response.put("lastName", userProfile.getLastName());
+//                response.put("gender", userProfile.getGender());
+//                response.put("email", user.getEmail());
+//                response.put("mobile", user.getMobileNo());
+////                response.put("height", userProfile.getHeight());
+//                response.put("heightFt", userProfile.getHeightFt());
+//                response.put("heightIn", userProfile.getHeightIn());
+//                response.put("weight", userProfile.getWeight());
+//                response.put("bmi", userProfile.getBmi());
+//                response.put("googleAccountLink", userProfile.getGoogleAccountLink());
+//                response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
+//                response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
+//                response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
+//
+//                response.put("Android App Link","https://play.google.com/store/apps/details?id=com.icmr.amr_treatment_guidelines&hl=en_IN&gl=US");
+//                response.put("IOS App Link","https://play.google.com/store/apps/details?id=com.icmr.amr_treatment_guidelines&hl=en_IN&gl=US");
+//                response.put("App message","\uD83C\uDF1F Elevate your health with Nutrify India Now 2.0! \uD83D\uDE80\n" +
+//                        "\uD83C\uDF4F Personalized insights, fitness tracking, nutrition guidance, and more! \n" +
+//                        "#NIN2Point0 #WellnessRevolution \n" +
+//                        "\uD83D\uDD17 Download Now :");
+//
+//                // Convert dateOfBirth to "yyyy-MM-dd" format
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//                String dobString1 = userProfile.getDateOfBirth().format(formatter);
+//                response.put("dateOfBirth", dobString1);
+//
+//                // Calculate the age
+//                response.put("age", age);
+//
+//                return ResponseEntity.ok(response);
+//            } else {
+//                Error error = new Error();
+//                error.setUser(user);
+//                error.setExceptionMessage("User Profile Not Created");
+//                error.setLocalDateTime(LocalDateTime.now()); // Set current date
+//                errorRepository.save(error);
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
+//            }
+//        } catch (Exception e) {
+//
+//            Error error = new Error();
+//            error.setUser(user); // Set the user if available
+//            error.setExceptionMessage("Exception occurred: " + e.getMessage());
+//            error.setStackTrace(Arrays.toString(e.getStackTrace()));
+//            error.setLocalDateTime(LocalDateTime.now()); // Set current date
+//            errorRepository.save(error);
+//            // Handle any exceptions, e.g., token validation failure
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
+//        }
+//    }
+
     @GetMapping("/get-userProfile")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
         User user = null; // Declare the user variable outside the try block
 
@@ -94,7 +167,6 @@ public class UserProfileController {
             String dobString = String.valueOf(userProfile.getDateOfBirth());
             Integer age = calculatedAge(dobString);
 
-
             if (user != null && userProfile != null) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("firstName", userProfile.getFirstName());
@@ -102,7 +174,6 @@ public class UserProfileController {
                 response.put("gender", userProfile.getGender());
                 response.put("email", user.getEmail());
                 response.put("mobile", user.getMobileNo());
-//                response.put("height", userProfile.getHeight());
                 response.put("heightFt", userProfile.getHeightFt());
                 response.put("heightIn", userProfile.getHeightIn());
                 response.put("weight", userProfile.getWeight());
@@ -111,6 +182,16 @@ public class UserProfileController {
                 response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
                 response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
+
+                // Add null checks for workLevel and occupation
+                if (userProfile.getWorkLevel() != null) {
+                    response.put("workLevel", userProfile.getWorkLevel());
+                }
+                if (userProfile.getOccupation() != null) {
+                    response.put("occupation", userProfile.getOccupation());
+                }
+
+                // Add other fields as needed
 
                 response.put("Android App Link","https://play.google.com/store/apps/details?id=com.icmr.amr_treatment_guidelines&hl=en_IN&gl=US");
                 response.put("IOS App Link","https://play.google.com/store/apps/details?id=com.icmr.amr_treatment_guidelines&hl=en_IN&gl=US");
@@ -137,7 +218,6 @@ public class UserProfileController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("error", "User Profile Not Created"));
             }
         } catch (Exception e) {
-
             Error error = new Error();
             error.setUser(user); // Set the user if available
             error.setExceptionMessage("Exception occurred: " + e.getMessage());

@@ -6,6 +6,7 @@ import com.example.jwt.repository.UserProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,5 +34,16 @@ public class ActivityTypeService {
         userProfile.setWorkLevel(activityType.getTypeOfActivity());
         userProfile.setOccupation(occupation);
         return userProfileRepository.save(userProfile);
+    }
+
+
+
+    public List<String> getAllOccupations() {
+        List<ActivityType> activityTypes = activityTypeRepository.findAll();
+        List<String> occupations = new ArrayList<>();
+        for (ActivityType activityType : activityTypes) {
+            occupations.add(activityType.getOccupation());
+        }
+        return occupations;
     }
 }
