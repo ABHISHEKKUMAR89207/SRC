@@ -18,4 +18,6 @@ public interface ActivityRepository extends JpaRepository<Activities, Long> {
     Activities findByUserAndActivityDate(User user, LocalDate date);
 
     List<Activities> findByActivityDateAndUserUserId(LocalDate date, Long userId);
+
+    List<Activities> findByActivityDateAndUser(LocalDate date, User user);
 }
