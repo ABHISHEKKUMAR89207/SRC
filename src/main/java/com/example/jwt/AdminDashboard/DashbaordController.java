@@ -60,6 +60,8 @@ import java.util.*;
 
 import java.util.stream.Collectors;
 
+import static com.example.jwt.AdminDashboard.DashboardService.getStateFromCoordinates;
+
 
 @Controller
 @RequestMapping("/dashboard")
@@ -506,23 +508,30 @@ public class DashbaordController {
         if (contactUsOptional.isPresent()) {
             ContactUs contactUs = contactUsOptional.get();
             String to = contactUs.getEmail();
-            String subject = "Query from " + contactUs.getName();
+//            String subject = "Query from " + contactUs.getName();
+            String subject = "" + contactUs.getQueries();
 //            String body = "Name: " + contactUs.getName() + "\n"
 //                    + "Number: " + contactUs.getNumber() + "\n"
 //                    + "Email: " + contactUs.getEmail() + "\n"
 //                    + "Query: " + contactUs.getQueries();
-            String body = "Name: " + contactUs.getName() + "\n"
-                    + "Number: " + contactUs.getNumber() + "\n"
-                    + "Email: " + contactUs.getEmail() + "\n"
-                    + "Query: " + contactUs.getQueries() + "\n"
-                    + "Additional Message: " + emailRequest.getMessage();
+            String body = "Hi " + contactUs.getName()+"," + "\n"
+//                    + "Number: " + contactUs.getNumber() + "\n"
+//                    + "Email: " + contactUs.getEmail() + "\n"
+                    + "Subject: " + contactUs.getQueries() + "\n"
+//                    + "Additional Message: " + emailRequest.getMessage();
+           + "" + emailRequest.getMessage();
 
 
-            // Add the additional message
-            String additionalMessage = "This is an additional message.";
+
+
+
+//            // Add the additional message
+//            String additionalMessage = "This is an additional message.";
+            String additionalMessage = "Regards,"+"\n"+"Team O2I";
 
             try {
                 sendEmail(to, subject, body + "\n\n" + additionalMessage);
+//                sendEmail(to, subject, body + "\n\n");
 
                 // Update the status to true after successfully sending the email
                 contactUs.setStatus(true);
@@ -553,7 +562,77 @@ public class DashbaordController {
         boolean status = dashboardService.getStatusById(id);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
+
 // ... (other code)
+
+
+    @GetMapping("/get-all-users-detail")
+    public ResponseEntity<CustomResponse> setupModel(Model model) {
+        // Retrieve all users from the repository
+        List<User> userList = userRepository.findAll();
+
+        // Calculate the total number of users
+        int totalUsers = userList.size();
+
+        // Create a map to store users grouped by state
+        Map<String, List<UserDTO>> usersByState = new HashMap<>();
+
+        // Create a list to store all UserDTOs
+        List<UserDTO> userDTOList = new ArrayList<>();
+
+        // Iterate through the user list and add the address for each user
+        for (User user : userList) {
+            Double latitude = user.getLatitude();
+            Double longitude = user.getLongitude();
+
+            // Calculate the state from coordinates
+            String state = null;
+
+            // Skip users with missing latitude or longitude
+            if (latitude != null && longitude != null) {
+                state = getStateFromCoordinates(latitude, longitude);
+            }
+
+            // Convert User entity to UserDTO and include the state
+            UserDTO userDTO = new UserDTO(
+                    user.getUserId(),
+                    user.getUserName(),
+                    user.getEmail(),
+                    user.getMobileNo(),
+                    user.getDeviceType(),
+                    latitude,
+                    longitude,
+//                    user.getAddress(),
+                    user.getLocalDate(),
+                    state // Include the state here
+            );
+
+            // Add the user to the list corresponding to their state
+            if (state != null) {
+                usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
+            }
+
+            // Add the UserDTO to the main list
+            userDTOList.add(userDTO);
+
+            // Set the address for each user (if needed)
+            if (state != null) {
+                user.setAddress(state);
+            }
+        }
+
+        // Create a response object with the data you want to send
+        CustomResponse customResponse = new CustomResponse(
+                userDTOList,
+                totalUsers
+        );
+
+        // Your additional logic if needed
+
+        // Return the response object with a status code
+        return ResponseEntity.ok(customResponse);
+    }
+
 
 
     //    @PostMapping("/send-email")
@@ -773,7 +852,7 @@ public class DashbaordController {
         // If selectedDate is null, use the current date
 //        LocalDate specificDate = (selectedDate != null) ? selectedDate : LocalDate.now();
         if (latitude != null && longitude != null) {
-            String state = dashboardService.getStateFromCoordinates(latitude, longitude);
+            String state = getStateFromCoordinates(latitude, longitude);
             System.out.println("State =====" + state);
             userStatus.setAddress(state);
         }
