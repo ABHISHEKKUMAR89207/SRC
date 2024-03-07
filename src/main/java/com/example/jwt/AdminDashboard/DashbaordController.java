@@ -523,6 +523,11 @@ public class DashbaordController {
 
             try {
                 sendEmail(to, subject, body + "\n\n" + additionalMessage);
+
+                // Update the status to true after successfully sending the email
+                contactUs.setStatus(true);
+                contactUsRepository.save(contactUs);
+
                 return new ResponseEntity<>("Email sent successfully!", HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>("Failed to send email: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -543,6 +548,11 @@ public class DashbaordController {
         mailSender.send(message);
     }
 
+    @GetMapping("/status/{id}")
+    public ResponseEntity<Boolean> getStatusById(@PathVariable Long id) {
+        boolean status = dashboardService.getStatusById(id);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
 // ... (other code)
 
 

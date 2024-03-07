@@ -37,6 +37,8 @@ public class ContactUs {
 
     private String imageData;
 
+    private boolean status;
+
     // Getters and Setters
 
     public Long getId() {

@@ -73,6 +73,12 @@ public class DashboardService {
     }
 
 
+
+    public boolean getStatusById(Long contactUsId) {
+        Optional<ContactUs> contactUsOptional = contactUsRepository.findById(contactUsId);
+        return contactUsOptional.map(ContactUs::isStatus).orElse(false);
+    }
+
     public Map<String, Long> getGenderCounts() {
 //        String queryString = "SELECT gender, COUNT(*) FROM UserProfile GROUP BY gender";
         String queryString = "SELECT up.gender, COUNT(*) FROM User u JOIN u.userProfile up GROUP BY up.gender";
