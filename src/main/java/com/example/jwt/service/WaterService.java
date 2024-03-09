@@ -371,61 +371,61 @@ private WaterEntryRepository waterEntryRepository;
         }
     }
 
-    public WaterEntity saveOrUpdateWaterEntity(String username, WaterEntity newWaterEntity) {
-        // Find the user by username
-        Optional<User> userOptional = userRepository.findByEmail(username);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-
-            // Find or create the WaterEntity for the specified date and user
-            LocalDate currentDate = LocalDate.now();
-            LocalTime localTime = LocalTime.now();
-            WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
-            LocalTime currentTime = LocalTime.now();
-
-            // Define the format for 12-hour clock
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
-
-            // Format the current time using the defined format
-            String formattedTime = currentTime.format(formatter);
-
-            if (existingWaterEntity == null) {
-                // If no entity exists for the current date and user, create a new one
-                WaterEntity waterEntity = new WaterEntity();
-                waterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
-                waterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
-                waterEntity.setLocalDate(currentDate);
-                waterEntity.setLocalTime(formattedTime);
-                waterEntity.setUser(user);
-
-                // Calculate and set the water intake based on the new data
-                waterEntity.setWaterIntake(calculateWaterIntake(waterEntity));
-
-                // Save the new WaterEntity
-                WaterEntity savedWaterEntity = waterEntityRepository.save(waterEntity);
-
-                // Return the saved WaterEntity
-                return savedWaterEntity;
-            } else {
-                // If an entity already exists for the current date and user
-                // Update cup capacity, number of cups, and recalculate water intake
-                existingWaterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
-                existingWaterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
-
-                // Calculate and set the updated water intake
-                existingWaterEntity.setWaterIntake(calculateWaterIntake(existingWaterEntity));
-
-                // Save the updated WaterEntity
-                WaterEntity savedWaterEntity = waterEntityRepository.save(existingWaterEntity);
-
-                // Return the saved WaterEntity
-                return savedWaterEntity;
-            }
-        } else {
-            throw new UserNotFoundException("User not found for username: " + username);
-        }
-    }
+//    public WaterEntity saveOrUpdateWaterEntity(String username, WaterEntity newWaterEntity) {
+//        // Find the user by username
+//        Optional<User> userOptional = userRepository.findByEmail(username);
+//
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//
+//            // Find or create the WaterEntity for the specified date and user
+//            LocalDate currentDate = LocalDate.now();
+//            LocalTime localTime = LocalTime.now();
+//            WaterEntity existingWaterEntity = waterEntityRepository.findByUserAndLocalDate(user, currentDate);
+//            LocalTime currentTime = LocalTime.now();
+//
+//            // Define the format for 12-hour clock
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a");
+//
+//            // Format the current time using the defined format
+//            String formattedTime = currentTime.format(formatter);
+//
+//            if (existingWaterEntity == null) {
+//                // If no entity exists for the current date and user, create a new one
+//                WaterEntity waterEntity = new WaterEntity();
+//                waterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
+//                waterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
+//                waterEntity.setLocalDate(currentDate);
+//                waterEntity.setLocalTime(formattedTime);
+//                waterEntity.setUser(user);
+//
+//                // Calculate and set the water intake based on the new data
+//                waterEntity.setWaterIntake(calculateWaterIntake(waterEntity));
+//
+//                // Save the new WaterEntity
+//                WaterEntity savedWaterEntity = waterEntityRepository.save(waterEntity);
+//
+//                // Return the saved WaterEntity
+//                return savedWaterEntity;
+//            } else {
+//                // If an entity already exists for the current date and user
+//                // Update cup capacity, number of cups, and recalculate water intake
+//                existingWaterEntity.setCupCapacity(newWaterEntity.getCupCapacity());
+//                existingWaterEntity.setNoOfCups(newWaterEntity.getNoOfCups());
+//
+//                // Calculate and set the updated water intake
+//                existingWaterEntity.setWaterIntake(calculateWaterIntake(existingWaterEntity));
+//
+//                // Save the updated WaterEntity
+//                WaterEntity savedWaterEntity = waterEntityRepository.save(existingWaterEntity);
+//
+//                // Return the saved WaterEntity
+//                return savedWaterEntity;
+//            }
+//        } else {
+//            throw new UserNotFoundException("User not found for username: " + username);
+//        }
+//    }
 
     // Calculate water intake based on cup capacity and updated number of cups
     private Double calculateWaterIntake(WaterEntity waterEntity) {

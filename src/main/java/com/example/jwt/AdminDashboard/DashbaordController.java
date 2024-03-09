@@ -105,7 +105,43 @@ public class DashbaordController {
 
     @Autowired
     private BookTableRepository bookTableRepository;
+@Autowired
+private demoService demoService;
 
+
+
+    @GetMapping("/average-water-intake")
+    @ResponseBody
+    public Map<String, Map<String, Double>> getAverageWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        // Check if the user is authenticated
+        if (user == null) {
+            // User is not authenticated, return an empty map or handle the error appropriately
+            return Collections.emptyMap();
+        }
+        return demoService.calculateAverageWaterIntake();
+    }
+
+
+    @GetMapping("/average-heart-rate")
+    @ResponseBody
+    public Map<String, Map<String, Double>> getAverageHeartRate(@RequestHeader("Auth") String tokenHeader) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        // Check if the user is authenticated
+        if (user == null) {
+            // User is not authenticated, return an empty map or handle the error appropriately
+            return Collections.emptyMap();
+        }
+        return demoService.calculateAverageHeartRate();
+    }
 
 //    @PostMapping("/user-login")
 //    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(

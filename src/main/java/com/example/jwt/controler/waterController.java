@@ -63,15 +63,15 @@ public class waterController {
     }
 
     // to get the water intake of the last week
-    @GetMapping("/calculate-intake-last-week")
-    public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(@RequestHeader("Auth") String tokenHeader) {
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
-
-        Map<String, Double> waterIntakeMap = waterService.calculateWaterIntakeForLastWeek(user);
-        return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
-    }
+//    @GetMapping("/calculate-intake-last-week")
+//    public ResponseEntity<Map<String, Double>> calculateWaterIntakeForLastWeek(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Double> waterIntakeMap = waterService.calculateWaterIntakeForLastWeek(user);
+//        return new ResponseEntity<>(waterIntakeMap, HttpStatus.OK);
+//    }
 
     // to update the water entity
 //    @PostMapping("/update-water-entity")
@@ -87,56 +87,56 @@ public class waterController {
 //    }
     @Autowired
     private UserRepository userRepository;
-    @PostMapping("/update-water-entity")
-    public ResponseEntity<String> updateWaterEntity(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity newWaterEntity) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-            WaterEntity updatedWaterEntity = waterService.saveOrUpdateWaterEntity(username, newWaterEntity);
+//    @PostMapping("/update-water-entity")
+//    public ResponseEntity<String> updateWaterEntity(@RequestHeader("Auth") String tokenHeader, @RequestBody WaterEntity newWaterEntity) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            WaterEntity updatedWaterEntity = waterService.saveOrUpdateWaterEntity(username, newWaterEntity);
+//
+//            return new ResponseEntity<>("Water entity updated successfully. New water intake: " + updatedWaterEntity.getWaterIntake(), HttpStatus.OK);
+//        } catch (UserNotFoundException e) {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
+//    }
 
-            return new ResponseEntity<>("Water entity updated successfully. New water intake: " + updatedWaterEntity.getWaterIntake(), HttpStatus.OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
-    }
 
-
-    @GetMapping("/get-water-intake/custom-range")
-    public ResponseEntity<Map<LocalDate, Double>> getWaterIntakeForCustomRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestHeader("Auth") String tokenHeader) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-
-            Optional<User> userOptional = userRepository.findByEmail(username);
-
-            if (userOptional.isPresent()) {
-                User user = userOptional.get();
-
-                // Retrieve water entries within the custom date range
-                List<WaterEntity> waterEntries = waterEntityRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
-
-                // Create a map to store water intake for each date
-                Map<LocalDate, Double> waterIntakeMap = new HashMap<>();
-
-                // Populate the water intake map with data from the retrieved entities
-                for (WaterEntity waterEntity : waterEntries) {
-                    waterIntakeMap.put(waterEntity.getLocalDate(), waterEntity.calculateTotalWaterIntake());
-                }
-
-                return ResponseEntity.ok(waterIntakeMap);
-            } else {
-                throw new UserNotFoundException("User not found for username: " + username);
-            }
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+//    @GetMapping("/get-water-intake/custom-range")
+//    public ResponseEntity<Map<LocalDate, Double>> getWaterIntakeForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            Optional<User> userOptional = userRepository.findByEmail(username);
+//
+//            if (userOptional.isPresent()) {
+//                User user = userOptional.get();
+//
+//                // Retrieve water entries within the custom date range
+//                List<WaterEntity> waterEntries = waterEntityRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
+//
+//                // Create a map to store water intake for each date
+//                Map<LocalDate, Double> waterIntakeMap = new HashMap<>();
+//
+//                // Populate the water intake map with data from the retrieved entities
+//                for (WaterEntity waterEntity : waterEntries) {
+//                    waterIntakeMap.put(waterEntity.getLocalDate(), waterEntity.calculateTotalWaterIntake());
+//                }
+//
+//                return ResponseEntity.ok(waterIntakeMap);
+//            } else {
+//                throw new UserNotFoundException("User not found for username: " + username);
+//            }
+//        } catch (UserNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
 
 
 
@@ -147,7 +147,7 @@ public class waterController {
             String username = jwtHelper.getUsernameFromToken(token);
             WaterEntity updatedWaterEntity = waterService.saveOrUpdateWaterEntity1(username, newWaterEntity);
 
-            return new ResponseEntity<>("Water entity updated successfully. New water intake: " + updatedWaterEntity.getWaterIntake(), HttpStatus.OK);
+            return new ResponseEntity<>("Water entity updated successfully. New water intake: ", HttpStatus.OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         }

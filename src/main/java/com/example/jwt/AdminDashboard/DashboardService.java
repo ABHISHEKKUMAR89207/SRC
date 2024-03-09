@@ -72,7 +72,31 @@ public class DashboardService {
         return feedbackRepository.findAll();
     }
 
+//    public Map<String, Double> calculateAverageWaterIntakeByGenderAndAge() {
+//        List<UserProfile> userProfiles = userProfileRepository.findAll();
+//        Map<String, Double> averageIntakeByGenderAndAge = new HashMap<>();
+//
+//        // Group user profiles by gender and age
+//        Map<String, List<UserProfile>> profilesByGenderAndAge = userProfiles.stream()
+//                .collect(Collectors.groupingBy(profile -> profile.getGender() + "-" + calculateAge(profile.getDateOfBirth())));
+//
+//        // Calculate average water intake for each group
+//        profilesByGenderAndAge.forEach((genderAge, profiles) -> {
+//            double totalWaterIntake = profiles.stream()
+//                    .mapToDouble(profile -> profile.getWaterEntity().calculateTotalWaterIntake())
+//                    .sum();
+//            double averageWaterIntake = totalWaterIntake / profiles.size();
+//            averageIntakeByGenderAndAge.put(genderAge, averageWaterIntake);
+//        });
+//
+//        return averageIntakeByGenderAndAge;
+//    }
 
+    // Calculate age based on date of birth
+    private int calculateAge(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        return Period.between(dateOfBirth, currentDate).getYears();
+    }
 
     public boolean getStatusById(Long contactUsId) {
         Optional<ContactUs> contactUsOptional = contactUsRepository.findById(contactUsId);
