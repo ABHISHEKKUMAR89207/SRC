@@ -567,7 +567,17 @@ public class DashbaordController {
 
 
     @GetMapping("/get-all-users-detail")
-    public ResponseEntity<CustomResponse> setupModel(Model model) {
+    public ResponseEntity<CustomResponse> setupModel(@RequestHeader("Auth") String tokenHeader, Model model) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user1 = userService.findByUsername(username);
+
+        // Check if the user is authenticated
+        if (user1 == null) {
+            // User is not authenticated, return unauthorized status code
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         // Retrieve all users from the repository
         List<User> userList = userRepository.findAll();
 
@@ -735,10 +745,15 @@ public class DashbaordController {
 //    }
 
     @GetMapping("/gender-count")
-    public ResponseEntity<Map<String, Long>> getGenderCountss( ) {
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        User user = userService.findByUsername(username);
+    public ResponseEntity<Map<String, Long>> getGenderCountss(@RequestHeader("Auth") String tokenHeader ) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+        // Check if the user is authenticated
+        if (user == null) {
+            // User is not authenticated, return unauthorized status code
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         Map<String, Long> genderCounts = dashboardService.getGenderCounts();
         return ResponseEntity.ok(genderCounts);
@@ -762,17 +777,17 @@ public class DashbaordController {
 
     //calculate bmi by gender wise
     @GetMapping("/combined-bmi-categories")
-//    public ResponseEntity<Map<String, Map<String, Integer>>> getCombinedBMICategories(@RequestHeader("Auth") String tokenHeader) {
-    public ResponseEntity<Map<String, Map<String, Integer>>> getCombinedBMICategories() {
+    public ResponseEntity<Map<String, Map<String, Integer>>> getCombinedBMICategories(@RequestHeader("Auth") String tokenHeader) {
+//    public ResponseEntity<Map<String, Map<String, Integer>>> getCombinedBMICategories() {
 
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        User user = userService.findByUsername(username);
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
 
-//        Map<String, Integer> maleBMICategories = dashboardService.getMaleBMICategories(user);
-//        Map<String, Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female", user);
-        Map<String, Integer> maleBMICategories = dashboardService.getMaleBMICategories();
-        Map<String, Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female");
+        Map<String, Integer> maleBMICategories = dashboardService.getMaleBMICategories(user);
+        Map<String, Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female", user);
+//        Map<String, Integer> maleBMICategories = dashboardService.getMaleBMICategories();
+//        Map<String, Integer> femaleBMICategories = dashboardService.getBMICategoriesByGender("Female");
         Map<String, Map<String, Integer>> combinedCategories = new HashMap<>();
         combinedCategories.put("maleCategories", maleBMICategories);
         combinedCategories.put("femaleCategories", femaleBMICategories);
@@ -786,12 +801,19 @@ public class DashbaordController {
     private UserProfileRepository userProfileRepository;
     //Age category wise
     @GetMapping("/age-categories")
-//    public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount(@RequestHeader("Auth") String tokenHeader) {
-    public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount() {
+    public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount(@RequestHeader("Auth") String tokenHeader) {
+//    public ResponseEntity<Map<String, Integer>> getAgeCategoriesCount() {
 
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        User user = userService.findByUsername(username);
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        // Check if the user is authenticated
+        if (user == null) {
+            // User is not authenticated, return unauthorized status code
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
 
         List<UserProfile> allUserProfiles = userProfileRepository.findAll(); // Fetch all user profiles
         Map<String, Integer> ageCategoryCounts = dashboardService.calculateAgeCategoriesCount(allUserProfiles);
@@ -801,32 +823,42 @@ public class DashbaordController {
 
 
 
+//jwt done
+@GetMapping("/user-registration-by-month")
+public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestHeader("Auth") String tokenHeader,
+                                                                      @RequestParam(name = "year") int year) {
+    String token = tokenHeader.replace("Bearer ", "");
+    String username = jwtHelper.getUsernameFromToken(token);
+    User user = userService.findByUsername(username);
 
-    @GetMapping("/user-registration-by-month")
-    public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestParam(name = "year") int year) {
-        List<User> users = userRepository.findAll(); // Retrieve all users
-
-        Map<String, Integer> userCountByMonth = new LinkedHashMap<>();
-        DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
-
-        // Initialize counts for all months to zero
-        for (int month = 1; month <= 12; month++) {
-            String monthName = YearMonth.of(year, month).format(monthFormatter);
-            userCountByMonth.put(monthName, 0);
-        }
-
-        for (User user : users) {
-            LocalDate registrationDate = user.getRegistrationTimestamp().toLocalDate();
-
-            // Filter users by the selected year
-            if (registrationDate.getYear() == year) {
-                String monthName = registrationDate.format(monthFormatter);
-                userCountByMonth.put(monthName, userCountByMonth.get(monthName) + 1);
-            }
-        }
-
-        return ResponseEntity.ok(userCountByMonth);
+    // Authorization logic to check if the user is allowed to access this endpoint
+    if (user == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    List<User> users = userRepository.findAll(); // Retrieve all users
+
+    Map<String, Integer> userCountByMonth = new LinkedHashMap<>();
+    DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM", Locale.ENGLISH);
+
+    // Initialize counts for all months to zero
+    for (int month = 1; month <= 12; month++) {
+        String monthName = YearMonth.of(year, month).format(monthFormatter);
+        userCountByMonth.put(monthName, 0);
+    }
+
+    for (User user1 : users) {
+        LocalDate registrationDate = user1.getRegistrationTimestamp().toLocalDate();
+
+        // Filter users by the selected year
+        if (registrationDate.getYear() == year) {
+            String monthName = registrationDate.format(monthFormatter);
+            userCountByMonth.put(monthName, userCountByMonth.get(monthName) + 1);
+        }
+    }
+
+    return ResponseEntity.ok(userCountByMonth);
+}
     @GetMapping("/userStatus.html")
     public String userStatus(Model model) {
         List<Feedback> feedbackList = dashboardService.getAllFeedbackData();
@@ -836,34 +868,194 @@ public class DashbaordController {
 
 
 
-    @GetMapping("/userStatus/{userId}")
-    public String userStatus(@PathVariable Long userId,
-//                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
-                             Model model) {
-        User userStatus = userRepository.findByUserId(userId);
-
-        // Add the state information to the userStatus object
-        Double latitude = userStatus.getLatitude();
-        Double longitude = userStatus.getLongitude();
-
-        // Specify the date for which you want to get the dish count
-//        LocalDate specificDate = LocalDate.of(2024, 1, 12); // Update with your specific date
-        LocalDate specificDate = LocalDate.now(); // Update with your specific date
-        // If selectedDate is null, use the current date
-//        LocalDate specificDate = (selectedDate != null) ? selectedDate : LocalDate.now();
-        if (latitude != null && longitude != null) {
-            String state = getStateFromCoordinates(latitude, longitude);
-            System.out.println("State =====" + state);
-            userStatus.setAddress(state);
-        }
-
-//    // Calculate age from date of birth
-//    LocalDate dateOfBirth = userStatus.getUserProfile().getDateOfBirth();
-//    if (dateOfBirth != null) {
-//        LocalDate now = LocalDate.now();
-//        int age = Period.between(dateOfBirth, now).getYears();
-//        model.addAttribute("age", age);
+//    @GetMapping("/userStatus/{userId}")
+//    public String userStatus(@PathVariable Long userId,
+////                             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
+//                             Model model) {
+//        User userStatus = userRepository.findByUserId(userId);
+//
+//        // Add the state information to the userStatus object
+//        Double latitude = userStatus.getLatitude();
+//        Double longitude = userStatus.getLongitude();
+//
+//        // Specify the date for which you want to get the dish count
+////        LocalDate specificDate = LocalDate.of(2024, 1, 12); // Update with your specific date
+//        LocalDate specificDate = LocalDate.now(); // Update with your specific date
+//        // If selectedDate is null, use the current date
+////        LocalDate specificDate = (selectedDate != null) ? selectedDate : LocalDate.now();
+//        if (latitude != null && longitude != null) {
+//            String state = getStateFromCoordinates(latitude, longitude);
+//            System.out.println("State =====" + state);
+//            userStatus.setAddress(state);
+//        }
+//
+////    // Calculate age from date of birth
+////    LocalDate dateOfBirth = userStatus.getUserProfile().getDateOfBirth();
+////    if (dateOfBirth != null) {
+////        LocalDate now = LocalDate.now();
+////        int age = Period.between(dateOfBirth, now).getYears();
+////        model.addAttribute("age", age);
+////    }
+//        // Calculate age from date of birth
+//        UserProfile userProfile = userStatus.getUserProfile();
+//        if (userProfile != null) {
+//            LocalDate dateOfBirth = userProfile.getDateOfBirth();
+//            if (dateOfBirth != null) {
+//                LocalDate now = LocalDate.now();
+//                int age = Period.between(dateOfBirth, now).getYears();
+//                model.addAttribute("age", age);
+//            }
+//        }
+//
+//
+//        // Get activities for the last week
+//        List<Activities> activitiesForLastWeek = dashboardService.getActivitiesForLastWeek(userStatus);
+//
+//        // Calculate average steps for the last week
+//        double averageStepsLastWeek = activitiesForLastWeek.stream()
+//                .mapToInt(Activities::getSteps)
+//                .average()
+//                .orElse(0.0); // Set default value if no activities found
+//
+//        // Add average steps to the model
+//        model.addAttribute("averageStepsLastWeek", averageStepsLastWeek);
+//
+//
+//        // Get sleep durations for the last week
+//        List<SleepDuration> sleepDurationsForLastWeek = dashboardService.getSleepDurationsForLastWeek(userStatus);
+//
+//        // Calculate total sleep duration and number of days within the last week
+//        double totalSleepDuration = sleepDurationsForLastWeek.stream()
+//                .mapToDouble(SleepDuration::getManualDuration)
+//                .sum();
+//
+//        long numOfDays = sleepDurationsForLastWeek.stream()
+//                .map(SleepDuration::getDateOfSleep)
+//                .distinct()
+//                .count();
+//
+//        // Calculate average hours of sleep per day
+//        double averageHoursOfSleepPerDay = numOfDays > 0 ?
+//                totalSleepDuration / numOfDays : 0;
+//
+//        // Add average hours of sleep to the model
+//        model.addAttribute("averageHoursOfSleepPerDay", averageHoursOfSleepPerDay);
+//
+////
+//        // Calculate average water intake per day for the last week
+//        List<WaterEntry> waterEntriesForLastWeek = dashboardService.getWaterEntriesForLastWeek(userStatus);
+//
+//        double averageWaterIntakePerDay = waterEntriesForLastWeek.stream()
+//                .mapToDouble(WaterEntry::getWaterIntake)
+//                .average()
+//                .orElse(0.0);
+//
+//        // Add average water intake per day to the model
+//        model.addAttribute("averageWaterIntakePerDay", averageWaterIntakePerDay);
+//
+//
+////        // Calculate dish count for the specific date
+//        long dishCount = dashboardService.getDishCountForDate(userStatus, specificDate);
+////
+////        // Add dish count to the model
+//        model.addAttribute("dishCount", dishCount);
+//        // Calculate dish count for the specific date
+////        long dishCount = getDishCountForDate(userStatus, specificDate);
+////
+////        // Add dish count and selected date to the model
+////        model.addAttribute("dishCount", dishCount);
+////        model.addAttribute("selectedDate", specificDate);
+//
+//
+//        // Update the calling code to pass the list of Dishes from the User object
+//        String mostFrequentlyConsumedMeal = dashboardService.calculateMostFrequentlyConsumedMeal(userStatus.getDishesList());
+//// Add the most frequently consumed meal to the model
+//        model.addAttribute("mostFrequentlyConsumedMeal", mostFrequentlyConsumedMeal);
+//
+//        // Calculate most skipped meal
+//        String mostSkippedMeal = dashboardService.calculateMostSkippedMeal(userStatus.getDishesList());
+//
+//        // Add the most skipped meal to the model
+//        model.addAttribute("mostSkippedMeal", mostSkippedMeal);
+//
+//        // Calculate most consumed dish
+//        String mostConsumedDish = dashboardService.calculateMostConsumedDish(userStatus.getDishesList());
+//
+//        // Add the most consumed dish to the model
+//        model.addAttribute("mostConsumedDish", mostConsumedDish);
+//        // Calculate most consumed breakfast
+////        String mostConsumedBreakfast = calculateMostConsumedBreakfast(userStatus.getDishesList());
+////
+//
+//        // Example usage in your controller methods
+//        String mostConsumedBreakfast = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Breakfast");
+//        model.addAttribute("mostConsumedBreakfast", mostConsumedBreakfast);
+//
+//        String mostConsumedLunch = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Lunch");
+//        model.addAttribute("mostConsumedLunch", mostConsumedLunch);
+//
+//        String mostConsumedDinner = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Dinner");
+//        model.addAttribute("mostConsumedDinner", mostConsumedDinner);
+//
+//        String mostConsumedSnacks = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Snacks");
+//        model.addAttribute("mostConsumedSnacks", mostConsumedSnacks);
+//
+//        // Example usage in your controller method
+////        String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(userStatus.getWaterEntities());
+////        model.addAttribute("mostConsumedDrink", mostConsumedDrink);
+////        List<WaterEntry> waterEntriesForLastWeek = dashboardService.getWaterEntriesForLastWeek(userStatus);
+//
+//        String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(waterEntriesForLastWeek);
+//        model.addAttribute("mostConsumedDrink", mostConsumedDrink);
+//
+//        String mostConsumedNutrient = dashboardService.calculateMostConsumedNutrient(userStatus.getDishesList());
+//        model.addAttribute("mostConsumedNutrient", mostConsumedNutrient);
+//
+//        String leastConsumedNutrient = dashboardService.calculateLeastConsumedNutrient(userStatus.getDishesList());
+//        model.addAttribute("leastConsumedNutrient", leastConsumedNutrient);
+//
+//        // Example usage in your controller method
+//        String mostProteinRichDiet = dashboardService.calculateMostConsumedProteinRichDiet(userStatus.getDishesList());
+//
+//// Add the most consumed protein-rich diet to the model
+//        model.addAttribute("mostProteinRichDiet", mostProteinRichDiet);
+//        // Example usage in your controller method
+//        String mostIronRichDiet = dashboardService.calculateMostConsumedIronRichDiet(userStatus.getDishesList());
+//
+//// Add the most consumed iron-rich diet to the model
+//        model.addAttribute("mostIronRichDiet", mostIronRichDiet);
+//
+//        // Example usage in your controller method
+//        String mostCalciumRichDiet = dashboardService.calculateMostConsumedCalciumRichDiet(userStatus.getDishesList());
+//
+//// Add the most consumed calcium-rich diet to the model
+//        model.addAttribute("mostCalciumRichDiet", mostCalciumRichDiet);
+//// Example usage in your controller method
+//        String mostCalorieRichDiet = dashboardService.calculateMostConsumedCalorieRichDiet(userStatus.getDishesList());
+//
+//// Add the most consumed calorie-rich diet to the model
+//        model.addAttribute("mostCalorieRichDiet", mostCalorieRichDiet);
+//
+//
+//// Example usage in your controller method
+//        String mostCHORichDiet = dashboardService.calculateMostConsumedCHORichDiet(userStatus.getDishesList());
+//
+//// Add the most consumed CHO-rich diet to the model
+//        model.addAttribute("mostCHORichDiet", mostCHORichDiet);
+//
+//
+//        // Add the userStatus data to the model
+//        model.addAttribute("userStatus", userStatus);
+//        return "userStatus"; // Return the Thymeleaf template to display user status
 //    }
+
+
+
+    @GetMapping("/userStatus/{userId}")
+    public UserStatusResponse userStatus(@PathVariable Long userId) {
+        User userStatus = userRepository.findByUserId(userId);
+        UserStatusResponse response = new UserStatusResponse();
+
         // Calculate age from date of birth
         UserProfile userProfile = userStatus.getUserProfile();
         if (userProfile != null) {
@@ -871,10 +1063,9 @@ public class DashbaordController {
             if (dateOfBirth != null) {
                 LocalDate now = LocalDate.now();
                 int age = Period.between(dateOfBirth, now).getYears();
-                model.addAttribute("age", age);
+                response.setAge(age);
             }
         }
-
 
         // Get activities for the last week
         List<Activities> activitiesForLastWeek = dashboardService.getActivitiesForLastWeek(userStatus);
@@ -884,10 +1075,7 @@ public class DashbaordController {
                 .mapToInt(Activities::getSteps)
                 .average()
                 .orElse(0.0); // Set default value if no activities found
-
-        // Add average steps to the model
-        model.addAttribute("averageStepsLastWeek", averageStepsLastWeek);
-
+        response.setAverageStepsLastWeek(averageStepsLastWeek);
 
         // Get sleep durations for the last week
         List<SleepDuration> sleepDurationsForLastWeek = dashboardService.getSleepDurationsForLastWeek(userStatus);
@@ -905,125 +1093,79 @@ public class DashbaordController {
         // Calculate average hours of sleep per day
         double averageHoursOfSleepPerDay = numOfDays > 0 ?
                 totalSleepDuration / numOfDays : 0;
+        response.setAverageHoursOfSleepPerDay(averageHoursOfSleepPerDay);
 
-        // Add average hours of sleep to the model
-        model.addAttribute("averageHoursOfSleepPerDay", averageHoursOfSleepPerDay);
-
-//
-        // Calculate average water intake per day for the last week
+        // Get water entries for the last week
         List<WaterEntry> waterEntriesForLastWeek = dashboardService.getWaterEntriesForLastWeek(userStatus);
 
+        // Calculate average water intake per day for the last week
         double averageWaterIntakePerDay = waterEntriesForLastWeek.stream()
                 .mapToDouble(WaterEntry::getWaterIntake)
                 .average()
                 .orElse(0.0);
+        response.setAverageWaterIntakePerDay(averageWaterIntakePerDay);
 
-        // Add average water intake per day to the model
-        model.addAttribute("averageWaterIntakePerDay", averageWaterIntakePerDay);
-
-
-//        // Calculate dish count for the specific date
-        long dishCount = dashboardService.getDishCountForDate(userStatus, specificDate);
-//
-//        // Add dish count to the model
-        model.addAttribute("dishCount", dishCount);
         // Calculate dish count for the specific date
-//        long dishCount = getDishCountForDate(userStatus, specificDate);
-//
-//        // Add dish count and selected date to the model
-//        model.addAttribute("dishCount", dishCount);
-//        model.addAttribute("selectedDate", specificDate);
+        LocalDate specificDate = LocalDate.now(); // Update with your specific date
+        long dishCount = dashboardService.getDishCountForDate(userStatus, specificDate);
+        response.setDishCount(dishCount);
 
-
-        // Update the calling code to pass the list of Dishes from the User object
+        // Calculate most frequently consumed meal
         String mostFrequentlyConsumedMeal = dashboardService.calculateMostFrequentlyConsumedMeal(userStatus.getDishesList());
-// Add the most frequently consumed meal to the model
-        model.addAttribute("mostFrequentlyConsumedMeal", mostFrequentlyConsumedMeal);
+        response.setMostFrequentlyConsumedMeal(mostFrequentlyConsumedMeal);
 
         // Calculate most skipped meal
         String mostSkippedMeal = dashboardService.calculateMostSkippedMeal(userStatus.getDishesList());
-
-        // Add the most skipped meal to the model
-        model.addAttribute("mostSkippedMeal", mostSkippedMeal);
+        response.setMostSkippedMeal(mostSkippedMeal);
 
         // Calculate most consumed dish
         String mostConsumedDish = dashboardService.calculateMostConsumedDish(userStatus.getDishesList());
-
-        // Add the most consumed dish to the model
-        model.addAttribute("mostConsumedDish", mostConsumedDish);
-        // Calculate most consumed breakfast
-//        String mostConsumedBreakfast = calculateMostConsumedBreakfast(userStatus.getDishesList());
-//
+        response.setMostConsumedDish(mostConsumedDish);
 
         // Example usage in your controller methods
         String mostConsumedBreakfast = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Breakfast");
-        model.addAttribute("mostConsumedBreakfast", mostConsumedBreakfast);
+        response.setMostConsumedBreakfast(mostConsumedBreakfast);
 
         String mostConsumedLunch = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Lunch");
-        model.addAttribute("mostConsumedLunch", mostConsumedLunch);
+        response.setMostConsumedLunch(mostConsumedLunch);
 
         String mostConsumedDinner = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Dinner");
-        model.addAttribute("mostConsumedDinner", mostConsumedDinner);
+        response.setMostConsumedDinner(mostConsumedDinner);
 
         String mostConsumedSnacks = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Snacks");
-        model.addAttribute("mostConsumedSnacks", mostConsumedSnacks);
-
-        // Example usage in your controller method
-//        String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(userStatus.getWaterEntities());
-//        model.addAttribute("mostConsumedDrink", mostConsumedDrink);
-//        List<WaterEntry> waterEntriesForLastWeek = dashboardService.getWaterEntriesForLastWeek(userStatus);
+        response.setMostConsumedSnacks(mostConsumedSnacks);
 
         String mostConsumedDrink = dashboardService.calculateMostConsumedDrink(waterEntriesForLastWeek);
-        model.addAttribute("mostConsumedDrink", mostConsumedDrink);
+        response.setMostConsumedDrink(mostConsumedDrink);
 
         String mostConsumedNutrient = dashboardService.calculateMostConsumedNutrient(userStatus.getDishesList());
-        model.addAttribute("mostConsumedNutrient", mostConsumedNutrient);
+        response.setMostConsumedNutrient(mostConsumedNutrient);
 
         String leastConsumedNutrient = dashboardService.calculateLeastConsumedNutrient(userStatus.getDishesList());
-        model.addAttribute("leastConsumedNutrient", leastConsumedNutrient);
+        response.setLeastConsumedNutrient(leastConsumedNutrient);
 
-        // Example usage in your controller method
         String mostProteinRichDiet = dashboardService.calculateMostConsumedProteinRichDiet(userStatus.getDishesList());
+        response.setMostProteinRichDiet(mostProteinRichDiet);
 
-// Add the most consumed protein-rich diet to the model
-        model.addAttribute("mostProteinRichDiet", mostProteinRichDiet);
-        // Example usage in your controller method
         String mostIronRichDiet = dashboardService.calculateMostConsumedIronRichDiet(userStatus.getDishesList());
+        response.setMostIronRichDiet(mostIronRichDiet);
 
-// Add the most consumed iron-rich diet to the model
-        model.addAttribute("mostIronRichDiet", mostIronRichDiet);
-
-        // Example usage in your controller method
         String mostCalciumRichDiet = dashboardService.calculateMostConsumedCalciumRichDiet(userStatus.getDishesList());
+        response.setMostCalciumRichDiet(mostCalciumRichDiet);
 
-// Add the most consumed calcium-rich diet to the model
-        model.addAttribute("mostCalciumRichDiet", mostCalciumRichDiet);
-// Example usage in your controller method
         String mostCalorieRichDiet = dashboardService.calculateMostConsumedCalorieRichDiet(userStatus.getDishesList());
+        response.setMostCalorieRichDiet(mostCalorieRichDiet);
 
-// Add the most consumed calorie-rich diet to the model
-        model.addAttribute("mostCalorieRichDiet", mostCalorieRichDiet);
-
-
-// Example usage in your controller method
         String mostCHORichDiet = dashboardService.calculateMostConsumedCHORichDiet(userStatus.getDishesList());
+        response.setMostCHORichDiet(mostCHORichDiet);
 
-// Add the most consumed CHO-rich diet to the model
-        model.addAttribute("mostCHORichDiet", mostCHORichDiet);
+        // Add the userStatus data to the response
+//        response.setUserStatus(userStatus);
 
-
-        // Add the userStatus data to the model
-        model.addAttribute("userStatus", userStatus);
-        return "userStatus"; // Return the Thymeleaf template to display user status
+        return response;
     }
 
-
-
-
-
-
 }
-
 
 
 

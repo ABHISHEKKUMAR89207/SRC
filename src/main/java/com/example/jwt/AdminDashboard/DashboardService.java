@@ -281,23 +281,23 @@ public class DashboardService {
         return bmiCategoriesCount;
     }
 
-    //    public Map<String, Integer> getBMICategoriesByGender(String gender, User currentUser) {
-//        List<UserProfile> profiles = userProfileRepository.findAllUserByGender(gender);
-//        return calculateBMICategoriesCount(profiles, currentUser);
-//    }
-    public Map<String, Integer> getBMICategoriesByGender(String gender) {
+        public Map<String, Integer> getBMICategoriesByGender(String gender, User currentUser) {
         List<UserProfile> profiles = userProfileRepository.findAllUserByGender(gender);
-        return calculateBMICategoriesCount(profiles);
+        return calculateBMICategoriesCount(profiles, currentUser);
     }
-
-    //    public Map<String, Integer> getMaleBMICategories(User currentUser) {
-//        List<UserProfile> maleProfiles = userProfileRepository.findAllUserByGender("Male");
-//        return calculateBMICategoriesCount(maleProfiles, currentUser);
+//    public Map<String, Integer> getBMICategoriesByGender(String gender) {
+//        List<UserProfile> profiles = userProfileRepository.findAllUserByGender(gender);
+//        return calculateBMICategoriesCount(profiles);
 //    }
-    public Map<String, Integer> getMaleBMICategories() {
+
+        public Map<String, Integer> getMaleBMICategories(User currentUser) {
         List<UserProfile> maleProfiles = userProfileRepository.findAllUserByGender("Male");
-        return calculateBMICategoriesCount(maleProfiles);
+        return calculateBMICategoriesCount(maleProfiles, currentUser);
     }
+//    public Map<String, Integer> getMaleBMICategories() {
+//        List<UserProfile> maleProfiles = userProfileRepository.findAllUserByGender("Male");
+//        return calculateBMICategoriesCount(maleProfiles);
+//    }
 
 
     public Map<String, Integer> getMonthlyUserRegistrations() {

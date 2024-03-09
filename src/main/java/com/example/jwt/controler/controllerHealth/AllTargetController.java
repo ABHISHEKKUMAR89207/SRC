@@ -155,18 +155,39 @@ public class AllTargetController {
     @GetMapping("/get-weight-goal")
     public ResponseEntity<WeightGoalResponse> getUserWeightGoal(@RequestHeader("Auth") String tokenHeader) {
         try {
+            String weightGoal = "Maintain";
+            Double weightChange = 0.0;
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
             User user = userService.findByUsername(username);
 
+//            if (user != null && user.getAllTarget() != null) {
+//                WeightGoalResponse response = new WeightGoalResponse(
+//                        user.getAllTarget().getWeightGoal(),
+//                        user.getAllTarget().getWeightChange()
+//                );
+//                return new ResponseEntity<>(response, HttpStatus.OK);
             if (user != null && user.getAllTarget() != null) {
-                WeightGoalResponse response = new WeightGoalResponse(
-                        user.getAllTarget().getWeightGoal(),
-                        user.getAllTarget().getWeightChange()
-                );
+                String userWeightGoal = user.getAllTarget().getWeightGoal();
+                Double userWeightChange = user.getAllTarget().getWeightChange();
+
+                // Check if userWeightGoal is null, if null set to default value "Maintain"
+                if (userWeightGoal == null) {
+                    userWeightGoal = "Maintain";
+                }
+
+                // Check if userWeightChange is null, if null set to default value 0.0
+                if (userWeightChange == null) {
+                    userWeightChange = 0.0;
+                }
+
+                WeightGoalResponse response = new WeightGoalResponse(userWeightGoal, userWeightChange);
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+                WeightGoalResponse response = new WeightGoalResponse(weightGoal,weightChange);
+
+                return new ResponseEntity<>(response,HttpStatus.OK);
             }
         } catch (Exception e) {
             // Handle any exceptions that may occur (e.g., token parsing error, database error)
