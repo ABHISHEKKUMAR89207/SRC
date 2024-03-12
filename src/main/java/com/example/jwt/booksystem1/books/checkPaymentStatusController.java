@@ -15,13 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment")
-public class checkPaymentStatus {
+public class checkPaymentStatusController {
 
     @Autowired
     private JwtHelper jwtHelper;

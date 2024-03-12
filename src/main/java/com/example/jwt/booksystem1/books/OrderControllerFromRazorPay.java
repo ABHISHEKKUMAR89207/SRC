@@ -23,16 +23,12 @@ package com.example.jwt.booksystem1.books;
         import com.razorpay.RazorpayClient;
         import com.razorpay.RazorpayException;
 
-/**
- *
- * @author rahul
- * This can only be used for payment for order in RazorPay.
- */
+
 @Controller
 
 @RestController
 @RequestMapping("/buy")
-public class Home {
+public class OrderControllerFromRazorPay {
     @Autowired
     private BookTableRepository bookTableRepository;
     @Autowired
@@ -52,7 +48,7 @@ public class Home {
     private static final String SECRET_ID = "rzp_test_ThfqICRiicaM5G";
     private static final String SECRET_KEY = "6v7UTKPjlwOIASl1VSbsRFDl";
 
-    public Home() throws RazorpayException {
+    public OrderControllerFromRazorPay() throws RazorpayException {
         this.client =  new RazorpayClient(SECRET_ID, SECRET_KEY);
     }
     @RequestMapping(value="/createPayment", method=RequestMethod.POST)

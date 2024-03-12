@@ -5,6 +5,7 @@ import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.UserProfileRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,7 +50,9 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -107,8 +111,216 @@ public class DashbaordController {
     private BookTableRepository bookTableRepository;
 @Autowired
 private demoService demoService;
+//    @GetMapping("/books/{bookId}")
+//    public ResponseEntity<?> getBook(@PathVariable Long bookId) {
+//        try {
+//            // Retrieve book details from the database
+//            BookTable book = getBookById(bookId);
+//
+//            // Check if book exists
+//            if (book == null) {
+//                return ResponseEntity.notFound().build();
+//            }
+//
+//            // Load image file
+//            Path imagePath = Paths.get("images/" + book.getImageFilename());
+//            byte[] imageBytes = Files.readAllBytes(imagePath);
+//
+//
+//            // Encode image bytes to Base64
+//            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+//
+////            // Create response with book details and image
+////            BookResponse bookResponse = new BookResponse();
+////            bookResponse.setId(book.getId());
+////            bookResponse.setTitle(book.getTitle());
+////            bookResponse.setAuthor(book.getAuthor());
+////            bookResponse.setYear(book.getYear());
+////            bookResponse.setQuantity(book.getQuantity());
+////            bookResponse.setPrice(book.getPrice());
+////            bookResponse.setRatings(book.getRatings());
+////            bookResponse.setImage(imageBytes); // Set image bytes
+//            // Create response with book details and image URL
+//            BookResponse bookResponse = new BookResponse();
+//            bookResponse.setId(book.getId());
+//            bookResponse.setTitle(book.getTitle());
+//            bookResponse.setAuthor(book.getAuthor());
+//            bookResponse.setYear(book.getYear());
+//            bookResponse.setQuantity(book.getQuantity());
+//            bookResponse.setPrice(book.getPrice());
+//            bookResponse.setRatings(book.getRatings());
+//            bookResponse.setImage(imageBytes); // Include image data if needed
+////bookResponse.setImageUrl(base64Image);
+//            bookResponse.setImageUrl("images/" + book.getImageFilename()); // Set image URL
+//            return ResponseEntity.ok(bookResponse);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while loading image");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch book details");
+//        }
+//    }
+private String getImageUrl(String filename) {
+    return "/images/" + filename; // Adjust the path based on your configuration
+}
+    @GetMapping("/get/{bookId}")
+    public ResponseEntity<?> getBookDetails(@PathVariable Long bookId) {
+        try {
+            // Retrieve the book from the database using the bookId
+            Optional<BookTable> optionalBook = bookTableRepository.findById(bookId);
+
+            if (optionalBook.isPresent()) {
+                BookTable book = optionalBook.get();
+
+                // You can customize the response as needed, for example, return a DTO (Data Transfer Object)
+                BookResponse bookResponse = new BookResponse(
+                        book.getId(),
+                        book.getTitle(),
+                        book.getAuthor(),
+                        book.getYear(),
+                        book.getQuantity(),
+                        book.getPrice(),
+                        book.getRatings(),
+                        getImageUrl(book.getImageFilename())
+                );
+
+                return ResponseEntity.ok(bookResponse);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while retrieving book details");
+        }
+    }
 
 
+
+    public BookTable getBookById(Long bookId) {
+        return bookTableRepository.findById(bookId).orElse(null);
+    }
+    @PostMapping("/add")
+    public ResponseEntity<String> addBook(
+            @Valid @RequestParam String title,
+            @Valid @RequestParam String author,
+            @Valid @RequestParam int year,
+            @Valid @RequestParam int quantity,
+            @Valid @RequestParam double price,
+//            @Valid @RequestParam double ratings,
+//            @Valid @RequestParam Long userId,
+            @RequestParam("image") MultipartFile image,
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user1 = userService.findByUsername(username);
+
+        // Check if the user is authenticated
+//        if (user1 == null) {
+//            // User is not authenticated, return an empty map or handle the error appropriately
+//            return Collections.emptyMap();
+//        }
+        try {
+//            // Find the user by userId
+//            User user = userRepository.findById(userId)
+//                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Save the book with user and image
+            saveBook(title, author, year, quantity, price, image);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Book added successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while uploading image");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to add book");
+        }
+    }
+    @Value("${upload.path}")
+    private String uploadPath;
+
+    public void saveBook(String title, String author, int year, int quantity, double price,  MultipartFile image) throws IOException {
+        // Generate a unique filename for the image
+        String filename = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+
+        System.out.println("image url ............."+filename);
+
+        // Create the directory if it doesn't exist
+        File directory = new File(uploadPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        // Save the image file to the server
+        Path imagePath = Paths.get(uploadPath, filename);
+        System.out.println("fdvfdvvbd"+imagePath);
+        Files.write(imagePath, image.getBytes());
+
+        // Save the book details to the database
+        BookTable book = new BookTable();
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setYear(year);
+        book.setQuantity(quantity);
+        book.setPrice(price);
+//        book.setRatings(ratings);
+//        book.setUser(user); // Assuming the user is the owner of the book
+        book.setImageFilename(filename); // Save the filename of the image
+        // Save the book object to the database using your repository
+        bookTableRepository.save(book);
+
+        // You can add your repository logic here to save the book object to the database
+    }
+
+
+
+    @PutMapping("/book/update")
+    public ResponseEntity<String> updateBook(
+            @RequestParam Long bookId,
+            @Valid @RequestParam int quantity,
+            @Valid @RequestParam double price,
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            // Check if the user is authenticated
+            if (user == null) {
+                // User is not authenticated, return an appropriate response or handle the error
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated");
+            }
+
+            // Check if the book exists
+            Optional<BookTable> optionalBook = bookTableRepository.findById(bookId);
+            if (optionalBook.isPresent()) {
+                BookTable book = optionalBook.get();
+
+                // Check if the logged-in user is the owner of the book
+                if (!book.getUser().equals(user)) {
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You don't have permission to update this book");
+                }
+
+                // Update the book details
+                book.setQuantity(quantity);
+                book.setPrice(price);
+
+                // Save the updated book object to the database
+                bookTableRepository.save(book);
+
+                return ResponseEntity.status(HttpStatus.OK).body("Book updated successfully");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating book");
+        }
+    }
 
     @GetMapping("/average-water-intake")
     @ResponseBody
@@ -1087,10 +1299,43 @@ public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestHe
 
 
 
-    @GetMapping("/userStatus/{userId}")
-    public UserStatusResponse userStatus(@PathVariable Long userId) {
+    @GetMapping("/userStatus")
+    @ResponseBody
+    public UserStatusResponse userStatus(@RequestParam Long userId,@RequestHeader("Auth") String tokenHeader) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        // Check if the user is authenticated
+        if (user == null) {
+            // User is not authenticated, return an empty UserStatusResponse
+            return new UserStatusResponse();
+        }
+
         User userStatus = userRepository.findByUserId(userId);
         UserStatusResponse response = new UserStatusResponse();
+
+        response.setName(userStatus.getUserProfile().getFirstName()); // Assuming user.getName() returns the name
+        response.setUserName(userStatus.getUserName()); // Assuming user.getUserName() returns the username
+        response.setEmailId(userStatus.getEmail()); // Assuming user.getEmail() returns the email
+        System.out.println("get email id............"+user.getEmail());
+        response.setMobileNo(userStatus.getMobileNo()); // Assuming user.getMobileNo() returns the mobile number
+
+        Double latitude = userStatus.getLatitude();
+        Double longitude = userStatus.getLongitude();
+
+        // Calculate the state from coordinates
+        String state = null;
+
+        // Skip users with missing latitude or longitude
+        if (latitude != null && longitude != null) {
+            state = getStateFromCoordinates(latitude, longitude);
+        }
+
+
+        response.setState(state); // Assuming user.getState() returns the state
+
 
         // Calculate age from date of birth
         UserProfile userProfile = userStatus.getUserProfile();

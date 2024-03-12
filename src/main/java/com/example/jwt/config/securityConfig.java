@@ -74,7 +74,7 @@ public class securityConfig {
                                 .requestMatchers("/api/booktables/{id}").permitAll()
                                 .requestMatchers("/api/food/all-row-food").permitAll()
 
-                                .requestMatchers("/api/booktables").permitAll()
+                                .requestMatchers("/api/booktables/**").permitAll()
                                 .requestMatchers("/api/contact-us/**").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()
                                 .anyRequest().authenticated())

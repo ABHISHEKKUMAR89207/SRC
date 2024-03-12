@@ -27,6 +27,9 @@ public class BookTable {
     private double price;
     private double ratings;
 
+    private String imageFilename; // Add image filename property
+
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

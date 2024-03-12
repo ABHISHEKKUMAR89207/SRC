@@ -10,6 +10,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 class UserStatusResponse {
+
+    private String Name;
+    private String UserName;
+    private String emailId;
+    private String mobileNo;
+    private String state;
+
     private int age;
     private double averageStepsLastWeek;
     private double averageHoursOfSleepPerDay;

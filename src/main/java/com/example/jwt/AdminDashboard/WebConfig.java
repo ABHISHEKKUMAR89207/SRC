@@ -26,5 +26,18 @@ public class WebConfig implements WebMvcConfigurer {
     public GeocodingUtility geocodingUtility() {
         return new GeocodingUtility();
     }
+
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("classpath:/static/images/");
+//    }
+
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("classpath:./images/")
+//                .setCachePeriod(0); // Disable caching for testing
+//    }
 }
 
