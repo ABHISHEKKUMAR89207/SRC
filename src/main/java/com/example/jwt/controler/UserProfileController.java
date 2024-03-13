@@ -7,6 +7,8 @@ import com.example.jwt.entities.FoodToday.ear.EarService;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 
+import com.example.jwt.entities.activityType.ActivityType;
+import com.example.jwt.entities.activityType.ActivityTypeService;
 import com.example.jwt.entities.error.Error;
 import com.example.jwt.entities.error.ErrorRepository;
 import com.example.jwt.repository.UserProfileRepository;
@@ -243,6 +245,9 @@ public class UserProfileController {
         return years;
     }
 
+
+    @Autowired
+    private ActivityTypeService activityTypeService;
     //update profile
     @PutMapping("/update-userProfile")
     public ResponseEntity<?> updateUserProfileByToken(@RequestHeader("Auth") String tokenHeader, @RequestBody Map<String, Object> updateData) {
@@ -295,6 +300,22 @@ public class UserProfileController {
                         // Email remains the same, no action needed
                     } else {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already in use.");
+                    }
+                }
+
+
+                // Update occupation and work level
+                if (updateData.containsKey("occupation")) {
+                    String newOccupation = updateData.get("occupation").toString();
+                    userProfile.setOccupation(newOccupation);
+
+                    // Fetch the activity type based on the occupation
+                    ActivityType activityType = activityTypeService.findByOccupation(newOccupation);
+
+                    if (activityType != null) {
+                        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+                    } else {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activity type not found for occupation: " + newOccupation);
                     }
                 }
 

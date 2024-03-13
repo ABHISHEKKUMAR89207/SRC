@@ -1,5 +1,8 @@
 package com.example.jwt.AdminDashboard;
 
+import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
+import com.example.jwt.entities.dashboardEntity.healthTrends.DiastolicBloodPressure;
+import com.example.jwt.entities.dashboardEntity.healthTrends.SystolicBloodPressure;
 import com.example.jwt.entities.water.WaterEntry;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.UserProfileRepository;
@@ -161,33 +164,154 @@ private demoService demoService;
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch book details");
 //        }
 //    }
+
+
+    @GetMapping("/blood-pressure-stats")
+    @ResponseBody // Add this annotation
+
+    public Map<String, Map<String, Map<String, Double>>> getBloodPressureStatsByGenderAndAge() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .collect(Collectors.groupingBy(user -> user.getUserProfile().getGender(), // Group users by gender
+                        Collectors.groupingBy(user -> calculateAgeGroup(user.getUserProfile().getDateOfBirth()), // Then by age group
+                                Collectors.collectingAndThen(Collectors.toList(), this::calculateAverageBloodPressure))));
+    }
+
+    private String calculateAgeGroup(LocalDate dateOfBirth) {
+        LocalDate currentDate = LocalDate.now();
+        int age = currentDate.getYear() - dateOfBirth.getYear();
+
+        if (age < 15) {
+            return "<15";
+        } else if (age >= 15 && age <= 29) {
+            return "15-29";
+        } else if (age >= 30 && age <= 44) {
+            return "30-44";
+        } else if (age >= 45 && age <= 59) {
+            return "45-59";
+        } else {
+            return ">60";
+        }
+    }
+
+    private Map<String, Double> calculateAverageBloodPressure(List<User> users) {
+        double averageBloodGlucose = users.stream()
+                .flatMap(user -> user.getBloodGlucoses().stream())
+                .mapToDouble(BloodGlucose::getValue)
+                .average()
+                .orElse(0.0);
+
+        double averageDiastolicBloodPressure = users.stream()
+                .flatMap(user -> user.getDiastolicBloodPressures().stream())
+                .mapToDouble(DiastolicBloodPressure::getValue)
+                .average()
+                .orElse(0.0);
+
+        double averageSystolicBloodPressure = users.stream()
+                .flatMap(user -> user.getSystolicBloodPressures().stream())
+                .mapToDouble(SystolicBloodPressure::getValue)
+                .average()
+                .orElse(0.0);
+
+        long userCount = users.size();
+
+        Map<String, Double> result = new HashMap<>();
+        result.put("averageBloodGlucose", averageBloodGlucose);
+        result.put("averageDiastolicBloodPressure", averageDiastolicBloodPressure);
+        result.put("averageSystolicBloodPressure", averageSystolicBloodPressure);
+        result.put("userCount", (double) userCount);
+        return result;
+    }
+
 private String getImageUrl(String filename) {
     return "/images/" + filename; // Adjust the path based on your configuration
 }
-    @GetMapping("/get/{bookId}")
-    public ResponseEntity<?> getBookDetails(@PathVariable Long bookId) {
+//    @GetMapping("/get/{bookId}")
+//    public ResponseEntity<?> getBookDetails(@PathVariable Long bookId) {
+//        try {
+//            // Retrieve the book from the database using the bookId
+//            Optional<BookTable> optionalBook = bookTableRepository.findById(bookId);
+//
+//            if (optionalBook.isPresent()) {
+//                BookTable book = optionalBook.get();
+//
+//                // You can customize the response as needed, for example, return a DTO (Data Transfer Object)
+//                BookResponse bookResponse = new BookResponse(
+//                        book.getId(),
+//                        book.getTitle(),
+//                        book.getAuthor(),
+//                        book.getYear(),
+//                        book.getQuantity(),
+//                        book.getPrice(),
+//                        book.getRatings(),
+//                        getImageUrl(book.getImageFilename())
+//                );
+//
+//                return ResponseEntity.ok(bookResponse);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while retrieving book details");
+//        }
+//    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
         try {
-            // Retrieve the book from the database using the bookId
-            Optional<BookTable> optionalBook = bookTableRepository.findById(bookId);
-
-            if (optionalBook.isPresent()) {
-                BookTable book = optionalBook.get();
-
-                // You can customize the response as needed, for example, return a DTO (Data Transfer Object)
-                BookResponse bookResponse = new BookResponse(
-                        book.getId(),
-                        book.getTitle(),
-                        book.getAuthor(),
-                        book.getYear(),
-                        book.getQuantity(),
-                        book.getPrice(),
-                        book.getRatings(),
-                        getImageUrl(book.getImageFilename())
-                );
-
-                return ResponseEntity.ok(bookResponse);
-            } else {
+            // Check if the book exists
+            if (!bookTableRepository.existsById(id)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Book not found");
+            }
+
+            // Delete the book
+            bookTableRepository.deleteById(id);
+
+            return ResponseEntity.ok("Book deleted successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while deleting the book");
+        }
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllBookDetails(@RequestHeader("Auth") String tokenHeader) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user1 = userService.findByUsername(username);
+
+            // Check if the user is authenticated
+            if (user1 == null) {
+                // User is not authenticated, return an appropriate response
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+            }
+            // Retrieve all books from the database
+            List<BookTable> books = bookTableRepository.findAll();
+
+            if (!books.isEmpty()) {
+                List<BookResponse> bookResponses = new ArrayList<>();
+
+                for (BookTable book : books) {
+                    // Customize the response for each book
+                    BookResponse bookResponse = new BookResponse(
+                            book.getId(),
+                            book.getTitle(),
+                            book.getAuthor(),
+                            book.getYear(),
+                            book.getQuantity(),
+                            book.getPrice(),
+                            book.getRatings(),
+                            getImageUrl(book.getImageFilename())
+                    );
+                    bookResponses.add(bookResponse);
+                }
+
+                return ResponseEntity.ok(bookResponses);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -321,6 +445,7 @@ private String getImageUrl(String filename) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while updating book");
         }
     }
+
 
     @GetMapping("/average-water-intake")
     @ResponseBody

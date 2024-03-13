@@ -3,9 +3,7 @@ package com.example.jwt.entities;
 import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.NewRecipe.Personal.Personal;
 import com.example.jwt.entities.dashboardEntity.Activities;
-import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
-import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
-import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
+import com.example.jwt.entities.dashboardEntity.healthTrends.*;
 import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.entities.weight.WeightManager;
 import com.example.jwt.registration.token.VerificationToken;
@@ -78,6 +76,15 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<WaterEntity> waterEntities = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<BloodGlucose> bloodGlucoses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<DiastolicBloodPressure> diastolicBloodPressures = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<SystolicBloodPressure> systolicBloodPressures = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<WeightManager> weightManagers = new ArrayList<>();

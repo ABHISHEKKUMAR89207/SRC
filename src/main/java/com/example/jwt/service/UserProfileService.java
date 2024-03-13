@@ -6,8 +6,12 @@ import com.example.jwt.entities.FoodToday.ear.EarResponse;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.UserProfileResponse;
+import com.example.jwt.entities.activityType.ActivityType;
+import com.example.jwt.entities.activityType.ActivityTypeRepository;
+import com.example.jwt.entities.activityType.ActivityTypeService;
 import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.exception.UserNotFoundException;
+import com.example.jwt.repository.ActivityRepository;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 
@@ -62,8 +66,33 @@ public class UserProfileService {
         return userProfileRepository.save(userProfile);
     }
 
-
+    @Autowired
+    private ActivityTypeService activityTypeService;
+    @Autowired
+    private ActivityTypeRepository activityTypeRepository;
     // to create the user profile
+//    public UserProfile createUserProfile(UserProfile userProfile, Long userId) throws ParseException {
+//        User user = this.userRepository.findById(userId)
+//                .orElseThrow(() -> new ResourceNotFoundException("User Profile"));
+//
+//
+//        // Set the user reference in the UserProfile
+//        userProfile.setUser(user);
+//
+//        // Calculate and set the BMI
+//        double heightInInches = userProfile.getHeightFt() * 12 + userProfile.getHeightIn();
+//        double heightInDecimal = heightInInches / 12.0; // Convert total inches to feet in decimal format
+//         System.out.println("height in decimal .........."+heightInDecimal);
+//        double bmi = calculateBMI(userProfile.getGender(),userProfile.getHeightFt(),userProfile.getHeightIn(), userProfile.getWeight());
+//        userProfile.setBmi(bmi);
+//
+////        userProfile = activityTypeService.updateActivityType(user.getUserId(), userProfile.getOccupation());
+//
+////        UserProfile userProfile = activityTypeService.updateActivityType(user.getUserId(), updateActivityTypeDTO.getOccupation());
+//
+//        UserProfile newProfile = this.userProfileRepository.save(userProfile);
+//        return newProfile;
+//    }
     public UserProfile createUserProfile(UserProfile userProfile, Long userId) throws ParseException {
         User user = this.userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User Profile"));
@@ -74,12 +103,60 @@ public class UserProfileService {
         // Calculate and set the BMI
         double heightInInches = userProfile.getHeightFt() * 12 + userProfile.getHeightIn();
         double heightInDecimal = heightInInches / 12.0; // Convert total inches to feet in decimal format
-         System.out.println("height in decimal .........."+heightInDecimal);
-        double bmi = calculateBMI(userProfile.getGender(),userProfile.getHeightFt(),userProfile.getHeightIn(), userProfile.getWeight());
+        System.out.println("height in decimal .........."+heightInDecimal);
+        double bmi = calculateBMI(userProfile.getGender(), userProfile.getHeightFt(), userProfile.getHeightIn(), userProfile.getWeight());
         userProfile.setBmi(bmi);
+
+        // Find the ActivityType based on the occupation
+        ActivityType activityType = activityTypeRepository.findByOccupation(userProfile.getOccupation());
+
+        if (activityType == null) {
+            // Handle error: ActivityType not found for the given occupation
+            throw new RuntimeException("ActivityType not found for occupation: " + userProfile.getOccupation());
+        }
+
+        // Set the work level based on the ActivityType
+        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+
+        // Save the userProfile
         UserProfile newProfile = this.userProfileRepository.save(userProfile);
         return newProfile;
     }
+//    public UserProfile createUserProfile(UserProfile userProfile, Long userId, String occupation) throws ParseException {
+//        User user = this.userRepository.findById(userId)
+//                .orElseThrow(() -> new ResourceNotFoundException("User Profile"));
+//
+//        // Set the user reference in the UserProfile
+//        userProfile.setUser(user);
+//
+//        // Calculate and set the BMI
+//        double heightInInches = userProfile.getHeightFt() * 12 + userProfile.getHeightIn();
+//        double heightInDecimal = heightInInches / 12.0; // Convert total inches to feet in decimal format
+//        double bmi = calculateBMI(userProfile.getGender(),userProfile.getHeightFt(),userProfile.getHeightIn(), userProfile.getWeight());
+//        userProfile.setBmi(bmi);
+//
+//        // Set the occupation
+//        userProfile = activityTypeService.updateActivityType(user.getUserId(), occupation);
+//        userProfile.setOccupation(occupation);
+//
+//        UserProfile newProfile = this.userProfileRepository.save(userProfile);
+//        return newProfile;
+//    }
+
+
+//    public UserProfile updateActivityType(Long userId, String occupation) {
+//        UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
+//        ActivityType activityType = activityTypeRepository.findByOccupation(occupation);
+//
+//        if (activityType == null) {
+//            // Handle error: ActivityType not found for the given occupation
+//            throw new RuntimeException("ActivityType not found for occupation: " + occupation);
+//        }
+//
+//        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+//        userProfile.setOccupation(occupation);
+//        return userProfileRepository.save(userProfile);
+//    }
 
     // to calculate the BMI of the user
 //    private double calculateBMI(double heightInFeet, double weight) {

@@ -22,6 +22,9 @@ public class ActivityTypeService {
         this.activityTypeRepository = activityTypeRepository;
     }
 
+    public ActivityType findByOccupation(String occupation) {
+        return activityTypeRepository.findByOccupation(occupation);
+    }
     public UserProfile updateActivityType(Long userId, String occupation) {
         UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
         ActivityType activityType = activityTypeRepository.findByOccupation(occupation);
