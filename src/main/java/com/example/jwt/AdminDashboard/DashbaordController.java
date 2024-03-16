@@ -3,9 +3,14 @@ package com.example.jwt.AdminDashboard;
 import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
 import com.example.jwt.entities.dashboardEntity.healthTrends.DiastolicBloodPressure;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SystolicBloodPressure;
+import com.example.jwt.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
 import com.example.jwt.entities.water.WaterEntry;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.UserProfileRepository;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
@@ -83,7 +88,6 @@ public class DashbaordController {
     @Autowired
     private OrderRepository orderRepository;
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -112,8 +116,9 @@ public class DashbaordController {
 
     @Autowired
     private BookTableRepository bookTableRepository;
-@Autowired
-private demoService demoService;
+
+    @Autowired
+    private demoService demoService;
 //    @GetMapping("/books/{bookId}")
 //    public ResponseEntity<?> getBook(@PathVariable Long bookId) {
 //        try {
@@ -166,16 +171,171 @@ private demoService demoService;
 //    }
 
 
+//    @GetMapping("/blood-pressure-stats")
+//    @ResponseBody // Add this annotation
+//
+//    public Map<String, Map<String, Map<String, Double>>> getBloodPressureStatsByGenderAndAge() {
+//        List<User> users = userRepository.findAll();
+//
+//        return users.stream()
+//                .collect(Collectors.groupingBy(user -> user.getUserProfile().getGender(), // Group users by gender
+//                        Collectors.groupingBy(user -> calculateAgeGroup(user.getUserProfile().getDateOfBirth()), // Then by age group
+//                                Collectors.collectingAndThen(Collectors.toList(), this::calculateAverageBloodPressure))));
+//    }
+
+
+//    @GetMapping("/user/state-count")
+//    @ResponseBody // This annotation serializes the return value directly to the HTTP response body
+//
+//    public Map<String, Integer> getStateCount() {
+//        Map<String, Integer> stateCountMap = new HashMap<>();
+//
+//        List<User> users = userRepository.findAll(); // Fetch all users from database
+//
+//        for (User user : users) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//
+//            String state = getStateFromCoordinates(latitude, longitude);
+//
+//            if (state != null) {
+//                stateCountMap.put(state, stateCountMap.getOrDefault(state, 0) + 1);
+//            }
+//            else {
+//                // If either latitude or longitude is null, categorize the user as "No Access"
+//                stateCountMap.put("No Access", stateCountMap.getOrDefault("No Access", 0) + 1);
+//            }
+//        }
+//
+//        return stateCountMap;
+//    }
+//@GetMapping("/user/state-count")
+//@ResponseBody
+//public Map<String, Integer> getStateCount(@RequestHeader("Auth") String tokenHeader) {
+//    String token = tokenHeader.replace("Bearer ", "");
+//    String username = jwtHelper.getUsernameFromToken(token);
+//    User user1 = userService.findByUsername(username);
+//    Map<String, Integer> stateCountMap = new HashMap<>();
+//
+//    List<User> users = userRepository.findAll(); // Fetch all users from the database
+//
+//    for (User user : users) {
+//        Double latitude = user.getLatitude();
+//        Double longitude = user.getLongitude();
+//
+//        if (latitude != null && longitude != null) {
+//            String state = getStateFromCoordinates(latitude, longitude);
+//            if (state != null) {
+//                stateCountMap.put(state, stateCountMap.getOrDefault(state, 0) + 1);
+//            }
+//        } else {
+//            // If either latitude or longitude is null, categorize the user as "No Access"
+//            stateCountMap.put("No Access", stateCountMap.getOrDefault("No Access", 0) + 1);
+//        }
+//    }
+//
+//    return stateCountMap;
+//}
+@GetMapping("/user/state-count")
+@ResponseBody
+public Map<String, Integer> getStateCount() {
+    Map<String, Integer> stateCountMap = new HashMap<>();
+
+    List<User> users = userRepository.findAll(); // Fetch all users from the database
+
+    int totalUsers = users.size(); // Total number of users
+
+    for (User user : users) {
+        Double latitude = user.getLatitude();
+        Double longitude = user.getLongitude();
+
+        if (latitude != null && longitude != null) {
+            String state = getStateFromCoordinates(latitude, longitude);
+            if (state != null) {
+                stateCountMap.put(state, stateCountMap.getOrDefault(state, 0) + 1);
+            }
+        } else {
+            // If either latitude or longitude is null, categorize the user as "No Access"
+            stateCountMap.put("No Access", stateCountMap.getOrDefault("No Access", 0) + 1);
+        }
+    }
+
+    // Add the total count of users to the response
+    stateCountMap.put("Total Users", totalUsers);
+
+    return stateCountMap;
+}
+
+    @Autowired
+    private demoService sleepDurationService;
+    @GetMapping("/average-sleep")
+    public ResponseEntity<List<SleepDurationStatsDTO>> getAverageSleepDurationByAgeAndGender( @RequestHeader("Auth") String tokenHeader) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user1 = userService.findByUsername(username);
+
+            // Check if the user is authenticated
+//        if (user1 == null) {
+//            // User is not authenticated, return an appropriate response
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+//        }
+            List<SleepDurationStatsDTO> stats = sleepDurationService.getAverageSleepDurationByAgeAndGender();
+            return new ResponseEntity<>(stats, HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle exception
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/averageCalories")
+    public ResponseEntity<List<ActivitiesStatsDTO>> getAverageCaloriesByAgeAndGender( @RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user1 = userService.findByUsername(username);
+
+//    // Check if the user is authenticated
+//    if (user1 == null) {
+//        // User is not authenticated, return an appropriate response
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+//    }
+        List<ActivitiesStatsDTO> stats = sleepDurationService.getAverageCaloriesByAgeAndGender();
+        if (stats == null) {
+            // Handle the case where stats is null, perhaps by returning an error response
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(stats, HttpStatus.OK);
+    }
     @GetMapping("/blood-pressure-stats")
-    @ResponseBody // Add this annotation
+    @ResponseBody
+    public Map<String, Map<String, Map<String, Double>>> getBloodPressureStatsByGenderAndAge(@RequestHeader("Auth") String tokenHeader) {
+        try {
 
-    public Map<String, Map<String, Map<String, Double>>> getBloodPressureStatsByGenderAndAge() {
-        List<User> users = userRepository.findAll();
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user1 = userService.findByUsername(username);
 
-        return users.stream()
-                .collect(Collectors.groupingBy(user -> user.getUserProfile().getGender(), // Group users by gender
-                        Collectors.groupingBy(user -> calculateAgeGroup(user.getUserProfile().getDateOfBirth()), // Then by age group
-                                Collectors.collectingAndThen(Collectors.toList(), this::calculateAverageBloodPressure))));
+//            // Check if the user is authenticated
+//            if (user1 == null) {
+//                // User is not authenticated, return an appropriate response
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+//            }
+
+            List<User> users = userRepository.findAll();
+
+            // Filter out users with null profiles
+            users = users.stream()
+                    .filter(user -> user.getUserProfile() != null)
+                    .collect(Collectors.toList());
+
+            return users.stream()
+                    .collect(Collectors.groupingBy(user -> user.getUserProfile().getGender(), // Group users by gender
+                            Collectors.groupingBy(user -> calculateAgeGroup(user.getUserProfile().getDateOfBirth()), // Then by age group
+                                    Collectors.collectingAndThen(Collectors.toList(), this::calculateAverageBloodPressure))));
+        } catch (NullPointerException e) {
+            // Handle exception
+            return Collections.emptyMap();
+        }
     }
 
     private String calculateAgeGroup(LocalDate dateOfBirth) {
@@ -464,22 +624,41 @@ private String getImageUrl(String filename) {
     }
 
 
+//    @GetMapping("/average-heart-rate")
+//    @ResponseBody
+//    public Map<String, Map<String, Double>> getAverageHeartRate(@RequestHeader("Auth") String tokenHeader) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        // Check if the user is authenticated
+//        if (user == null) {
+//            // User is not authenticated, return an empty map or handle the error appropriately
+//            return Collections.emptyMap();
+//        }
+//        return demoService.calculateAverageHeartRate();
+//    }
+
     @GetMapping("/average-heart-rate")
     @ResponseBody
     public Map<String, Map<String, Double>> getAverageHeartRate(@RequestHeader("Auth") String tokenHeader) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
 
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
-
-        // Check if the user is authenticated
-        if (user == null) {
-            // User is not authenticated, return an empty map or handle the error appropriately
+            // Check if the user is authenticated
+            if (user == null) {
+                // User is not authenticated, return an empty map or handle the error appropriately
+                return Collections.emptyMap();
+            }
+            return demoService.calculateAverageHeartRate();
+        } catch (RuntimeException e) {
+            // Handle exception
             return Collections.emptyMap();
         }
-        return demoService.calculateAverageHeartRate();
     }
-
 //    @PostMapping("/user-login")
 //    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
 //            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {
@@ -602,10 +781,11 @@ private String getImageUrl(String filename) {
 
 
     @GetMapping("/book.html")
+    @ResponseBody
     public String books(Model model) {
         List<Order> orders = orderRepository.findAll(); // Assuming you have an Order repository
         model.addAttribute("orders", orders); // Use "orders" instead of "order" to pass the list to the template
-        return "book"; // Assuming "book" is the Thymeleaf template name
+        return orders.toString(); // Assuming "book" is the Thymeleaf template name
     }
 
 //
@@ -645,8 +825,46 @@ private String getImageUrl(String filename) {
         }
     }
 
+    @GetMapping("/orders")
+    public ResponseEntity<List<OrderDTO>> getOrders() {
+        List<Order> orders = orderRepository.findAll();
 
+        // Map orders to DTOs containing necessary information
+        List<OrderDTO> orderDTOs = orders.stream()
+                .map(order -> new OrderDTO(
+//                        order.getUser().getUserName(), // Username
+//                        order.getUser().getUserProfile().getFirstName(), // Username
+                        order.getOrderId(),
+                        order.getUser().getUserProfile().getFirstName() + " " + order.getUser().getUserProfile().getLastName(), // Full name
+                        order.getUser().getEmail(), // Email
+                        order.getBook().getTitle(), // Book title
+                        order.getQuantity(), // Quantity
+                        order.getAmount(), // Amount
+                        order.getPaymentId(), // Payment ID
+                        order.getDeliveryAddress(), // Delivery Address
+                        order.getDeliveryDate(), // Delivery Date
+                        order.getContact(), // Contact
+                        order.getDeliveryStatus() // Delivery Status
+                ))
+                .collect(Collectors.toList());
 
+        return ResponseEntity.ok(orderDTOs);
+    }
+    @PostMapping("/orders/updateDeliveryStatus")
+    public ResponseEntity<String> updateDeliveryStatus(
+            @RequestParam Long orderId,
+            @RequestParam String newStatus) {
+
+        // Retrieve the order by its ID
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+
+        // Update the delivery status
+        order.setDeliveryStatus(newStatus);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok("Delivery status updated successfully");
+    }
 
     @GetMapping
     public List<BookTable> getAllBookTables() {
@@ -1015,6 +1233,90 @@ private String getImageUrl(String filename) {
         // Return the response object with a status code
         return ResponseEntity.ok(customResponse);
     }
+
+//    @GetMapping("/get-all-users-detail")
+//    public ResponseEntity<CustomResponse> setupModel(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            Model model) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user1 = userService.findByUsername(username);
+//
+//        // Check if the user is authenticated
+//        if (user1 == null) {
+//            // User is not authenticated, return unauthorized status code
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        // Retrieve total count of users
+//        long totalUsers = userRepository.count();
+//
+//        // Retrieve users based on pagination parameters
+//        Page<User> userPage = userRepository.findAll(PageRequest.of(page, size));
+//
+//        // Retrieve users from the current page
+//        List<User> userList = userPage.getContent();
+//
+//        // Create a map to store users grouped by state
+//        Map<String, List<UserDTO>> usersByState = new HashMap<>();
+//
+//        // Create a list to store all UserDTOs
+//        List<UserDTO> userDTOList = new ArrayList<>();
+//
+//        // Iterate through the user list and add the address for each user
+//        for (User user : userList) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//
+//            // Calculate the state from coordinates
+//            String state = null;
+//
+//            // Skip users with missing latitude or longitude
+//            if (latitude != null && longitude != null) {
+//                state = getStateFromCoordinates(latitude, longitude);
+//            }
+//
+//            // Convert User entity to UserDTO and include the state
+//            UserDTO userDTO = new UserDTO(
+//                    user.getUserId(),
+//                    user.getUserName(),
+//                    user.getEmail(),
+//                    user.getMobileNo(),
+//                    user.getDeviceType(),
+//                    latitude,
+//                    longitude,
+//                    user.getLocalDate(),
+//                    state // Include the state here
+//            );
+//
+//            // Add the user to the list corresponding to their state
+//            if (state != null) {
+//                usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
+//            }
+//
+//            // Add the UserDTO to the main list
+//            userDTOList.add(userDTO);
+//
+//            // Set the address for each user (if needed)
+//            if (state != null) {
+//                user.setAddress(state);
+//            }
+//        }
+//
+//        // Create a response object with the data you want to send
+//        CustomResponse customResponse = new CustomResponse(
+//                userDTOList,
+//                totalUsers
+//        );
+//
+//        // Your additional logic if needed
+//
+//        // Return the response object with a status code
+//        return ResponseEntity.ok(customResponse);
+//    }
 
 
 

@@ -189,9 +189,9 @@ public class UserProfileController {
                 if (userProfile.getWorkLevel() != null) {
                     response.put("workLevel", userProfile.getWorkLevel());
                 }
-                if (userProfile.getOccupation() != null) {
-                    response.put("occupation", userProfile.getOccupation());
-                }
+//                if (userProfile.getOccupation() != null) {
+//                    response.put("occupation", userProfile.getOccupation());
+//                }
 
                 // Add other fields as needed
 
@@ -304,20 +304,20 @@ public class UserProfileController {
                 }
 
 
-                // Update occupation and work level
-                if (updateData.containsKey("occupation")) {
-                    String newOccupation = updateData.get("occupation").toString();
-                    userProfile.setOccupation(newOccupation);
-
-                    // Fetch the activity type based on the occupation
-                    ActivityType activityType = activityTypeService.findByOccupation(newOccupation);
-
-                    if (activityType != null) {
-                        userProfile.setWorkLevel(activityType.getTypeOfActivity());
-                    } else {
-                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activity type not found for occupation: " + newOccupation);
-                    }
-                }
+//                // Update occupation and work level
+//                if (updateData.containsKey("occupation")) {
+//                    String newOccupation = updateData.get("occupation").toString();
+//                    userProfile.setOccupation(newOccupation);
+//
+//                    // Fetch the activity type based on the occupation
+//                    ActivityType activityType = activityTypeService.findByOccupation(newOccupation);
+//
+//                    if (activityType != null) {
+//                        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+//                    } else {
+//                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Activity type not found for occupation: " + newOccupation);
+//                    }
+//                }
 
                 if ((updateData.containsKey("googleAccountLink"))) {
                     String newGoogleAccountLink = updateData.get("googleAccountLink").toString();

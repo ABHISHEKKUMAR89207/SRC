@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CustomResponse {
     private List<UserDTO> userList;
-    private int totalUsers;
+    private long totalUsers;
 //    private Map<String, List<UserDTO>> usersByState;
 //    private Map<String, List<UserDTO>> userStatusByState;
 
@@ -25,7 +25,7 @@ public class CustomResponse {
 ////        this.usersByState = usersByState;
 ////        this.userStatusByState = userStatusByState;
 //    }
-    public CustomResponse(List<UserDTO> userList, int totalUsers) {
+    public CustomResponse(List<UserDTO> userList, long totalUsers) {
         this.userList = userList;
         this.totalUsers = totalUsers;
 //        this.usersByState = usersByState;

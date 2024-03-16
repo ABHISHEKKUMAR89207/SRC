@@ -19,11 +19,21 @@ public class DashUserController {
         return new ResponseEntity<>(totalUsersDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/byWorkLevel")
-    public ResponseEntity<UsersByWorkLevelDTO> getUsersByWorkLevel() {
+//    @GetMapping("/byWorkLevel")
+//    public ResponseEntity<UsersByWorkLevelDTO> getUsersByWorkLevel() {
+//        UsersByWorkLevelDTO usersByWorkLevelDTO = demoService.getUsersByWorkLevel();
+//        return new ResponseEntity<>(usersByWorkLevelDTO, HttpStatus.OK);
+//    }
+@GetMapping("/byWorkLevel")
+public ResponseEntity<UsersByWorkLevelDTO> getUsersByWorkLevel() {
+    try {
         UsersByWorkLevelDTO usersByWorkLevelDTO = demoService.getUsersByWorkLevel();
         return new ResponseEntity<>(usersByWorkLevelDTO, HttpStatus.OK);
+    } catch (Exception e) {
+        // Handle exception
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
 //    @GetMapping("/totalStepCountAndKms")
 //    public ResponseEntity<StepCountDTO> getTotalStepCountAndKms() {

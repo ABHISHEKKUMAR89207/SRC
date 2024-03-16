@@ -9,12 +9,14 @@ import com.example.jwt.entities.UserProfileResponse;
 import com.example.jwt.entities.activityType.ActivityType;
 import com.example.jwt.entities.activityType.ActivityTypeRepository;
 import com.example.jwt.entities.activityType.ActivityTypeService;
+import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
 import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.ActivityRepository;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 
+import com.example.jwt.repository.repositoryHealth.AllTargetRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,6 +94,9 @@ public class UserProfileService {
 //
 //        UserProfile newProfile = this.userProfileRepository.save(userProfile);
 //        return newProfile;
+
+    @Autowired
+    private AllTargetRepository allTargetRepository;
 //    }
     public UserProfile createUserProfile(UserProfile userProfile, Long userId) throws ParseException {
         User user = this.userRepository.findById(userId)
@@ -107,16 +112,32 @@ public class UserProfileService {
         double bmi = calculateBMI(userProfile.getGender(), userProfile.getHeightFt(), userProfile.getHeightIn(), userProfile.getWeight());
         userProfile.setBmi(bmi);
 
-        // Find the ActivityType based on the occupation
-        ActivityType activityType = activityTypeRepository.findByOccupation(userProfile.getOccupation());
-
-        if (activityType == null) {
-            // Handle error: ActivityType not found for the given occupation
-            throw new RuntimeException("ActivityType not found for occupation: " + userProfile.getOccupation());
-        }
-
+//        // Find the ActivityType based on the occupation
+//        ActivityType activityType = activityTypeRepository.findByOccupation(userProfile.getOccupation());
+//
+//        if (activityType == null) {
+//            // Handle error: ActivityType not found for the given occupation
+//            throw new RuntimeException("ActivityType not found for occupation: " + userProfile.getOccupation());
+//        }
+//
         // Set the work level based on the ActivityType
-        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+//        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+
+        // Calculate water goal and update AllTarget entity
+        double waterGoal = ((userProfile.getWeight() * 30)/1000); // Calculate water goal based on weight in litter
+
+        AllTarget existingGoal = allTargetRepository.findByUser(user);
+        if (existingGoal == null) {
+            // If no goal exists, create a new one
+            AllTarget newWaterGoalEntity = new AllTarget();
+            newWaterGoalEntity.setWaterGoal(waterGoal);
+            newWaterGoalEntity.setUser(user);
+            allTargetRepository.save(newWaterGoalEntity);
+        } else {
+            // If a goal already exists, update the existing one
+            existingGoal.setWaterGoal(waterGoal);
+            allTargetRepository.save(existingGoal);
+        }
 
         // Save the userProfile
         UserProfile newProfile = this.userProfileRepository.save(userProfile);
@@ -629,22 +650,22 @@ public Ear findEars(String age, String gender, String HGroup) {
 
 
 
-    public UserProfileResponse getUserProfileDetails(Long userId) {
-        UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
-
-        if (userProfile == null) {
-            // Handle error: User not found
-            throw new RuntimeException("User not found for userId: " + userId);
-        }
-
-        // Check for null values and handle it appropriately
-        if (userProfile.getWorkLevel() == null || userProfile.getOccupation() == null) {
-            // You can throw an exception or return a default response
-            throw new RuntimeException("WorkLevel or Occupation is null for userId: " + userId);
-        }
-
-        return new UserProfileResponse(userProfile.getWorkLevel(), userProfile.getOccupation());
-    }
+//    public UserProfileResponse getUserProfileDetails(Long userId) {
+//        UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
+//
+//        if (userProfile == null) {
+//            // Handle error: User not found
+//            throw new RuntimeException("User not found for userId: " + userId);
+//        }
+//
+//        // Check for null values and handle it appropriately
+//        if (userProfile.getWorkLevel() == null || userProfile.getOccupation() == null) {
+//            // You can throw an exception or return a default response
+//            throw new RuntimeException("WorkLevel or Occupation is null for userId: " + userId);
+//        }
+//
+//        return new UserProfileResponse(userProfile.getWorkLevel(), userProfile.getOccupation());
+//    }
 
 
 }

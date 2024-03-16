@@ -88,4 +88,30 @@ public class ReSendMailVerificationController {
             throw new RuntimeException("Error sending email", e);
         }
     }
+
+
+
+//    public void sendVerificationEmail(User theUser, String verificationToken, String applicationUrl) {
+//        String subject = "Email Verification";
+//        String senderName = "Nutrify India Now (2.O)";
+//        String verificationLink = applicationUrl + "/register/verifyEmail?token=" + verificationToken;
+//        String mailContent = "<p> Hi, " + theUser.getEmail() + ", </p>" + "<p>Thank you for registering with us. Please follow the link below to complete your registration:</p>" + "<a href=\"" + verificationLink + "\">Verify your email to activate your account</a>" + "<p> Thank you <br> Users Registration Portal Service";
+//        try {
+//            MimeMessage message = mailSender.createMimeMessage();
+//            var messageHelper = new MimeMessageHelper(message);
+//            messageHelper.setFrom("rajkumariimt2002@gmail.com", senderName);
+//            messageHelper.setTo(theUser.getEmail());
+//            messageHelper.setSubject(subject);
+//            messageHelper.setText(mailContent, true);
+//            mailSender.send(message);
+//
+//            // Print the verification link to the console
+//            System.out.println("Verification Link: " + verificationLink);
+//        } catch (MessagingException | UnsupportedEncodingException e) {
+//            // Handle the exceptions here, for example, log the error or throw a custom exception
+//            throw new RuntimeException("Error sending email", e);
+//        }
+//    }
+
+
 }

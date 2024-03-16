@@ -35,22 +35,33 @@ public class NinData {
     private Double Total_Fat;
     private Double Total_Dietary_Fibre;
     private Double carbohydrate;
-    private Double calcium;
-    private Double magnesium;
-    private Double iron;
-    private Double zinc;
     private Double thiamine_B1;
+    //    private Double thiamine;
     private Double riboflavin_B2;
     private Double niacin_B3;
-//  private Double vitaminB6;
+    //    private Double niacin;
+    //  private Double vitaminB6;
     private Double totalFolates_B9;
-    private Double retinolVit_A;
+//    private Double vitC
+private Double retinolVit_A;
+    //    private Double vitA;
+    private Double iron;
+    private Double zinc;
+    private Double sodium;
+    private Double calcium;
+    private Double magnesium;
+
+
+
+
+
+
+
 //  private Double vitaminD;
 
 
 
     private Double cholestrol;
-    private Double sodium;
     private Double potassium;
     private Double phosphorus;
     private Double selenium;

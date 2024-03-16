@@ -334,7 +334,13 @@ private AllToggleRepository allToggleRepository;
 
     @Scheduled(fixedDelay = 60000)
     public void sendScheduledNotifications() {
+//        List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+        LocalDateTime currentDateTime = LocalDateTime.now(indianTimeZone);
+        log.debug("Current time in Indian timezone: {}", currentDateTime);
+
         List<NotificationEntity> notifications = getNotificationsForCurrentTime();
+        log.debug("Found {} notifications for the current time.", notifications.size());
 
         for (NotificationEntity notification : notifications) {
             log.debug("Processing notification: {}", notification.getId());

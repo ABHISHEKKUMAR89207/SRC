@@ -25,19 +25,19 @@ public class ActivityTypeService {
     public ActivityType findByOccupation(String occupation) {
         return activityTypeRepository.findByOccupation(occupation);
     }
-    public UserProfile updateActivityType(Long userId, String occupation) {
-        UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
-        ActivityType activityType = activityTypeRepository.findByOccupation(occupation);
-
-        if (activityType == null) {
-            // Handle error: ActivityType not found for the given occupation
-            throw new RuntimeException("ActivityType not found for occupation: " + occupation);
-        }
-
-        userProfile.setWorkLevel(activityType.getTypeOfActivity());
-        userProfile.setOccupation(occupation);
-        return userProfileRepository.save(userProfile);
-    }
+//    public UserProfile updateActivityType(Long userId, String occupation) {
+//        UserProfile userProfile = userProfileRepository.findByUserUserId(userId);
+//        ActivityType activityType = activityTypeRepository.findByOccupation(occupation);
+//
+//        if (activityType == null) {
+//            // Handle error: ActivityType not found for the given occupation
+//            throw new RuntimeException("ActivityType not found for occupation: " + occupation);
+//        }
+//
+//        userProfile.setWorkLevel(activityType.getTypeOfActivity());
+//        userProfile.setOccupation(occupation);
+//        return userProfileRepository.save(userProfile);
+//    }
 
 
 

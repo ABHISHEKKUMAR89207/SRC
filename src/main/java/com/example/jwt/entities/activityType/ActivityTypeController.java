@@ -34,43 +34,43 @@ public class ActivityTypeController {
         this.activityTypeService = activityTypeService;
     }
 
-    @PostMapping("/save-workLevel-occupation")
-    public ResponseEntity<String> updateProfileActivityType(@RequestHeader("Auth") String tokenHeader,
-                                                            @RequestBody UpdateActivityTypeDTO updateActivityTypeDTO) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-            User user = userService.findByUsername(username);
-
-            UserProfile userProfile = activityTypeService.updateActivityType(user.getUserId(), updateActivityTypeDTO.getOccupation());
-            return ResponseEntity.ok("Activity Type updated successfully for user " + userProfile.getId());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error updating Activity Type: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/save-workLevel-occupation")
+//    public ResponseEntity<String> updateProfileActivityType(@RequestHeader("Auth") String tokenHeader,
+//                                                            @RequestBody UpdateActivityTypeDTO updateActivityTypeDTO) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            UserProfile userProfile = activityTypeService.updateActivityType(user.getUserId(), updateActivityTypeDTO.getOccupation());
+//            return ResponseEntity.ok("Activity Type updated successfully for user " + userProfile.getId());
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("Error updating Activity Type: " + e.getMessage());
+//        }
+//    }
 
 @Autowired
 private UserProfileService userProfileService;
 
-    @GetMapping("/get-workLevel-occupation")
-    public ResponseEntity<UserProfileResponse> getUserProfileDetails(@RequestHeader("Auth") String tokenHeader) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-            User user = userService.findByUsername(username);
-
-            UserProfileResponse responseDTO = userProfileService.getUserProfileDetails(user.getUserId());
-
-            if (responseDTO.getWorkLevel() == null || responseDTO.getOccupation() == null) {
-                // Handle the case where workLevel or occupation is null
-                return ResponseEntity.badRequest().body(null); // Or return an appropriate error response
-            }
-
-            return ResponseEntity.ok(responseDTO);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null); // Adjust error handling as needed
-        }
-    }
+//    @GetMapping("/get-workLevel-occupation")
+//    public ResponseEntity<UserProfileResponse> getUserProfileDetails(@RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            UserProfileResponse responseDTO = userProfileService.getUserProfileDetails(user.getUserId());
+//
+//            if (responseDTO.getWorkLevel() == null || responseDTO.getOccupation() == null) {
+//                // Handle the case where workLevel or occupation is null
+//                return ResponseEntity.badRequest().body(null); // Or return an appropriate error response
+//            }
+//
+//            return ResponseEntity.ok(responseDTO);
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(null); // Adjust error handling as needed
+//        }
+//    }
 
 
     @GetMapping("/get-all-occupations")
