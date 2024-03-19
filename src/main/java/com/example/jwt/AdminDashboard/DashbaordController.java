@@ -1,11 +1,18 @@
 package com.example.jwt.AdminDashboard;
 
+import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
 import com.example.jwt.entities.dashboardEntity.healthTrends.DiastolicBloodPressure;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SystolicBloodPressure;
 import com.example.jwt.exception.ResourceNotFoundException;
+//import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.PageRequest;
+import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
+import com.example.jwt.request.NinDataRequestResponse;
+import com.example.jwt.service.FoodTodayService.NinDataService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+
 
 import com.example.jwt.entities.water.WaterEntry;
 import com.example.jwt.repository.ContactUsRepository;
@@ -24,7 +31,6 @@ import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
-import com.example.jwt.entities.water.WaterEntity;
 
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.security.JwtHelper;
@@ -38,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -1157,82 +1164,82 @@ private String getImageUrl(String filename) {
 // ... (other code)
 
 
-    @GetMapping("/get-all-users-detail")
-    public ResponseEntity<CustomResponse> setupModel(@RequestHeader("Auth") String tokenHeader, Model model) {
-
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user1 = userService.findByUsername(username);
-
-        // Check if the user is authenticated
-        if (user1 == null) {
-            // User is not authenticated, return unauthorized status code
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        // Retrieve all users from the repository
-        List<User> userList = userRepository.findAll();
-
-        // Calculate the total number of users
-        int totalUsers = userList.size();
-
-        // Create a map to store users grouped by state
-        Map<String, List<UserDTO>> usersByState = new HashMap<>();
-
-        // Create a list to store all UserDTOs
-        List<UserDTO> userDTOList = new ArrayList<>();
-
-        // Iterate through the user list and add the address for each user
-        for (User user : userList) {
-            Double latitude = user.getLatitude();
-            Double longitude = user.getLongitude();
-
-            // Calculate the state from coordinates
-            String state = null;
-
-            // Skip users with missing latitude or longitude
-            if (latitude != null && longitude != null) {
-                state = getStateFromCoordinates(latitude, longitude);
-            }
-
-            // Convert User entity to UserDTO and include the state
-            UserDTO userDTO = new UserDTO(
-                    user.getUserId(),
-                    user.getUserName(),
-                    user.getEmail(),
-                    user.getMobileNo(),
-                    user.getDeviceType(),
-                    latitude,
-                    longitude,
-//                    user.getAddress(),
-                    user.getLocalDate(),
-                    state // Include the state here
-            );
-
-            // Add the user to the list corresponding to their state
-            if (state != null) {
-                usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
-            }
-
-            // Add the UserDTO to the main list
-            userDTOList.add(userDTO);
-
-            // Set the address for each user (if needed)
-            if (state != null) {
-                user.setAddress(state);
-            }
-        }
-
-        // Create a response object with the data you want to send
-        CustomResponse customResponse = new CustomResponse(
-                userDTOList,
-                totalUsers
-        );
-
-        // Your additional logic if needed
-
-        // Return the response object with a status code
-        return ResponseEntity.ok(customResponse);
-    }
+//    @GetMapping("/get-all-users-detail")
+//    public ResponseEntity<CustomResponse> setupModel(@RequestHeader("Auth") String tokenHeader, Model model) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user1 = userService.findByUsername(username);
+//
+//        // Check if the user is authenticated
+//        if (user1 == null) {
+//            // User is not authenticated, return unauthorized status code
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//        // Retrieve all users from the repository
+//        List<User> userList = userRepository.findAll();
+//
+//        // Calculate the total number of users
+//        int totalUsers = userList.size();
+//
+//        // Create a map to store users grouped by state
+//        Map<String, List<UserDTO>> usersByState = new HashMap<>();
+//
+//        // Create a list to store all UserDTOs
+//        List<UserDTO> userDTOList = new ArrayList<>();
+//
+//        // Iterate through the user list and add the address for each user
+//        for (User user : userList) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//
+//            // Calculate the state from coordinates
+//            String state = null;
+//
+//            // Skip users with missing latitude or longitude
+//            if (latitude != null && longitude != null) {
+//                state = getStateFromCoordinates(latitude, longitude);
+//            }
+//
+//            // Convert User entity to UserDTO and include the state
+//            UserDTO userDTO = new UserDTO(
+//                    user.getUserId(),
+//                    user.getUserName(),
+//                    user.getEmail(),
+//                    user.getMobileNo(),
+//                    user.getDeviceType(),
+//                    latitude,
+//                    longitude,
+////                    user.getAddress(),
+//                    user.getLocalDate(),
+//                    state // Include the state here
+//            );
+//
+//            // Add the user to the list corresponding to their state
+//            if (state != null) {
+//                usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
+//            }
+//
+//            // Add the UserDTO to the main list
+//            userDTOList.add(userDTO);
+//
+//            // Set the address for each user (if needed)
+//            if (state != null) {
+//                user.setAddress(state);
+//            }
+//        }
+//
+//        // Create a response object with the data you want to send
+//        CustomResponse customResponse = new CustomResponse(
+//                userDTOList,
+//                totalUsers
+//        );
+//
+//        // Your additional logic if needed
+//
+//        // Return the response object with a status code
+//        return ResponseEntity.ok(customResponse);
+//    }
 
 //    @GetMapping("/get-all-users-detail")
 //    public ResponseEntity<CustomResponse> setupModel(
@@ -1313,6 +1320,382 @@ private String getImageUrl(String filename) {
 //        );
 //
 //        // Your additional logic if needed
+//
+//        // Return the response object with a status code
+//        return ResponseEntity.ok(customResponse);
+//    }
+//@GetMapping("/get-all-users-detail")
+//public ResponseEntity<CustomResponse> setupModel(
+//        @RequestHeader("Auth") String tokenHeader,
+//        @RequestParam(defaultValue = "0") int page,
+//        @RequestParam(defaultValue = "10") int size,
+//        @RequestParam(required = false) String searchQuery, // New parameter for search query
+//        Model model) {
+//
+//    String token = tokenHeader.replace("Bearer ", "");
+//    String username = jwtHelper.getUsernameFromToken(token);
+//    User user1 = userService.findByUsername(username);
+//
+//    // Check if the user is authenticated
+//    if (user1 == null) {
+//        // User is not authenticated, return unauthorized status code
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//    }
+//
+//    Page<User> userPage;
+//    long totalUsers;
+//
+//    if (searchQuery != null && !searchQuery.isEmpty()) {
+//        // Perform search query across all users
+//        userPage = userRepository.findBySearchQuery(searchQuery, PageRequest.of(page, size));
+//        totalUsers = userRepository.countBySearchQuery(searchQuery);
+//    } else {
+//        // Retrieve total count of users
+//        totalUsers = userRepository.count();
+//        // Retrieve users based on pagination parameters
+//        userPage = userRepository.findAll(PageRequest.of(page, size));
+//    }
+//
+//    // Retrieve users from the current page
+//    List<User> userList = userPage.getContent();
+//
+//    // Create a map to store users grouped by state
+//    Map<String, List<UserDTO>> usersByState = new HashMap<>();
+//
+//    // Create a list to store all UserDTOs
+//    List<UserDTO> userDTOList = new ArrayList<>();
+//
+//    // Iterate through the user list and add the address for each user
+//    for (User user : userList) {
+//        Double latitude = user.getLatitude();
+//        Double longitude = user.getLongitude();
+//
+//        // Calculate the state from coordinates
+//        String state = null;
+//
+//        // Skip users with missing latitude or longitude
+//        if (latitude != null && longitude != null) {
+//            state = getStateFromCoordinates(latitude, longitude);
+//        }
+//
+//        // Convert User entity to UserDTO and include the state
+//        UserDTO userDTO = new UserDTO(
+//                user.getUserId(),
+//                user.getUserName(),
+//                user.getEmail(),
+//                user.getMobileNo(),
+//                user.getDeviceType(),
+//                latitude,
+//                longitude,
+//                user.getLocalDate(),
+//                state // Include the state here
+//        );
+//
+//        // Add the user to the list corresponding to their state
+//        if (state != null) {
+//            usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
+//        }
+//
+//        // Add the UserDTO to the main list
+//        userDTOList.add(userDTO);
+//
+//        // Set the address for each user (if needed)
+//        if (state != null) {
+//            user.setAddress(state);
+//        }
+//    }
+//
+//    // Create a response object with the data you want to send
+//    CustomResponse customResponse = new CustomResponse(
+//            userDTOList,
+//            totalUsers
+//    );
+//
+//    // Your additional logic if needed
+//
+//    // Return the response object with a status code
+//    return ResponseEntity.ok(customResponse);
+//}
+
+    @Autowired
+    private NinDataRepository ninDataRepository;
+    @Autowired
+    private NinDataService ninDataService;
+    @PostMapping("/add-row-food-nutrients")
+    public ResponseEntity<String> saveNinData(@RequestBody NinDataRequestResponse request) {
+        try {
+            ninDataService.saveNinData(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body("NinData saved successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save NinData: " + e.getMessage());
+        }
+    }
+
+//    @GetMapping("/get-all-nutrients")
+//    public List<NinDataRequestResponse> getAllNinData() {
+//        List<NinData> ninDataList = ninDataRepository.findAll();
+//        List<NinDataRequestResponse> responseList = new ArrayList<>();
+//        for (NinData ninData : ninDataList) {
+//            responseList.add(new NinDataRequestResponse(
+//                    ninData.getFood(),
+//                    ninData.getFoodCode(),
+//                    ninData.getCategory(),
+//                    ninData.getSource(),
+//                    ninData.getTypesoffood(),
+//                    ninData.getEnergy(),
+//                    ninData.getProtein(),
+//                    ninData.getTotal_Fat(),
+//                    ninData.getTotal_Dietary_Fibre(),
+//                    ninData.getCarbohydrate(),
+//                    ninData.getThiamine_B1(),
+//                    ninData.getRiboflavin_B2(),
+//                    ninData.getNiacin_B3(),
+//                    ninData.getVit_B6(),
+//                    ninData.getTotalFolates_B9(),
+//                    ninData.getVit_C(),
+//                    ninData.getVit_A(),
+//                    ninData.getIron(),
+//                    ninData.getZinc(),
+//                    ninData.getSodium(),
+//                    ninData.getCalcium(),
+//                    ninData.getMagnesium()
+//            ));
+//        }
+//        return responseList;
+//    }
+//@GetMapping("/get-all-nutrients")
+//@ResponseBody
+//public List<NinDataRequestResponse> getAllNinData() {
+////    List<NinData> ninDataList = ninDataRepository.findAll();
+//    List<NinData> ninDataList = ninDataRepository.findAll(Pageable.unpaged()).getContent();
+//
+//    List<NinDataRequestResponse> responseList = new ArrayList<>();
+//    for (NinData ninData : ninDataList) {
+//        responseList.add(new NinDataRequestResponse(
+//                ninData.getNinDataId(),
+//                ninData.getFood(),
+//                ninData.getFoodCode(),
+//                ninData.getCategory(),
+//                ninData.getSource(),
+//                ninData.getTypesoffood(),
+//                ninData.getEnergy() != null ? ninData.getEnergy() : 0.0,
+//                ninData.getProtein() != null ? ninData.getProtein() : 0.0,
+//                ninData.getTotal_Fat() != null ? ninData.getTotal_Fat() : 0.0,
+//                ninData.getTotal_Dietary_Fibre() != null ? ninData.getTotal_Dietary_Fibre() : 0.0,
+//                ninData.getCarbohydrate() != null ? ninData.getCarbohydrate() : 0.0,
+//                ninData.getThiamine_B1() != null ? ninData.getThiamine_B1() : 0.0,
+//                ninData.getRiboflavin_B2() != null ? ninData.getRiboflavin_B2() : 0.0,
+//                ninData.getNiacin_B3() != null ? ninData.getNiacin_B3() : 0.0,
+//                ninData.getVit_B6() != null ? ninData.getVit_B6() : 0.0,
+//                ninData.getTotalFolates_B9() != null ? ninData.getTotalFolates_B9() : 0.0,
+//                ninData.getVit_C() != null ? ninData.getVit_C() : 0.0,
+//                ninData.getVit_A() != null ? ninData.getVit_A() : 0.0,
+//                ninData.getIron() != null ? ninData.getIron() : 0.0,
+//                ninData.getZinc() != null ? ninData.getZinc() : 0.0,
+//                ninData.getSodium() != null ? ninData.getSodium() : 0.0,
+//                ninData.getCalcium() != null ? ninData.getCalcium() : 0.0,
+//                ninData.getMagnesium() != null ? ninData.getMagnesium() : 0.0
+//        ));
+//    }
+//    return responseList;
+//}
+
+    @GetMapping("/get-all-users-detail")
+public ResponseEntity<CustomResponse> setupModel(
+        @RequestHeader("Auth") String tokenHeader,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "11") int size,
+//        @RequestParam() int size,
+        @RequestParam(required = false) String searchQuery,
+        Model model) {
+
+    String token = tokenHeader.replace("Bearer ", "");
+    String username = jwtHelper.getUsernameFromToken(token);
+    User user1 = userService.findByUsername(username);
+
+    // Check if the user is authenticated
+    if (user1 == null) {
+        // User is not authenticated, return unauthorized status code
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    Page<User> userPage;
+    long totalUsers;
+
+    if (searchQuery != null && !searchQuery.isEmpty()) {
+        // Perform search query across all users
+        userPage = userRepository.findBySearchQuery(searchQuery, PageRequest.of(page, size));
+        // Fetch the total count of users without filtering by searchQuery
+        totalUsers = userRepository.count();
+    } else {
+        // Retrieve total count of users
+        totalUsers = userRepository.count();
+        // Retrieve users based on pagination parameters
+        userPage = userRepository.findAll(PageRequest.of(page, size));
+    }
+
+    // Retrieve users from the current page
+    List<User> userList = userPage.getContent();
+
+    // Create a map to store users grouped by state
+    Map<String, List<UserDTO>> usersByState = new HashMap<>();
+
+    // Create a list to store all UserDTOs
+    List<UserDTO> userDTOList = new ArrayList<>();
+
+    // Iterate through the user list and add the address for each user
+    for (User user : userList) {
+        Double latitude = user.getLatitude();
+        Double longitude = user.getLongitude();
+
+        // Calculate the state from coordinates
+        String state = null;
+
+        // Skip users with missing latitude or longitude
+        if (latitude != null && longitude != null) {
+            state = getStateFromCoordinates(latitude, longitude);
+        }
+
+        // Convert User entity to UserDTO and include the state
+        UserDTO userDTO = new UserDTO(
+                user.getUserId(),
+                user.getUserName(),
+                user.getEmail(),
+                user.getMobileNo(),
+                user.getDeviceType(),
+                latitude,
+                longitude,
+                user.getLocalDate(),
+                state // Include the state here
+        );
+
+        // Add the user to the list corresponding to their state
+        if (state != null) {
+            usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
+        }
+
+        // Add the UserDTO to the main list
+        userDTOList.add(userDTO);
+
+        // Set the address for each user (if needed)
+        if (state != null) {
+            user.setAddress(state);
+        }
+    }
+
+    // Create a response object with the data you want to send
+    CustomResponse customResponse = new CustomResponse(
+            userDTOList,
+            totalUsers
+    );
+
+    // Your additional logic if needed
+
+    // Return the response object with a status code
+    return ResponseEntity.ok(customResponse);
+}
+
+
+//    @GetMapping("/get-all-users-detail")
+//    public ResponseEntity<CustomResponse> setupModel(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(required = false) String searchQuery,
+//            Model model) {
+//
+//        // Measure the start time
+//        long startTime = System.currentTimeMillis();
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user1 = userService.findByUsername(username);
+//
+//        // Check if the user is authenticated
+//        if (user1 == null) {
+//            // User is not authenticated, return unauthorized status code
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        // Fetch users directly for the required page
+//        Page<User> userPage;
+//        long totalUsers;
+//
+//        if (searchQuery != null && !searchQuery.isEmpty()) {
+//            // Perform search query across all users
+//            userPage = userRepository.findBySearchQuery(searchQuery, PageRequest.of(page, size));
+//            // Fetch the total count of users without filtering by searchQuery
+//            totalUsers = userRepository.count();
+//        } else {
+//            // Retrieve total count of users based on the search criteria
+//            totalUsers = userRepository.countBySearchQuery(searchQuery);
+//            // Retrieve users based on pagination parameters
+//            userPage = userRepository.findBySearchQuery(searchQuery, PageRequest.of(page, size));
+//        }
+//
+//        // Retrieve users from the current page
+//        List<User> userList = userPage.getContent();
+//
+//        // Create a map to store users grouped by state
+//        Map<String, List<UserDTO>> usersByState = new HashMap<>();
+//
+//        // Create a list to store all UserDTOs
+//        List<UserDTO> userDTOList = new ArrayList<>();
+//
+//        // Iterate through the user list and add the address for each user
+//        for (User user : userList) {
+//            Double latitude = user.getLatitude();
+//            Double longitude = user.getLongitude();
+//
+//            // Calculate the state from coordinates
+//            String state = null;
+//
+//            // Skip users with missing latitude or longitude
+//            if (latitude != null && longitude != null) {
+//                state = getStateFromCoordinates(latitude, longitude);
+//            }
+//
+//            // Convert User entity to UserDTO and include the state
+//            UserDTO userDTO = new UserDTO(
+//                    user.getUserId(),
+//                    user.getUserName(),
+//                    user.getEmail(),
+//                    user.getMobileNo(),
+//                    user.getDeviceType(),
+//                    latitude,
+//                    longitude,
+//                    user.getLocalDate(),
+//                    state // Include the state here
+//            );
+//
+//            // Add the user to the list corresponding to their state
+//            if (state != null) {
+//                usersByState.computeIfAbsent(state, k -> new ArrayList<>()).add(userDTO);
+//            }
+//
+//            // Add the UserDTO to the main list
+//            userDTOList.add(userDTO);
+//
+//            // Set the address for each user (if needed)
+//            if (state != null) {
+//                user.setAddress(state);
+//            }
+//        }
+//
+//        // Create a response object with the data you want to send
+//        CustomResponse customResponse = new CustomResponse(
+//                userDTOList,
+//                totalUsers
+//        );
+//
+//        // Measure the end time
+//        long endTime = System.currentTimeMillis();
+//
+//        // Calculate the execution time
+//        long executionTime = endTime - startTime;
+//
+//        // Log the execution time
+//        System.out.println("Execution Time: " + executionTime + " ms");
 //
 //        // Return the response object with a status code
 //        return ResponseEntity.ok(customResponse);

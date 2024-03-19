@@ -28,6 +28,7 @@ public class NinData {
     private String food;
     private String foodCode;
     private String category;
+    private String source;
     private String Typesoffood;
 
     private Double Energy;
@@ -40,10 +41,13 @@ public class NinData {
     private Double riboflavin_B2;
     private Double niacin_B3;
     //    private Double niacin;
-    //  private Double vitaminB6;
+      private Double vit_B6;
     private Double totalFolates_B9;
-//    private Double vitC
+    private Double vit_C;
 private Double retinolVit_A;
+//    private Double retinolVit_A;
+//    private Double vit_A;
+
     //    private Double vitA;
     private Double iron;
     private Double zinc;
@@ -53,11 +57,6 @@ private Double retinolVit_A;
 
 
 
-
-
-
-
-//  private Double vitaminD;
 
 
 
@@ -72,7 +71,7 @@ private Double retinolVit_A;
 
 
 
-    
+
 //    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "nutrient_name", referencedColumnName = "nutrientName")
 //    @JsonIgnore

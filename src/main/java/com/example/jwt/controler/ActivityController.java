@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -554,7 +555,7 @@ private HeartRateService heartRateService;
 
         if (user != null) {
             // Get heart rate data
-            HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
+            HeartRate heartRate = heartRateService.getHeartRateForUserAndDateee(user, LocalDate.now());
             if (heartRate != null) {
                 userHealthData.setLocalDate(heartRate.getLocalDate());
                 userHealthData.setHeartRateValue(heartRate.getValue());

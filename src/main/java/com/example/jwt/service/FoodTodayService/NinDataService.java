@@ -4,6 +4,7 @@ import com.example.jwt.dtos.NinDataDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
+import com.example.jwt.request.NinDataRequestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,5 +63,36 @@ public class NinDataService {
         return ninDataDTO;
     }
 
+
+
+
+    public void saveNinData(NinDataRequestResponse request) {
+        NinData ninData = new NinData();
+        ninData.setFood(request.getFood());
+        ninData.setFoodCode(request.getFoodCode());
+        ninData.setCategory(request.getCategory());
+        ninData.setSource(request.getSource());
+        ninData.setTypesoffood(request.getTypesOfFood());
+        ninData.setEnergy(request.getEnergy());
+        ninData.setProtein(request.getProtein());
+        ninData.setTotal_Fat(request.getTotalFat());
+        ninData.setTotal_Dietary_Fibre(request.getTotalDietaryFibre());
+        ninData.setCarbohydrate(request.getCarbohydrate());
+        ninData.setThiamine_B1(request.getThiamineB1());
+        ninData.setRiboflavin_B2(request.getRiboflavinB2());
+        ninData.setNiacin_B3(request.getNiacinB3());
+        ninData.setVit_B6(request.getVitB6());
+        ninData.setTotalFolates_B9(request.getTotalFolatesB9());
+        ninData.setVit_C(request.getVitC());
+        ninData.setRetinolVit_A(request.getVitA());
+        ninData.setIron(request.getIron());
+        ninData.setZinc(request.getZinc());
+        ninData.setSodium(request.getSodium());
+        ninData.setCalcium(request.getCalcium());
+        ninData.setMagnesium(request.getMagnesium());
+
+        // Save NinData to repository
+        ninDataRepository.save(ninData);
+    }
 }
 

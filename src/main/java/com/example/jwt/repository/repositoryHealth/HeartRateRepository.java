@@ -6,16 +6,21 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public interface HeartRateRepository extends JpaRepository<HeartRate, Long> {
-    List<HeartRate> findAllByTimeStampBetween(LocalDateTime localDateTime, LocalDateTime localDateTime1);
+//    List<HeartRate> findAllByTimeStampBetween(LocalDateTime localDateTime, LocalDateTime localDateTime1);
 
-    List<HeartRate> findByTimeStampBetween(LocalDateTime startTime, LocalDateTime endTime);
+//    List<HeartRate> findByTimeStampBetween(LocalDateTime startTime, LocalDateTime endTime);
 
     HeartRate findAllByLocalDate(LocalDate localDate);
 
 //    List<HeartRate> findByUserAndLocalDate(User user, LocalDate date);
 HeartRate findByUserAndLocalDate(User user, LocalDate date);
+
+    HeartRate findTopByUserAndLocalDateOrderByTimeStampDesc(User user, LocalDate date);
+
+HeartRate findByUserAndTimeStamp(User user, LocalTime localTime);
     List<HeartRate> findByUserAndLocalDateBetween(User user, LocalDate startDate, LocalDate endDate);
 }

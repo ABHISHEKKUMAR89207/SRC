@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,10 +34,10 @@ public class HeartRateService {
         this.healthTrendsRepository = healthTrendsRepository;
     }
 
-    public List<HeartRate> getHeartRatesByTime(LocalDateTime startTime, LocalDateTime endTime) {
-        // Use the repository to fetch heart rates between the given time range
-        return heartRateRepository.findByTimeStampBetween(startTime, endTime);
-    }
+//    public List<HeartRate> getHeartRatesByTime(LocalDateTime startTime, LocalDateTime endTime) {
+//        // Use the repository to fetch heart rates between the given time range
+//        return heartRateRepository.findByTimeStampBetween(startTime, endTime);
+//    }
 
     // add heart rate by token username
     public HeartRate addHeartRate(HeartRate heartRate, String username) {
@@ -59,6 +60,13 @@ private HeartRateRepositoryy heartRateRepositoryy;
     public HeartRate getHeartRateForUserAndDate(User user, LocalDate date) {
         return heartRateRepository.findByUserAndLocalDate(user, date);
     }
+
+//    public HeartRate getHeartRateForUserAndTime(User user, LocalTime localTime) {
+//        return heartRateRepository.findByUserAndTimeStamp(user, localTime);
+//    }
+public HeartRate getHeartRateForUserAndDateee(User user, LocalDate date) {
+    return heartRateRepository.findTopByUserAndLocalDateOrderByTimeStampDesc(user, date);
+}
 
     public   List<HeartRate> getHeartRateForUserAndDatee(User user, LocalDate date) {
         return heartRateRepositoryy.findByUserAndLocalDate(user, date);

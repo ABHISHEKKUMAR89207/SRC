@@ -303,6 +303,11 @@ public class UserProfileController {
                     }
                 }
 
+                if (updateData.containsKey("workLevel")) {
+                    String newWorkLevel = updateData.get("workLevel").toString();
+                    userProfile.setWorkLevel(newWorkLevel);
+                }
+
 
 //                // Update occupation and work level
 //                if (updateData.containsKey("occupation")) {
@@ -344,20 +349,21 @@ public class UserProfileController {
                 userService.updateUser(user);
                 userProfileService.saveUserProfile(userProfile);
 
-                Map<String, Object> response = new HashMap<>();
-                response.put("firstName", userProfile.getFirstName());
-                response.put("lastName", userProfile.getLastName());
-                response.put("email", user.getEmail());
-                response.put("mobile", user.getMobileNo());
-                response.put("height", userProfile.getHeight());
-                response.put("weight", userProfile.getWeight());
-                response.put("bmi", userProfile.getBmi());
-                response.put("googleAccountLink", userProfile.getGoogleAccountLink());
-                response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
-                response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
-                response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
+//                Map<String, Object> response = new HashMap<>();
+//                response.put("firstName", userProfile.getFirstName());
+//                response.put("lastName", userProfile.getLastName());
+//                response.put("email", user.getEmail());
+//                response.put("mobile", user.getMobileNo());
+//                response.put("height", userProfile.getHeight());
+//                response.put("weight", userProfile.getWeight());
+//                response.put("bmi", userProfile.getBmi());
+//                response.put("googleAccountLink", userProfile.getGoogleAccountLink());
+//                response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
+//                response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
+//                response.put("linkedinAccountLink", userProfile.getLinkedInAccountLink());
 
-                return ResponseEntity.ok(response);
+//                return ResponseEntity.ok(response);
+                return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User or profile not found.");
             }
