@@ -37,6 +37,9 @@ public class NinDataService {
                 .collect(Collectors.toList());
     }
 
+    public List<NinData> getAllNinData() {
+        return ninDataRepository.findAll();
+    }
     private NinDataDTO convertToDto(NinData ninData) {
         NinDataDTO ninDataDTO = new NinDataDTO();
         ninDataDTO.setId(ninData.getNinDataId());
@@ -66,8 +69,74 @@ public class NinDataService {
 
 
 
+//    public void saveNinData(NinDataRequestResponse request) {
+//        NinData ninData = new NinData();
+//        ninData.setFood(request.getFood());
+//        ninData.setFoodCode(request.getFoodCode());
+//        ninData.setCategory(request.getCategory());
+//        ninData.setSource(request.getSource());
+//        ninData.setTypesoffood(request.getTypesOfFood());
+//        ninData.setEnergy(request.getEnergy());
+//        ninData.setProtein(request.getProtein());
+//        ninData.setTotal_Fat(request.getTotalFat());
+//        ninData.setTotal_Dietary_Fibre(request.getTotalDietaryFibre());
+//        ninData.setCarbohydrate(request.getCarbohydrate());
+//        ninData.setThiamine_B1(request.getThiamineB1());
+//        ninData.setRiboflavin_B2(request.getRiboflavinB2());
+//        ninData.setNiacin_B3(request.getNiacinB3());
+//        ninData.setVit_B6(request.getVitB6());
+//        ninData.setTotalFolates_B9(request.getTotalFolatesB9());
+//        ninData.setVit_C(request.getVitC());
+//        ninData.setRetinolVit_A(request.getVitA());
+//        ninData.setIron(request.getIron());
+//        ninData.setZinc(request.getZinc());
+//        ninData.setSodium(request.getSodium());
+//        ninData.setCalcium(request.getCalcium());
+//        ninData.setMagnesium(request.getMagnesium());
+//
+//        // Save NinData to repository
+//        ninDataRepository.save(ninData);
+//    }
+
+
+
+
     public void saveNinData(NinDataRequestResponse request) {
-        NinData ninData = new NinData();
+        NinData ninData = new NinData(); // Create a new NinData object
+        // Set all the fields from the request
+        ninData.setFood(request.getFood());
+        ninData.setFoodCode(request.getFoodCode());
+        ninData.setCategory(request.getCategory());
+        ninData.setSource(request.getSource());
+        ninData.setTypesoffood(request.getTypesOfFood());
+        ninData.setEnergy(request.getEnergy());
+        ninData.setProtein(request.getProtein());
+        ninData.setTotal_Fat(request.getTotalFat());
+        ninData.setTotal_Dietary_Fibre(request.getTotalDietaryFibre());
+        ninData.setCarbohydrate(request.getCarbohydrate());
+        ninData.setThiamine_B1(request.getThiamineB1());
+        ninData.setRiboflavin_B2(request.getRiboflavinB2());
+        ninData.setNiacin_B3(request.getNiacinB3());
+        ninData.setVit_B6(request.getVitB6());
+        ninData.setTotalFolates_B9(request.getTotalFolatesB9());
+        ninData.setVit_C(request.getVitC());
+        ninData.setRetinolVit_A(request.getVitA());
+        ninData.setIron(request.getIron());
+        ninData.setZinc(request.getZinc());
+        ninData.setSodium(request.getSodium());
+        ninData.setCalcium(request.getCalcium());
+        ninData.setMagnesium(request.getMagnesium());
+        // Save NinData to repository
+        ninDataRepository.save(ninData);
+    }
+
+
+
+    public void updateNinData(Long id, NinDataRequestResponse request) {
+        NinData ninData = ninDataRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("NinData not found with id: " + id));
+
+        // Update NinData object with values from the request
         ninData.setFood(request.getFood());
         ninData.setFoodCode(request.getFoodCode());
         ninData.setCategory(request.getCategory());
@@ -91,8 +160,8 @@ public class NinDataService {
         ninData.setCalcium(request.getCalcium());
         ninData.setMagnesium(request.getMagnesium());
 
-        // Save NinData to repository
         ninDataRepository.save(ninData);
     }
+
 }
 

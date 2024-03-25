@@ -1,15 +1,25 @@
 package com.example.jwt.AdminDashboard;
 
+import com.example.jwt.entities.FoodToday.MissingRowFood;
+import com.example.jwt.entities.FoodToday.MissingRowFoodDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
 import com.example.jwt.entities.dashboardEntity.healthTrends.DiastolicBloodPressure;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SystolicBloodPressure;
 import com.example.jwt.exception.ResourceNotFoundException;
 //import org.springframework.data.domain.Page;
+//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 //import org.springframework.data.domain.PageRequest;
+
+import com.example.jwt.repository.FoodTodayRepository.MissingRowFoodRepository;
+import org.apache.poi.ss.usermodel.*;
+
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.request.NinDataRequestResponse;
 import com.example.jwt.service.FoodTodayService.NinDataService;
+
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -67,12 +77,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -243,6 +256,43 @@ public class DashbaordController {
 //
 //    return stateCountMap;
 //}
+
+
+    @Autowired
+    private MissingRowFoodRepository missingRowFoodRepository;
+    @GetMapping("/missingRowFoods")
+    public ResponseEntity<Map<String, Object>> getAllMissingRowFoods() {
+        try {
+            List<MissingRowFood> missingRowFoods = missingRowFoodRepository.findAll();
+
+            // Sort missing messages by timestamp (most recent first)
+            missingRowFoods.sort(Comparator.comparing(MissingRowFood::getTimestamp).reversed());
+
+            // Calculate total count of missing messages
+            long totalCount = missingRowFoods.size();
+
+            // Format the timestamps
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            // Create MissingRowFoodDTO objects
+            List<MissingRowFoodDTO> dtos = missingRowFoods.stream()
+                    .map(row -> new MissingRowFoodDTO(
+                            row.getMissingId(),
+                            row.getTimestamp() != null ? sdf.format(row.getTimestamp()) : null,
+                            row.getMessingMessage()
+                    ))
+                    .collect(Collectors.toList());
+
+            // Create the response map
+            Map<String, Object> response = new HashMap<>();
+            response.put("missingRowFoods", dtos);
+            response.put("totalCount", totalCount);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 @GetMapping("/user/state-count")
 @ResponseBody
 public Map<String, Integer> getStateCount() {
@@ -485,6 +535,7 @@ private String getImageUrl(String filename) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while retrieving book details");
         }
     }
+
 
 
 
@@ -1421,6 +1472,16 @@ private String getImageUrl(String filename) {
     private NinDataRepository ninDataRepository;
     @Autowired
     private NinDataService ninDataService;
+//    @PostMapping("/add-row-food-nutrients")
+//    public ResponseEntity<String> saveNinData(@RequestBody NinDataRequestResponse request) {
+//        try {
+//            ninDataService.saveNinData(request);
+//            return ResponseEntity.status(HttpStatus.CREATED).body("NinData saved successfully");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save NinData: " + e.getMessage());
+//        }
+//    }
+
     @PostMapping("/add-row-food-nutrients")
     public ResponseEntity<String> saveNinData(@RequestBody NinDataRequestResponse request) {
         try {
@@ -1431,7 +1492,7 @@ private String getImageUrl(String filename) {
         }
     }
 
-//    @GetMapping("/get-all-nutrients")
+    //    @GetMapping("/get-all-nutrients")
 //    public List<NinDataRequestResponse> getAllNinData() {
 //        List<NinData> ninDataList = ninDataRepository.findAll();
 //        List<NinDataRequestResponse> responseList = new ArrayList<>();
@@ -1463,42 +1524,239 @@ private String getImageUrl(String filename) {
 //        }
 //        return responseList;
 //    }
-//@GetMapping("/get-all-nutrients")
-//@ResponseBody
-//public List<NinDataRequestResponse> getAllNinData() {
-////    List<NinData> ninDataList = ninDataRepository.findAll();
-//    List<NinData> ninDataList = ninDataRepository.findAll(Pageable.unpaged()).getContent();
+@GetMapping("/get-all-row-food-nutrients")
+@ResponseBody
+public List<NinDataRequestResponse> getAllNinData() {
+//    List<NinData> ninDataList = ninDataRepository.findAll();
+    List<NinData> ninDataList = ninDataRepository.findAll(Pageable.unpaged()).getContent();
+
+    List<NinDataRequestResponse> responseList = new ArrayList<>();
+    for (NinData ninData : ninDataList) {
+        responseList.add(new NinDataRequestResponse(
+                ninData.getNinDataId(),
+                ninData.getFood(),
+                ninData.getFoodCode(),
+                ninData.getCategory(),
+                ninData.getSource(),
+                ninData.getTypesoffood(),
+                ninData.getEnergy() != null ? ninData.getEnergy() : 0.0,
+                ninData.getProtein() != null ? ninData.getProtein() : 0.0,
+                ninData.getTotal_Fat() != null ? ninData.getTotal_Fat() : 0.0,
+                ninData.getTotal_Dietary_Fibre() != null ? ninData.getTotal_Dietary_Fibre() : 0.0,
+                ninData.getCarbohydrate() != null ? ninData.getCarbohydrate() : 0.0,
+                ninData.getThiamine_B1() != null ? ninData.getThiamine_B1() : 0.0,
+                ninData.getRiboflavin_B2() != null ? ninData.getRiboflavin_B2() : 0.0,
+                ninData.getNiacin_B3() != null ? ninData.getNiacin_B3() : 0.0,
+                ninData.getVit_B6() != null ? ninData.getVit_B6() : 0.0,
+                ninData.getTotalFolates_B9() != null ? ninData.getTotalFolates_B9() : 0.0,
+                ninData.getVit_C() != null ? ninData.getVit_C() : 0.0,
+                ninData.getRetinolVit_A() != null ? ninData.getRetinolVit_A() : 0.0,
+                ninData.getIron() != null ? ninData.getIron() : 0.0,
+                ninData.getZinc() != null ? ninData.getZinc() : 0.0,
+                ninData.getSodium() != null ? ninData.getSodium() : 0.0,
+                ninData.getCalcium() != null ? ninData.getCalcium() : 0.0,
+                ninData.getMagnesium() != null ? ninData.getMagnesium() : 0.0
+        ));
+    }
+    return responseList;
+}
+
+
+    @DeleteMapping("/delete-row-food-nutrients/{id}")
+    public ResponseEntity<String> deleteNinData(@PathVariable Long id) {
+        try {
+            ninDataRepository.deleteById(id);
+            return ResponseEntity.ok("NinData deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to delete NinData: " + e.getMessage());
+        }
+    }
+
+
+    @PutMapping("/update-row-food-nutrients/{id}")
+    public ResponseEntity<String> updateNinData(@PathVariable Long id, @RequestBody NinDataRequestResponse request) {
+        try {
+            ninDataService.updateNinData(id, request);
+            return ResponseEntity.ok("NinData updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update NinData: " + e.getMessage());
+        }
+    }
+
+
+//    @GetMapping("/nin-data")
+//    public ResponseEntity<byte[]> exportNinDataToExcel() {
+//        List<NinData> ninDataList = ninDataService.getAllNinData(); // Implement this method in your NinDataService
 //
-//    List<NinDataRequestResponse> responseList = new ArrayList<>();
-//    for (NinData ninData : ninDataList) {
-//        responseList.add(new NinDataRequestResponse(
-//                ninData.getNinDataId(),
-//                ninData.getFood(),
-//                ninData.getFoodCode(),
-//                ninData.getCategory(),
-//                ninData.getSource(),
-//                ninData.getTypesoffood(),
-//                ninData.getEnergy() != null ? ninData.getEnergy() : 0.0,
-//                ninData.getProtein() != null ? ninData.getProtein() : 0.0,
-//                ninData.getTotal_Fat() != null ? ninData.getTotal_Fat() : 0.0,
-//                ninData.getTotal_Dietary_Fibre() != null ? ninData.getTotal_Dietary_Fibre() : 0.0,
-//                ninData.getCarbohydrate() != null ? ninData.getCarbohydrate() : 0.0,
-//                ninData.getThiamine_B1() != null ? ninData.getThiamine_B1() : 0.0,
-//                ninData.getRiboflavin_B2() != null ? ninData.getRiboflavin_B2() : 0.0,
-//                ninData.getNiacin_B3() != null ? ninData.getNiacin_B3() : 0.0,
-//                ninData.getVit_B6() != null ? ninData.getVit_B6() : 0.0,
-//                ninData.getTotalFolates_B9() != null ? ninData.getTotalFolates_B9() : 0.0,
-//                ninData.getVit_C() != null ? ninData.getVit_C() : 0.0,
-//                ninData.getVit_A() != null ? ninData.getVit_A() : 0.0,
-//                ninData.getIron() != null ? ninData.getIron() : 0.0,
-//                ninData.getZinc() != null ? ninData.getZinc() : 0.0,
-//                ninData.getSodium() != null ? ninData.getSodium() : 0.0,
-//                ninData.getCalcium() != null ? ninData.getCalcium() : 0.0,
-//                ninData.getMagnesium() != null ? ninData.getMagnesium() : 0.0
-//        ));
+//        try (Workbook workbook = new XSSFWorkbook();
+//             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+//            Sheet sheet = workbook.createSheet("NinData"); // Create sheet
+//
+//            // Create header row
+//            Row headerRow = sheet.createRow(0);
+//            String[] excelHeaders = {"Food ID", "Food", "Food Code", "Category", "Source", "Types of Food", "Energy", "Protein", "Total Fat", "Total Dietary Fibre", "Carbohydrate", "Thiamine B1", "Riboflavin B2", "Niacin B3", "Vit B6", "Total Folates B9", "Vit C", "Vit A", "Iron", "Zinc", "Sodium", "Calcium", "Magnesium"};
+//            for (int i = 0; i < excelHeaders.length; i++) {
+//                headerRow.createCell(i).setCellValue(excelHeaders[i]);
+//            }
+//
+//            // Create data rows
+//            int rowNum = 1;
+//            for (NinData ninData : ninDataList) {
+//                Row row = sheet.createRow(rowNum++);
+//                row.createCell(0).setCellValue(ninData.getNinDataId());
+//                row.createCell(1).setCellValue(ninData.getFood());
+//                row.createCell(2).setCellValue(ninData.getFoodCode());
+//                row.createCell(3).setCellValue(ninData.getCategory());
+//                row.createCell(4).setCellValue(ninData.getSource());
+//                row.createCell(5).setCellValue(ninData.getTypesoffood());
+//                row.createCell(6).setCellValue(ninData.getEnergy());
+//                row.createCell(7).setCellValue(ninData.getProtein());
+//                row.createCell(8).setCellValue(ninData.getTotal_Fat());
+//                row.createCell(9).setCellValue(ninData.getTotal_Dietary_Fibre());
+//                row.createCell(10).setCellValue(ninData.getCarbohydrate());
+//                row.createCell(11).setCellValue(ninData.getThiamine_B1());
+//                row.createCell(12).setCellValue(ninData.getRiboflavin_B2());
+//                row.createCell(13).setCellValue(ninData.getNinDataId());
+//                row.createCell(14).setCellValue(ninData.getVit_B6());
+//                row.createCell(15).setCellValue(ninData.getTotalFolates_B9());
+//                row.createCell(16).setCellValue(ninData.getVit_C());
+//                row.createCell(17).setCellValue(ninData.getRetinolVit_A());
+//                row.createCell(18).setCellValue(ninData.getIron());
+//                row.createCell(19).setCellValue(ninData.getZinc());
+//                row.createCell(20).setCellValue(ninData.getSodium());
+//                row.createCell(21).setCellValue(ninData.getCalcium());
+//                row.createCell(22).setCellValue(ninData.getMagnesium());
+//            }
+//
+//            // Write workbook to output stream
+//            workbook.write(outputStream);
+//
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            httpHeaders.add("Content-Disposition", "attachment; filename=NinData.xlsx");
+//
+//            return new ResponseEntity<>(outputStream.toByteArray(), httpHeaders, HttpStatus.OK);
+//        } catch (IOException e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
 //    }
-//    return responseList;
-//}
+
+//    import org.apache.poi.ss.usermodel.*;
+
+//    @GetMapping("/nin-data")
+//    public ResponseEntity<byte[]> exportNinDataToExcel() {
+//        List<NinData> ninDataList = ninDataService.getAllNinData(); // Implement this method in your NinDataService
+//
+//        try (Workbook workbook = WorkbookFactory.create(new FileInputStream("NinData.xlsx"));
+//             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+//            Sheet sheet = workbook.createSheet("NinData"); // Create sheet
+//
+//            // Create header row
+//            Row headerRow = sheet.createRow(0);
+//            String[] excelHeaders = {"Food ID", "Food", "Food Code", "Category", "Source", "Types of Food", "Energy", "Protein", "Total Fat", "Total Dietary Fibre", "Carbohydrate", "Thiamine B1", "Riboflavin B2", "Niacin B3", "Vit B6", "Total Folates B9", "Vit C", "Vit A", "Iron", "Zinc", "Sodium", "Calcium", "Magnesium"};
+//            for (int i = 0; i < excelHeaders.length; i++) {
+//                headerRow.createCell(i).setCellValue(excelHeaders[i]);
+//            }
+//
+//            // Create data rows
+//            int rowNum = 1;
+//            for (NinData ninData : ninDataList) {
+//                Row row = sheet.createRow(rowNum++);
+//                row.createCell(0).setCellValue(ninData.getNinDataId());
+//                row.createCell(1).setCellValue(ninData.getFood());
+//                row.createCell(2).setCellValue(ninData.getFoodCode());
+//                row.createCell(3).setCellValue(ninData.getCategory());
+//                row.createCell(4).setCellValue(ninData.getSource());
+//                row.createCell(5).setCellValue(ninData.getTypesoffood());
+//                row.createCell(6).setCellValue(ninData.getEnergy());
+////                row.createCell(7).setCellValue(ninData.getProtein());
+////                row.createCell(8).setCellValue(ninData.getTotal_Fat());
+////                row.createCell(9).setCellValue(ninData.getTotal_Dietary_Fibre());
+////                row.createCell(10).setCellValue(ninData.getCarbohydrate());
+////                row.createCell(11).setCellValue(ninData.getThiamine_B1());
+////                row.createCell(12).setCellValue(ninData.getRiboflavin_B2());
+////                row.createCell(13).setCellValue(ninData.getNiacin_B3());
+////                row.createCell(14).setCellValue(ninData.getVit_B6());
+////                row.createCell(15).setCellValue(ninData.getTotalFolates_B9());
+////                row.createCell(16).setCellValue(ninData.getVit_C());
+////                row.createCell(17).setCellValue(ninData.getRetinolVit_A());
+////                row.createCell(18).setCellValue(ninData.getIron());
+////                row.createCell(19).setCellValue(ninData.getZinc());
+////                row.createCell(20).setCellValue(ninData.getSodium());
+////                row.createCell(21).setCellValue(ninData.getCalcium());
+////                row.createCell(22).setCellValue(ninData.getMagnesium());
+//            }
+//
+//            // Write workbook to output stream
+//            workbook.write(outputStream);
+//
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            httpHeaders.add("Content-Disposition", "attachment; filename=NinData.xlsx");
+//
+//            return new ResponseEntity<>(outputStream.toByteArray(), httpHeaders, HttpStatus.OK);
+//        } catch (IOException e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+//    @GetMapping("/nin-data")
+//    public ResponseEntity<byte[]> exportNinDataToExcel() {
+//        List<NinData> ninDataList = ninDataRepository.getAllNinData();
+//// Your Excel exporting logic here
+//        try (Workbook workbook = new XSSFWorkbook();
+//             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+//            Sheet sheet = workbook.createSheet("NinData"); // Create sheet
+//
+//            // Create header row
+//            Row headerRow = sheet.createRow(0);
+//            String[] excelHeaders = {"Food ID", "Food", "Food Code", "Category", "Source", "Types of Food", "Energy", "Protein", "Total Fat", "Total Dietary Fibre", "Carbohydrate", "Thiamine B1", "Riboflavin B2", "Niacin B3", "Vit B6", "Total Folates B9", "Vit C", "Vit A", "Iron", "Zinc", "Sodium", "Calcium", "Magnesium"};
+//            for (int i = 0; i < excelHeaders.length; i++) {
+//                headerRow.createCell(i).setCellValue(excelHeaders[i]);
+//            }
+//
+//            // Create data rows
+//            int rowNum = 1;
+//            for (NinData ninData : ninDataList) {
+//                Row row = sheet.createRow(rowNum++);
+//                row.createCell(0).setCellValue(ninData.getNinDataId());
+//                row.createCell(1).setCellValue(ninData.getFood());
+//                row.createCell(2).setCellValue(ninData.getFoodCode());
+//                row.createCell(3).setCellValue(ninData.getCategory());
+//                row.createCell(4).setCellValue(ninData.getSource());
+//                row.createCell(5).setCellValue(ninData.getTypesoffood());
+//                row.createCell(6).setCellValue(ninData.getEnergy());
+//                row.createCell(7).setCellValue(ninData.getProtein());
+//                row.createCell(8).setCellValue(ninData.getTotal_Fat());
+//                row.createCell(9).setCellValue(ninData.getTotal_Dietary_Fibre());
+//                row.createCell(10).setCellValue(ninData.getCarbohydrate());
+//                row.createCell(11).setCellValue(ninData.getThiamine_B1());
+//                row.createCell(12).setCellValue(ninData.getRiboflavin_B2());
+//                row.createCell(13).setCellValue(ninData.getNiacin_B3());
+//                row.createCell(14).setCellValue(ninData.getVit_B6());
+//                row.createCell(15).setCellValue(ninData.getTotalFolates_B9());
+//                row.createCell(16).setCellValue(ninData.getVit_C());
+//                row.createCell(17).setCellValue(ninData.getRetinolVit_A());
+//                row.createCell(18).setCellValue(ninData.getIron());
+//                row.createCell(19).setCellValue(ninData.getZinc());
+//                row.createCell(20).setCellValue(ninData.getSodium());
+//                row.createCell(21).setCellValue(ninData.getCalcium());
+//                row.createCell(22).setCellValue(ninData.getMagnesium());
+//            }
+//
+//            // Write workbook to output stream
+//            workbook.write(outputStream);
+//
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            httpHeaders.add("Content-Disposition", "attachment; filename=NinData.xlsx");
+//
+//            return new ResponseEntity<>(outputStream.toByteArray(), httpHeaders, HttpStatus.OK);
+//        } catch (IOException e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        // Your Excel exporting logic here
+//    }
 
     @GetMapping("/get-all-users-detail")
 public ResponseEntity<CustomResponse> setupModel(
@@ -2168,12 +2426,31 @@ public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestHe
                 .orElse(0.0); // Set default value if no activities found
         response.setAverageStepsLastWeek(averageStepsLastWeek);
 
+//        // Get sleep durations for the last week
+//        List<SleepDuration> sleepDurationsForLastWeek = dashboardService.getSleepDurationsForLastWeek(userStatus);
+//
+//        // Calculate total sleep duration and number of days within the last week
+//        double totalSleepDuration = sleepDurationsForLastWeek.stream()
+//                .mapToDouble(SleepDuration::getManualDuration)
+//                .sum();
+//
+//        long numOfDays = sleepDurationsForLastWeek.stream()
+//                .map(SleepDuration::getDateOfSleep)
+//                .distinct()
+//                .count();
+//
+//        // Calculate average hours of sleep per day
+//        double averageHoursOfSleepPerDay = numOfDays > 0 ?
+//                totalSleepDuration / numOfDays : 0;
+//        response.setAverageHoursOfSleepPerDay(averageHoursOfSleepPerDay);
+
+
         // Get sleep durations for the last week
         List<SleepDuration> sleepDurationsForLastWeek = dashboardService.getSleepDurationsForLastWeek(userStatus);
 
-        // Calculate total sleep duration and number of days within the last week
+// Calculate total sleep duration and number of days within the last week
         double totalSleepDuration = sleepDurationsForLastWeek.stream()
-                .mapToDouble(SleepDuration::getManualDuration)
+                .mapToDouble(sleep -> sleep.getDuration() + sleep.getManualDuration())
                 .sum();
 
         long numOfDays = sleepDurationsForLastWeek.stream()
@@ -2181,7 +2458,7 @@ public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestHe
                 .distinct()
                 .count();
 
-        // Calculate average hours of sleep per day
+// Calculate average hours of sleep per day
         double averageHoursOfSleepPerDay = numOfDays > 0 ?
                 totalSleepDuration / numOfDays : 0;
         response.setAverageHoursOfSleepPerDay(averageHoursOfSleepPerDay);
@@ -2211,7 +2488,7 @@ public ResponseEntity<Map<String, Integer>> getUsersRegisteredByMonth(@RequestHe
 
         // Calculate most consumed dish
         String mostConsumedDish = dashboardService.calculateMostConsumedDish(userStatus.getDishesList());
-        response.setMostConsumedDish(mostConsumedDish);
+           response.setMostConsumedDish(mostConsumedDish);
 
         // Example usage in your controller methods
         String mostConsumedBreakfast = dashboardService.calculateMostConsumedMeal(userStatus.getDishesList(), "Breakfast");

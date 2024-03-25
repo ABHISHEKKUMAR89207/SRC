@@ -14,7 +14,8 @@ public interface NinDataRepository extends JpaRepository<NinData, Long> {
     List<NinData> findByNinDataId(Long ninDataId);
     @Query("SELECT n FROM NinData n WHERE LOWER(n.Typesoffood) = LOWER(:typesoffood)")
     List<NinData> findByTypesoffoodIgnoreCase(@Param("typesoffood") String typesoffood);
-
+    @Query("SELECT n FROM NinData n")
+    List<NinData> getAllNinData();
 
     NinData findByFood(String name);
 

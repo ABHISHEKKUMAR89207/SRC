@@ -11,7 +11,6 @@ import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SleepDuration;
-import com.example.jwt.entities.water.WaterEntity;
 import com.example.jwt.entities.water.WaterEntry;
 import com.example.jwt.repository.ContactUsRepository;
 import com.example.jwt.repository.FeedbackRepository;
@@ -567,7 +566,41 @@ public class DashboardService {
                 .filter(sleep -> sleep.getDateOfSleep().isAfter(oneWeekAgo))
                 .collect(Collectors.toList());
     }
+//public List<SleepDuration> getSleepDurationsForLastWeek(User user) {
+//    LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+//
+//    return user.getSleepDurations().stream()
+//            .filter(sleep -> sleep.getDateOfSleep().isAfter(oneWeekAgo))
+//            .collect(Collectors.toList());
+//}
 
+//    public List<SleepDurationWithAverage> getSleepDurationsWithAverageForLastWeek(User user) {
+//        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+//
+//        List<SleepDuration> sleepDurationsForLastWeek = user.getSleepDurations().stream()
+//                .filter(sleep -> sleep.getDateOfSleep().isAfter(oneWeekAgo))
+//                .collect(Collectors.toList());
+//
+//        double totalDuration = 0;
+//        double totalManualDuration = 0;
+//        int numberOfDays = 0;
+//
+//        for (SleepDuration sleep : sleepDurationsForLastWeek) {
+//            totalDuration += sleep.getDuration();
+//            totalManualDuration += sleep.getManualDuration();
+//            numberOfDays++;
+//        }
+//
+//        double averageDurationPerDay = (totalDuration + totalManualDuration) / numberOfDays;
+//
+//        // Create SleepDurationWithAverage object
+//        SleepDurationWithAverage sleepDurationWithAverage = new SleepDurationWithAverage();
+//        sleepDurationWithAverage.setSleepDurations(sleepDurationsForLastWeek);
+//        sleepDurationWithAverage.setAverageDurationPerDay(averageDurationPerDay);
+//
+//        // Return list with only one element as we're combining data
+//        return Collections.singletonList(sleepDurationWithAverage);
+//    }
     //    public List<WaterEntity> getWaterEntitiesForLastWeek(User user) {
 //        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
 //

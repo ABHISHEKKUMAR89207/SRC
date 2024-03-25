@@ -19,7 +19,7 @@ import java.util.Set;
 @Table(name = "nutrients_csvfile_new")
 public class NinData {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Change the generation type to IDENTITY
 //    @Column(name = "nin_data_id")
     @Index(name = "idx_nin_data_id")
     private Long ninDataId;

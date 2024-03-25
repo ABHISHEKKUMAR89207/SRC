@@ -20,7 +20,7 @@ public class NinDataRequestResponse {
 
     private Double energy;
     private Double protein;
-    private Double totalFat;
+    private Double totalFat;  // Corrected field name
     private Double totalDietaryFibre;
     private Double carbohydrate;
     private Double thiamineB1;

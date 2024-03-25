@@ -2,6 +2,7 @@ package com.example.jwt.entities.dashboardEntity.healthTrends;
 
 import com.example.jwt.entities.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,12 +17,20 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class SystolicBloodPressure {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     LocalDateTime timeStamp = LocalDateTime.now();
+    @JsonFormat(pattern = "yyyy-MM-dd")
+
     LocalDate localDate = LocalDate.now();
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long systolicId;
     private double value;
+
+    private double systolicValue;
+    private double diastolicValue; // Added field for diastolic blood pressure
+
     @ManyToOne
     @JoinColumn(name = "healthTrend_Id")
     @JsonBackReference

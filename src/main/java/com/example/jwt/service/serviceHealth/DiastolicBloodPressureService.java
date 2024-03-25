@@ -35,6 +35,10 @@ public class DiastolicBloodPressureService {
         this.healthTrendsRepository = healthTrendsRepository;
     }
 
+    public List<DiastolicBloodPressure> getDiastolicBloodPressureByDateRange(User user, LocalDate startDate, LocalDate endDate) {
+        return diastolicBloodPressureRepository.findByUserAndLocalDateBetween(user, startDate, endDate);
+    }
+
     public DiastolicBloodPressure addDiastolicBloodPressure(DiastolicBloodPressure diastolicBloodPressure, String username) {
         // Find the user by the username, and associate the heart rate with that user
         User user = userRepository.findByEmail(username)
