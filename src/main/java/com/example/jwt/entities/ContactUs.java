@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @AllArgsConstructor
@@ -85,6 +86,9 @@ public class ContactUs {
         this.imageData = imageData;
     }
 
-
+    public String getFormattedLocalDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return localDateTime.format(formatter);
+    }
 
 }

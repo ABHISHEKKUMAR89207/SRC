@@ -8,6 +8,7 @@ import com.example.jwt.repository.TargetDataRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.request.TargetDataRequest;
 import com.example.jwt.security.JwtHelper;
+import io.grpc.internal.JsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,26 @@ public class TargetAnalysisService {
 
         Map<String, Double> calculatedMap = new HashMap<>();
         List<Map<String, Double>> listOfMaps = new ArrayList<>();
+
+        // Initialize myMap with 0.0 values if it's null
+        if (myMap == null) {
+            myMap = new HashMap<>();
+            myMap.put("Energy", 0.0);
+            myMap.put("Protiens", 0.0);
+            myMap.put("carbs", 0.0);
+            myMap.put("fat", 0.0);
+            myMap.put("fibers", 0.0);
+            myMap.put("Magnesium", 0.0);
+            myMap.put("Zinc", 0.0);
+            myMap.put("Iron", 0.0);
+            myMap.put("Calcium", 0.0);
+            myMap.put("Thiamine-B1", 0.0);
+            myMap.put("Retinol-Vit-A", 0.0);
+            myMap.put("Riboflavin-B2", 0.0);
+            myMap.put("Niacin-B3", 0.0);
+            myMap.put("Folates-B9", 0.0);
+        }
+
         // Check if targetData is null
         if (targetData != null) {
 //            Double targetCalories = targetData.getTargetCalories();
@@ -130,6 +151,7 @@ public class TargetAnalysisService {
             calculatedMap.put("Left Niacin_B3", 0.0);
             calculatedMap.put("Left Folates_B9", 0.0);
         }
+        System.out.println("all data my map container ========== "+myMap);
         listOfMaps.add(myMap);
         listOfMaps.add(calculatedMap);
         return listOfMaps;

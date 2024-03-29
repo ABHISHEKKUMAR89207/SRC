@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/booktables")
@@ -14,11 +15,37 @@ public class BookTableController {
     @Autowired
     private BookTableRepository bookTableRepository;
 
+//    @GetMapping
+//    public List<BookTable> getAllBookTables() {
+//        return bookTableRepository.findAll();
+//    }
+
     @GetMapping
-    public List<BookTable> getAllBookTables() {
-        return bookTableRepository.findAll();
+    public ResponseEntity<List<BookResponse>> getAllBookTables() {
+        List<BookTable> books = bookTableRepository.findAll();
+
+        List<BookResponse> responses = books.stream().map(book -> new BookResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getYear(),
+                book.getQuantity(),
+                book.getPrice(),
+                book.getRatings(),
+                getImageUrl(book.getImageFilename()) // Assuming getImageUrl() method is defined
+        )).collect(Collectors.toList());
+
+        return ResponseEntity.ok(responses);
     }
 
+
+    private String getImageUrl(String filename) {
+        // Construct the full URL for the image
+        // You need to adjust the base URL as per your server configuration
+//        String baseUrl = "http://localhost:7073/images/";
+        String baseUrl = "http://68.183.89.215:7073/images/";
+        return baseUrl + filename;
+    }
     @GetMapping("/{id}")
     public BookTable getBookTableById(@PathVariable Long id) {
         return bookTableRepository.findById(id).orElse(null);

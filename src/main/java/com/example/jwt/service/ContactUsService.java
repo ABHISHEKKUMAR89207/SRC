@@ -72,51 +72,51 @@ public class ContactUsService {
 //
 //        return name;
 //    }
-//public String uploadImage(String path, MultipartFile file) throws IOException {
-//    // Original file name
-//    String originalName = file.getOriginalFilename();
-//
-//    // Generate random identifier
-//    String randomId = UUID.randomUUID().toString();
-//
-//    // Concatenate randomId and originalName
-//    String fileNameWithRandomId = randomId.concat(originalName.substring(originalName.lastIndexOf(".")));
-//
-//    // Full path
-//    String filePath = path + File.separator + fileNameWithRandomId;
-//
-//    // Create folder if not created
-//    File folder = new File(path);
-//    if (!folder.exists()) {
-//        folder.mkdir();
-//    }
-//
-//    // Copy file
-//    Files.copy(file.getInputStream(), Paths.get(filePath));
-//
-//    return fileNameWithRandomId;
-//}
+public String uploadImage(String path, MultipartFile file) throws IOException {
+    // Original file name
+    String originalName = file.getOriginalFilename();
 
+    // Generate random identifier
+    String randomId = UUID.randomUUID().toString();
 
-    public String uploadImage(String path, MultipartFile file) throws IOException {
+    // Concatenate randomId and originalName
+    String fileNameWithRandomId = randomId.concat(originalName.substring(originalName.lastIndexOf(".")));
 
-        // Original file name
-        String originalFileName = file.getOriginalFilename();
+    // Full path
+    String filePath = path + File.separator + fileNameWithRandomId;
 
-        // Full path to save the file
-        String filePath = path + File.separator + originalFileName;
-
-        // Create the folder if it doesn't exist
-        File folder = new File(path);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
-
-        // Copy the file to the specified path with the original name
-        Files.copy(file.getInputStream(), Paths.get(filePath));
-
-        // Return the original file name
-        return originalFileName;
+    // Create folder if not created
+    File folder = new File(path);
+    if (!folder.exists()) {
+        folder.mkdir();
     }
+
+    // Copy file
+    Files.copy(file.getInputStream(), Paths.get(filePath));
+
+    return fileNameWithRandomId;
+}
+
+
+//    public String uploadImage(String path, MultipartFile file) throws IOException {
+//
+//        // Original file name
+//        String originalFileName = file.getOriginalFilename();
+//
+//        // Full path to save the file
+//        String filePath = path + File.separator + originalFileName;
+//
+//        // Create the folder if it doesn't exist
+//        File folder = new File(path);
+//        if (!folder.exists()) {
+//            folder.mkdir();
+//        }
+//
+//        // Copy the file to the specified path with the original name
+//        Files.copy(file.getInputStream(), Paths.get(filePath));
+//
+//        // Return the original file name
+//        return originalFileName;
+//    }
     // Add more service methods as needed
 }

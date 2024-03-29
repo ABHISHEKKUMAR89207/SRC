@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/heart-rates")
@@ -92,50 +93,133 @@ public class HeartRateController {
         return ResponseEntity.ok(heartRates);
     }
 
+//    @GetMapping("/get-heart-rate/custom-range")
+//    public ResponseEntity<List<Map<String, Object>>> getHeartRateForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get heart rates for the custom date range and user
+//                List<HeartRate> heartRates = heartRateService.getHeartRateForUserBetweenDates(user, startDate, endDate);
+//
+//                // Create a map to store average heart rate for each day
+//                Map<LocalDate, Double> averageHeartRateMap = new HashMap<>();
+//
+//                // Initialize the map with all dates in the range
+//                startDate.datesUntil(endDate.plusDays(1)).forEach(date -> averageHeartRateMap.put(date, 0.0));
+//
+//                // Calculate the average heart rate for each available day
+//                for (HeartRate heartRate : heartRates) {
+//                    LocalDate date = heartRate.getLocalDate();
+//                    double value = heartRate.getValue();
+//
+//                    // Update the average heart rate for the day
+//                    averageHeartRateMap.merge(date, value, (existingValue, newValue) -> (existingValue + newValue) / 2);
+//                }
+//
+//                // Create a list to store results
+//                List<Map<String, Object>> result = new ArrayList<>();
+//
+//                // Convert the averageHeartRateMap to the desired format
+//                averageHeartRateMap.forEach((date, averageHeartRate) -> {
+//                    Map<String, Object> resultMap = new HashMap<>();
+//                    resultMap.put("date", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+//                    resultMap.put("value", averageHeartRate);
+//                    result.add(resultMap);
+//                });
+//
+//                return ResponseEntity.ok(result);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
+//    @GetMapping("/get-heart-rate/custom-range")
+//    public ResponseEntity<List<Map<String, Object>>> getHeartRateForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                List<HeartRate> heartRates = heartRateService.getHeartRateForUserBetweenDates(user, startDate, endDate);
+//
+//                // Initialize a map to store the latest heart rate for each date in the range, default to 0.0
+//                Map<LocalDate, Double> heartRateByDate = startDate.datesUntil(endDate.plusDays(1))
+//                        .collect(Collectors.toMap(date -> date, date -> 0.0));
+//
+//                for (HeartRate heartRate : heartRates) {
+//                    LocalDate date = heartRate.getLocalDate();
+//                    // Assuming you want to keep the last value for a given date
+//                    heartRateByDate.put(date, heartRate.getValue());
+//                }
+//
+//                // Convert the map to the desired list format
+//                List<Map<String, Object>> result = heartRateByDate.entrySet().stream().map(entry -> {
+//                    Map<String, Object> dayResult = new HashMap<>();
+//                    dayResult.put("date", entry.getKey().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+//                    dayResult.put("value", entry.getValue());
+//                    return dayResult;
+//                }).collect(Collectors.toList());
+//
+//                return ResponseEntity.ok(result);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
     @GetMapping("/get-heart-rate/custom-range")
     public ResponseEntity<List<Map<String, Object>>> getHeartRateForCustomRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestHeader("Auth") String tokenHeader) {
         try {
-            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
-
-            // Extract the username (email) from the token
             String username = jwtHelper.getUsernameFromToken(token);
-
-            // Use the username to fetch the userId from your user service
             User user = userService.findByUsername(username);
 
             if (user != null) {
-                // Get heart rates for the custom date range and user
                 List<HeartRate> heartRates = heartRateService.getHeartRateForUserBetweenDates(user, startDate, endDate);
 
-                // Create a map to store average heart rate for each day
-                Map<LocalDate, Double> averageHeartRateMap = new HashMap<>();
+                // Use TreeMap to automatically sort dates in ascending order
+                Map<LocalDate, Double> heartRateByDate = new TreeMap<>(startDate.datesUntil(endDate.plusDays(1))
+                        .collect(Collectors.toMap(date -> date, date -> 0.0)));
 
-                // Initialize the map with all dates in the range
-                startDate.datesUntil(endDate.plusDays(1)).forEach(date -> averageHeartRateMap.put(date, 0.0));
-
-                // Calculate the average heart rate for each available day
                 for (HeartRate heartRate : heartRates) {
                     LocalDate date = heartRate.getLocalDate();
-                    double value = heartRate.getValue();
-
-                    // Update the average heart rate for the day
-                    averageHeartRateMap.merge(date, value, (existingValue, newValue) -> (existingValue + newValue) / 2);
+                    // Update the map with the actual value, replacing 0.0 if heart rate data exists for the date
+                    heartRateByDate.put(date, heartRate.getValue());
                 }
 
-                // Create a list to store results
+                // Convert the sorted map to the desired list format
                 List<Map<String, Object>> result = new ArrayList<>();
-
-                // Convert the averageHeartRateMap to the desired format
-                averageHeartRateMap.forEach((date, averageHeartRate) -> {
-                    Map<String, Object> resultMap = new HashMap<>();
-                    resultMap.put("date", date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                    resultMap.put("value", averageHeartRate);
-                    result.add(resultMap);
-                });
+                for (Map.Entry<LocalDate, Double> entry : heartRateByDate.entrySet()) {
+                    Map<String, Object> dayResult = new HashMap<>();
+                    dayResult.put("date", entry.getKey().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    dayResult.put("value", entry.getValue());
+                    result.add(dayResult);
+                }
 
                 return ResponseEntity.ok(result);
             } else {
@@ -146,7 +230,6 @@ public class HeartRateController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 
     // to get  heath rate of the specific user of one month
     @GetMapping("/get/one-month-ago")

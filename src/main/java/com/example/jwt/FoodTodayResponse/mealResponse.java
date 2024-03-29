@@ -141,6 +141,20 @@ public class mealResponse {
 
 
     }
+
+    public mealResponse(Map<String, Double> energyByMealType) {
+        this.mealEnergy = calculateTotalEnergy(energyByMealType);
+    }
+
+    private Double calculateTotalEnergy(Map<String, Double> energyByMealType) {
+        Double totalEnergy = 0.0;
+        for (Double energy : energyByMealType.values()) {
+            totalEnergy += energy;
+        }
+        return totalEnergy;
+    }
+
+
     private String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return date.format(formatter);

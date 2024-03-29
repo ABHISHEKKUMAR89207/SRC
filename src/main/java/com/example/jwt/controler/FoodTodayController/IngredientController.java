@@ -158,6 +158,7 @@ public class IngredientController {
         // Use the username to fetch the userId from your user service
         User user = userService.findByUsername(username);
 
+//        return ingrdientService.getEnergyByDate(user, date);
         return ingrdientService.getEnergyByDate(user, date);
     }
 

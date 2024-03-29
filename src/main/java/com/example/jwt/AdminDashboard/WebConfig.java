@@ -8,19 +8,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/")
-                .setCachePeriod(0); // Disable caching for development
-
-//        registry.addResourceHandler("/img/**")
-//                .addResourceLocations("classpath:/static/img/")
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/static/**")
+//                .addResourceLocations("classpath:/static/")
 //                .setCachePeriod(0); // Disable caching for development
+//
+////        registry.addResourceHandler("/img/**")
+////                .addResourceLocations("classpath:/static/img/")
+////                .setCachePeriod(0); // Disable caching for development
+////    }
+//        registry.addResourceHandler("/static/**", "/img/**")
+//                .addResourceLocations("classpath:/static/");
 //    }
-        registry.addResourceHandler("/static/**", "/img/**")
-                .addResourceLocations("classpath:/static/");
-    }
 
     @Bean
     public GeocodingUtility geocodingUtility() {
@@ -39,5 +39,14 @@ public class WebConfig implements WebMvcConfigurer {
 //                .addResourceLocations("classpath:./images/")
 //                .setCachePeriod(0); // Disable caching for testing
 //    }
+
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:./images/")
+                .setCachePeriod(3600) // Cache period in seconds
+                .resourceChain(true);
+    }
 }
 

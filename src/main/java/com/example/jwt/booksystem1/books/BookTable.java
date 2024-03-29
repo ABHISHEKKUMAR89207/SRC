@@ -2,6 +2,7 @@ package com.example.jwt.booksystem1.books;
 
 
 import com.example.jwt.entities.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,8 +33,10 @@ public class BookTable {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
+    @JsonBackReference // Add this
     private Order order;
     @ManyToOne
+    @JsonBackReference // Add this
     private User user;
 
 

@@ -2,6 +2,7 @@ package com.example.jwt.booksystem1.books;
 
 
 import com.example.jwt.entities.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,9 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_id") // This should match the user_id column in the User table
+    @JsonBackReference // Add this to prevent serialization of `user` back reference
     private User user;
+
     @ManyToOne
     @JoinColumn(name = "book_id")
     private BookTable book;

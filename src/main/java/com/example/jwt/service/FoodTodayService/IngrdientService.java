@@ -4,6 +4,7 @@ import com.example.jwt.FoodTodayResponse.DishWithIngredientsResponse;
 import com.example.jwt.FoodTodayResponse.IngredientsResponse;
 import com.example.jwt.FoodTodayResponse.NutritionalInfoResponse;
 import com.example.jwt.FoodTodayResponse.mealResponse;
+import com.example.jwt.controler.NotificationController;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.Ingredients;
@@ -16,6 +17,8 @@ import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.repository.UnitsDatabaseRepository;
 import com.example.jwt.service.TargetAnalysisService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -359,6 +362,8 @@ public class IngrdientService {
 //        return finalResponseList;
 //    }
 
+//    private static final Logger log = LoggerFactory.getLogger(IngrdientService.class);
+
 
     public List<mealResponse> getDishesWithIngredientsByDate(User user, LocalDate date) {
         List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
@@ -500,6 +505,8 @@ public class IngrdientService {
             mapIngredient.put("Niacin-B3", niacin_B3);
             mapIngredient.put("Folates-B9", folates_B9);
 
+//            log.info("Map Ingredients for Dish {}: {}", dish.getDishId(), mapIngredient);
+            System.out.println("map Ingredient =============== "+mapIngredient);
             analysisService.setmaps(mapIngredient);
 
 
@@ -1160,6 +1167,9 @@ public class IngrdientService {
 
                 }
             }
+
+            System.out.println(" EEnergy =========================  " +energy);
+
             onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
             onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
             onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
@@ -1236,26 +1246,116 @@ public class IngrdientService {
 
 
 
-    public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
-        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+//    public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
+//        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+//
+//        Map<String, Double> energyByMealType = new HashMap<>();
+//
+//        for (Dishes dish : dishesList) {
+//            String mealType = dish.getMealName();
+//            if (!energyByMealType.containsKey(mealType)) {
+//                energyByMealType.put(mealType, 0.0);
+//            }
+//
+//            if (dish.getMealName().equalsIgnoreCase(mealType)) {
+//                Double totalEnergy = calculateTotalEnergyForDish(dish);
+//                energyByMealType.put(mealType, energyByMealType.get(mealType) + totalEnergy);
+//            }
+//        }
+//
+//        return energyByMealType;
+//    }
 
-        Map<String, Double> energyByMealType = new HashMap<>();
+//    public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
+//        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+//
+//        Map<String, Double> energyByMealType = new HashMap<>();
+//
+//        for (Dishes dish : dishesList) {
+//            String mealType = dish.getMealName();
+//            if (!energyByMealType.containsKey(mealType)) {
+//                energyByMealType.put(mealType, 0.0);
+//            }
+//
+//            if (dish.getMealName().equalsIgnoreCase(mealType)) {
+//                Double totalEnergy = calculateTotalEnergyForDish(dish);
+//                // Add the calculated energy based on serving size to the meal type
+//                energyByMealType.put(mealType, energyByMealType.get(mealType) + totalEnergy);
+//            }
+//        }
+//
+//        return energyByMealType;
+//    }
+////
+//    private Double calculateTotalEnergyForDish(Dishes dish) {
+//        Double totalEnergy = 0.0;
+//
+//        if (dish.getRecipe() != null) {
+//            // If the dish has a recipe, get energy directly from the recipe table
+//            Recipe recipe = dish.getRecipe();
+//            totalEnergy += (recipe.getEnergy_joules() / 100) * dish.getDishQuantity();
+//        }
+//
+//        // Calculate energy from ingredients
+//        List<Ingredients> ingredients = dish.getIngredientList();
+//        for (Ingredients ingredient : ingredients) {
+//            NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//            // Check if ninData is not null before accessing its methods
+//            if (ninData != null) {
+//                Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy() * (dish.getServingSize() / 100);
+//                totalEnergy += energy;
+//            } else {
+//                // Handle the case when ninData is null (e.g., log a warning or handle it accordingly)
+//                System.out.println("Warning: ninData is null for ingredient " + ingredient.getIngredientName());
+//            }
+//        }
+//
+//        return totalEnergy;
+//    }
+public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
+    List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+    Map<String, Double> energyByMealType = new HashMap<>();
 
-        for (Dishes dish : dishesList) {
-            String mealType = dish.getMealName();
-            if (!energyByMealType.containsKey(mealType)) {
-                energyByMealType.put(mealType, 0.0);
-            }
+    for (Dishes dish : dishesList) {
+        String mealType = dish.getMealName();
+        Double totalEnergy = calculateTotalEnergyForDish(dish);
 
-            if (dish.getMealName().equalsIgnoreCase(mealType)) {
-                Double totalEnergy = calculateTotalEnergyForDish(dish);
-                energyByMealType.put(mealType, energyByMealType.get(mealType) + totalEnergy);
+        energyByMealType.merge(mealType, totalEnergy, Double::sum);
+    }
+
+    return energyByMealType;
+}
+
+    // Helper method to calculate total energy for a single dish
+    private Double calculateTotalEnergyForDish(Dishes dish) {
+        Double totalEnergy = 0.0;
+        double onegrmEng = 0.0;
+
+        // Adding energy from recipe if present
+        if (dish.getRecipe() != null) {
+            Recipe recipe = dish.getRecipe();
+            totalEnergy += (recipe.getEnergy_joules() / 100) * dish.getServingSize();
+        }
+
+        // Adding energy from ingredients
+        List<Ingredients> ingredients = dish.getIngredientList();
+        for (Ingredients ingredient : ingredients) {
+            NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
+            if (ninData != null) {
+                Double ingredientEnergy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+                totalEnergy += ingredientEnergy;
+                onegrmEng = (totalEnergy/dish.getDishQuantity())*dish.getServingSize();
+                System.out.println("EEnergddddddy  ================== "+onegrmEng);
+
+            } else {
+                System.out.println("Warning: ninData is null for ingredient " + ingredient.getIngredientName());
             }
         }
 
-        return energyByMealType;
+        return onegrmEng;
     }
-
 //    private Double calculateTotalEnergyForDish(Dishes dish) {
 //        Double totalEnergy = 0.0;
 //
@@ -1276,34 +1376,61 @@ public class IngrdientService {
 //        return totalEnergy;
 //    }
 
-    private Double calculateTotalEnergyForDish(Dishes dish) {
-        Double totalEnergy = 0.0;
+//    private Double calculateTotalEnergyForDish(Dishes dish) {
+//        Double totalEnergy = 0.0;
+//
+//        if (dish.getRecipe() != null) {
+//            // If the dish has a recipe, get energy directly from the recipe table
+//            Recipe recipe = dish.getRecipe();
+//            totalEnergy += (recipe.getEnergy_joules() / 100) * dish.getDishQuantity();
+//        }
+//
+//        // Calculate energy from ingredients
+//        List<Ingredients> ingredients = dish.getIngredientList();
+//        for (Ingredients ingredient : ingredients) {
+//            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//
+//            // Check if ninData is not null before accessing its methods
+//            if (ninData != null) {
+//                Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//                totalEnergy += energy;
+//            } else {
+//                // Handle the case when ninData is null (e.g., log a warning or handle it accordingly)
+//                System.out.println("Warning: ninData is null for ingredient " + ingredient.getIngredientName());
+//            }
+//        }
+//
+//        return totalEnergy;
+//    }
+//
 
-        if (dish.getRecipe() != null) {
-            // If the dish has a recipe, get energy directly from the recipe table
-            Recipe recipe = dish.getRecipe();
-            totalEnergy += (recipe.getEnergy_joules() / 100) * dish.getDishQuantity();
-        }
-
-        // Calculate energy from ingredients
-        List<Ingredients> ingredients = dish.getIngredientList();
-        for (Ingredients ingredient : ingredients) {
-            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
-
-            // Check if ninData is not null before accessing its methods
-            if (ninData != null) {
-                Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
-                totalEnergy += energy;
-            } else {
-                // Handle the case when ninData is null (e.g., log a warning or handle it accordingly)
-                System.out.println("Warning: ninData is null for ingredient " + ingredient.getIngredientName());
-            }
-        }
-
-        return totalEnergy;
-    }
-
-
+//    private Double calculateTotalEnergyForDish(Dishes dish) {
+//        Double totalEnergy = 0.0;
+//
+//        if (dish.getRecipe() != null) {
+//            // If the dish has a recipe, get energy directly from the recipe table
+//            Recipe recipe = dish.getRecipe();
+//            totalEnergy += (recipe.getEnergy_joules() / 100) * dish.getDishQuantity();
+//        }
+//
+//        // Calculate energy from ingredients
+//        List<Ingredients> ingredients = dish.getIngredientList();
+//        for (Ingredients ingredient : ingredients) {
+//            NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//
+//            // Check if ninData is not null before accessing its methods
+//            if (ninData != null) {
+//                Double energy = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy() * (dish.getServingSize() / 100);
+//                totalEnergy += energy;
+//            } else {
+//                // Handle the case when ninData is null (e.g., log a warning or handle it accordingly)
+//                System.out.println("Warning: ninData is null for ingredient " + ingredient.getIngredientName());
+//            }
+//        }
+//
+//        return totalEnergy;
+//    }
+//
 
 
 //public Map<String, Double> getEnergyByDate(User user, LocalDate date) {

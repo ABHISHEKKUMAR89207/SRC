@@ -58,18 +58,38 @@ public class AllTargetController {
     }
 
     // to get the user's sleep target
+//    @GetMapping("/get-sleep-target")
+//    public ResponseEntity<Integer> getUserSleepTarget(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null && user.getAllTarget() != null) {
+//            return new ResponseEntity<>(user.getAllTarget().getSleepTarget(), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
     @GetMapping("/get-sleep-target")
     public ResponseEntity<Integer> getUserSleepTarget(@RequestHeader("Auth") String tokenHeader) {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
 
-        if (user != null && user.getAllTarget() != null) {
-            return new ResponseEntity<>(user.getAllTarget().getSleepTarget(), HttpStatus.OK);
+        if (user != null) {
+            AllTarget allTarget = user.getAllTarget();
+            Integer sleepTarget = null;
+            if (allTarget != null) {
+                sleepTarget = allTarget.getSleepTarget();
+            }
+            // If sleepTarget is still null, set it to default value 5
+            sleepTarget = (sleepTarget != null) ? sleepTarget : 5;
+            return new ResponseEntity<>(sleepTarget, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     // to update the water goal of the user
     @PostMapping("/update-water-goal")

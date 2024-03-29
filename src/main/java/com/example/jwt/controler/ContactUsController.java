@@ -1,5 +1,6 @@
 package com.example.jwt.controler;
 
+import com.example.jwt.dtos.ContactUsResponse;
 import com.example.jwt.entities.ContactUs;
 import com.example.jwt.entities.error.FileResponse;
 import com.example.jwt.service.ContactUsService;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/contact-us")
@@ -109,6 +112,58 @@ private String path;
         List<ContactUs> allContactUs = contactUsService.getAllContactUs();
         return ResponseEntity.ok(allContactUs);
     }
+
+//    @GetMapping("/all")
+//    public ResponseEntity<List<ContactUsResponse>> getAllContactUs() {
+//        List<ContactUs> allContactUs = contactUsService.getAllContactUs();
+//
+//        List<ContactUsResponse> responses = allContactUs.stream().map(contactUs -> new ContactUsResponse(
+//                contactUs.getId(),
+//                contactUs.getLocalDateTime(),
+//                contactUs.getName(),
+//                contactUs.getNumber(),
+//                contactUs.getEmail(),
+//                contactUs.getQueries(),
+//                getImageUrl(contactUs.getImageData()), // Assuming getImageUrl() method is defined
+//                contactUs.isStatus(),
+//                contactUs.getFeedbackMessage()
+//        )).collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(responses);
+//    }
+
+//    @GetMapping("/all")
+//    public ResponseEntity<List<ContactUsResponse>> getAllContactUs() {
+//        List<ContactUs> allContactUs = contactUsService.getAllContactUs();
+//
+//        List<ContactUsResponse> responses = allContactUs.stream().map(contactUs -> {
+//            // Convert LocalDateTime to formatted string
+//            String formattedDateTime = contactUs.getLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+//
+//            return new ContactUsResponse(
+//                    contactUs.getId(),
+//                    formattedDateTime, // Use the formatted datetime string
+//                    contactUs.getName(),
+//                    contactUs.getNumber(),
+//                    contactUs.getEmail(),
+//                    contactUs.getQueries(),
+//                    getImageUrl(contactUs.getImageData()), // Assuming getImageUrl() method is defined
+//                    contactUs.isStatus(),
+//                    contactUs.getFeedbackMessage()
+//            );
+//        }).collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(responses);
+//    }
+
+    private String getImageUrl(String filename) {
+        // Construct the full URL for the image
+        // You need to adjust the base URL as per your server configuration
+    String baseUrl = "http://localhost:7073/images/";
+//        String baseUrl = "http://68.183.89.215:7073/images/";
+        return baseUrl + filename;
+    }
+
     // Add more GET endpoints as needed
 
 }
