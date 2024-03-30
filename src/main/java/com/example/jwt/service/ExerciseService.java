@@ -8,31 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
-//@Service
-//public class ExerciseService {
-//    private final ExerciseRepository exerciseRepository;
-//
-//    @Autowired
-//    public ExerciseService(ExerciseRepository exerciseRepository) {
-//        this.exerciseRepository = exerciseRepository;
-//    }
-//
-//
-//    // Method to calculate duration and calories burned
-//    public Exercise calculateAndSaveExercise(Exercise exercise) {
-//        String activityType = exercise.getActivityType();
-//        double duration = exercise.getDuration();
-//
-//        // Assuming a simple calorie calculation based on activity type
-//        double caloriesBurned = calculateCaloriesBurned(activityType, duration);
-//
-//        // Set calculated values
-//        exercise.setCaloriesBurned(caloriesBurned);
-//
-//        // Save the exercise entity
-//        return exerciseRepository.save(exercise);
-//    }
+
 @Service
 public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
@@ -59,6 +37,17 @@ public class ExerciseService {
     public List<Exercise> findByUserAndDate(User user, LocalDate date) {
         return exerciseRepository.findByUserAndDate(user, date);
     }
+
+    public Exercise findById(Long id) {
+        Optional<Exercise> exerciseOptional = exerciseRepository.findById(id);
+        return exerciseOptional.orElse(null);
+    }
+
+    public void deleteExercise(Long id) {
+        exerciseRepository.deleteById(id);
+    }
+
+
 
     private double calculateCaloriesBurned(String activityType, double duration) {
         // Simple assumption: Calories burned per hour for different activities
