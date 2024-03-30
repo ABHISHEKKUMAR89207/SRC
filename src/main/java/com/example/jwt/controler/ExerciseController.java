@@ -110,6 +110,8 @@ public class ExerciseController {
             throw e;
         }
     }
+
+
     @PutMapping("/update-exercise/{id}")
     public ResponseEntity<Exercise> updateExercise(
             @PathVariable Long id,
@@ -122,7 +124,7 @@ public class ExerciseController {
             String username = jwtHelper.getUsernameFromToken(token);
             User user = userService.findByUsername(username);
 
-            Exercise exercise = exerciseService.findById(id);
+            Exercise exercise = exerciseService.findByIdd(id);
 
             if (exercise == null || !exercise.getUser().equals(user)) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

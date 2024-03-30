@@ -126,7 +126,7 @@ public class ExerciseService {
     }
     // You can add more service methods as needed
 
-    public Exercise findById(Long id) {
+    public Exercise findByIdd(Long id) {
         return exerciseRepository.findById(id).orElse(null);
     }
 
