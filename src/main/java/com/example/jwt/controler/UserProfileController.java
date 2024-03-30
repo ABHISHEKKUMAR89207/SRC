@@ -180,6 +180,7 @@ public class UserProfileController {
                 response.put("heightIn", userProfile.getHeightIn());
                 response.put("weight", userProfile.getWeight());
                 response.put("bmi", userProfile.getBmi());
+                response.put("bmr", userProfile.getBmr());
                 response.put("googleAccountLink", userProfile.getGoogleAccountLink());
                 response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
@@ -290,6 +291,9 @@ public class UserProfileController {
                 if (updateData.containsKey("weight") || updateData.containsKey("height")) {
                     userProfile.setBmi(userProfileService.calculateBMI(userProfile.getGender(), userProfile.getHeightFt(), userProfile.getHeightIn(), userProfile.getWeight()));
                 }
+
+                // Recalculate and update BMR based on the updated weight and height
+                userProfile.setBmr(userProfileService.calculateBMR(userProfile));
 
                 // Check if email is present in the updateData and it's different from the current email
                 if (updateData.containsKey("email")) {

@@ -112,6 +112,12 @@ public class UserProfileService {
         double bmi = calculateBMI(userProfile.getGender(), userProfile.getHeightFt(), userProfile.getHeightIn(), userProfile.getWeight());
         userProfile.setBmi(bmi);
 
+
+        // Calculate and set the BMR
+        double bmr = calculateBMR(userProfile);
+        userProfile.setBmr(bmr);
+
+
 //        // Find the ActivityType based on the occupation
 //        ActivityType activityType = activityTypeRepository.findByOccupation(userProfile.getOccupation());
 //
@@ -257,6 +263,42 @@ public class UserProfileService {
         return bmi;
     }
 
+    // Method to calculate BMR
+    public double calculateBMR(UserProfile userProfile) {
+        String gender = userProfile.getGender();
+        int age = calculateAgee(userProfile.getDateOfBirth());
+        double weight = userProfile.getWeight();
+//        double heightInCM = convertToCentimeters(userProfile.getHeightFt(), userProfile.getHeightIn());
+
+        double bmr;
+
+        if (gender.equalsIgnoreCase("male")) {
+            if (age >= 18 && age <= 30) {
+                bmr = (15.1 * weight) + 692.2;
+            } else if (age > 30 && age <= 60) {
+                bmr = (11.5 * weight) + 873;
+            } else {
+                bmr = (11.7 * weight) + 587.7;
+            }
+            bmr *= 0.9; // Apply activity factor for males
+        } else if (gender.equalsIgnoreCase("female")) {
+            if (age >= 18 && age <= 30) {
+                bmr = (14.8 * weight) + 486.6;
+            } else if (age > 30 && age <= 60) {
+                bmr = (8.1 * weight) + 845.6;
+            } else {
+                bmr = (9.1 * weight) + 658.5;
+            }
+            bmr *= 0.91; // Apply activity factor for females
+        } else {
+            throw new IllegalArgumentException("Invalid gender specified");
+        }
+        System.out.println("output of bmr" + bmr);
+
+        return bmr;
+    }
+
+
 
     //update user profile
     public UserProfile saveUserProfile(UserProfile userProfile) {
@@ -286,16 +328,6 @@ public class UserProfileService {
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -40,6 +40,7 @@ public class UserProfile {
 
 
     private double bmi;
+    private double bmr;
     private String googleAccountLink;
     private String facebookAccountLink;
     private String twitterAccountLink;
