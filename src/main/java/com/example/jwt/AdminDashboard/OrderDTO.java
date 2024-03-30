@@ -25,5 +25,24 @@ public class OrderDTO {
     private String contact;
     private String deliveryStatus;
 
+    private Integer totalBookSale;
+
+
+    // Constructor
+    public OrderDTO(Long orderId, String name, String email, String bookTitle, int quantity, double amount,
+                    String paymentId, String deliveryAddress, String deliveryDate, String contact, String deliveryStatus) {
+        this.orderId = orderId;
+        this.Name = name;
+        this.email = email;
+        this.bookTitle = bookTitle;
+        this.quantity = quantity;
+        this.amount = amount;
+        this.paymentId = paymentId;
+        this.deliveryAddress = deliveryAddress;
+        this.deliveryDate = deliveryDate;
+        this.contact = contact;
+        this.deliveryStatus = deliveryStatus;
+    }
+
     // Constructor, getters, and setters
 }

@@ -19,6 +19,8 @@ public class BookResponse {
     private double ratings;
 //    private byte[] image;
     private String imageUrl;  // Add this field
+
+    private Integer totalAvailableBook;
     private String getImageUrl(String filename) {
         return "/images/" + filename; // Adjust the path based on your configuration
     }
@@ -39,4 +41,18 @@ public class BookResponse {
     // Constructor
 
     // Other methods
+
+
+    // Constructor
+    public BookResponse(Long id, String title, String author, int year, int quantity, double price, double ratings, String imageUrl) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.year = year;
+        this.quantity = quantity;
+        this.price = price;
+        this.ratings = ratings;
+        this.imageUrl = imageUrl;
+    }
+
 }

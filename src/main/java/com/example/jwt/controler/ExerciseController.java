@@ -7,6 +7,8 @@ import com.example.jwt.service.ExerciseService;
 import com.example.jwt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
@@ -218,6 +220,39 @@ public class ExerciseController {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
+        }
+    }
+    @PutMapping("/update-exercise/{id}")
+    public ResponseEntity<Exercise> updateExercise(
+            @PathVariable Long id,
+            @RequestParam String startTime,
+            @RequestParam String endTime,
+            @RequestHeader("Auth") String tokenHeader
+    ) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            Exercise exercise = exerciseService.findById(id);
+
+            if (exercise == null || !exercise.getUser().equals(user)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            Time startTimestamp = Time.valueOf(startTime.replace("T", " ").replace("Z", ""));
+            Time endTimestamp = Time.valueOf(endTime.replace("T", " ").replace("Z", ""));
+
+            exercise.setStartTime(startTimestamp);
+            exercise.setEndTime(endTimestamp);
+            // Update other exercise fields if needed
+
+            Exercise updatedExercise = exerciseService.saveExercise(exercise);
+
+            return ResponseEntity.ok(updatedExercise);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
