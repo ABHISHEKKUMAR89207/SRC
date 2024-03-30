@@ -493,6 +493,50 @@ private String getImageUrl(String filename) {
         }
     }
 
+//    @GetMapping("/get")
+//    public ResponseEntity<?> getAllBookDetails(@RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user1 = userService.findByUsername(username);
+//
+//            // Check if the user is authenticated
+//            if (user1 == null) {
+//                // User is not authenticated, return an appropriate response
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
+//            }
+//            // Retrieve all books from the database
+//            List<BookTable> books = bookTableRepository.findAll();
+//
+//            if (!books.isEmpty()) {
+//                List<BookResponse> bookResponses = new ArrayList<>();
+//
+//                for (BookTable book : books) {
+//                    // Customize the response for each book
+//                    BookResponse bookResponse = new BookResponse(
+//                            book.getId(),
+//                            book.getTitle(),
+//                            book.getAuthor(),
+//                            book.getYear(),
+//                            book.getQuantity(),
+//                            book.getPrice(),
+//                            book.getRatings(),
+//                            getImageUrl(book.getImageFilename())
+//                    );
+//                    bookResponses.add(bookResponse);
+//                }
+//
+//                return ResponseEntity.ok(bookResponses);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while retrieving book details");
+//        }
+//    }
+//
+
     @GetMapping("/get")
     public ResponseEntity<?> getAllBookDetails(@RequestHeader("Auth") String tokenHeader) {
         try {
@@ -510,6 +554,7 @@ private String getImageUrl(String filename) {
 
             if (!books.isEmpty()) {
                 List<BookResponse> bookResponses = new ArrayList<>();
+                int totalAvailableBooks = 0; // Initialize totalAvailableBooks
 
                 for (BookTable book : books) {
                     // Customize the response for each book
@@ -521,12 +566,19 @@ private String getImageUrl(String filename) {
                             book.getQuantity(),
                             book.getPrice(),
                             book.getRatings(),
-                            getImageUrl(book.getImageFilename())
+                            getImageUrl(book.getImageFilename()),
+                            null // Set totalAvailableBook as null for now
                     );
                     bookResponses.add(bookResponse);
+                    totalAvailableBooks += book.getQuantity(); // Sum up the quantities
                 }
 
-                return ResponseEntity.ok(bookResponses);
+                // Create a Map to hold the bookResponses list and totalAvailableBooks
+                Map<String, Object> responseMap = new HashMap<>();
+                responseMap.put("books", bookResponses);
+                responseMap.put("totalAvailableBook", totalAvailableBooks);
+
+                return ResponseEntity.ok(responseMap);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No books found");
             }
@@ -535,8 +587,6 @@ private String getImageUrl(String filename) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while retrieving book details");
         }
     }
-
-
 
 
     public BookTable getBookById(Long bookId) {
@@ -883,15 +933,39 @@ private String getImageUrl(String filename) {
         }
     }
 
+//    @GetMapping("/orders")
+//    public ResponseEntity<List<OrderDTO>> getOrders() {
+//        List<Order> orders = orderRepository.findAll();
+//
+//        // Map orders to DTOs containing necessary information
+//        List<OrderDTO> orderDTOs = orders.stream()
+//                .map(order -> new OrderDTO(
+////                        order.getUser().getUserName(), // Username
+////                        order.getUser().getUserProfile().getFirstName(), // Username
+//                        order.getOrderId(),
+//                        order.getUser().getUserProfile().getFirstName() + " " + order.getUser().getUserProfile().getLastName(), // Full name
+//                        order.getUser().getEmail(), // Email
+//                        order.getBook().getTitle(), // Book title
+//                        order.getQuantity(), // Quantity
+//                        order.getAmount(), // Amount
+//                        order.getPaymentId(), // Payment ID
+//                        order.getDeliveryAddress(), // Delivery Address
+//                        order.getDeliveryDate(), // Delivery Date
+//                        order.getContact(), // Contact
+//                        order.getDeliveryStatus() // Delivery Status
+//                ))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(orderDTOs);
+//    }
+
     @GetMapping("/orders")
-    public ResponseEntity<List<OrderDTO>> getOrders() {
+    public ResponseEntity<Map<String, Object>> getOrders() {
         List<Order> orders = orderRepository.findAll();
 
         // Map orders to DTOs containing necessary information
         List<OrderDTO> orderDTOs = orders.stream()
                 .map(order -> new OrderDTO(
-//                        order.getUser().getUserName(), // Username
-//                        order.getUser().getUserProfile().getFirstName(), // Username
                         order.getOrderId(),
                         order.getUser().getUserProfile().getFirstName() + " " + order.getUser().getUserProfile().getLastName(), // Full name
                         order.getUser().getEmail(), // Email
@@ -906,8 +980,20 @@ private String getImageUrl(String filename) {
                 ))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(orderDTOs);
+        // Calculate total book sale quantity
+        int totalBookSale = orderDTOs.stream()
+                .mapToInt(OrderDTO::getQuantity)
+                .sum();
+
+        // Create a response map to hold orderDTOs list and totalBookSale
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("orders", orderDTOs);
+        responseMap.put("totalBookSale", totalBookSale);
+
+        return ResponseEntity.ok(responseMap);
     }
+
+
     @PostMapping("/orders/updateDeliveryStatus")
     public ResponseEntity<String> updateDeliveryStatus(
             @RequestParam Long orderId,

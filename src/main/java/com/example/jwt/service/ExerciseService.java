@@ -125,4 +125,12 @@ public class ExerciseService {
         return exerciseRepository.findByUserAndDateBetween(user, startDate, endDate);
     }
     // You can add more service methods as needed
+
+    public Exercise findById(Long id) {
+        return exerciseRepository.findById(id).orElse(null);
+    }
+
+    public Exercise saveExercise(Exercise exercise) {
+        return exerciseRepository.save(exercise);
+    }
 }
