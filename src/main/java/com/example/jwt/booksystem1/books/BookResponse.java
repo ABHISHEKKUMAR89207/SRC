@@ -1,5 +1,6 @@
 package com.example.jwt.booksystem1.books;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class BookResponse {
     private double ratings;
 //    private byte[] image;
     private String imageUrl;  // Add this field
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer totalAvailableBook;
     private String getImageUrl(String filename) {
         return "/images/" + filename; // Adjust the path based on your configuration

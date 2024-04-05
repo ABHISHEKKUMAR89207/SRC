@@ -109,6 +109,14 @@ public class ExerciseService {
             case "Sitting":
                 caloriesPerHour = 86; // Adjust this value based on accurate data
                 break;
+
+            case "Cycling":
+                caloriesPerHour = 360; // Adjust this value based on accurate data
+                break;
+
+            case "Walking":
+                caloriesPerHour = 160; // Adjust this value based on accurate data
+                break;
             // Add more cases for other activity types as needed
 
             default:

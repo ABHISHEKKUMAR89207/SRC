@@ -29,7 +29,7 @@ import java.time.YearMonth;
 
 @RestController
 @RequestMapping("/activities")
-public class ActivityController {
+public class  ActivityController {
     @Autowired
     private ActivityService activityService;
     @Autowired

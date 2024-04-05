@@ -461,7 +461,10 @@ private String getImageUrl(String filename) {
 //                        book.getYear(),
 //                        book.getQuantity(),
 //                        book.getPrice(),
-//                        book.getRatings(),
+//
+//
+//
+//                    book.getRatings(),
 //                        getImageUrl(book.getImageFilename())
 //                );
 //

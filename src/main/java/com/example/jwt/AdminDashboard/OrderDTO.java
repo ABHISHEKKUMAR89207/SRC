@@ -1,6 +1,7 @@
 package com.example.jwt.AdminDashboard;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +25,7 @@ public class OrderDTO {
     private String deliveryDate;
     private String contact;
     private String deliveryStatus;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer totalBookSale;
 
 
