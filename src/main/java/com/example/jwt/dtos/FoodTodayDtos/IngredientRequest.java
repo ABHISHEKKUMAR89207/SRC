@@ -11,5 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class IngredientRequest {
     private String ingredientName;
+    private String foodCode;
     private Double ingredientQuantity;
 }

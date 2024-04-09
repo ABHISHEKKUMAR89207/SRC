@@ -341,7 +341,7 @@ public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") Strin
             for (IngredientRequest ingredientInfo : ingredientRequest.getIngredients()) {
                 // Call the service method to get nutritional information for each ingredient
                 NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(
-                        ingredientInfo.getIngredientName(), ingredientInfo.getIngredientQuantity());
+                        ingredientInfo.getFoodCode(), ingredientInfo.getIngredientQuantity());
                 nutritionalInfoList.add(nutritionalInfo);
             }
 

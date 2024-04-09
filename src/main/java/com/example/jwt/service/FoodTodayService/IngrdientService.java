@@ -2693,8 +2693,31 @@ public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
     }
 
 
-    public NutritionalInfoResponse getNutritionalInfo(String ingredientName, Double ingredientQuantity) {
-        NinData ninData = ninDataRepository.findByFood(ingredientName);
+//    public NutritionalInfoResponse getNutritionalInfo(String ingredientName, Double ingredientQuantity) {
+//
+//        System.out.println("gdhsfadghsadh +++++++++++++++++ "+ingredientName);
+//
+//        NinData ninData = ninDataRepository.findByFoodCode(ingredientName);
+//
+//        System.out.println("dsafsjgdgjshdgj  ---------------  "+ninData);
+//        if (ninData != null) {
+//            Double energy = (ingredientQuantity / 100) * ninData.getEnergy();
+//            Double protein = (ingredientQuantity / 100) * ninData.getProtein();
+//            Double fat = (ingredientQuantity / 100) * ninData.getTotal_Fat();
+//            Double carbohydrates = (ingredientQuantity / 100) * ninData.getCarbohydrate();
+//            Double fiber = (ingredientQuantity / 100) * ninData.getTotal_Dietary_Fibre();
+//
+//            return new NutritionalInfoResponse(energy, protein, fat, carbohydrates, fiber);
+//        } else {
+//            return new NutritionalInfoResponse(0.0, 0.0, 0.0, 0.0, 0.0);
+//        }
+//    }
+
+    public NutritionalInfoResponse getNutritionalInfo( String foodCode, Double ingredientQuantity) {
+//        System.out.println("Searching nutritional info for: " + ingredientName);
+
+        // Check if nutritional data is available in NinData
+        NinData ninData = ninDataRepository.findByFoodCode(foodCode);
 
         if (ninData != null) {
             Double energy = (ingredientQuantity / 100) * ninData.getEnergy();
@@ -2705,9 +2728,24 @@ public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
 
             return new NutritionalInfoResponse(energy, protein, fat, carbohydrates, fiber);
         } else {
-            return new NutritionalInfoResponse(0.0, 0.0, 0.0, 0.0, 0.0);
+            // If not found in NinData, check UserRowIng
+            UserRowIng userRowIng = userRowIngRepository.findByFoodCode(foodCode);
+
+            if (userRowIng != null) {
+                Double energy = (ingredientQuantity / 100) * userRowIng.getEnergy();
+                Double protein = (ingredientQuantity / 100) * userRowIng.getProtein();
+                Double fat = (ingredientQuantity / 100) * userRowIng.getFat();
+                Double carbohydrates = (ingredientQuantity / 100) * userRowIng.getCarbohydrate();
+                Double fiber = (ingredientQuantity / 100) * userRowIng.getFiber();
+
+                return new NutritionalInfoResponse(energy, protein, fat, carbohydrates, fiber);
+            } else {
+                // If not found in both tables, return default response
+                return new NutritionalInfoResponse(0.0, 0.0, 0.0, 0.0, 0.0);
+            }
         }
     }
+
 
 
 
