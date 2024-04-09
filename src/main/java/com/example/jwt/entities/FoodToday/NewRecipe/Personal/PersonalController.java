@@ -1,10 +1,8 @@
 package com.example.jwt.entities.FoodToday.NewRecipe.Personal;
 
-import com.example.jwt.dtos.FoodTodayDtos.DishDTO;
+import com.example.jwt.Response.PersonalRecipeResponse;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
-import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.Ingredients;
-import com.example.jwt.entities.FoodToday.NewRecipe.RecipeRequest;
 import com.example.jwt.entities.User;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
@@ -13,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +25,7 @@ public class PersonalController {
     @Autowired
     private UserService userService;
     @Autowired
-    PersonalRecipe personalRecipe;
+    PersonalRecipeRepository personalRecipe;
     @Autowired
     private PersonalService personalService;
 
@@ -171,5 +168,27 @@ public ResponseEntity<String> saveRecipeAndIngredientsp(@RequestBody PersonalReq
         User user = userService.findByUsername(username);
         personalService.deleteDish(dishId);
         return ResponseEntity.ok("Dish and associated ingredients deleted successfully");
+    }
+
+
+
+    @GetMapping("/personal-recipe")
+    public ResponseEntity<?> getPersonalRecipeByName(@RequestHeader("Auth") String tokenHeader, @RequestParam String foodName) {
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+        // Fetch the personal recipe by user and food name
+        PersonalRecipeResponse personalRecipeResponse = personalService.getPersonalRecipeByName(user, foodName);
+
+        // Check if the personal recipe exists
+        if (personalRecipeResponse != null) {
+            return ResponseEntity.ok(personalRecipeResponse);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

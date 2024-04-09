@@ -1,9 +1,10 @@
 package com.example.jwt.entities.FoodToday.NewRecipe.Personal;
 
 
+import com.example.jwt.Response.IngredientResponse;
+import com.example.jwt.Response.PersonalRecipeResponse;
 import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.Ingredients;
-import com.example.jwt.entities.FoodToday.NewRecipe.RecipeRequest;
 import com.example.jwt.entities.FoodToday.NewRecipe.Recipen;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.DishesRepository;
@@ -13,10 +14,10 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class PersonalService {
 
     @Autowired
-    private PersonalRecipe personalRecipe;
+    private PersonalRecipeRepository personalRecipe;
 
     @Transactional
     public void saveRecipeAndIngredientsp(PersonalRequest request, User user) {
@@ -73,7 +74,7 @@ public class PersonalService {
 //
 
 @Autowired
-private PersonalRecipe personalRepository;
+private PersonalRecipeRepository personalRepository;
     @Autowired
     private DishesRepository dishesRepository;
     @Autowired
@@ -214,6 +215,43 @@ private PersonalRecipe personalRepository;
 
         // Delete the dish itself
         dishesRepository.delete(dish);
+    }
+
+
+
+    public PersonalRecipeResponse getPersonalRecipeByName(User username, String foodName) {
+        // Fetch personal recipe by user and food name from repository
+        Personal personalRecipe = personalRepository.findByUserAndItemname(username, foodName);
+
+        // Check if the personal recipe exists
+        if (personalRecipe != null) {
+            // Map personal recipe to response object
+            return mapToPersonalRecipeResponse(personalRecipe);
+        } else {
+            return null;
+        }
+    }
+
+    private PersonalRecipeResponse mapToPersonalRecipeResponse(Personal personal) {
+        PersonalRecipeResponse response = new PersonalRecipeResponse();
+        response.setRecipeId(personal.getRecipen().getUidrecipesn());
+        response.setRecipeName(personal.getItemname());
+        response.setTotalCookedQuantity(personal.getTotalCookedWtG());
+        response.setUnit(personal.getServingUnit());
+        response.setValueForOneUnit(personal.getOneUnitSize());
+
+        // Map ingredients to response format
+        List<IngredientResponse> ingredientResponses = new ArrayList<>();
+        for (Ingredients ingredient : personal.getIngredientList()) {
+            IngredientResponse ingredientResponse = new IngredientResponse();
+            ingredientResponse.setIngredientName(ingredient.getIngredientName());
+            ingredientResponse.setIngredientQuantity(ingredient.getIngredientQuantity());
+            ingredientResponse.setFoodCode(ingredient.getFoodCode());
+            ingredientResponses.add(ingredientResponse);
+        }
+        response.setIngredients(ingredientResponses);
+
+        return response;
     }
 
 }
