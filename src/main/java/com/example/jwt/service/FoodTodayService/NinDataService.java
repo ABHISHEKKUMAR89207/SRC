@@ -49,18 +49,18 @@ public class NinDataService {
         ninDataDTO.setEnergy(ninData.getEnergy());
         ninDataDTO.setCarbohydrate(ninData.getCarbohydrate());
         ninDataDTO.setTotal_Fat(ninData.getTotal_Fat());
-        ninDataDTO.setCholestrol(ninData.getCholestrol());
+//        ninDataDTO.setCholestrol(ninData.getCholestrol());
         ninDataDTO.setSodium(ninData.getSodium());
         ninDataDTO.setTotal_Dietary_Fibre(ninData.getTotal_Dietary_Fibre());
         ninDataDTO.setCalcium(ninData.getCalcium());
         ninDataDTO.setIron(ninData.getIron());
-        ninDataDTO.setPotassium(ninData.getPotassium());
-        ninDataDTO.setPhosphorus(ninData.getPhosphorus());
+//        ninDataDTO.setPotassium(ninData.getPotassium());
+//        ninDataDTO.setPhosphorus(ninData.getPhosphorus());
         ninDataDTO.setMagnesium(ninData.getMagnesium());
         ninDataDTO.setZinc(ninData.getZinc());
-        ninDataDTO.setSelenium(ninData.getSelenium());
-        ninDataDTO.setCopper(ninData.getCopper());
-        ninDataDTO.setManganese(ninData.getManganese());
+//        ninDataDTO.setSelenium(ninData.getSelenium());
+//        ninDataDTO.setCopper(ninData.getCopper());
+//        ninDataDTO.setManganese(ninData.getManganese());
 
 
         return ninDataDTO;

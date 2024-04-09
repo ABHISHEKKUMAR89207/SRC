@@ -54,6 +54,7 @@ public class securityConfig {
                                 .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
                                 .requestMatchers("/logs").permitAll()
                                 .requestMatchers("/api").permitAll()
+                                .requestMatchers("/api/food/add").permitAll()
                                 .requestMatchers("/authh/google-loginn").permitAll()
                                 .requestMatchers("/downloadLog").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()

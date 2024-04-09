@@ -26,4 +26,9 @@ public class IngredientsResponse {
         this.totalFats = totalFats;
         this.totalFibers = totalFibers;
     }
+
+    public IngredientsResponse(List<IngredientDTO> updatedIngredients, Double totalEnergy) {
+        this.ingredients = updatedIngredients;
+        this.totalEnergy = totalEnergy;
+    }
 }

@@ -3,7 +3,9 @@ package com.example.jwt.controler.FoodTodayController;
 import com.example.jwt.FoodTodayResponse.*;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientRequest;
+import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.User;
+import com.example.jwt.request.NutrientRequest;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.IngrdientService;
 import com.example.jwt.service.UserService;
@@ -11,8 +13,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,19 +37,69 @@ public class IngredientController {
     @Autowired
     private JwtHelper jwtHelper;
 
-    //    @PostMapping("/setIngredientsForDish")
-    @PostMapping("/setIngredientsForDish")
-    public IngredientsResponse setIngredientsForDish(@RequestHeader("Auth") String tokenHeader, @RequestParam String mealName, @RequestParam String dishName, @RequestBody List<IngredientDTO> ingredientDTOList) {
 
-        String token = tokenHeader.replace("Bearer ", "");
-
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-        return ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
+    @PostMapping("/save")
+    public ResponseEntity<String> saveNutrient(@RequestBody NutrientRequest nutrientRequest) {
+        NinData nutrient = ingrdientService.saveNutrient(nutrientRequest);
+        if (nutrient != null) {
+            return ResponseEntity.ok("Nutrient saved successfully with ID: " + nutrient.getNinDataId());
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save nutrient");
+        }
     }
+
+    //    @PostMapping("/setIngredientsForDish")
+//    @PostMapping("/setIngredientsForDish")
+//    public IngredientsResponse setIngredientsForDish(@RequestHeader("Auth") String tokenHeader, @RequestParam String mealName, @RequestParam String dishName, @RequestBody List<IngredientDTO> ingredientDTOList) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//        return ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
+//    }
+
+//    @PostMapping("/setIngredientsForDish")
+//    public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") String tokenHeader,
+//                                                        @RequestParam String mealName,
+//                                                        @RequestParam String dishName,
+//                                                        @RequestBody List<IngredientDTO> ingredientDTOList) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
+//
+//        return ResponseEntity.ok().build();    }
+@PostMapping("/setIngredientsForDish")
+public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") String tokenHeader,
+                                                    @RequestParam String mealName,
+                                                    @RequestParam String dishName,
+                                                    @RequestBody List<IngredientDTO> ingredientDTOList) {
+    String token = tokenHeader.replace("Bearer ", "");
+
+    // Extract the username (email) from the token
+    String username = jwtHelper.getUsernameFromToken(token);
+
+    // Use the username to fetch the userId from your user service
+    User user = userService.findByUsername(username);
+
+    try {
+        ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
+        return ResponseEntity.ok().build();
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+    }
+}
+
+
 
     //get all ingredient with date
     @GetMapping("/getDishesWithIngredients-by-date")

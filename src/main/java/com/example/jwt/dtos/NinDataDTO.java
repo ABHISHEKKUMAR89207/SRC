@@ -23,16 +23,16 @@ public class NinDataDTO {
     private Double carbohydrate;
     private Double protein;
     private Double Total_Fat;
-    private Double cholestrol;
+//    private Double cholestrol;
     private Double  sodium;
     private Double Total_Dietary_Fibre;
     private Double calcium;
     private Double iron;
-    private Double potassium;
-    private Double phosphorus;
+//    private Double potassium;
+//    private Double phosphorus;
     private Double magnesium;
     private Double zinc;
-    private Double selenium;
-    private Double copper;
-    private Double manganese;
+//    private Double selenium;
+//    private Double copper;
+//    private Double manganese;
 }

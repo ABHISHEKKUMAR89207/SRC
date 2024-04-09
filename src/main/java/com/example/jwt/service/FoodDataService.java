@@ -175,9 +175,11 @@ public class FoodDataService {
                 dto.setCarbohydrate(entity.getCarbohydrate());
             } else if ("total_fat".equalsIgnoreCase(column)) {
                 dto.setTotal_Fat(entity.getTotal_Fat());
-            } else if ("cholestrol".equalsIgnoreCase(column)) {
-                dto.setCholestrol(entity.getCholestrol());
-            } else if ("sodium".equalsIgnoreCase(column)) {
+            }
+//            else if ("cholestrol".equalsIgnoreCase(column)) {
+//                dto.setCholestrol(entity.getCholestrol());
+//            }
+            else if ("sodium".equalsIgnoreCase(column)) {
                 dto.setSodium(entity.getSodium());
             } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
                 dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
@@ -185,21 +187,27 @@ public class FoodDataService {
                 dto.setCalcium(entity.getCalcium());
             } else if ("iron".equalsIgnoreCase(column)) {
                 dto.setIron(entity.getIron());
-            } else if ("potassium".equalsIgnoreCase(column)) {
-                dto.setPotassium(entity.getPotassium());
-            } else if ("phosphorus".equalsIgnoreCase(column)) {
-                dto.setPhosphorus(entity.getPhosphorus());
-            } else if ("magnesium".equalsIgnoreCase(column)) {
+            }
+//            else if ("potassium".equalsIgnoreCase(column)) {
+//                dto.setPotassium(entity.getPotassium());
+//            }
+//            else if ("phosphorus".equalsIgnoreCase(column)) {
+//                dto.setPhosphorus(entity.getPhosphorus());
+//            }
+            else if ("magnesium".equalsIgnoreCase(column)) {
                 dto.setMagnesium(entity.getMagnesium());
             } else if ("zinc".equalsIgnoreCase(column)) {
                 dto.setZinc(entity.getZinc());
-            } else if ("selenium".equalsIgnoreCase(column)) {
-                dto.setSelenium(entity.getSelenium());
-            } else if ("copper".equalsIgnoreCase(column)) {
-                dto.setCopper(entity.getCopper());
-            } else if ("manganese".equalsIgnoreCase(column)) {
-                dto.setManganese(entity.getManganese());
             }
+//            else if ("selenium".equalsIgnoreCase(column)) {
+//                dto.setSelenium(entity.getSelenium());
+//            }
+//            else if ("copper".equalsIgnoreCase(column)) {
+//                dto.setCopper(entity.getCopper());
+//            }
+//            else if ("manganese".equalsIgnoreCase(column)) {
+//                dto.setManganese(entity.getManganese());
+//            }
             else if ("protein".equalsIgnoreCase(column)) {
                 dto.setProtein(entity.getProtein());
             }
@@ -240,9 +248,11 @@ public class FoodDataService {
                 dto.setCarbohydrate(entity.getCarbohydrate());
             } else if ("total_fat".equalsIgnoreCase(column)) {
                 dto.setTotal_Fat(entity.getTotal_Fat());
-            } else if ("cholestrol".equalsIgnoreCase(column)) {
-                dto.setCholestrol(entity.getCholestrol());
-            } else if ("sodium".equalsIgnoreCase(column)) {
+            }
+//            else if ("cholestrol".equalsIgnoreCase(column)) {
+//                dto.setCholestrol(entity.getCholestrol());
+//            }
+            else if ("sodium".equalsIgnoreCase(column)) {
                 dto.setSodium(entity.getSodium());
             } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
                 dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
@@ -250,21 +260,24 @@ public class FoodDataService {
                 dto.setCalcium(entity.getCalcium());
             } else if ("iron".equalsIgnoreCase(column)) {
                 dto.setIron(entity.getIron());
-            } else if ("potassium".equalsIgnoreCase(column)) {
-                dto.setPotassium(entity.getPotassium());
-            } else if ("phosphorus".equalsIgnoreCase(column)) {
-                dto.setPhosphorus(entity.getPhosphorus());
-            } else if ("magnesium".equalsIgnoreCase(column)) {
+            }
+//            else if ("potassium".equalsIgnoreCase(column)) {
+//                dto.setPotassium(entity.getPotassium());
+//            } else if ("phosphorus".equalsIgnoreCase(column)) {
+//                dto.setPhosphorus(entity.getPhosphorus());
+//            }
+            else if ("magnesium".equalsIgnoreCase(column)) {
                 dto.setMagnesium(entity.getMagnesium());
             } else if ("zinc".equalsIgnoreCase(column)) {
                 dto.setZinc(entity.getZinc());
-            } else if ("selenium".equalsIgnoreCase(column)) {
-                dto.setSelenium(entity.getSelenium());
-            } else if ("copper".equalsIgnoreCase(column)) {
-                dto.setCopper(entity.getCopper());
-            } else if ("manganese".equalsIgnoreCase(column)) {
-                dto.setManganese(entity.getManganese());
             }
+//            else if ("selenium".equalsIgnoreCase(column)) {
+//                dto.setSelenium(entity.getSelenium());
+//            } else if ("copper".equalsIgnoreCase(column)) {
+//                dto.setCopper(entity.getCopper());
+//            } else if ("manganese".equalsIgnoreCase(column)) {
+//                dto.setManganese(entity.getManganese());
+//            }
             else if ("protein".equalsIgnoreCase(column)) {
                 dto.setProtein(entity.getProtein());
             }
@@ -323,20 +336,39 @@ public class FoodDataService {
     @PersistenceContext
     private EntityManager entityManager;
 
+//    public List<NinDataDTO> getAllNinData() {
+//        Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
+//                "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
+//                "nd.Energy, nd.carbohydrate, nd.Protein, nd.Total_Fat, " +
+//                "nd.cholestrol, nd.sodium, nd.Total_Dietary_Fibre, " +
+//                "nd.calcium, nd.iron, nd.potassium, nd.phosphorus, " +
+//                "nd.magnesium, nd.zinc, nd.selenium, " +
+//                "nd.copper, nd.manganese) FROM NinData nd");
+//        return query.getResultList();
+//    }
+
+
+//    public List<NinDataDTO> getAllNinData() {
+//        Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
+//                "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
+//                "nd.Energy, nd.carbohydrate, nd.Protein, nd.Total_Fat, " +
+//                " nd.sodium, nd.Total_Dietary_Fibre, " +
+//                "nd.calcium, nd.iron, " +
+//                "nd.magnesium, nd.zinc,  " +
+//                "nd.copper, nd.manganese) FROM NinData nd");
+//        return query.getResultList();
+//    }
+
+
     public List<NinDataDTO> getAllNinData() {
         Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
                 "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
                 "nd.Energy, nd.carbohydrate, nd.Protein, nd.Total_Fat, " +
-                "nd.cholestrol, nd.sodium, nd.Total_Dietary_Fibre, " +
-                "nd.calcium, nd.iron, nd.potassium, nd.phosphorus, " +
-                "nd.magnesium, nd.zinc, nd.selenium, " +
-                "nd.copper, nd.manganese) FROM NinData nd");
+                " nd.sodium, nd.Total_Dietary_Fibre, " +
+                "nd.calcium, nd.iron, " +
+                "nd.magnesium, nd.zinc) FROM NinData nd");
         return query.getResultList();
     }
-
-
-
-
 
 
 

@@ -7,6 +7,8 @@ import com.example.jwt.entities.FoodToday.MissingRowFoodDTO;
 import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.FoodToday.Recipe.Recipe;
 import com.example.jwt.entities.FoodToday.Recipe.RecipeRepository;
+import com.example.jwt.entities.FoodToday.UserRowIngredient.UserRowIng;
+import com.example.jwt.entities.FoodToday.UserRowIngredient.UserRowIngRepository;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.MissingRowFoodRepository;
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
@@ -61,26 +63,60 @@ public class NinDataController {
 //        }
 //    }
 
-    @GetMapping("/all-food-list")
-    public List<FoodDTO> getAllFoodNamesAndCodes(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
-        String token = tokenHeader.replace("Bearer ", "");
+//    @GetMapping("/all-food-list")
+//    public List<FoodDTO> getAllFoodNamesAndCodes(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user != null && user.getUserId().equals(user.getUserId())) {
+//            List<NinData> foodItems = ninDataRepository.findAll();
+//            List<FoodDTO> foodList = foodItems.stream()
+//                    .map(foodItem -> new FoodDTO(foodItem.getFood(), foodItem.getFoodCode()))
+//                    .collect(Collectors.toList());
+//            return foodList;
+//        } else {
+//            throw new AccessDeniedException("Access denied");
+//        }
+//    }
 
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
+    @Autowired
+    private UserRowIngRepository userRowIngRepository;
+@GetMapping("/all-food-list")
+public List<FoodDTO> getAllFoodNamesAndCodes(@RequestHeader("Auth") String tokenHeader) throws AccessDeniedException {
+    String token = tokenHeader.replace("Bearer ", "");
 
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
+    // Extract the username (email) from the token
+    String username = jwtHelper.getUsernameFromToken(token);
 
-        if (user != null && user.getUserId().equals(user.getUserId())) {
-            List<NinData> foodItems = ninDataRepository.findAll();
-            List<FoodDTO> foodList = foodItems.stream()
-                    .map(foodItem -> new FoodDTO(foodItem.getFood(), foodItem.getFoodCode()))
-                    .collect(Collectors.toList());
-            return foodList;
-        } else {
-            throw new AccessDeniedException("Access denied");
-        }
+    // Use the username to fetch the userId from your user service
+    User user = userService.findByUsername(username);
+
+    if (user != null && user.getUserId().equals(user.getUserId())) {
+        // Fetch data from NinData table
+        List<NinData> ninFoodItems = ninDataRepository.findAll();
+        List<FoodDTO> foodList = ninFoodItems.stream()
+                .map(foodItem -> new FoodDTO(foodItem.getFood(), foodItem.getFoodCode()))
+                .collect(Collectors.toList());
+
+        // Fetch data from UserRowIng table
+        List<UserRowIng> userRowIngList = userRowIngRepository.findAllByUser(user);
+        List<FoodDTO> userRowIngFoodList = userRowIngList.stream()
+                .map(userRowIng -> new FoodDTO(userRowIng.getFoodName(), userRowIng.getFoodCode()))
+                .collect(Collectors.toList());
+
+        // Combine both lists
+        foodList.addAll(userRowIngFoodList);
+
+        return foodList;
+    } else {
+        throw new AccessDeniedException("Access denied");
     }
+}
 
     @Autowired
     private RecipeRepository recipeRepository;

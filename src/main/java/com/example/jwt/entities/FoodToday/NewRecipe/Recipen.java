@@ -29,7 +29,7 @@ public class Recipen {
 
     private String itemcode;
     private String itemname;
-    private String typeOfPreparation;
+    private String typeOfPreperation;
     private double totalCookedWtG;
     private double oneServingWtG;
     private String servingMeasure;

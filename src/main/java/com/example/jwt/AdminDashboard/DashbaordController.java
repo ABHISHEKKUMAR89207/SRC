@@ -1628,6 +1628,7 @@ public List<NinDataRequestResponse> getAllNinData() {
                 ninData.getCategory(),
                 ninData.getSource(),
                 ninData.getTypesoffood(),
+
                 ninData.getEnergy() != null ? ninData.getEnergy() : 0.0,
                 ninData.getProtein() != null ? ninData.getProtein() : 0.0,
                 ninData.getTotal_Fat() != null ? ninData.getTotal_Fat() : 0.0,

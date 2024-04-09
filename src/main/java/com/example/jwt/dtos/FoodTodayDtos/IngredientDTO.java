@@ -42,6 +42,8 @@ public class IngredientDTO {
 
 
     }
+
+
     public IngredientDTO(String ingredientName,
                          Double ingredientQuantity,
                          Double energy,
@@ -80,5 +82,12 @@ public class IngredientDTO {
     public IngredientDTO(String ingredientName, Double ingredientQuantity) {
         this.ingredientName = ingredientName;
         this.ingredientQuantity = ingredientQuantity;
+    }
+
+    public IngredientDTO(String ingredientName, Double ingredientQuantity, double v) {
+        this.ingredientName = ingredientName;
+        this.ingredientQuantity = ingredientQuantity;
+        this.energy = v;
+
     }
 }

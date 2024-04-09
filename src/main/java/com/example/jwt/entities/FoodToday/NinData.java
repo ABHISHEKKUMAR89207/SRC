@@ -34,6 +34,7 @@ public class NinData {
     private Double Energy;
     private Double Protein;
     private Double Total_Fat;
+
     private Double Total_Dietary_Fibre;
     private Double carbohydrate;
     private Double thiamine_B1;
@@ -60,12 +61,12 @@ private Double retinolVit_A;
 
 
 
-    private Double cholestrol;
-    private Double potassium;
-    private Double phosphorus;
-    private Double selenium;
-    private Double copper;
-    private Double manganese;
+//    private Double cholestrol;
+//    private Double potassium;
+//    private Double phosphorus;
+//    private Double selenium;
+//    private Double copper;
+//    private Double manganese;
 
 
 

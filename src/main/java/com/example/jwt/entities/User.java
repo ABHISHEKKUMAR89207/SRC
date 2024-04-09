@@ -2,6 +2,7 @@ package com.example.jwt.entities;
 
 import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.NewRecipe.Personal.Personal;
+import com.example.jwt.entities.FoodToday.UserRowIngredient.UserRowIng;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.*;
 import com.example.jwt.entities.water.WaterEntity;
@@ -100,6 +101,11 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Personal> personals;
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // Add this annotation
+    private List<UserRowIng> userRowIngs = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
