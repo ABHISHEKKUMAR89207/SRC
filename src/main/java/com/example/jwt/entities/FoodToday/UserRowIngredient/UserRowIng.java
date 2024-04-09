@@ -2,6 +2,7 @@ package com.example.jwt.entities.FoodToday.UserRowIngredient;
 
 
 import com.example.jwt.entities.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,6 +53,8 @@ public class UserRowIng {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+
     @JoinColumn(name = "user_id")
     private User user;
 }
