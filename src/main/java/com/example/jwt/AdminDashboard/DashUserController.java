@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/dashboard")
 public class DashUserController {
@@ -34,6 +36,13 @@ public ResponseEntity<UsersByWorkLevelDTO> getUsersByWorkLevel() {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+
+
+    @GetMapping("/average-steps-by-age")
+    public ResponseEntity<List<AverageStepsByAgeDTO>> getAverageStepsByAge() {
+        List<AverageStepsByAgeDTO> statsList = demoService.getAverageStepsByAge();
+        return new ResponseEntity<>(statsList, HttpStatus.OK);
+    }
 
 //    @GetMapping("/totalStepCountAndKms")
 //    public ResponseEntity<StepCountDTO> getTotalStepCountAndKms() {

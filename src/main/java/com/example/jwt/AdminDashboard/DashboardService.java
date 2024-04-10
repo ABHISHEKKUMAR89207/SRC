@@ -685,8 +685,34 @@ public class DashboardService {
         for (Dishes dish : dishesList) {
             List<Ingredients> ingredients = dish.getIngredientList();
 
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//                System.out.println("bye  errer nidata v----------------- "+ninData.getEnergy());
+//                // Calculate nutrient intake based on ingredient quantity and NinData
+//                double nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//                totalNutrientIntake.merge("Energy", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+//                totalNutrientIntake.merge("Proteins", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+//                totalNutrientIntake.merge("Carbs", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Fat();
+//                totalNutrientIntake.merge("Fats", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Dietary_Fibre();
+//                totalNutrientIntake.merge("Fibers", nutrientIntake, Double::sum);
+//            }
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
 
                 // Calculate nutrient intake based on ingredient quantity and NinData
                 double nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
@@ -726,13 +752,27 @@ public class DashboardService {
             double totalProteinIntake = 0.0;
 
             // Consider direct ingredients
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//                // Calculate protein intake based on ingredient quantity and NinData
+//                double proteinIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+//                totalProteinIntake += proteinIntake;
+//            }
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
 
                 // Calculate protein intake based on ingredient quantity and NinData
                 double proteinIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
                 totalProteinIntake += proteinIntake;
             }
+
 
             // Consider recipe ingredients
             Recipe recipe = dish.getRecipe();
@@ -763,8 +803,22 @@ public class DashboardService {
             double totalIronIntake = 0.0;
 
             // Consider direct ingredients
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//                // Calculate iron intake based on ingredient quantity and NinData
+//                double ironIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getIron();
+//                totalIronIntake += ironIntake;
+//            }
+
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
 
                 // Calculate iron intake based on ingredient quantity and NinData
                 double ironIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getIron();
@@ -801,13 +855,27 @@ public class DashboardService {
             double totalCalciumIntake = 0.0;
 
             // Consider direct ingredients
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//                // Calculate calcium intake based on ingredient quantity and NinData
+//                double calciumIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCalcium();
+//                totalCalciumIntake += calciumIntake;
+//            }
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
 
                 // Calculate calcium intake based on ingredient quantity and NinData
                 double calciumIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCalcium();
                 totalCalciumIntake += calciumIntake;
             }
+
 
             // Consider recipe ingredients
             Recipe recipe = dish.getRecipe();
@@ -839,13 +907,27 @@ public class DashboardService {
             double totalCalorieIntake = 0.0;
 
             // Consider direct ingredients
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//                // Calculate calorie intake based on ingredient quantity and NinData
+//                double calorieIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//                totalCalorieIntake += calorieIntake;
+//            }
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
 
                 // Calculate calorie intake based on ingredient quantity and NinData
                 double calorieIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
                 totalCalorieIntake += calorieIntake;
             }
+
 
             // Consider recipe ingredients
             Recipe recipe = dish.getRecipe();
@@ -878,13 +960,27 @@ public class DashboardService {
             double totalCHOIntake = 0.0;
 
             // Consider direct ingredients
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//
+//                // Calculate CHO intake based on ingredient quantity and NinData
+//                double choIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+//                totalCHOIntake += choIntake;
+//            }
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
 
-                // Calculate CHO intake based on ingredient quantity and NinData
-                double choIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
-                totalCHOIntake += choIntake;
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
+
+                // Calculate calorie intake based on ingredient quantity and NinData
+                double calorieIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+                totalCHOIntake += calorieIntake;
             }
+
 
             // Consider recipe ingredients
             Recipe recipe = dish.getRecipe();
@@ -960,9 +1056,34 @@ public class DashboardService {
         for (Dishes dish : dishesList) {
             List<Ingredients> ingredients = dish.getIngredientList();
 
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
+//
+//                // Calculate nutrient intake based on ingredient quantity and NinData
+//                double nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//                totalNutrientIntake.merge("Energy", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getProtein();
+//                totalNutrientIntake.merge("Proteins", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getCarbohydrate();
+//                totalNutrientIntake.merge("Carbs", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Fat();
+//                totalNutrientIntake.merge("Fats", nutrientIntake, Double::sum);
+//
+//                nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Dietary_Fibre();
+//                totalNutrientIntake.merge("Fibers", nutrientIntake, Double::sum);
+//            }
             for (Ingredients ingredient : ingredients) {
-                NinData ninData = ninDataRepository.findByFood(ingredient.getIngredientName());
-
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+                System.out.println("hsdhs ___________"+ninData);;
+                // Check if NinData is null
+                if (ninData == null) {
+                    // Handle the case when NinData is not found for an ingredient
+                    continue; // Skip this ingredient and move to the next one
+                }
+                System.out.println("hsdhs Energyyyyyyyy___________"+ninData.getEnergy());;
                 // Calculate nutrient intake based on ingredient quantity and NinData
                 double nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
                 totalNutrientIntake.merge("Energy", nutrientIntake, Double::sum);
@@ -979,6 +1100,7 @@ public class DashboardService {
                 nutrientIntake = (ingredient.getIngredientQuantity() / 100) * ninData.getTotal_Dietary_Fibre();
                 totalNutrientIntake.merge("Fibers", nutrientIntake, Double::sum);
             }
+
         }
 
         // Find the most consumed nutrient
