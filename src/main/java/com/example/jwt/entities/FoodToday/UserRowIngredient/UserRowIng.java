@@ -27,13 +27,13 @@ public class UserRowIng {
     private double fat;
     private double fiber;
     private double carbohydrate;
-    private double thiamine; // Thiamine (B1)
-    private double riboflavin; // Riboflavin (B2)
-    private double niacin; // Niacin (B3)
-    private double vitaminB6; // Vitamin B6
-    private double totalFolate; // Total folate
-    private double vitaminC; // Vitamin C
-    private double vitaminA; // Vitamin A
+    private double thiamine;
+    private double riboflavin;
+    private double niacin;
+    private double vitaminB6;
+    private double totalFolate;
+    private double vitaminC;
+    private double vitaminA;
     private double iron;
     private double zinc;
     private double sodium;
@@ -46,15 +46,12 @@ public class UserRowIng {
 
 
 
-
-    //    private String source;
     @OneToOne(mappedBy = "userRowIng", cascade = CascadeType.ALL)
     private Source source;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-
     @JoinColumn(name = "user_id")
     private User user;
 }
