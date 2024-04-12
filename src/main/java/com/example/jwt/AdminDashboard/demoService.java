@@ -84,8 +84,8 @@ public class demoService {
 //
 //        return statsList;
 //    }
-public List<SleepDurationStatsDTO> getAverageSleepDurationByAgeAndGender() {
-    List<SleepDurationStatsDTO> statsList = new ArrayList<>();
+public List<AverageDTOs> getAverageSleepDurationByAgeAndGender() {
+    List<AverageDTOs> statsList = new ArrayList<>();
 
     // Fetch all users with sleep duration information
     List<User> users = userRepository.findAll();
@@ -104,22 +104,113 @@ public List<SleepDurationStatsDTO> getAverageSleepDurationByAgeAndGender() {
                         return gender != null ? gender : "Unknown"; // Handle null genders
                     })));
 
+//    // Calculate average sleep duration and user count for each group
+//    groupedUsers.forEach((ageGroup, genderMap) ->
+//            genderMap.forEach((gender, userList) -> {
+//                double averageDuration = calculateAverageDuration(userList);
+//                long userCount = userList.size();  // Count of users in the group
+//                SleepDurationStatsDTO statsDTO = new SleepDurationStatsDTO();
+//                statsDTO.setAgeGroup(ageGroup);
+//                statsDTO.setGender(gender);
+//                statsDTO.setAverageDuration(averageDuration);
+//                statsDTO.setUserCount(userCount);
+//                statsList.add(statsDTO);
+//            }));
+//    groupedUsers.forEach((ageGroup, genderMap) ->
+//            genderMap.forEach((gender, userList) -> {
+//                double averageDuration = calculateAverageDuration(userList);
+//                long userCount = userList.size();  // Count of users in the group
+//                String averageDurationWithUnit = String.format("%.2f min", averageDuration); // Format with unit
+//                SleepDurationStatsDTO statsDTO = new SleepDurationStatsDTO();
+//                statsDTO.setAgeGroup(ageGroup);
+//                statsDTO.setGender(gender);
+//                statsDTO.setAverageDuration(averageDurationWithUnit); // Set the formatted string with unit
+//                statsDTO.setUserCount(userCount);
+//                statsList.add(statsDTO);
+//            }));
+
+
     // Calculate average sleep duration and user count for each group
     groupedUsers.forEach((ageGroup, genderMap) ->
             genderMap.forEach((gender, userList) -> {
-                double averageDuration = calculateAverageDuration(userList);
+                double averageDurationMinutes = calculateAverageDuration(userList);
+                String averageDurationStr = convertMinutesToHoursMinutes(averageDurationMinutes); // Convert to hr:min format
                 long userCount = userList.size();  // Count of users in the group
-                SleepDurationStatsDTO statsDTO = new SleepDurationStatsDTO();
+                AverageDTOs statsDTO = new AverageDTOs();
                 statsDTO.setAgeGroup(ageGroup);
                 statsDTO.setGender(gender);
-                statsDTO.setAverageDuration(averageDuration);
+                statsDTO.setAverage(averageDurationStr); // Use the converted string
                 statsDTO.setUserCount(userCount);
                 statsList.add(statsDTO);
             }));
 
     return statsList;
 }
+public List<AverageDTOs> calculateAverageWaterIntake() {
+    // Maps to keep track of total water intake and user counts for each category
+    Map<String, Map<String, Double>> totalWaterIntake = new HashMap<>();
+    Map<String, Map<String, Integer>> userCounts = new HashMap<>();
 
+    // Initialize these maps for male and female categories
+    initializeMaps(totalWaterIntake, userCounts);
+
+    // Fetch all users
+    List<User> users = userRepository.findAll();
+    if (users == null) {
+        return Collections.emptyList();
+    }
+
+    // Process each user
+    for (User user : users) {
+        UserProfile profile = user.getUserProfile();
+        if (profile == null || profile.getGender() == null) continue;
+
+        String ageGroup = calculateAgeGroup(user);
+        String gender = profile.getGender().toLowerCase();
+
+        Double waterIntake = calculateWaterIntakeForUser(user);
+        totalWaterIntake.get(gender).merge(ageGroup, waterIntake, Double::sum);
+        userCounts.get(gender).merge(ageGroup, 1, Integer::sum);
+    }
+
+    return compileResults(totalWaterIntake, userCounts);
+}
+
+
+    private void initializeMaps(Map<String, Map<String, Double>> intakeMap, Map<String, Map<String, Integer>> countMap) {
+        List<String> genders = Arrays.asList("male", "female");
+        List<String> ageGroups = Arrays.asList("<15yrs", "15-29yrs", "30-44yrs", "45-59yrs", ">60yrs");
+
+        for (String gender : genders) {
+            intakeMap.put(gender, new LinkedHashMap<>());
+            countMap.put(gender, new LinkedHashMap<>());
+            for (String ageGroup : ageGroups) {
+                intakeMap.get(gender).put(ageGroup, 0.0);
+                countMap.get(gender).put(ageGroup, 0);
+            }
+        }
+    }
+
+    private List<AverageDTOs> compileResults(Map<String, Map<String, Double>> totalWaterIntake, Map<String, Map<String, Integer>> userCounts) {
+        List<AverageDTOs> results = new ArrayList<>();
+        totalWaterIntake.forEach((gender, ageMap) -> {
+            ageMap.forEach((ageGroup, total) -> {
+                Integer count = userCounts.get(gender).get(ageGroup);
+                if (count > 0) {
+                    double average = total / count;
+                    results.add(new AverageDTOs(String.format("%.2fml", average), ageGroup, gender, count));
+                }
+            });
+        });
+        return results;
+    }
+
+
+    public String convertMinutesToHoursMinutes(double minutes) {
+        int hours = (int) minutes / 60;
+        int remainingMinutes = (int) minutes % 60;
+        return String.format("%dh:%02dm", hours, remainingMinutes);
+    }
 //    public Double calculateAverageWaterIntake(Long userId) {
 //        User user = userRepository.findById(userId).orElse(null);
 //        if (user == null) {
@@ -273,58 +364,66 @@ private WaterEntityRepository waterEntityRepository;
 
 
 
-        public Map<String, Map<String, Double>> calculateAverageWaterIntake() {
-            // Define average water intake values (in milliliters) for different age groups and genders
-            // These values can be retrieved from a database or configuration file
-            Map<String, Map<String, Double>> averageWaterIntakeResult = new HashMap<>();
-            Map<String, Double> maleHeartMap = new LinkedHashMap<>(); // Use LinkedHashMap here
-            Map<String, Double> femaleIntakeMap = new LinkedHashMap<>(); // Use LinkedHashMap here
+//        public Map<String, Map<String, Double>> calculateAverageWaterIntake() {
+//            // Define average water intake values (in milliliters) for different age groups and genders
+//            // These values can be retrieved from a database or configuration file
+//            Map<String, Map<String, Double>> averageWaterIntakeResult = new HashMap<>();
+//            Map<String, Double> maleHeartMap = new LinkedHashMap<>(); // Use LinkedHashMap here
+//            Map<String, Double> femaleIntakeMap = new LinkedHashMap<>(); // Use LinkedHashMap here
+//
+//            // Initialize average water intake values for male and female
+//            initializeAverageValueMap(maleHeartMap);
+//            initializeAverageValueMap(femaleIntakeMap);
+//
+//            // Populate the map with gender-specific intake maps
+//            averageWaterIntakeResult.put("male", maleHeartMap);
+//            averageWaterIntakeResult.put("female", femaleIntakeMap);
+//
+//            // Fetch all users
+//            List<User> users = userRepository.findAll();
+//
+//            if (users == null) {
+//                // Handle the case where users list is null
+//                return averageWaterIntakeResult; // or throw an exception
+//            }
+//
+//            // Iterate through all users to calculate total water intake for each age group and gender
+//            for (User user : users) {
+//                // Check if user profile is null
+//                if (user.getUserProfile() == null) {
+//                    continue; // Skip this user and continue to the next one
+//                }
+//
+//                String ageGroup = calculateAgeGroup(user);
+//                String gender = user.getUserProfile().getGender().toLowerCase();
+//                Double waterIntake = calculateWaterIntakeForUser(user);
+//
+//                // Update the total water intake for the specified age group and gender
+//                Map<String, Double> genderMap = averageWaterIntakeResult.get(gender);
+//                genderMap.put(ageGroup, genderMap.getOrDefault(ageGroup, 0.0) + waterIntake);
+//            }
+//
+//            return averageWaterIntakeResult;
+//        }
 
-            // Initialize average water intake values for male and female
-            initializeAverageValueMap(maleHeartMap);
-            initializeAverageValueMap(femaleIntakeMap);
 
-            // Populate the map with gender-specific intake maps
-            averageWaterIntakeResult.put("male", maleHeartMap);
-            averageWaterIntakeResult.put("female", femaleIntakeMap);
-
-            // Fetch all users
-            List<User> users = userRepository.findAll();
-
-            if (users == null) {
-                // Handle the case where users list is null
-                return averageWaterIntakeResult; // or throw an exception
-            }
-
-            // Iterate through all users to calculate total water intake for each age group and gender
-            for (User user : users) {
-                // Check if user profile is null
-                if (user.getUserProfile() == null) {
-                    continue; // Skip this user and continue to the next one
-                }
-
-                String ageGroup = calculateAgeGroup(user);
-                String gender = user.getUserProfile().getGender().toLowerCase();
-                Double waterIntake = calculateWaterIntakeForUser(user);
-
-                // Update the total water intake for the specified age group and gender
-                Map<String, Double> genderMap = averageWaterIntakeResult.get(gender);
-                genderMap.put(ageGroup, genderMap.getOrDefault(ageGroup, 0.0) + waterIntake);
-            }
-
-            return averageWaterIntakeResult;
-        }
+//    private void initializeAverageValueMap(Map<String, Double> intakeMap) {
+//        // Initialize average water intake values for different age groups
+//        intakeMap.put("<15", 0.0);
+//        intakeMap.put("15-29", 0.0);
+//        intakeMap.put("30-44", 0.0);
+//        intakeMap.put("45-59", 0.0);
+//        intakeMap.put(">60", 0.0);
+//    }
 
     private void initializeAverageValueMap(Map<String, Double> intakeMap) {
         // Initialize average water intake values for different age groups
-        intakeMap.put("<15", 0.0);
-        intakeMap.put("15-29", 0.0);
-        intakeMap.put("30-44", 0.0);
-        intakeMap.put("45-59", 0.0);
-        intakeMap.put(">60", 0.0);
+        intakeMap.put("<15yrs", 0.0);
+        intakeMap.put("15-29yrs", 0.0);
+        intakeMap.put("30-44yrs", 0.0);
+        intakeMap.put("45-59yrs", 0.0);
+        intakeMap.put(">60yrs", 0.0);
     }
-
-
     private Double calculateWaterIntakeForUser(User user) {
         List<WaterEntity> waterEntities = user.getWaterEntities();
         Double totalWaterIntake = 0.0;
@@ -480,6 +579,30 @@ private HeartRateRepository heartRateRepository;
 //    }
 
     private String calculateAgeGroup(User user) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate birthDate = user.getUserProfile() != null ? user.getUserProfile().getDateOfBirth() : null;
+
+        if (birthDate == null) {
+            // Handle the case where birthDate is null
+            return "Unknown"; // or throw an exception
+        }
+
+        int age = Period.between(birthDate, currentDate).getYears();
+
+        // Implement logic to categorize age into groups
+        if (age < 15) {
+            return "<15yrs";
+        } else if (age >= 15 && age <= 29) {
+            return "15-29yrs";
+        } else if (age >= 30 && age <= 44) {
+            return "30-44yrs";
+        } else if (age >= 45 && age <= 59) {
+            return "45-59yrs";
+        } else {
+            return ">60yrs";
+        }
+    }
+    private String calculateAgeGroupp(User user) {
         LocalDate currentDate = LocalDate.now();
         LocalDate birthDate = user.getUserProfile() != null ? user.getUserProfile().getDateOfBirth() : null;
 

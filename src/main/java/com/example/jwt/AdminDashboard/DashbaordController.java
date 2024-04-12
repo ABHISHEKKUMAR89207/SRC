@@ -13,7 +13,6 @@ import com.example.jwt.exception.ResourceNotFoundException;
 //import org.springframework.data.domain.PageRequest;
 
 import com.example.jwt.repository.FoodTodayRepository.MissingRowFoodRepository;
-import org.apache.poi.ss.usermodel.*;
 
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.request.NinDataRequestResponse;
@@ -77,9 +76,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
@@ -326,7 +323,7 @@ public Map<String, Integer> getStateCount() {
     @Autowired
     private demoService sleepDurationService;
     @GetMapping("/average-sleep")
-    public ResponseEntity<List<SleepDurationStatsDTO>> getAverageSleepDurationByAgeAndGender( @RequestHeader("Auth") String tokenHeader) {
+    public ResponseEntity<List<AverageDTOs>> getAverageSleepDurationByAgeAndGender(@RequestHeader("Auth") String tokenHeader) {
         try {
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
@@ -337,7 +334,7 @@ public Map<String, Integer> getStateCount() {
 //            // User is not authenticated, return an appropriate response
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User is not authenticated");
 //        }
-            List<SleepDurationStatsDTO> stats = sleepDurationService.getAverageSleepDurationByAgeAndGender();
+            List<AverageDTOs> stats = sleepDurationService.getAverageSleepDurationByAgeAndGender();
             return new ResponseEntity<>(stats, HttpStatus.OK);
         } catch (Exception e) {
             // Handle exception
@@ -718,21 +715,36 @@ private String getImageUrl(String filename) {
     }
 
 
-    @GetMapping("/average-water-intake")
-    @ResponseBody
-    public Map<String, Map<String, Double>> getAverageWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+//    @GetMapping("/average-water-intake")
+//    @ResponseBody
+//    public Map<String, Map<String, Double>> getAverageWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        // Check if the user is authenticated
+//        if (user == null) {
+//            // User is not authenticated, return an empty map or handle the error appropriately
+//            return Collections.emptyMap();
+//        }
+//        return demoService.calculateAverageWaterIntake();
+//    }
+@GetMapping("/average-water-intake")
+@ResponseBody
+public List<AverageDTOs> getAverageWaterIntake(@RequestHeader("Auth") String tokenHeader) {
+    String token = tokenHeader.replace("Bearer ", "");
+    String username = jwtHelper.getUsernameFromToken(token);
+    User user = userService.findByUsername(username);
 
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
-
-        // Check if the user is authenticated
-        if (user == null) {
-            // User is not authenticated, return an empty map or handle the error appropriately
-            return Collections.emptyMap();
-        }
-        return demoService.calculateAverageWaterIntake();
+    // Check if the user is authenticated
+    if (user == null) {
+        // User is not authenticated, return an empty list
+        return Collections.emptyList();
     }
+    return demoService.calculateAverageWaterIntake();
+}
+
 
 
 //    @GetMapping("/average-heart-rate")
