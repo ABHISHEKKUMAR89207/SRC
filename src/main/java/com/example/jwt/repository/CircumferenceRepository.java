@@ -7,9 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CircumferenceRepository extends JpaRepository<Circumference, Long> {
+    Optional<Circumference> findTopByUserOrderByDateDesc(User user);
+//    Optional<Circumference> findTopByUserOrderByDateDesc(User user);
+
 
     Circumference findByUserAndDate(User user, LocalDate date);
 

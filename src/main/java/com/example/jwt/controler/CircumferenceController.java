@@ -78,42 +78,102 @@ private final CircumferenceService circumferenceService;
         }
     }
 
-@GetMapping("/hip-circumference/{date}")
-public Map<String, Object> getHipCircumferenceByDate(@RequestHeader("Auth") String tokenHeader, @PathVariable String date) {
-    Map<String, Object> response = new HashMap<>();
-    try {
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
+//@GetMapping("/hip-circumference/{date}")
+//public Map<String, Object> getHipCircumferenceByDate(@RequestHeader("Auth") String tokenHeader, @PathVariable String date) {
+//    Map<String, Object> response = new HashMap<>();
+//    try {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        LocalDate measurementDate = LocalDate.parse(date); // Parse date from the request
+//
+//        String hipCircumference = circumferenceService.getHipCircumferenceByDate(measurementDate, user);
+//
+//        response.put("date", date);
+//        response.put("hipCircumference", hipCircumference);
+//
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        response.put("error", "Internal Server Error");
+//    }
+//    return response;
+//    }
 
-        LocalDate measurementDate = LocalDate.parse(date); // Parse date from the request
-
-        String hipCircumference = circumferenceService.getHipCircumferenceByDate(measurementDate, user);
-
-        response.put("date", date);
-        response.put("hipCircumference", hipCircumference);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        response.put("error", "Internal Server Error");
-    }
-    return response;
-    }
-
-    @GetMapping("/waist-circumference/{date}")
-    public Map<String, Object> getWaistCircumferenceByDate(@RequestHeader("Auth") String tokenHeader, @PathVariable String date) {
+    @GetMapping("/latest-hip-circumference")
+    public Map<String, Object> getLatestHipCircumference(@RequestHeader("Auth") String tokenHeader) {
         Map<String, Object> response = new HashMap<>();
         try {
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
             User user = userService.findByUsername(username);
 
-            LocalDate measurementDate = LocalDate.parse(date); // Parse date from the request
+            Map<String, Object> hipCircumferenceDetails = circumferenceService.getLatestHipCircumferenceDetails(user);
+            if (hipCircumferenceDetails != null) {
+                response.putAll(hipCircumferenceDetails);
+            } else {
+                response.put("error", "No data available");
+            }
 
-            String waistCircumference = circumferenceService.getWaistCircumferenceByDate(measurementDate, user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("error", "Internal Server Error");
+        }
+        return response;
+    }
 
-            response.put("date", date);
-            response.put("waistCircumference", waistCircumference);
+//    @GetMapping("/waist-circumference")
+//    public Map<String, Object> getWaistCircumferenceByDate(@RequestHeader("Auth") String tokenHeader, @PathVariable String date) {
+//        Map<String, Object> response = new HashMap<>();
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            LocalDate measurementDate = LocalDate.parse(date); // Parse date from the request
+//
+//            String waistCircumference = circumferenceService.getWaistCircumferenceByDate(measurementDate, user);
+//
+//            response.put("date", date);
+//            response.put("waistCircumference", waistCircumference);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.put("error", "Internal Server Error");
+//        }
+//        return response;
+//    }
+//    public Map<String, Object> getLatestWaistCircumference(@RequestHeader("Auth") String tokenHeader) {
+//        Map<String, Object> response = new HashMap<>();
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            String waistCircumference = circumferenceService.getLatestWaistCircumference(user);
+//
+//            response.put("waistCircumference", waistCircumference);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.put("error", "Internal Server Error");
+//        }
+//        return response;
+//    }
+@GetMapping("/latest-waist-circumference")
+public Map<String, Object> getLatestWaistCircumference(@RequestHeader("Auth") String tokenHeader) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            Map<String, Object> waistCircumferenceDetails = circumferenceService.getLatestWaistCircumferenceDetails(user);
+            if (waistCircumferenceDetails != null) {
+                response.putAll(waistCircumferenceDetails);
+            } else {
+                response.put("error", "No data available");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

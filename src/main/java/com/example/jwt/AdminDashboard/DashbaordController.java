@@ -19,6 +19,8 @@ import com.example.jwt.request.NinDataRequestResponse;
 import com.example.jwt.service.FoodTodayService.NinDataService;
 
 
+import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -763,25 +765,318 @@ public List<AverageDTOs> getAverageWaterIntake(@RequestHeader("Auth") String tok
 //        return demoService.calculateAverageHeartRate();
 //    }
 
-    @GetMapping("/average-heart-rate")
-    @ResponseBody
-    public Map<String, Map<String, Double>> getAverageHeartRate(@RequestHeader("Auth") String tokenHeader) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-            User user = userService.findByUsername(username);
+//    @GetMapping("/average-heart-rate")
+//    @ResponseBody
+//    public Map<String, Map<String, Double>> getAverageHeartRate(@RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userService.findByUsername(username);
+//
+//            // Check if the user is authenticated
+//            if (user == null) {
+//                // User is not authenticated, return an empty map or handle the error appropriately
+//                return Collections.emptyMap();
+//            }
+//            return demoService.calculateAverageHeartRate();
+//        } catch (RuntimeException e) {
+//            // Handle exception
+//            return Collections.emptyMap();
+//        }
+//    }
+@GetMapping("/average-heart-rate")
+@ResponseBody
+public ResponseEntity<List<AverageDTOs>> getAverageHeartRate(@RequestHeader("Auth") String tokenHeader) {
+    try {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
 
-            // Check if the user is authenticated
-            if (user == null) {
-                // User is not authenticated, return an empty map or handle the error appropriately
-                return Collections.emptyMap();
-            }
-            return demoService.calculateAverageHeartRate();
-        } catch (RuntimeException e) {
-            // Handle exception
-            return Collections.emptyMap();
+        // Check if the user is authenticated
+        if (user == null) {
+            // User is not authenticated, return an empty response or handle the error appropriately
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
+        }
+
+        List<AverageDTOs> averages = demoService.calculateAverageHeartRate();
+        return ResponseEntity.ok(averages);
+    } catch (RuntimeException e) {
+        // Handle exception
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+    }
+}
+    @Transactional
+    public void deleteUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+        user.getRoles().clear(); // Detach roles from user
+        userRepository.saveAndFlush(user); // Commit the removal of roles from the join table
+        userRepository.delete(user); // Now delete the user safely
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            deleteUserById(id);
+            return ResponseEntity.ok().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot delete user due to data integrity issues with related entities.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request.");
         }
     }
+
+
 //    @PostMapping("/user-login")
 //    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(
 //            @RequestBody AuthenticationRequest authenticationRequest) throws Exception {

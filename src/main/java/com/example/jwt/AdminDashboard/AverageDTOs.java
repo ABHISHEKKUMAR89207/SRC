@@ -8,8 +8,10 @@ public class AverageDTOs {
     private String ageGroup;
     private String gender;
     private long userCount;  // New field for user count
+    private long activeUsers;  // Active users who contributed to the average calculation
 
-//    public SleepDurationStatsDTO(String averageWater, String ageGroup, String gender, int userCount) {
+
+    //    public SleepDurationStatsDTO(String averageWater, String ageGroup, String gender, int userCount) {
 //        this.average = averageWater;
 //        this.ageGroup = ageGroup;
 //        this.gender = gender;
@@ -23,6 +25,13 @@ public AverageDTOs() {
         this.ageGroup = ageGroup;
         this.gender = gender;
         this.userCount = userCount;
+    }
+    public AverageDTOs(String average, String ageGroup, String gender, long userCount, int activeUsers) {
+        this.average = average;
+        this.ageGroup = ageGroup;
+        this.gender = gender;
+        this.userCount = userCount;
+        this.activeUsers = activeUsers;
     }
 }
 

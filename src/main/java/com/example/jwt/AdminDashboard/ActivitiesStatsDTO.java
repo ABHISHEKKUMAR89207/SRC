@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class ActivitiesStatsDTO {
-    private double averageCalories;
+    private String averageCalories;
     private String ageGroup;
     private String gender;
     private long userCount;
+    private long activeUsers;
     private long activityCount;  // New field for activity count
+
 }
