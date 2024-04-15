@@ -1,3 +1,5 @@
+// Configuration Password decoder file 
+
 package com.example.jwt.config;
 
 import org.modelmapper.ModelMapper;

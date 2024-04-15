@@ -1,3 +1,5 @@
+// Main Table Data 
+
 package com.example.jwt.entities.FoodToday;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

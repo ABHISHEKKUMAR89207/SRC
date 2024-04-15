@@ -1,3 +1,5 @@
+// User Profile Database Table 
+
 package com.example.jwt.entities;
 
 import com.example.jwt.entities.FoodToday.ear.Ear;

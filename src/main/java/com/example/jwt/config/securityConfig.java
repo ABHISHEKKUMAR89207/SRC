@@ -1,3 +1,5 @@
+// Security Configuration file for each API 
+
 package com.example.jwt.config;
 
 import com.example.jwt.security.JwtAuthenticationEntryPoint;

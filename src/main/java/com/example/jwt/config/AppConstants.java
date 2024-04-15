@@ -1,3 +1,5 @@
+// User role - Admin vs Normal
+
 package com.example.jwt.config;
 
 public class AppConstants {

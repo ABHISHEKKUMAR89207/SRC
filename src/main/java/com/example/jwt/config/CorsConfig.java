@@ -1,3 +1,5 @@
+// Web App - Authority access via the Backend 
+
 //package com.example.jwt.config;
 //
 //import org.springframework.context.annotation.Configuration;
