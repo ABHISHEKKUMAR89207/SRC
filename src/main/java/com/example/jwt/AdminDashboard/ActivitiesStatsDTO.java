@@ -1,3 +1,6 @@
+// Admin Dashboard - Data kept independently
+// Email Request etc - Back End data sending etc ... 
+
 package com.example.jwt.AdminDashboard;
 
 import lombok.Data;

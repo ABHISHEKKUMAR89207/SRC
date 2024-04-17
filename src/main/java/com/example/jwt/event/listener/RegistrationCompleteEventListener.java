@@ -1,3 +1,5 @@
+// Registration time - Process 
+
 package com.example.jwt.event.listener;
 
 import com.example.jwt.entities.User;

@@ -1,3 +1,6 @@
+// Inputs from User 
+// Send request and get the relevant responses 
+
 package com.example.jwt.controler.controllerHealth;//package com.practice.springbootimportcsvfileapp.controller;
 
 import com.example.jwt.dtos.WaterGoalAndIntakeResponse;

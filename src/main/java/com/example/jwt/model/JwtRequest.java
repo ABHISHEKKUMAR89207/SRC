@@ -1,3 +1,5 @@
+// Security Authentication - Password - encrypt - decrypt 
+
 package com.example.jwt.model;
 
 import lombok.*;

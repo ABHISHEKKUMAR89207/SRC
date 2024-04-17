@@ -1,3 +1,5 @@
+// Data transfer Object 
+
 package com.example.jwt.dtos.FoodTodayDtos;
 
 import com.example.jwt.entities.dashboardEntity.healthTrends.DiastolicBloodPressure;

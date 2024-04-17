@@ -1,3 +1,5 @@
+// Response to user from the Database 
+
 package com.example.jwt.entities.myActivity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
