@@ -33,5 +33,14 @@ public AverageDTOs() {
         this.userCount = userCount;
         this.activeUsers = activeUsers;
     }
+
+
+    public AverageDTOs(String average, String ageGroup, String gender, long userCount, long activeUsers) {
+        this.average = average;
+        this.ageGroup = ageGroup;
+        this.gender = gender;
+        this.userCount = userCount;
+        this.activeUsers = activeUsers;
+    }
 }
 

@@ -38,11 +38,7 @@ public ResponseEntity<UsersByWorkLevelDTO> getUsersByWorkLevel() {
 }
 
 
-    @GetMapping("/average-steps-by-age")
-    public ResponseEntity<List<AverageStepsByAgeDTO>> getAverageStepsByAge() {
-        List<AverageStepsByAgeDTO> statsList = demoService.getAverageStepsByAge();
-        return new ResponseEntity<>(statsList, HttpStatus.OK);
-    }
+
 
 //    @GetMapping("/totalStepCountAndKms")
 //    public ResponseEntity<StepCountDTO> getTotalStepCountAndKms() {

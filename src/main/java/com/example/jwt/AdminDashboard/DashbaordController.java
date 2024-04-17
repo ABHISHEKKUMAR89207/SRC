@@ -256,6 +256,19 @@ public class DashbaordController {
 //    return stateCountMap;
 //}
 
+//    @GetMapping("/average-steps-by-age")
+//    public ResponseEntity<List<AverageStepsByAgeDTO>> getAverageStepsByAge() {
+//        List<AverageStepsByAgeDTO> statsList = demoService.getAverageStepsByAge();
+//        return new ResponseEntity<>(statsList, HttpStatus.OK);
+//    }
+@GetMapping("/average-steps-by-age")
+public ResponseEntity<List<AverageDTOs>> getAverageStepsByAge() {
+    List<AverageDTOs> statsList = demoService.getAverageStepsByAge(); // Ensure that demoService returns List<AverageDTOs>
+    return new ResponseEntity<>(statsList, HttpStatus.OK);
+}
+
+
+
 
     @Autowired
     private MissingRowFoodRepository missingRowFoodRepository;

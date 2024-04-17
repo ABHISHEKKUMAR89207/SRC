@@ -1064,36 +1064,175 @@ private String calculateAverageCalories(List<User> userList) {
 //        return averageSteps;
 //    }
 
-    public List<AverageStepsByAgeDTO> getAverageStepsByAge() {
-        List<AverageStepsByAgeDTO> statsList = new ArrayList<>();
+//    public List<AverageStepsByAgeDTO> getAverageStepsByAge() {
+//        List<AverageStepsByAgeDTO> statsList = new ArrayList<>();
+//
+//        // Fetch all users with activity information
+//        List<User> users = userRepository.findAll();
+//
+//        // Group users by age
+//        Map<String, List<User>> groupedUsers = users.stream()
+//                .filter(user -> !calculateAgeGroup(user).equals("Unknown")) // Filter out users with unknown age
+//                .collect(Collectors.groupingBy(this::calculateAgeGroup));
+//
+//        // Add ">60" age group if not present
+//        if (!groupedUsers.containsKey(">60")) {
+//            groupedUsers.put(">60", new ArrayList<>());
+//        }
+//
+//        // Calculate average steps for each age group
+//        groupedUsers.forEach((ageGroup, userList) -> {
+//            double averageSteps = calculateAverageSteps(userList);
+//            AverageStepsByAgeDTO statsDTO = new AverageStepsByAgeDTO();
+//            statsDTO.setAgeGroup(ageGroup);
+//            statsDTO.setAverageSteps(averageSteps);
+//            statsList.add(statsDTO);
+//        });
+//
+//        // Sort the statsList based on age groups
+//        Collections.sort(statsList, new AgeGroupComparator());
+//
+//        return statsList;
+//    }
 
-        // Fetch all users with activity information
+//    public List<AverageDTOs> getAverageStepsByAge() {
+//        List<AverageStepsByAgeDTO> statsList = new ArrayList<>();
+//
+//        List<User> users = userRepository.findAll();
+//        // Group by age and then by gender
+//        Map<String, Map<String, List<User>>> groupedUsers = users.stream()
+//                .filter(user -> user.getUserProfile() != null && user.getUserProfile().getGender() != null)
+//                .collect(Collectors.groupingBy(this::calculateAgeGroup,
+//                        Collectors.groupingBy(user -> user.getUserProfile().getGender())));
+//
+//        groupedUsers.forEach((ageGroup, genderMap) -> {
+//            genderMap.forEach((gender, userList) -> {
+//                double averageSteps = calculateAverageSteps(userList);
+//                long userCount = userList.size();
+//                long activeUsers = userList.stream().filter(u -> u.getSteps() > 0).count();
+//
+//                AverageStepsByAgeDTO statsDTO = new AverageStepsByAgeDTO();
+//                statsDTO.setAgeGroup(ageGroup);
+//                statsDTO.setGender(gender);
+//                statsDTO.setAverageSteps(averageSteps);
+//                statsDTO.setUserCount(userCount);
+//                statsDTO.setActiveUsers(activeUsers);
+//
+//                statsList.add(statsDTO);
+//            });
+//        });
+//
+//        // Optionally sort the list by age group and gender for structured output
+//        statsList.sort(Comparator.comparing(AverageStepsByAgeDTO::getAgeGroup)
+//                .thenComparing(AverageStepsByAgeDTO::getGender));
+//
+//        return statsList;
+//    }
+//
+//    private double calculateAverageSteps(List<User> userList) {
+//        return userList.stream()
+//                .mapToDouble(user -> user.getSteps()) // Assuming `getSteps()` gets the number of steps
+//                .average()
+//                .orElse(0.0);
+//    }
+
+
+//    public List<AverageDTOs> getAverageStepsByAge() {
+//        List<User> users = userRepository.findAll();
+//
+//        // Group users by age and gender
+//        Map<String, Map<String, List<User>>> groupedUsers = users.stream()
+//                .filter(user -> user.getUserProfile() != null && user.getUserProfile().getDateOfBirth() != null)
+//                .collect(Collectors.groupingBy(this::calculateAgeGroup,
+//                        Collectors.groupingBy(user -> {
+//                            String gender = user.getUserProfile().getGender();
+//                            return gender != null ? gender : "Unknown";
+//                        })));
+//
+//        List<AverageDTOs> statsList = new ArrayList<>();
+//
+//        // Calculate average steps, user count, and active users for each age group and gender
+//        groupedUsers.forEach((ageGroup, genderMap) ->
+//                genderMap.forEach((gender, userList) -> {
+//                    double averageSteps = calculateAverageSteps(userList);
+//                    long userCount = userList.size();
+//                    long activeUsers = countActiveUsers(userList);  // Implement this method based on criteria for active
+//                    String averageStepsFormatted = String.format("%.2f", averageSteps);  // Format steps if necessary
+//
+//                    AverageDTOs statsDTO = new AverageDTOs(averageStepsFormatted, ageGroup, gender, userCount, activeUsers);
+//                    statsList.add(statsDTO);
+//                }));
+//
+//        // Sort the list by age group and possibly gender if required
+//        statsList.sort(Comparator.comparing(AverageDTOs::getAgeGroup).thenComparing(AverageDTOs::getGender));
+//
+//        return statsList;
+//    }
+
+//    public Map<String, List<AverageDTOs>> getAverageStepsByAge() {
+//        List<User> users = userRepository.findAll();
+//
+//        // Group users by age and gender
+//        Map<String, Map<String, List<User>>> groupedUsers = users.stream()
+//                .filter(user -> user.getUserProfile() != null && user.getUserProfile().getDateOfBirth() != null)
+//                .collect(Collectors.groupingBy(this::calculateAgeGroup,
+//                        Collectors.groupingBy(user -> {
+//                            String gender = user.getUserProfile().getGender();
+//                            return gender != null ? gender : "Unknown";
+//                        })));
+//
+//        Map<String, List<AverageDTOs>> groupedStats = new HashMap<>();
+//
+//        // Calculate average steps, user count, and active users for each age group and gender
+//        groupedUsers.forEach((ageGroup, genderMap) -> {
+//            List<AverageDTOs> statsByAge = new ArrayList<>();
+//            genderMap.forEach((gender, userList) -> {
+//                double averageSteps = calculateAverageSteps(userList);
+//                long userCount = userList.size();
+//                long activeUsers = countActiveUsers(userList);
+//                String averageStepsFormatted = String.format("%.2f", averageSteps);
+//
+//                AverageDTOs statsDTO = new AverageDTOs(averageStepsFormatted, ageGroup, gender, userCount, activeUsers);
+//                statsByAge.add(statsDTO);
+//            });
+//            groupedStats.put(ageGroup, statsByAge);
+//        });
+//
+//        return groupedStats;
+//    }
+
+    public List<AverageDTOs> getAverageStepsByAge() {
         List<User> users = userRepository.findAll();
 
-        // Group users by age
-        Map<String, List<User>> groupedUsers = users.stream()
-                .filter(user -> !calculateAgeGroup(user).equals("Unknown")) // Filter out users with unknown age
-                .collect(Collectors.groupingBy(this::calculateAgeGroup));
+        // Group users by age and gender
+        Map<String, Map<String, List<User>>> groupedUsers = users.stream()
+                .filter(user -> user.getUserProfile() != null && user.getUserProfile().getDateOfBirth() != null)
+                .collect(Collectors.groupingBy(this::calculateAgeGroup,
+                        Collectors.groupingBy(user -> {
+                            String gender = user.getUserProfile().getGender();
+                            return gender != null ? gender : "Unknown";
+                        })));
 
-        // Add ">60" age group if not present
-        if (!groupedUsers.containsKey(">60")) {
-            groupedUsers.put(">60", new ArrayList<>());
-        }
+        List<AverageDTOs> statsList = new ArrayList<>();
 
-        // Calculate average steps for each age group
-        groupedUsers.forEach((ageGroup, userList) -> {
-            double averageSteps = calculateAverageSteps(userList);
-            AverageStepsByAgeDTO statsDTO = new AverageStepsByAgeDTO();
-            statsDTO.setAgeGroup(ageGroup);
-            statsDTO.setAverageSteps(averageSteps);
-            statsList.add(statsDTO);
-        });
+        // Calculate average steps, user count, and active users for each age group and gender
+        groupedUsers.forEach((ageGroup, genderMap) ->
+                genderMap.forEach((gender, userList) -> {
+                    double averageSteps = calculateAverageSteps(userList);
+                    long userCount = userList.size();
+                    long activeUsers = countActiveUsers(userList);
+                    String averageStepsFormatted = String.format("%.2f", averageSteps);
 
-        // Sort the statsList based on age groups
-        Collections.sort(statsList, new AgeGroupComparator());
+                    AverageDTOs statsDTO = new AverageDTOs(averageStepsFormatted, ageGroup, gender, userCount, activeUsers);
+                    statsList.add(statsDTO);
+                }));
+
+        // Sort the list by age group and possibly gender if required
+        statsList.sort(Comparator.comparing(AverageDTOs::getAgeGroup).thenComparing(AverageDTOs::getGender));
 
         return statsList;
     }
+
 
 //public List<AverageStepsByAgeDTO> getAverageStepsByAge() {
 //    List<AverageStepsByAgeDTO> statsList = new ArrayList<>();
@@ -1147,29 +1286,29 @@ private String calculateAverageCalories(List<User> userList) {
 //            return Integer.compare(index1, index2);
 //        }
 //    }
-    private class AgeGroupComparator implements Comparator<AverageStepsByAgeDTO> {
-        private List<String> ageGroupsOrder = Arrays.asList("<15", "15-29", "30-44", "45-59", ">60");
-
-        @Override
-        public int compare(AverageStepsByAgeDTO dto1, AverageStepsByAgeDTO dto2) {
-            String ageGroup1 = dto1.getAgeGroup();
-            String ageGroup2 = dto2.getAgeGroup();
-
-            // Check if age group is ">60", if yes, return 1 to push it to the end
-            if (ageGroup1.equals(">60")) {
-                return 1;
-            } else if (ageGroup2.equals(">60")) {
-                return -1;
-            }
-
-            // If age groups are not ">60", compare based on their index in the ageGroupsOrder list
-            int index1 = ageGroupsOrder.indexOf(ageGroup1);
-            int index2 = ageGroupsOrder.indexOf(ageGroup2);
-
-            // Compare based on the index in ageGroupsOrder list
-            return Integer.compare(index1, index2);
-        }
-    }
+//    private class AgeGroupComparator implements Comparator<AverageStepsByAgeDTO> {
+//        private List<String> ageGroupsOrder = Arrays.asList("<15", "15-29", "30-44", "45-59", ">60");
+//
+//        @Override
+//        public int compare(AverageStepsByAgeDTO dto1, AverageStepsByAgeDTO dto2) {
+//            String ageGroup1 = dto1.getAgeGroup();
+//            String ageGroup2 = dto2.getAgeGroup();
+//
+//            // Check if age group is ">60", if yes, return 1 to push it to the end
+//            if (ageGroup1.equals(">60")) {
+//                return 1;
+//            } else if (ageGroup2.equals(">60")) {
+//                return -1;
+//            }
+//
+//            // If age groups are not ">60", compare based on their index in the ageGroupsOrder list
+//            int index1 = ageGroupsOrder.indexOf(ageGroup1);
+//            int index2 = ageGroupsOrder.indexOf(ageGroup2);
+//
+//            // Compare based on the index in ageGroupsOrder list
+//            return Integer.compare(index1, index2);
+//        }
+//    }
 
 
 //public List<AverageStepsByAgeDTO> getAverageStepsByAge() {

@@ -5,14 +5,11 @@ import com.example.jwt.entities.FoodToday.ear.EarRepository;
 import com.example.jwt.entities.FoodToday.ear.EarResponse;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
-import com.example.jwt.entities.UserProfileResponse;
-import com.example.jwt.entities.activityType.ActivityType;
 import com.example.jwt.entities.activityType.ActivityTypeRepository;
 import com.example.jwt.entities.activityType.ActivityTypeService;
 import com.example.jwt.entities.dashboardEntity.healthTrends.AllTarget;
 import com.example.jwt.exception.ResourceNotFoundException;
 import com.example.jwt.exception.UserNotFoundException;
-import com.example.jwt.repository.ActivityRepository;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 
@@ -547,7 +544,7 @@ public Ear findEars(String age, String gender, String HGroup) {
                     matchingEar.getEnergy(), matchingEar.getProtein(), matchingEar.getFats(),
                     matchingEar.getFiber(), matchingEar.getCalcium(), matchingEar.getMagnesium(),
                     matchingEar.getIron(), matchingEar.getZinc(), matchingEar.getThiamine(),
-                    matchingEar.getRiboflavin(), matchingEar.getNiacin(),matchingEar.getFolate(),matchingEar.getVitA(), matchingEar.getCarbohyderate());
+                    matchingEar.getRiboflavin(), matchingEar.getNiacin(),matchingEar.getFolate(),matchingEar.getVit_A(), matchingEar.getCarbohyderate());
         }
 
         // Return null or an appropriate default EarResponse instance

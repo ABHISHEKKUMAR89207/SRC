@@ -39,13 +39,13 @@ public class Ear {
     private double niacin;
 //    private double vitB6;
     private double folate;
-    private double vitA;
+    private double Vit_A;
 //    private double vitD;
 
 
     private double iodine;
-    private double vitB12;
-    private double vitC;
+    private double Vit_B12;
+    private double Vit_C;
     private double carbohyderate;
 
     @ManyToOne

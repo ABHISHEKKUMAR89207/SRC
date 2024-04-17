@@ -91,7 +91,7 @@ public class EarResponse {
         this.riboflavin = ear.getRiboflavin();
         this.niacin = ear.getNiacin();
         this.folate = ear.getFolate();
-        this.vitA = ear.getVitA();
+        this.vitA = ear.getVit_A();
         this.carbohyderate = ear.getCarbohyderate();
         generateParticulars(); // Call the method to set the "particulars" field
 
