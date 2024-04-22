@@ -2816,4 +2816,13 @@ public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
         return nutrient;
     }
 
+    public Double findIngredientQuantityByName(String ingredientName) {
+        Ingredients ingredient = ingredientsRepository.findByIngredientName(ingredientName);
+        if (ingredient != null) {
+            return ingredient.getIngredientQuantity();
+        } else {
+            return null;
+        }
+    }
+
 }

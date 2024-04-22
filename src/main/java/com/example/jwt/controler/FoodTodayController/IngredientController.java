@@ -3,8 +3,10 @@ package com.example.jwt.controler.FoodTodayController;
 import com.example.jwt.FoodTodayResponse.*;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientRequest;
+import com.example.jwt.entities.FoodToday.Ingredients;
 import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.User;
+import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
 import com.example.jwt.request.NutrientRequest;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.IngrdientService;
@@ -354,6 +356,29 @@ public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") Strin
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // You can customize the response code as needed
         }
     }
+    @Autowired
+    private IngredientsRepository ingredientsRepository;
 
+
+    @GetMapping("/get-salt")
+//    @GetMapping("/ingredients/{ingredientName}")
+    public ResponseEntity<Double> getIngredientQuantityByName(
+            @RequestParam String ingredientName,
+            @RequestHeader("Auth") String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+
+        // Use the jwtHelper to validate and extract information from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the user from your user service
+        User user = userService.findByUsername(username);
+
+        Double ingredientQuantity = ingrdientService.findIngredientQuantityByName(ingredientName);
+        if (ingredientQuantity == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(ingredientQuantity, HttpStatus.OK);
+        }
+    }
 
 }

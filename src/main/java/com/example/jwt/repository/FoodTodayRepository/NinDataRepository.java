@@ -20,6 +20,11 @@ public interface NinDataRepository extends JpaRepository<NinData, Long> {
     NinData findByFood(String name);
 
     NinData findByFoodCode(String name);
+
+    @Query("SELECT n FROM NinData n WHERE n.foodCode = :name")
+    List<NinData> findByFoodCodeCustomQuery(@Param("name") String name);
+
+
 //    @Query("SELECT n FROM NinData n WHERE n.food_code = :foodCode")
 //    List<NinData> findByFoodCodee(String foodCode);
 

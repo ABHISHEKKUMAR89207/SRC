@@ -3,6 +3,8 @@ package com.example.jwt.controler.FoodTodayController;
 
 import com.example.jwt.dtos.FoodTodayDtos.DishDTO;
 import com.example.jwt.entities.FoodToday.Dishes;
+import com.example.jwt.entities.FoodToday.Ingredients;
+import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.FoodToday.Recipe.Recipe;
 import com.example.jwt.entities.FoodToday.Recipe.RecipeDTO;
 //import com.example.jwt.entities.FoodToday.Recipe.RecipeService;
@@ -10,6 +12,7 @@ import com.example.jwt.entities.FoodToday.Recipe.RecipeRepository;
 import com.example.jwt.entities.FoodToday.Recipe.RecipeService;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.DishesRepository;
+import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.DishesService;
 import com.example.jwt.service.UserService;
@@ -20,8 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/dishes")
@@ -43,7 +46,223 @@ public class DishesController {
     @Autowired
     private RecipeService recipeService;
 
+    @Autowired
+    private NinDataRepository ninDataRepository;
 
+
+//    @GetMapping("/calculateDDScore")
+//    public Map<String, Integer> calculateDDScore(@RequestHeader("Auth") String tokenHeader) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Integer> dDScoreMap = new HashMap<>();
+//
+//        // Retrieve the dish by ID
+//        Dishes dish = dishesRepository.findById(user.getDishesList()).orElse(null);
+//
+//        if (dish != null) {
+//            List<Ingredients> ingredientsList = dish.getIngredientList();
+//
+//            for (Ingredients ingredient : ingredientsList) {
+//                String foodCode = ingredient.getFoodCode();
+//
+//                // Retrieve all NinData entries with matching foodCode
+//                List<NinData> ninDataList = (List<NinData>) ninDataRepository.findByFoodCode(foodCode);
+//
+//                // Increment DDScore for each unique DDS_Food_Category_Code
+//                for (NinData ninData : ninDataList) {
+//                    String ddsFoodCategoryCode = ninData.getDDS_Food_Category_Code().toString();
+//                    dDScoreMap.put(ddsFoodCategoryCode, dDScoreMap.getOrDefault(ddsFoodCategoryCode, 0) + 1);
+//                }
+//            }
+//        }
+//
+//        return dDScoreMap;
+//    }
+
+//    @GetMapping("/calculateDDScore")
+//    public Map<String, Integer> calculateDDScore(@RequestHeader("Auth") String tokenHeader) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Integer> dDScoreMap = new HashMap<>();
+//
+//        // Retrieve the list of dishes chosen by the user
+//        List<Dishes> dishesList = user.getDishesList();
+//
+//        // Iterate through each dish chosen by the user
+//        for (Dishes dish : dishesList) {
+//            List<Ingredients> ingredientsList = dish.getIngredientList();
+//
+//            for (Ingredients ingredient : ingredientsList) {
+//                String foodCode = ingredient.getFoodCode();
+//
+//                // Retrieve all NinData entries with matching foodCode
+//                List<NinData> ninDataList =  ninDataRepository.findByFoodCodeCustomQuery(foodCode);
+//
+//                // Increment DDScore for each unique DDS_Food_Category_Code
+//                for (NinData ninData : ninDataList) {
+//                    String ddsFoodCategoryCode = ninData.getDDS_Food_Category_Code().toString();
+//                    dDScoreMap.put(ddsFoodCategoryCode, dDScoreMap.getOrDefault(ddsFoodCategoryCode, 0) + 1);
+//                }
+//            }
+//        }
+//
+//        return dDScoreMap;
+//    }
+
+//    @GetMapping("/calculateDDScore")
+//    public Map<String, Integer> calculateDDScore(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Integer> dDScoreMap = new HashMap<>();
+//
+//        // Get the current date
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Retrieve the list of dishes chosen by the user for the current date
+//        List<Dishes> dishesList = user.getDishesList().stream()
+//                .filter(dish -> dish.getDate().isEqual(currentDate))
+//                .collect(Collectors.toList());
+//
+//        // Iterate through each dish chosen by the user for the current date
+//        for (Dishes dish : dishesList) {
+//            List<Ingredients> ingredientsList = dish.getIngredientList();
+//
+//            for (Ingredients ingredient : ingredientsList) {
+//                String foodCode = ingredient.getFoodCode();
+//
+//                // Retrieve all NinData entries with matching foodCode
+//                List<NinData> ninDataList = ninDataRepository.findByFoodCodeCustomQuery(foodCode);
+//
+//                // Increment DDScore for each unique DDS_Food_Category_Code
+//                for (NinData ninData : ninDataList) {
+//                    String ddsFoodCategoryCode = ninData.getDDS_Food_Category_Code().toString();
+//                    dDScoreMap.put(ddsFoodCategoryCode, dDScoreMap.getOrDefault(ddsFoodCategoryCode, 0) + 1);
+//                }
+//            }
+//        }
+//
+//        return dDScoreMap;
+//    }
+
+//    @GetMapping("/calculateDDScore")
+//    public Map<String, Integer> calculateDDScore(@RequestHeader("Auth") String tokenHeader) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        Map<String, Integer> dDScoreMap = new HashMap<>();
+//
+//        // Get the current date
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Retrieve the list of dishes chosen by the user for the current date
+//        List<Dishes> dishesList = user.getDishesList().stream()
+//                .filter(dish -> dish.getDate().isEqual(currentDate))
+//                .collect(Collectors.toList());
+//
+//        // Calculate total DDScore
+//        int totalDDScore = 0;
+//
+//        // Iterate through each dish chosen by the user for the current date
+//        for (Dishes dish : dishesList) {
+//            List<Ingredients> ingredientsList = dish.getIngredientList();
+//
+//            for (Ingredients ingredient : ingredientsList) {
+//                String foodCode = ingredient.getFoodCode();
+//
+//                // Retrieve all NinData entries with matching foodCode
+//                List<NinData> ninDataList = ninDataRepository.findByFoodCodeCustomQuery(foodCode);
+//
+//                // Increment DDScore for each unique DDS_Food_Category_Code
+//                for (NinData ninData : ninDataList) {
+//                    totalDDScore++;
+//                }
+//            }
+//        }
+//
+//        // Add total DDScore to the map
+//        dDScoreMap.put("DDScore", totalDDScore);
+//
+//        return dDScoreMap;
+//    }
+
+    @GetMapping("/calculateDDScore")
+    public Map<String, Integer> calculateDDScore(@RequestHeader("Auth") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        Map<String, Integer> dDScoreMap = new HashMap<>();
+
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Retrieve the list of dishes chosen by the user for the current date
+        List<Dishes> dishesList = user.getDishesList().stream()
+                .filter(dish -> dish.getDate().isEqual(currentDate))
+                .collect(Collectors.toList());
+
+        // Maintain a set to store unique DDS_Food_Category_Codes
+        Set<String> uniqueDDSCodes = new HashSet<>();
+
+        // Iterate through each dish chosen by the user for the current date
+        for (Dishes dish : dishesList) {
+            List<Ingredients> ingredientsList = dish.getIngredientList();
+
+            for (Ingredients ingredient : ingredientsList) {
+                String foodCode = ingredient.getFoodCode();
+
+                // Retrieve all NinData entries with matching foodCode
+                List<NinData> ninDataList = ninDataRepository.findByFoodCodeCustomQuery(foodCode);
+
+                // Increment DDScore for each unique DDS_Food_Category_Code
+                for (NinData ninData : ninDataList) {
+                    String ddsFoodCategoryCode = ninData.getDDS_Food_Category_Code().toString();
+
+                    // If the DDS_Food_Category_Code is not already counted, increment DDScore
+                    if (!uniqueDDSCodes.contains(ddsFoodCategoryCode)) {
+                        uniqueDDSCodes.add(ddsFoodCategoryCode);
+                    }
+                }
+            }
+        }
+
+        // Set the size of uniqueDDSCodes as the total DDScore
+        int totalDDScore = uniqueDDSCodes.size();
+
+        // Add total DDScore to the map
+        dDScoreMap.put("DDScore", totalDDScore);
+
+        return dDScoreMap;
+    }
 
 
 //    @PostMapping("/add-dish-id")
