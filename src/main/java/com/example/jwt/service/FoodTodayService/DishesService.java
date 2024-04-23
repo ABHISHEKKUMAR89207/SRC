@@ -96,4 +96,21 @@ public class DishesService {
     public Dishes saveDish(Dishes dish) {
         return dishesRepository.save(dish);
     }
+
+
+    // Service method
+    public void updateDishQuantity(Long dishId, Double newQuantity, User user) {
+        // Retrieve the dish entity by dish ID and user
+        Dishes dish = dishesRepository.findByUserAndDishId(user, dishId);
+        if (dish == null) {
+            throw new RuntimeException("Dish not found with id: " + dishId);
+        }
+
+        // Update the quantity of the dish
+        dish.setDishQuantity(newQuantity);
+
+        // Save the updated dish entity to the database
+        dishesRepository.save(dish);
+    }
+
 }

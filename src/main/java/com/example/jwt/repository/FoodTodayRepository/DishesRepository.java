@@ -16,6 +16,8 @@ import java.util.Optional;
 @Repository
 public interface DishesRepository extends JpaRepository<Dishes, Long> {
 
+
+    Dishes findByUserAndDishId(User user, Long dishId);
     List<Dishes> findByUserUserIdAndDateAndMealName(Long userId, LocalDate date, String mealName);
 
     List<Dishes> findByUserUserIdAndDate(Long userId, LocalDate date);
