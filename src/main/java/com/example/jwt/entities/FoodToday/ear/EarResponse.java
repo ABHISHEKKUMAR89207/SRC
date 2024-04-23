@@ -39,10 +39,47 @@ public class EarResponse {
     private String particulars;
 
 
-    public void generateParticulars() {
-        this.particulars = String.format("%s, %s , %s", gender, workLevel, age);
-    }
+//    public void generateParticulars() {
+//        this.particulars = String.format("%s, %s , %s", gender, workLevel, age);
+//    }
+//public void generateParticulars() {
+//    // Remove "NoLevel" from the workLevel
+//    String modifiedWorkLevel = workLevel.equals("NoLeavel") ? "" : workLevel;
+//    this.particulars = String.format("%s, %s , %s", gender, modifiedWorkLevel, age);
+//}
 
+//    public void generateParticulars() {
+//        // Remove "NoLevel" from the workLevel
+//        String modifiedWorkLevel = workLevel.equals("NoLeavel") ? "" : workLevel;
+//
+//        // Remove one comma if it exists between gender and age
+//        String modifiedGender = gender.endsWith(",") ? gender.substring(0, gender.length() - 1) : gender;
+//
+//        this.particulars = String.format("%s, %s , %s", modifiedGender, modifiedWorkLevel, age);
+//    }
+//public void generateParticulars() {
+//    // Remove "NoLevel" from the workLevel
+//    String modifiedWorkLevel = workLevel.equals("NoLeavel") ? "" : workLevel;
+//
+//    // Remove extra comma between gender and age if any of them is empty
+//    String genderAgeSeparator = (gender.isEmpty() || age.isEmpty()) ? "" : ", ";
+//
+//    this.particulars = String.format("%s%s%s , %s", gender, genderAgeSeparator, age, modifiedWorkLevel);
+//}
+//
+
+    public void generateParticulars() {
+        // Remove "NoLevel" from the workLevel
+        String modifiedWorkLevel = workLevel.equals("NoLeavel") ? "" : workLevel;
+
+        // Remove extra comma between gender and age if any of them is empty
+        String genderAgeSeparator = (gender.isEmpty() || age.isEmpty()) ? "" : ", ";
+
+        // Remove trailing comma if workLevel is empty
+        String workLevelSeparator = modifiedWorkLevel.isEmpty() ? "" : ", ";
+
+        this.particulars = String.format("%s%s%s%s%s", gender, genderAgeSeparator, age, workLevelSeparator, modifiedWorkLevel);
+    }
 
 
     public EarResponse( String gender, String age, String group, String workLevel,
