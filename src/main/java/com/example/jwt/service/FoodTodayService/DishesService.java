@@ -107,7 +107,7 @@ public class DishesService {
         }
 
         // Update the quantity of the dish
-        dish.setDishQuantity(newQuantity);
+        dish.setServingSize(newQuantity);
 
         // Save the updated dish entity to the database
         dishesRepository.save(dish);
