@@ -475,6 +475,7 @@ public void saveRecipeAndIngredients(RecipeRequest request, User user, LocalDate
                 ingredient.setIngredientName(ingredientRequest.getIngredientName());
                 ingredient.setIngredientQuantity(ingredientRequest.getIngredientQuantity());
                 ingredient.setFoodCode(ingredientRequest.getFoodCode());
+                ingredient.setCategory(ingredientRequest.getCategory());
                 // Set other necessary fields in the ingredient
                 ingredient.setDishes(newDish); // Set the reference to Dishes
                 return ingredient;
