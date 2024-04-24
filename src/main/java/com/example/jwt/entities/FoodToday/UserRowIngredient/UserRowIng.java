@@ -21,6 +21,7 @@ public class UserRowIng {
 
     private String foodName;
     private String foodCode;
+    private String category;
 
     private double energy;
     private double protein;

@@ -100,13 +100,13 @@ public List<FoodDTO> getAllFoodNamesAndCodes(@RequestHeader("Auth") String token
         // Fetch data from NinData table
         List<NinData> ninFoodItems = ninDataRepository.findAll();
         List<FoodDTO> foodList = ninFoodItems.stream()
-                .map(foodItem -> new FoodDTO(foodItem.getFood(), foodItem.getFoodCode()))
+                .map(foodItem -> new FoodDTO(foodItem.getFood(), foodItem.getFoodCode(),foodItem.getCategory()))
                 .collect(Collectors.toList());
 
         // Fetch data from UserRowIng table
         List<UserRowIng> userRowIngList = userRowIngRepository.findAllByUser(user);
         List<FoodDTO> userRowIngFoodList = userRowIngList.stream()
-                .map(userRowIng -> new FoodDTO(userRowIng.getFoodName(), userRowIng.getFoodCode()))
+                .map(userRowIng -> new FoodDTO(userRowIng.getFoodName(), userRowIng.getFoodCode(),userRowIng.getCategory()))
                 .collect(Collectors.toList());
 
         // Combine both lists

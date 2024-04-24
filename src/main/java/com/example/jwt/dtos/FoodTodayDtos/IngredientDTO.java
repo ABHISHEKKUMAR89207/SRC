@@ -18,6 +18,7 @@ public class IngredientDTO {
     private String ingredientName;
     private Double ingredientQuantity;
     private String foodCode;
+    private String category;
     private Double energy;
     private Double proteins;
     private Double fats;

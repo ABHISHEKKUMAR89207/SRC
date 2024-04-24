@@ -13,6 +13,7 @@ public class IngredientRequest {
         private String ingredientName;
     private Double ingredientQuantity;
     private String foodCode;
+    private String category;
     // getters and setters
     public Double getIngredientQuantity() {
         return ingredientQuantity;

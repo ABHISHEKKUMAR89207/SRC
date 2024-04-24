@@ -12,6 +12,7 @@ public class IngredientResponse {
     private String ingredientName;
     private Double ingredientQuantity;
     private String foodCode;
+    private String category;
 //    private Map<String, Double> nutrients;
 
     // ... getters and setters

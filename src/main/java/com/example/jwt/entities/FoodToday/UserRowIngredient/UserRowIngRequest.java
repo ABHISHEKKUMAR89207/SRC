@@ -12,6 +12,7 @@ import lombok.Setter;
 public class UserRowIngRequest {
     private String foodName;
     private String foodCode;
+    private String category;
 
 //    private double energy;
 //    private double fat;

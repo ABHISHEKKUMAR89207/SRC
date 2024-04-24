@@ -97,6 +97,7 @@ public ResponseEntity<String> addUserRowIng(@RequestHeader("Auth") String tokenH
 
 //        // Set other properties
         userRowIng.setFoodName(request.getFoodName());
+        userRowIng.setCategory(request.getCategory());
 
         userRowIng.setEnergy(request.getEnergy());
         userRowIng.setProtein(request.getProtein());

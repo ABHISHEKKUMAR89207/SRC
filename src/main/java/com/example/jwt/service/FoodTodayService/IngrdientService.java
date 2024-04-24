@@ -262,6 +262,7 @@ private UserRowIngRepository userRowIngRepository;
         ingredient.setIngredientName(ingredientDTO.getIngredientName());
         ingredient.setIngredientQuantity(ingredientDTO.getIngredientQuantity());
         ingredient.setFoodCode(ingredientDTO.getFoodCode());
+        ingredient.setCategory(ingredientDTO.getCategory());
 
         ingredient.getNinDataList().add(ninData);
         updatedIngredients.add(new IngredientDTO(ingredient.getIngredientName(),
@@ -279,6 +280,7 @@ private UserRowIngRepository userRowIngRepository;
         ingredient.setIngredientName(ingredientDTO.getIngredientName());
         ingredient.setIngredientQuantity(ingredientDTO.getIngredientQuantity());
         ingredient.setFoodCode(ingredientDTO.getFoodCode());
+        ingredient.setCategory(ingredientDTO.getCategory());
 
         updatedIngredients.add(new IngredientDTO(ingredient.getIngredientName(),
                 ingredient.getIngredientQuantity(),

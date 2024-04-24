@@ -55,6 +55,7 @@ public class PersonalService {
                     ingredient.setIngredientName(ingredientRequest.getIngredientName());
                     ingredient.setIngredientQuantity(ingredientRequest.getIngredientQuantity());
                     ingredient.setFoodCode(ingredientRequest.getFoodCode());
+                    ingredient.setCategory(ingredientRequest.getCategory());
                     // Set other necessary fields in the ingredient
                     ingredient.setPersonal(newDish); // Set the reference to Dishes
                     return ingredient;

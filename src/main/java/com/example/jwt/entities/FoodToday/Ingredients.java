@@ -24,6 +24,7 @@ public class Ingredients {
     private String ingredientName;
     private Double ingredientQuantity;
     private String foodCode;
+    private String category;
 
 //    private transient List<Double> nutrirnts;
 

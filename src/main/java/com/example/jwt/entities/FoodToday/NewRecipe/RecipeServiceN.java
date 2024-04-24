@@ -277,6 +277,7 @@ public class RecipeServiceN {
         response.setIngredientName(ingredient.getIngredients());
         response.setIngredientQuantity(ingredient.getWeight());
         response.setFoodCode(ingredient.getIfctNvifCode());
+        response.setCategory(ingredient.getCategory());
         // Set other necessary fields in IngredientResponse
         return response;
     }

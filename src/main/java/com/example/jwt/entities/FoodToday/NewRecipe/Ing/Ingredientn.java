@@ -27,6 +27,7 @@ public class Ingredientn {
     private String ingredients;
     private Double weight;
     private String ifctNvifCode;
+    private String category;
     private String sourceIngredients;
 
     @ManyToOne

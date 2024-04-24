@@ -3,7 +3,9 @@ package com.example.jwt.controler.FoodTodayController;
 import com.example.jwt.FoodTodayResponse.*;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
 import com.example.jwt.dtos.FoodTodayDtos.IngredientRequest;
+import com.example.jwt.entities.FoodToday.Dishes;
 import com.example.jwt.entities.FoodToday.Ingredients;
+import com.example.jwt.entities.FoodToday.NewRecipe.Personal.Personal;
 import com.example.jwt.entities.FoodToday.NinData;
 import com.example.jwt.entities.User;
 import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
@@ -22,8 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -356,29 +360,243 @@ public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") Strin
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // You can customize the response code as needed
         }
     }
-    @Autowired
-    private IngredientsRepository ingredientsRepository;
 
 
-    @GetMapping("/get-salt")
-//    @GetMapping("/ingredients/{ingredientName}")
-    public ResponseEntity<Double> getIngredientQuantityByName(
-            @RequestParam String ingredientName,
+
+//    @GetMapping("/get-salt")
+//    public ResponseEntity<Map<String, Double>> getSaltQuantity(
+//            @RequestHeader("Auth") String authorizationHeader) {
+//        try {
+//            String token = authorizationHeader.replace("Bearer ", "");
+//
+//            // Use the jwtHelper to validate and extract information from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the user from your user service
+//            User user = userService.findByUsername(username);
+//
+//            // Check if the user exists
+//            if (user == null) {
+//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//            }
+//
+//            // Retrieve the user's dishes
+//            List<Dishes> dishes = user.getDishesList();
+//            double totalSaltQuantity = 0.0;
+//
+//            // Iterate through the user's dishes to find the ingredients
+//            for (Dishes dish : dishes) {
+//                List<Ingredients> ingredients = dish.getIngredientList();
+//                for (Ingredients ingredient : ingredients) {
+//                    // Check if the ingredient name is either "Common Salt" or "Iodised Salt"
+//                    if (ingredient.getIngredientName().equalsIgnoreCase("Common Salt")
+//                            || ingredient.getIngredientName().equalsIgnoreCase("Iodised Salt")) {
+//                        // Calculate the total quantity by adding the ingredient quantity
+//                        totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+//                    }
+//                }
+//            }
+//
+//            // Create a map to hold the response
+//            Map<String, Double> response = new HashMap<>();
+//            response.put("Salt", totalSaltQuantity);
+//
+//            // Return the response
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+//    @GetMapping("/get-salt-and-sugar")
+//    public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
+//            @RequestHeader("Auth") String authorizationHeader) {
+//        try {
+//            String token = authorizationHeader.replace("Bearer ", "");
+//
+//            // Use the jwtHelper to validate and extract information from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the user from your user service
+//            User user = userService.findByUsername(username);
+//
+//            // Check if the user exists
+//            if (user == null) {
+//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//            }
+//
+//            // Retrieve the user's dishes
+//            List<Dishes> dishes = user.getDishesList();
+//            double totalSaltQuantity = 0.0;
+//            double totalSugarQuantity = 0.0;
+//
+//            // Iterate through the user's dishes to find the ingredients
+//            for (Dishes dish : dishes) {
+//                List<Ingredients> ingredients = dish.getIngredientList();
+//                for (Ingredients ingredient : ingredients) {
+//                    // Check if the ingredient name is either "Common Salt" or "Iodised Salt"
+//                    if (ingredient.getCategory().equalsIgnoreCase("Salt")
+////                            || ingredient.getIngredientName().equalsIgnoreCase("Iodised Salt")
+//                    ) {
+//                        // Calculate the total quantity of salt
+//                        totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+//                    } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
+//                        // Calculate the total quantity of sugar
+//                        totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+//                    }
+//                }
+//            }
+//
+//            // Create a map to hold the response
+//            Map<String, Double> response = new HashMap<>();
+//            response.put("Salt", totalSaltQuantity);
+//            response.put("Sugar", totalSugarQuantity);
+//
+//            // Return the response
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//@GetMapping("/get-salt-and-sugar")
+//public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
+//        @RequestHeader("Auth") String authorizationHeader) {
+//    try {
+//        String token = authorizationHeader.replace("Bearer ", "");
+//
+//        // Use the jwtHelper to validate and extract information from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the user from your user service
+//        User user = userService.findByUsername(username);
+//
+//        // Check if the user exists
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+//
+//        // Retrieve the user's dishes for the current date
+//        List<Dishes> dishes = user.getDishesList();
+//        double totalSaltQuantity = 0.0;
+//        double totalSugarQuantity = 0.0;
+//
+//        // Get the current date
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Iterate through the user's dishes for the current date to find the ingredients
+//        for (Dishes dish : dishes) {
+//            // Check if the dish was taken on the current date
+//            if (dish.getDate().isEqual(currentDate)) {
+//                List<Ingredients> ingredients = dish.getIngredientList();
+//                for (Ingredients ingredient : ingredients) {
+//                    // Check if the ingredient name is either "Common Salt" or "Iodised Salt"
+//                    if (ingredient.getCategory().equalsIgnoreCase("Salt")
+////                            || ingredient.getIngredientName().equalsIgnoreCase("Iodised Salt")
+//                    ) {
+//                        // Calculate the total quantity of salt
+//                        totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+//                    } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
+//                        // Calculate the total quantity of sugar
+//                        totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Create a map to hold the response
+//        Map<String, Double> response = new HashMap<>();
+//        response.put("Salt", totalSaltQuantity);
+//        response.put("Sugar", totalSugarQuantity);
+//
+//        // Return the response
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+//}
+
+
+    @GetMapping("/get-salt-and-sugar")
+    public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
             @RequestHeader("Auth") String authorizationHeader) {
-        String token = authorizationHeader.replace("Bearer ", "");
+        try {
+            String token = authorizationHeader.replace("Bearer ", "");
 
-        // Use the jwtHelper to validate and extract information from the token
-        String username = jwtHelper.getUsernameFromToken(token);
+            // Use the jwtHelper to validate and extract information from the token
+            String username = jwtHelper.getUsernameFromToken(token);
 
-        // Use the username to fetch the user from your user service
-        User user = userService.findByUsername(username);
+            // Use the username to fetch the user from your user service
+            User user = userService.findByUsername(username);
 
-        Double ingredientQuantity = ingrdientService.findIngredientQuantityByName(ingredientName);
-        if (ingredientQuantity == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(ingredientQuantity, HttpStatus.OK);
+            // Check if the user exists
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            // Retrieve the user's dishes for the current date
+            List<Dishes> dishes = user.getDishesList();
+            List<Personal> personals = user.getPersonals();
+            double totalSaltQuantity = 0.0;
+            double totalSugarQuantity = 0.0;
+
+            // Get the current date
+            LocalDate currentDate = LocalDate.now();
+
+            // Iterate through the user's dishes for the current date to find the ingredients
+            for (Dishes dish : dishes) {
+                // Check if the dish was taken on the current date
+                if (dish.getDate().isEqual(currentDate)) {
+                    List<Ingredients> ingredients = dish.getIngredientList();
+                    for (Ingredients ingredient : ingredients) {
+                        System.out.println("Dishes ingredient name: " + ingredient.getIngredientName());
+
+                        // Check if the ingredient category is "Salt" or "Sugars"
+                        if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
+                            // Calculate the total quantity of salt from dish ingredients
+                            totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+                        } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
+                            // Calculate the total quantity of sugar from dish ingredients
+                            totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+                        }
+                    }
+                }
+            }
+
+            // Iterate through the user's personals for the current date to find the ingredients
+            for (Personal personal : personals) {
+                // Check if the personal was recorded on the current date
+                if (personal.getDate().isEqual(currentDate)) {
+                    List<Ingredients> ingredients = personal.getIngredientList();
+                    for (Ingredients ingredient : ingredients) {
+                        System.out.println("Personal ingredient name: " + ingredient.getIngredientName());
+                        // Check if the ingredient category is "Salt" or "Sugars"
+                        if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
+                            // Calculate the total quantity of salt from personal ingredients
+                            totalSaltQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
+                        } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
+                            // Calculate the total quantity of sugar from personal ingredients
+                            totalSugarQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
+                        }
+                    }
+                }
+            }
+
+            // Create a map to hold the response
+            Map<String, Double> response = new HashMap<>();
+            response.put("Salt", totalSaltQuantity);
+            response.put("Sugar", totalSugarQuantity);
+
+            // Return the response
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
 }
