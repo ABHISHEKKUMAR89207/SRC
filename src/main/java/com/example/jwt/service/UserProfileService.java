@@ -647,7 +647,8 @@ public Ear findEars(String age, String gender, String HGroup) {
         } else if (years >= 60) {
             return "above " + 60 + " years"; // If the age is 60 years or more
         } else {
-            return years + " years onwards"; // If there are some years and at least 18 but less than 60
+//            return years + " years onwards"; // If there are some years and at least 18 but less than 60
+            return years + " years and above";
         }
     }
 

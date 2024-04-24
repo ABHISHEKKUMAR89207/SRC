@@ -372,4 +372,23 @@ public class DishesController {
     }
 
 
+    @PutMapping("/updateQuantity")
+    public ResponseEntity<String> updateDishQuantity(
+            @RequestParam Long dishId,
+            @RequestParam Double newQuantity,
+            @RequestHeader("Auth") String tokenHeader
+
+            ) {
+        try {
+            // Your existing code to extract user information from the token
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+
+            dishesService.updateDishQuantity(dishId, newQuantity,user);
+            return ResponseEntity.ok("Dish quantity updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update dish quantity: " + e.getMessage());
+        }
+    }
 }
