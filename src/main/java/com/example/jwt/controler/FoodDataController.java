@@ -1,6 +1,7 @@
 package com.example.jwt.controler;
 
 import com.example.jwt.dtos.NinDataDTO;
+import com.example.jwt.dtos.NinDataDTOO;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class FoodDataController {
 
 
     @GetMapping("/top10")
-    public ResponseEntity<List<NinDataDTO>> getTop10ByColumnAndTypesOfFood(
+    public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
             @RequestHeader("Auth") String tokenHeader,
             @RequestParam("column") String column,
             @RequestParam("typesOfFood") String typesOfFood) {
@@ -52,7 +53,7 @@ public class FoodDataController {
             String username = jwtHelper.getUsernameFromToken(token);
 
             // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
-            List<NinDataDTO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFood(column, typesOfFood, username);
+            List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFood(column, typesOfFood, username);
 
             return ResponseEntity.ok(top10Data);
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.example.jwt.service;
 
 
 import com.example.jwt.dtos.NinDataDTO;
+import com.example.jwt.dtos.NinDataDTOO;
 import com.example.jwt.entities.FoodToday.NinData;
 
 import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
@@ -148,7 +149,7 @@ public class FoodDataService {
 //    return dtos;
 //    }
 
-    public List<NinDataDTO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood, String username) {
+    public List<NinDataDTOO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood, String username) {
         List<NinData> top10Results;
 
         if ("all".equalsIgnoreCase(typesOfFood)) {
@@ -158,35 +159,42 @@ public class FoodDataService {
         }
 
         // Create DTOs based on the retrieved entities
-        List<NinDataDTO> dtos = new ArrayList<>();
+        List<NinDataDTOO> dtos = new ArrayList<>();
 
         if (top10Results.size() > 10) {
             top10Results = top10Results.subList(0, 10);
         }
 
         for (NinData entity : top10Results) {
-            NinDataDTO dto = new NinDataDTO();
+            NinDataDTOO dto = new NinDataDTOO();
             dto.setId(entity.getNinDataId());
             dto.setName(entity.getFood());
             dto.setCategory(entity.getCategory());
 
             // Set DTO properties based on the selected column
             if ("carbohydrate".equalsIgnoreCase(column)) {
-                dto.setCarbohydrate(entity.getCarbohydrate());
+//                dto.setCarbohydrate(entity.getCarbohydrate());
+                dto.setCarbohydrate(entity.getCarbohydrateWithUnit()); // Use getCarbohydrateWithUnit() instead of getCarbohydrate()
+
             } else if ("total_fat".equalsIgnoreCase(column)) {
-                dto.setTotal_Fat(entity.getTotal_Fat());
+//                dto.setTotal_Fat(entity.getTotal_Fat());
+                dto.setTotal_Fat(entity.getTotal_FatWithUnit());
             }
 //            else if ("cholestrol".equalsIgnoreCase(column)) {
 //                dto.setCholestrol(entity.getCholestrol());
 //            }
             else if ("sodium".equalsIgnoreCase(column)) {
-                dto.setSodium(entity.getSodium());
+//                dto.setSodium(entity.getSodium());
+                dto.setSodium(entity.getSodiumWithUnit());
             } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
-                dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
+//                dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
+                dto.setTotal_Dietary_Fibre(entity.getTotalDietaryFibreWithUnit());
             } else if ("calcium".equalsIgnoreCase(column)) {
-                dto.setCalcium(entity.getCalcium());
+//                dto.setCalcium(entity.getCalcium());
+                dto.setCalcium(entity.getCalciumWithUnit());
             } else if ("iron".equalsIgnoreCase(column)) {
-                dto.setIron(entity.getIron());
+//                dto.setIron(entity.getIron());
+                dto.setIron(entity.getIronWithUnit());
             }
 //            else if ("potassium".equalsIgnoreCase(column)) {
 //                dto.setPotassium(entity.getPotassium());
@@ -195,9 +203,11 @@ public class FoodDataService {
 //                dto.setPhosphorus(entity.getPhosphorus());
 //            }
             else if ("magnesium".equalsIgnoreCase(column)) {
-                dto.setMagnesium(entity.getMagnesium());
+//                dto.setMagnesium(entity.getMagnesium());
+                dto.setMagnesium(entity.getMagnesiumWithUnit());
             } else if ("zinc".equalsIgnoreCase(column)) {
-                dto.setZinc(entity.getZinc());
+//                dto.setZinc(entity.getZinc());
+                dto.setZinc(entity.getZincWithUnit());
             }
 //            else if ("selenium".equalsIgnoreCase(column)) {
 //                dto.setSelenium(entity.getSelenium());
@@ -209,7 +219,8 @@ public class FoodDataService {
 //                dto.setManganese(entity.getManganese());
 //            }
             else if ("protein".equalsIgnoreCase(column)) {
-                dto.setProtein(entity.getProtein());
+//                dto.setProtein(entity.getProtein());
+                dto.setProtein(entity.getProteinWithUnit());
             }
             // ... add more conditions based on other columns
 
