@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +26,9 @@ public class NinDataService {
 //        return ninDataRepository.findByFoodCode(foodCode);
 //    }
 
-
+    public NinData findByFoodCode(String foodCode) {
+        return ninDataRepository.findByFoodCode(foodCode);
+    }
     public List<NinDataDTO> getNutritionalDataByFood(Long foodId) {
         List<NinData> ninDataList = ninDataRepository.findByNinDataId(foodId);
         return convertToDtoList(ninDataList);

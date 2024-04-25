@@ -20,10 +20,12 @@ import com.example.jwt.repository.FoodTodayRepository.NinDataRepository;
 import com.example.jwt.repository.UnitsDatabaseRepository;
 import com.example.jwt.request.NutrientRequest;
 import com.example.jwt.service.TargetAnalysisService;
+import com.example.jwt.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -2827,4 +2829,41 @@ public Map<String, Double> getEnergyByDate(User user, LocalDate date) {
         }
     }
 
+
+
+    @Autowired
+    private UserService userService;
+
+
+    // In your controller method
+//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(User user) {
+//        // Retrieve the user object from your user service
+//        user = userService.findByEmail(user.getEmail());
+//
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        // Map to hold category-wise ingredient quantity totals
+//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
+//
+//        // Iterate through each dish of the user
+//        for (Dishes dish : user.getDishesList()) {
+//            // Iterate through each ingredient of the dish
+//            for (Ingredients ingredient : dish.getIngredientList()) {
+//                // Get the category of the ingredient
+//                String category = ingredient.getCategory();
+//
+//                // Get the ingredient quantity
+//                double ingredientQuantity = ingredient.getIngredientQuantity();
+//
+//                // Update the total quantity for the category
+//                categoryWiseIngredientQuantity.put(category,
+//                        categoryWiseIngredientQuantity.getOrDefault(category, 0.0) + ingredientQuantity);
+//            }
+//        }
+//
+//        // Now you have category-wise ingredient quantity totals in the map
+//        return new ResponseEntity<>(categoryWiseIngredientQuantity, HttpStatus.OK);
+//    }
 }

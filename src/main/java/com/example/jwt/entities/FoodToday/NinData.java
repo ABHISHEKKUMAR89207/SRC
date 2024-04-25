@@ -61,6 +61,7 @@ private Double retinolVit_A;
 
 
     private Integer DDS_Food_Category_Code;
+    private String DDS_Category;
 
 
 //    private Double cholestrol;

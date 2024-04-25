@@ -12,6 +12,7 @@ import com.example.jwt.repository.FoodTodayRepository.IngredientsRepository;
 import com.example.jwt.request.NutrientRequest;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.IngrdientService;
+import com.example.jwt.service.FoodTodayService.NinDataService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -679,4 +677,199 @@ public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") Strin
 
 
 
+
+
+//    @GetMapping("/category-wise-ingredient-quantity")
+//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
+//        String token = authorizationHeader.replace("Bearer ", "");
+//
+//        // Use the jwtHelper to validate and extract information from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the user from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        // Map to hold category-wise ingredient quantity totals
+//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
+//
+//        // Iterate through each dish of the user
+//        for (Dishes dish : user.getDishesList()) {
+//            // Iterate through each ingredient of the dish
+//            for (Ingredients ingredient : dish.getIngredientList()) {
+//                // Get the category of the ingredient
+//                String category = ingredient.getCategory();
+//
+//                // Get the ingredient quantity
+//                double ingredientQuantity = ingredient.getIngredientQuantity();
+//
+//                // Update the total quantity for the category
+//                categoryWiseIngredientQuantity.put(category,
+//                        categoryWiseIngredientQuantity.getOrDefault(category, 0.0) + ingredientQuantity);
+//            }
+//        }
+//
+//        // Now you have category-wise ingredient quantity totals in the map
+//        return ResponseEntity.ok(categoryWiseIngredientQuantity);
+//    }
+
+
+    @Autowired
+    private NinDataService ninDataService;
+//    @GetMapping("/category-wise-ingredient-quantity")
+//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
+//        String token = authorizationHeader.replace("Bearer ", "");
+//
+//        // Use the jwtHelper to validate and extract information from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the user from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        // Map to hold category-wise ingredient quantity totals
+//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
+//
+//        // Iterate through each dish of the user
+//        for (Dishes dish : user.getDishesList()) {
+//            // Iterate through each ingredient of the dish
+//            for (Ingredients ingredient : dish.getIngredientList()) {
+//                // Get the foodCode of the ingredient
+//                String foodCode = ingredient.getFoodCode();
+//
+//                // Find the NinData record corresponding to the foodCode
+//                NinData ninData = ninDataService.findByFoodCode(foodCode);
+//
+//                if (ninData != null) {
+//                    // Get the DDS_Category
+//                    String ddsCategory = ninData.getDDS_Category();
+//
+//                    // Get the ingredient quantity
+//                    double ingredientQuantity = ingredient.getIngredientQuantity();
+//
+//                    // Update the total quantity for the DDS_Category
+//                    categoryWiseIngredientQuantity.put(ddsCategory,
+//                            categoryWiseIngredientQuantity.getOrDefault(ddsCategory, 0.0) + ingredientQuantity);
+//                }
+//            }
+//        }
+//
+//        // Now you have category-wise ingredient quantity totals in the map
+//        return ResponseEntity.ok(categoryWiseIngredientQuantity);
+//    }
+
+
+//    @GetMapping("/category-wise-ingredient-quantity")
+//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
+//        String token = authorizationHeader.replace("Bearer ", "");
+//
+//        // Use the jwtHelper to validate and extract information from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the user from your user service
+//        User user = userService.findByUsername(username);
+//
+//        if (user == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        // Map to hold category-wise ingredient quantity totals
+//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
+//
+//        // Get the current date
+//        LocalDate currentDate = LocalDate.now();
+//
+//        // Iterate through each dish of the user
+//        for (Dishes dish : user.getDishesList()) {
+//            // Check if the date of the dish matches the current date
+//            if (dish.getDate().equals(currentDate)) {
+//                // Iterate through each ingredient of the dish
+//                for (Ingredients ingredient : dish.getIngredientList()) {
+//                    // Get the foodCode of the ingredient
+//                    String foodCode = ingredient.getFoodCode();
+//
+//                    // Find the NinData record corresponding to the foodCode
+//                    NinData ninData = ninDataService.findByFoodCode(foodCode);
+//
+//                    if (ninData != null) {
+//                        // Get the DDS_Category
+//                        String ddsCategory = ninData.getDDS_Category();
+//
+//                        // Get the ingredient quantity
+//                        double ingredientQuantity = ingredient.getIngredientQuantity();
+//
+//                        // Update the total quantity for the DDS_Category
+//                        categoryWiseIngredientQuantity.put(ddsCategory,
+//                                categoryWiseIngredientQuantity.getOrDefault(ddsCategory, 0.0) + ingredientQuantity);
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Now you have category-wise ingredient quantity totals in the map
+//        return ResponseEntity.ok(categoryWiseIngredientQuantity);
+//    }
+
+    @GetMapping("/category-wise-ingredient-quantity")
+    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+
+        // Use the jwtHelper to validate and extract information from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the user from your user service
+        User user = userService.findByUsername(username);
+
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Map to hold category-wise ingredient quantity totals
+        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
+
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Retrieve all categories from ninData and initialize their quantities to 0.0
+        List<NinData> allNinData = ninDataService.getAllNinData();
+        for (NinData ninData : allNinData) {
+            categoryWiseIngredientQuantity.put(ninData.getDDS_Category(), 0.0);
+        }
+
+        // Iterate through each dish of the user
+        for (Dishes dish : user.getDishesList()) {
+            // Check if the date of the dish matches the current date
+            if (dish.getDate().equals(currentDate)) {
+                // Iterate through each ingredient of the dish
+                for (Ingredients ingredient : dish.getIngredientList()) {
+                    // Get the foodCode of the ingredient
+                    String foodCode = ingredient.getFoodCode();
+
+                    // Find the NinData record corresponding to the foodCode
+                    NinData ninData = ninDataService.findByFoodCode(foodCode);
+
+                    if (ninData != null) {
+                        // Get the DDS_Category
+                        String ddsCategory = ninData.getDDS_Category();
+
+                        // Get the ingredient quantity
+                        double ingredientQuantity = ingredient.getIngredientQuantity();
+
+                        // Update the total quantity for the DDS_Category
+                        categoryWiseIngredientQuantity.put(ddsCategory,
+                                categoryWiseIngredientQuantity.get(ddsCategory) + ingredientQuantity);
+                    }
+                }
+            }
+        }
+
+        // Now you have category-wise ingredient quantity totals in the map
+        return ResponseEntity.ok(categoryWiseIngredientQuantity);
+    }
 }
