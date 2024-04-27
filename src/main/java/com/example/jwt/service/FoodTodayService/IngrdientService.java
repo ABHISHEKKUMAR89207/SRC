@@ -1264,7 +1264,9 @@ private Double calculateNiacin(Ingredients ingredient) {
                     totalFolates_B9,
                     totalRetinolVit_A,
                     dish.getDishQuantity(),  // provide dish quantity here
-                    dish.getServingSize()  // provide serving size here
+                    dish.getServingSize(),  // provide serving size here
+                    dish.getUnit(),
+                    dish.getValueForOneUnit()
             ));
 
 //            }
@@ -2280,30 +2282,58 @@ private Double calculateNiacin(Ingredients ingredient) {
                 folates_B9 = folates_B9 + totalFolates_B9;
 
 
-                    responseList.add(new DishWithIngredientsResponse(
-                            dish.getDishId(),
-                            dish.getDishName(),
-                            dish.getMealName(),
-                            dish.isFavourite(),
-                            ingredientsList,
-                            totalEnergy,  // provide the original total energy here
-                            totalProteins,
-                            totalCarbs,
-                            totalFats,
-                            totalFibers,
-                            totalMagnesium,
-                            totalZinc,
-                            totalIron,
-                            totalCalcium,
-                            totalThiamine_B1,
-                            totalRiboflavin_B2,
-                            totalNiacin_B3,
-                            totalFolates_B9,
-                            totalRetinolVit_A,
+//                    responseList.add(new DishWithIngredientsResponse(
+//                            dish.getDishId(),
+//                            dish.getDishName(),
+//                            dish.getMealName(),
+//                            dish.isFavourite(),
+//                            ingredientsList,
+//                            totalEnergy,  // provide the original total energy here
+//                            totalProteins,
+//                            totalCarbs,
+//                            totalFats,
+//                            totalFibers,
+//                            totalMagnesium,
+//                            totalZinc,
+//                            totalIron,
+//                            totalCalcium,
+//                            totalThiamine_B1,
+//                            totalRiboflavin_B2,
+//                            totalNiacin_B3,
+//                            totalFolates_B9,
+//                            totalRetinolVit_A,
+//
+//                            dish.getDishQuantity(),  // provide dish quantity here
+//                            dish.getServingSize(),  // provide serving size here
+//                            dish.getUnit(),
+//                            dish.getValueForOneUnit()
+//                    ));
 
-                            dish.getDishQuantity(),  // provide dish quantity here
-                            dish.getServingSize()  // provide serving size here
-                    ));
+                responseList.add(new DishWithIngredientsResponse(
+                        dish.getDishId(),
+                        dish.getDishName(),
+                        dish.getMealName(),
+                        dish.isFavourite(),
+                        ingredientsList,
+                        totalEnergy,  // provide the original total energy here
+                        totalProteins,
+                        totalCarbs,
+                        totalFats,
+                        totalFibers,
+                        totalMagnesium,
+                        totalZinc,
+                        totalIron,
+                        totalCalcium,
+                        totalThiamine_B1,
+                        totalRiboflavin_B2,
+                        totalNiacin_B3,
+                        totalFolates_B9,
+                        totalRetinolVit_A,
+                        dish.getDishQuantity(),  // provide dish quantity here
+                        dish.getServingSize(),  // provide serving size here
+                        dish.getUnit(),  // add unit here
+                        dish.getValueForOneUnit()  // add valueForOneUnit here
+                ));
 
 //                }
             }

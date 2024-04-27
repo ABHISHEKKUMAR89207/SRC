@@ -456,6 +456,8 @@ public void saveRecipeAndIngredients(RecipeRequest request, User user, LocalDate
     newDish.setDishQuantity(request.getDishQuantity());
     newDish.setMealName(request.getMealType());
     newDish.setServingSize(request.getServingSize());
+    newDish.setUnit(request.getUnit());
+    newDish.setValueForOneUnit(request.getValueForOneUnit());
     // Set other necessary fields in the newDish
 
     newDish.setUser(user);

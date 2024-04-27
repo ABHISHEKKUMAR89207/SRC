@@ -19,6 +19,8 @@ public class DishWithIngredientsResponse {
     private String mealType;
     private Double dishQuantity;
     private Double servingSize;
+    private String unit;
+    private  Double valueForOneUnit;
     private boolean favourite;
     private List<IngredientDTO> ingredients;
     private Double totalEnergy;
@@ -35,6 +37,8 @@ public class DishWithIngredientsResponse {
     private Double totalNiacin_B3;
     private Double totalFolates_B9;
     private Double totalRetinolVit_A;
+
+
 //    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
@@ -85,14 +89,19 @@ public class DishWithIngredientsResponse {
                                        Double totalFolates_B9,
                                        Double totalRetinolVit_A,
                                        Double dishQuantity,
-                                       Double servingSize
+                                       Double servingSize,
+                                       String unit,
+                                       Double valueForOneUnit
                                ) {
         this.dishId = dishId;
         this.dishName = dishName;
         this.mealType = mealType;
         this.dishQuantity=dishQuantity;
         this.servingSize=servingSize;
+        this.unit=unit;
+        this.valueForOneUnit=valueForOneUnit;
         this.favourite = favourite;
+
 
 
         this.ingredients = ingredients;

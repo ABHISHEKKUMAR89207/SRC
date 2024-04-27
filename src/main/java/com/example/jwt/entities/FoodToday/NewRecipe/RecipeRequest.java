@@ -19,5 +19,7 @@ public class RecipeRequest {
     private String mealType;
     private Double dishQuantity;
     private Double servingSize;
+    private String unit;
+    private Double valueForOneUnit;
     private List<IngredientRequest> ingredients;
 }

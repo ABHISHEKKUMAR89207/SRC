@@ -32,6 +32,8 @@ public class Dishes {
     private LocalDate date;
     private boolean favourite;
     private Double servingSize;
+    private String unit;
+    private Double valueForOneUnit;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
