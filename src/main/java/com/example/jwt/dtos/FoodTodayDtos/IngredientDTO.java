@@ -16,6 +16,8 @@ import lombok.Setter;
 public class IngredientDTO {
 
     private String ingredientName;
+    private String imageIngUrl;
+
     private Double ingredientQuantity;
     private String foodCode;
     private String category;
@@ -46,6 +48,7 @@ public class IngredientDTO {
 
 
     public IngredientDTO(String ingredientName,
+                         String imageIngUrl,
                          Double ingredientQuantity,
                          Double energy,
                          Double proteins,
@@ -62,6 +65,7 @@ public class IngredientDTO {
                          Double folates_B9,
                          Double retinolVit_A) {
         this.ingredientName = ingredientName;
+        this.imageIngUrl = imageIngUrl;
         this.ingredientQuantity = ingredientQuantity;
         this.energy = energy;
         this.proteins = proteins;
