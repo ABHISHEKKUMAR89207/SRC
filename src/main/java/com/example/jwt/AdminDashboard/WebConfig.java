@@ -45,12 +45,30 @@ public class WebConfig implements WebMvcConfigurer {
 //    }
 
 
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("file:./images/")
+//                .setCachePeriod(3600) // Cache period in seconds
+//                .resourceChain(true);
+//    }
+
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("file:./images/")
+//                .setCachePeriod(0); // Disable caching for development
+//    }
+
+
+    @Value("${image.basePath}")
+    private String basePath; // Base path for images
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:./images/")
-                .setCachePeriod(3600) // Cache period in seconds
-                .resourceChain(true);
+                .addResourceLocations("file:" + basePath) // Serving images from the configured base path
+                .setCachePeriod(3600); // Cache period in seconds
     }
 //@Override
 //public void addResourceHandlers(ResourceHandlerRegistry registry) {

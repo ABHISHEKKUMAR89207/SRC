@@ -2083,8 +2083,8 @@ private Double calculateNiacin(Ingredients ingredient) {
     }
 //    String baseUrl = "http://68.183.89.215:7073/rowIngImage/"; // Base URL of your image folder
 //    String baseUrl = "http://68.183.89.215:7073/images/rowIngImage/"; // Base URL of your image folder
-//    String baseUrl = "http://localhost:7073/images/"; // Base URL of your image folder
-    String baseUrl = "http://68.183.89.215:7073/images/"; // Base URL of your image folder
+    String baseUrl = "http://localhost:7073/images/"; // Base URL of your image folder
+//    String baseUrl = "http://68.183.89.215:7073/images/"; // Base URL of your image folder
 
     public List<mealResponse> getDishesWithIngredientsByDateAndMealType(
             User user, LocalDate date, String mealType) {
