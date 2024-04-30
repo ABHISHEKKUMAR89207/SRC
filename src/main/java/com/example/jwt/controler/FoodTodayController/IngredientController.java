@@ -16,13 +16,20 @@ import com.example.jwt.service.FoodTodayService.NinDataService;
 import com.example.jwt.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -41,6 +48,54 @@ public class IngredientController {
     @Autowired
     private JwtHelper jwtHelper;
 
+
+
+    @Value("${upload.path}") // This will get the base path
+    private String basePath;
+
+//    @PostMapping("/uploadImages")
+//    public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
+//        try {
+//            // Create "rowIngImage" directory inside the "images" folder if it doesn't exist
+//            File rowIngImageDir = new File(basePath, "rowIngImage");
+//            if (!rowIngImageDir.exists()) {
+//                rowIngImageDir.mkdirs();
+//            }
+//
+//            for (MultipartFile image : images) {
+//                String fileName = image.getOriginalFilename();
+//                // Save the image to the "rowIngImage" folder within the "images" folder
+//                File dest = new File(rowIngImageDir.getAbsolutePath(), fileName);
+//                image.transferTo(dest);
+//            }
+//            return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+
+    @PostMapping("/uploadImages")
+    public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
+        try {
+            // Create "images" directory if it doesn't exist
+            File imagesDir = new File(basePath);
+            if (!imagesDir.exists()) {
+                imagesDir.mkdirs();
+            }
+
+            for (MultipartFile image : images) {
+                String fileName = image.getOriginalFilename();
+                // Save the image to the "images" folder
+                File dest = new File(imagesDir.getAbsolutePath(), fileName);
+                image.transferTo(dest);
+            }
+            return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/save")
     public ResponseEntity<String> saveNutrient(@RequestBody NutrientRequest nutrientRequest) {

@@ -1,5 +1,6 @@
 package com.example.jwt.AdminDashboard;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -7,6 +8,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+//    @Value("${image.basePath}")
+//    private String basePath; // Base path for images
 
 //    @Override
 //    public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -48,5 +52,20 @@ public class WebConfig implements WebMvcConfigurer {
                 .setCachePeriod(3600) // Cache period in seconds
                 .resourceChain(true);
     }
+//@Override
+//public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//    registry.addResourceHandler("/images/**", "/rowIngImage/**")
+//            .addResourceLocations("file:./images/", "file:./rowIngImage/")
+//            .setCachePeriod(3600) // Cache period in seconds
+//            .resourceChain(true);
+//}
+
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/images/**")
+//                .addResourceLocations("file:" + basePath) // Serving images from the configured base path
+//                .setCachePeriod(3600); // Cache period in seconds
+//    }
+
 }
 
