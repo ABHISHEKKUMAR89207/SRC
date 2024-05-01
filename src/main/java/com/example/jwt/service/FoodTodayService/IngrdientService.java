@@ -2075,16 +2075,22 @@ private Double calculateNiacin(Ingredients ingredient) {
 //        return finalResponseList;
 //    }
 //
+private static final Logger logger = LoggerFactory.getLogger(IngrdientService.class);
 
 
     // Method to construct image URL
+//    private String constructImageUrl(String baseUrl, String foodCode) {
+//        return baseUrl + foodCode + ".png"; // Adjust the file extension according to your image format
+//    }
     private String constructImageUrl(String baseUrl, String foodCode) {
-        return baseUrl + foodCode + ".png"; // Adjust the file extension according to your image format
+        String imageUrl = baseUrl + foodCode + ".PNG"; // Adjust the file extension according to your image format
+        logger.debug("Constructed image URL: {}", imageUrl);
+        return imageUrl;
     }
 //    String baseUrl = "http://68.183.89.215:7073/rowIngImage/"; // Base URL of your image folder
 //    String baseUrl = "http://68.183.89.215:7073/images/rowIngImage/"; // Base URL of your image folder
-    String baseUrl = "http://localhost:7073/images/"; // Base URL of your image folder
-//    String baseUrl = "http://68.183.89.215:7073/images/"; // Base URL of your image folder
+//    String baseUrl = "http://localhost:7073/images/"; // Base URL of your image folder
+    String baseUrl = "http://68.183.89.215:7073/images/"; // Base URL of your image folder
 
     public List<mealResponse> getDishesWithIngredientsByDateAndMealType(
             User user, LocalDate date, String mealType) {
@@ -2193,6 +2199,7 @@ private Double calculateNiacin(Ingredients ingredient) {
 //                }
                 for (Ingredients ingredient : ingredients) {
                     NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+
                     if (ninData != null) {
                         // NinData exists, use its values
                         ingredientsList.add(new IngredientDTO(
@@ -2382,6 +2389,7 @@ private Double calculateNiacin(Ingredients ingredient) {
             String siUnit = unitsDatabase.getSI_Unit();
             nutrientsNameWithSIUnit.put(nutrientName, siUnit);
         }
+
 
         finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
         return finalResponseList;
