@@ -48,6 +48,7 @@ public class NinDataService {
         ninDataDTO.setId(ninData.getNinDataId());
         ninDataDTO.setName(ninData.getFood());
         ninDataDTO.setTypesoffood(ninData.getTypesoffood());
+        ninDataDTO.setFoodCode(ninData.getFoodCode());
         ninDataDTO.setProtein(ninData.getProtein());
         ninDataDTO.setEnergy(ninData.getEnergy());
         ninDataDTO.setCarbohydrate(ninData.getCarbohydrate());
