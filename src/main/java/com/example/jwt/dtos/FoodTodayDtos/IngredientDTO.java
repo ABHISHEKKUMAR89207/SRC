@@ -38,11 +38,12 @@ public class IngredientDTO {
 
     public IngredientDTO(String ingredientName,
                          Double ingredientQuantity,
-                         String foodCode) {
+                         String foodCode,
+                         String category) {
         this.ingredientName = ingredientName;
         this.ingredientQuantity = ingredientQuantity;
         this.foodCode =foodCode;
-
+        this.category = category;
 
     }
 

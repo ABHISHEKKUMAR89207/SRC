@@ -1275,7 +1275,9 @@ private Double calculateNiacin(Ingredients ingredient) {
 
 //            }
             onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
+            System.out.println("one gram energy -------------- "+onegrmEng);
             onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
+            System.out.println("one gram energy -------------- "+onegrmPro);
             onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
             onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
             onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();

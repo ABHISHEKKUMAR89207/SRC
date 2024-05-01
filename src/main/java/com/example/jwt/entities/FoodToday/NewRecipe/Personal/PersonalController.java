@@ -42,7 +42,7 @@ public class PersonalController {
 //    }
 
 
-    @GetMapping("/ddd/{perRecId}")
+    @GetMapping("/get-personal-dish/{perRecId}")
     public ResponseEntity<PersonalDTO> getPersonalById(@RequestHeader("Auth") String tokenHeader, @PathVariable Long perRecId) {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
@@ -74,7 +74,7 @@ public class PersonalController {
 
     private List<IngredientDTO> convertToIngredientsDTOList(List<Ingredients> ingredientsList) {
         return ingredientsList.stream()
-                .map(ingredient -> new IngredientDTO(ingredient.getIngredientName(), ingredient.getIngredientQuantity(), ingredient.getFoodCode()))
+                .map(ingredient -> new IngredientDTO(ingredient.getIngredientName(), ingredient.getIngredientQuantity(), ingredient.getFoodCode(), ingredient.getCategory()))
                 .collect(Collectors.toList());
     }
 

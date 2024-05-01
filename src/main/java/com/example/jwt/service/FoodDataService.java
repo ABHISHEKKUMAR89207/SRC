@@ -322,6 +322,7 @@ public class FoodDataService {
             dto.setId(entity.getNinDataId());
             dto.setName(entity.getFood());
             dto.setCategory(entity.getCategory());
+            dto.setFoodCode(entity.getFoodCode());
 
             // Set DTO properties based on the selected column
             switch (column.toLowerCase()) {
