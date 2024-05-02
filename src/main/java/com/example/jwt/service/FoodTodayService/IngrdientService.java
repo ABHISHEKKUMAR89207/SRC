@@ -1030,11 +1030,30 @@ private Double calculateNiacin(Ingredients ingredient) {
         Double retinolVit_A = 0.0;
 
 
+
         for (Dishes dish : dishesList) {
+
             List<Ingredients> ingredients = dish.getIngredientList();
             List<IngredientDTO> ingredientsList = new ArrayList<>();
             Map<String, Double> mapIngredient = new HashMap<>();
 //            datee = dish.getDate(); // Assign the value here
+
+            Double finalTotalEnergy =0.0;
+            Double finalEnergy = 0.0;
+            Double finalProteins = 0.0;
+            Double finalCarbs = 0.0;
+            Double finalFats = 0.0;
+            Double finalFibers = 0.0;
+            Double finalMagnesium = 0.0;
+            Double finalZinc = 0.0;
+            Double finalIron = 0.0;
+            Double finalCalcium = 0.0;
+            Double finalThiamine_B1 = 0.0;
+            Double finalRetinolVit_A = 0.0;
+            Double finalRiboflavin_B2 = 0.0;
+            Double finalNiacin_B3 = 0.0;
+            Double finalFolates_B9 = 0.0;
+            Double onegrmEngg=0.0;
 
             Double totalEnergy = 0.0;
             Double totalProteins = 0.0;
@@ -1052,44 +1071,6 @@ private Double calculateNiacin(Ingredients ingredient) {
             Double totalRetinolVit_A = 0.0;
 
 
-//            for (Ingredients ingredient : ingredients) {
-//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
-//
-//                ingredientsList.add(new IngredientDTO(
-//                        ingredient.getIngredientName(),
-//                        ingredient.getIngredientQuantity(),
-//                        calculateEnergy(ingredient),
-//                        calculateProteins(ingredient),
-//                        calculateCarbs(ingredient),
-//                        calculateFats(ingredient),
-//                        calculateFibers(ingredient),
-//                        calculateMagnesium(ingredient),
-//                        calculateZinc(ingredient),
-//                        calculateCalcium(ingredient),
-//                        calculateIron(ingredient),
-//                        calculateThiamin(ingredient),
-//                        calculateNiacin(ingredient),
-//                        calculateRiboflavin(ingredient),
-//                        calculateTotalFolates(ingredient),
-//                        calculateVitaminA(ingredient)
-//                ));
-//
-//                totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
-//                totalProteins += (ingredient.getIngredientQuantity()/100) * ninData.getProtein();
-//                totalCarbs += (ingredient.getIngredientQuantity()/100) * ninData.getCarbohydrate();
-//                totalFats += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Fat();
-//                totalFibers += (ingredient.getIngredientQuantity()/100) * ninData.getTotal_Dietary_Fibre();
-//                totalMagnesium += (ingredient.getIngredientQuantity()/100) * ninData.getMagnesium();
-//                totalZinc += (ingredient.getIngredientQuantity()/100) * ninData.getZinc();
-//                totalIron += (ingredient.getIngredientQuantity()/100) * ninData.getIron();
-//                totalCalcium += (ingredient.getIngredientQuantity()/100) * ninData.getCalcium();
-//                totalFolates_B9 += (ingredient.getIngredientQuantity()/100) * ninData.getTotalFolates_B9();
-//                totalNiacin_B3 += (ingredient.getIngredientQuantity()/100) * ninData.getNiacin_B3();
-//                totalThiamine_B1 += (ingredient.getIngredientQuantity()/100) * ninData.getThiamine_B1();
-//                totalRetinolVit_A += (ingredient.getIngredientQuantity()/100) * ninData.getRetinolVit_A();
-//                totalRiboflavin_B2 += (ingredient.getIngredientQuantity()/100) * ninData.getRiboflavin_B2();
-//
-//            }
             // Inside your for loop where you're iterating over ingredients
             for (Ingredients ingredient : ingredients) {
                 NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
@@ -1195,56 +1176,6 @@ private Double calculateNiacin(Ingredients ingredient) {
             folates_B9 = folates_B9 + totalFolates_B9;
 
 
-            mapIngredient.put("Energy", energy);
-            mapIngredient.put("Protiens", proteins);
-            mapIngredient.put("carbs", carbs);
-            mapIngredient.put("fat", fats);
-            mapIngredient.put("fibers", fibers);
-            mapIngredient.put("Magnesium", magnesium);
-            mapIngredient.put("Zinc", zinc);
-            mapIngredient.put("Iron", iron);
-            mapIngredient.put("Calcium", calcium);
-            mapIngredient.put("Thiamine-B1", thiamine_B1);
-            mapIngredient.put("Retinol-Vit-A", retinolVit_A);
-            mapIngredient.put("Riboflavin-B2", riboflavin_B2);
-            mapIngredient.put("Niacin-B3", niacin_B3);
-            mapIngredient.put("Folates-B9", folates_B9);
-
-//            log.info("Map Ingredients for Dish {}: {}", dish.getDishId(), mapIngredient);
-            System.out.println("map Ingredient =============== "+mapIngredient);
-            analysisService.setmaps(mapIngredient);
-
-
-            // Fetch recipe details based on dish's recipe ID
-//            Recipe recipe = dish.getRecipe();
-//            if (recipe != null) {
-//                // Your existing calculation logic
-//                Double recipeEnergy = recipe.getEnergy_joules();
-//                Double recipeProteins = recipe.getProtein();
-//                Double recipeCarbs = recipe.getCarbohydrate();
-//                Double recipeFats = recipe.getTotal_fat();
-//                Double recipeFibers = recipe.getTotal_dietary_fibre();
-//
-//                energy += recipeEnergy;
-//                proteins += recipeProteins;
-//                fats += recipeFats;
-//                carbs += recipeCarbs;
-//                fibers += recipeFibers;
-//
-//                // Update the response list with recipe details
-//                responseList.add(new DishWithIngredientsResponse(
-//                        dish.getDishId(),
-//                        dish.getDishName(),
-//                        dish.getMealName(),
-//                        dish.isFavourite(),
-//                        ingredientsList,
-//                        totalEnergy + recipeEnergy,
-//                        totalProteins + recipeProteins,
-//                        totalCarbs + recipeCarbs,
-//                        totalFats + recipeFats,
-//                        totalFibers + recipeFibers
-//                ));
-//            } else {
 
             // Update the response list without recipe details
             responseList.add(new DishWithIngredientsResponse(
@@ -1273,55 +1204,81 @@ private Double calculateNiacin(Ingredients ingredient) {
                     dish.getValueForOneUnit()
             ));
 
-//            }
-            onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
-            System.out.println("one gram energy -------------- "+onegrmEng);
-            onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
-            System.out.println("one gram energy -------------- "+onegrmPro);
-            onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
-            onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
-            onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();
-            onegrmMagnesium = (magnesium/dish.getDishQuantity())*dish.getServingSize();
-            onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
-            onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
-            onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
 
-            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
-            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
-            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
-            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
-            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
+            // Loop through each DishWithIngredientsResponse in responseList
+            for (DishWithIngredientsResponse response : responseList) {
+                // Print details of each dish
+                System.out.println("Dish ID: " + response.getDishId());
+                System.out.println("Dish Name: " + response.getDishName());
+                System.out.println("Response List Total Energy: " + response.getTotalEnergy());
+
+                // Add the energy of the current dish to the final total energy
+                finalTotalEnergy += response.getTotalEnergy();
+                finalProteins += response.getTotalProteins();
+                finalCarbs += response.getTotalCarbs();
+                finalFats += response.getTotalFats();
+                finalFibers += response.getTotalFibers();
+                finalMagnesium += response.getTotalMagnesium();
+                finalZinc += response.getTotalZinc();
+                finalIron += response.getTotalIron();
+                finalCalcium += response.getTotalCalcium();
+                finalThiamine_B1 += response.getTotalThiamine_B1();
+                finalRetinolVit_A += response.getTotalRetinolVit_A();
+                finalRiboflavin_B2 += response.getTotalRiboflavin_B2();
+                finalNiacin_B3 += response.getTotalNiacin_B3();
+                finalFolates_B9 += response.getTotalFolates_B9();
+
+                // Print separator between dishes
+                System.out.println("----------------------------------");
+            }
+
+            System.out.println("Final Total Energy: " + finalTotalEnergy);
+
+            System.out.println("enryyyy-----"+energy);
+            System.out.println(" ttotal Energyy   ====  "+totalEnergy);
+//            }
+//            onegrmEng = (energy/(dish.getDishQuantity())*dish.getServingSize());
+            onegrmEng = finalTotalEnergy;
+            System.out.println("one gram energy -------------- "+onegrmEng);
+//            onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
+            onegrmPro = finalProteins;
+            System.out.println("one gram protein -------------- "+onegrmPro);
+//            onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
+            onegrmCarb = finalCarbs;
+//            onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFat = finalFats;
+//            onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFib = finalFibers;
+//            onegrmMagnesium = (magnesium/dish.getDishQuantity())*dish.getServingSize();
+            onegrmMagnesium = finalMagnesium;
+//            onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
+            onegrmZinc = finalZinc;
+//            onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
+            onegrmIron =finalIron;
+//            onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
+            onegrmCalcium = finalCalcium;
+//            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
+            onegramThiamine_B1 = finalThiamine_B1;
+//            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
+            onegrmRetinolVit_A = finalRetinolVit_A;
+//            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
+            onegrmRiboflavin_B2 = finalRiboflavin_B2;
+//            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
+            onegrmNiacin_B3 = finalNiacin_B3;
+//            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
+            onegrmFolates_B9 = finalFolates_B9;
         }
 
         Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
 
-        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
-        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
-            String nutrientName = unitsDatabase.getFood_unit();
-            String siUnit = unitsDatabase.getSI_Unit();
-            nutrientsNameWithSIUnit.put(nutrientName, siUnit);
-        }
+//        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
+//        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
+//            String nutrientName = unitsDatabase.getFood_unit();
+//            String siUnit = unitsDatabase.getSI_Unit();
+//            nutrientsNameWithSIUnit.put(nutrientName, siUnit);
+//        }
 
-//        finalResponseList.add(new mealResponse(
-//                        nutrientsNameWithSIUnit,
-//                        responseList,
-//                        energy,
-//                        proteins,
-//                        carbs,
-//                        fats,
-//                        fibers,
-//                        magnesium,
-//                        zinc,
-//                        iron,
-//                        calcium,
-//                        thiamine_B1,
-//                        riboflavin_B2,
-//                        niacin_B3,
-//                        folates_B9,
-//                        retinolVit_A,
-//                        datee
-//                )
-//        );
+//
         finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
 
         return finalResponseList;
@@ -2140,6 +2097,24 @@ private static final Logger logger = LoggerFactory.getLogger(IngrdientService.cl
                 List<Ingredients> ingredients = dish.getIngredientList();
                 List<IngredientDTO> ingredientsList = new ArrayList<>();
 
+                Double finalTotalEnergy =0.0;
+                Double finalEnergy = 0.0;
+                Double finalProteins = 0.0;
+                Double finalCarbs = 0.0;
+                Double finalFats = 0.0;
+                Double finalFibers = 0.0;
+                Double finalMagnesium = 0.0;
+                Double finalZinc = 0.0;
+                Double finalIron = 0.0;
+                Double finalCalcium = 0.0;
+                Double finalThiamine_B1 = 0.0;
+                Double finalRetinolVit_A = 0.0;
+                Double finalRiboflavin_B2 = 0.0;
+                Double finalNiacin_B3 = 0.0;
+                Double finalFolates_B9 = 0.0;
+                Double onegrmEngg=0.0;
+
+
 
                 Double totalEnergy = 0.0;
                 Double totalProteins = 0.0;
@@ -2359,38 +2334,103 @@ private static final Logger logger = LoggerFactory.getLogger(IngrdientService.cl
                         dish.getValueForOneUnit()  // add valueForOneUnit here
                 ));
 
+
+                // Loop through each DishWithIngredientsResponse in responseList
+                for (DishWithIngredientsResponse response : responseList) {
+                    // Print details of each dish
+                    System.out.println("Dish ID: " + response.getDishId());
+                    System.out.println("Dish Name: " + response.getDishName());
+                    System.out.println("Response List Total Energy: " + response.getTotalEnergy());
+
+                    // Add the energy of the current dish to the final total energy
+                    finalTotalEnergy += response.getTotalEnergy();
+                    finalProteins += response.getTotalProteins();
+                    finalCarbs += response.getTotalCarbs();
+                    finalFats += response.getTotalFats();
+                    finalFibers += response.getTotalFibers();
+                    finalMagnesium += response.getTotalMagnesium();
+                    finalZinc += response.getTotalZinc();
+                    finalIron += response.getTotalIron();
+                    finalCalcium += response.getTotalCalcium();
+                    finalThiamine_B1 += response.getTotalThiamine_B1();
+                    finalRetinolVit_A += response.getTotalRetinolVit_A();
+                    finalRiboflavin_B2 += response.getTotalRiboflavin_B2();
+                    finalNiacin_B3 += response.getTotalNiacin_B3();
+                    finalFolates_B9 += response.getTotalFolates_B9();
+
+                    // Print separator between dishes
+                    System.out.println("----------------------------------");
+                }
+
+                System.out.println("Final Total Energy: " + finalTotalEnergy);
+
+                System.out.println("enryyyy-----"+energy);
+                System.out.println(" ttotal Energyy   ====  "+totalEnergy);
+//            }
+//            onegrmEng = (energy/(dish.getDishQuantity())*dish.getServingSize());
+                onegrmEng = finalTotalEnergy;
+                System.out.println("one gram energy -------------- "+onegrmEng);
+//            onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
+                onegrmPro = finalProteins;
+                System.out.println("one gram protein -------------- "+onegrmPro);
+//            onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
+                onegrmCarb = finalCarbs;
+//            onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
+                onegrmFat = finalFats;
+//            onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();
+                onegrmFib = finalFibers;
+//            onegrmMagnesium = (magnesium/dish.getDishQuantity())*dish.getServingSize();
+                onegrmMagnesium = finalMagnesium;
+//            onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
+                onegrmZinc = finalZinc;
+//            onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
+                onegrmIron =finalIron;
+//            onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
+                onegrmCalcium = finalCalcium;
+//            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
+                onegramThiamine_B1 = finalThiamine_B1;
+//            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
+                onegrmRetinolVit_A = finalRetinolVit_A;
+//            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
+                onegrmRiboflavin_B2 = finalRiboflavin_B2;
+//            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
+                onegrmNiacin_B3 = finalNiacin_B3;
+//            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
+                onegrmFolates_B9 = finalFolates_B9;
+            }
+
 //                }
             }
 
-            System.out.println(" EEnergy =========================  " +energy);
+//            System.out.println(" EEnergy =========================  " +energy);
+//
+//            onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmMagnesium = (magnesium/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
+//
+//            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
+//            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
 
-            onegrmEng = (energy/dish.getDishQuantity())*dish.getServingSize();
-            onegrmPro = (proteins/dish.getDishQuantity())*dish.getServingSize();
-            onegrmCarb = (carbs/dish.getDishQuantity())*dish.getServingSize();
-            onegrmFat = (fats/dish.getDishQuantity())*dish.getServingSize();
-            onegrmFib = (fibers/dish.getDishQuantity())*dish.getServingSize();
-            onegrmMagnesium = (magnesium/dish.getDishQuantity())*dish.getServingSize();
-            onegrmZinc = (zinc/dish.getDishQuantity())*dish.getServingSize();
-            onegrmIron = (iron/dish.getDishQuantity())*dish.getServingSize();
-            onegrmCalcium = (calcium/dish.getDishQuantity())*dish.getServingSize();
 
-            onegramThiamine_B1 = (thiamine_B1/dish.getDishQuantity())*dish.getServingSize();
-            onegrmRetinolVit_A = (retinolVit_A/dish.getDishQuantity())*dish.getServingSize();
-            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
-            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
-            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
-
-
-        }
+//        }
 
         Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
 
-        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
-        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
-            String nutrientName = unitsDatabase.getFood_unit();
-            String siUnit = unitsDatabase.getSI_Unit();
-            nutrientsNameWithSIUnit.put(nutrientName, siUnit);
-        }
+//        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
+//        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
+//            String nutrientName = unitsDatabase.getFood_unit();
+//            String siUnit = unitsDatabase.getSI_Unit();
+//            nutrientsNameWithSIUnit.put(nutrientName, siUnit);
+//        }
 
 
         finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));

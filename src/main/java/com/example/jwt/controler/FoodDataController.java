@@ -82,7 +82,7 @@ public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
 }
 
     @GetMapping("/nolimit")
-    public ResponseEntity<List<NinDataDTO>> getTop10ByColumnAndTypesOfFoodnolimits(
+    public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFoodnolimits(
             @RequestHeader("Auth") String tokenHeader,
             @RequestParam("column") String column,
             @RequestParam("typesOfFood") String typesOfFood) {
@@ -94,7 +94,7 @@ public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
             String username = jwtHelper.getUsernameFromToken(token);
 
             // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
-            List<NinDataDTO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFoodNolimit(column, typesOfFood, username);
+            List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFoodNolimit(column, typesOfFood, username);
 
             return ResponseEntity.ok(top10Data);
         } catch (Exception e) {

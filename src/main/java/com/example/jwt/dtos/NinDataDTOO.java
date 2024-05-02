@@ -61,6 +61,13 @@ public class NinDataDTOO {
     private Double magnesium;
 //    private String magnesiumUnit;
     private Double zinc;
+    private Double niacin;
+    private Double thiamine;
+    private Double vitA;
+    private Double vitB6;
+    private Double vitC;
+    private Double totalFloate;
+    private Double riboflavin;
 //    private String zincUnit;
 
     private String unit;

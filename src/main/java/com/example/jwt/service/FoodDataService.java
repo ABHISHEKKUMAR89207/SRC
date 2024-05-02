@@ -326,55 +326,91 @@ public class FoodDataService {
 
             // Set DTO properties based on the selected column
             switch (column.toLowerCase()) {
-                case "energy":
+                case "energy"://
                     dto.setEnergy(entity.getEnergy());
 //                    dto.setEnergyUnit("g");
-                    dto.setUnit("g");
+                    dto.setUnit("kcal");
                     break;
-                case "carbohydrate":
+                case "carbohydrate"://
                     dto.setCarbohydrate(entity.getCarbohydrate());
 //                    dto.setCarbohydrateUnit("g");
                     dto.setUnit("g");
                     break;
-                case "total_fat":
+                case "total_fat"://
                     dto.setTotalFat(entity.getTotal_Fat());
 //                    dto.setTotalFatUnit("g");
                     dto.setUnit("g");
                     break;
-                case "sodium":
+                case "sodium"://
                     dto.setSodium(entity.getSodium());
 //                    dto.setSodiumUnit("mg");
                     dto.setUnit("mg");
                     break;
-                case "total_dietary_fibre":
+                case "total_dietary_fibre"://
                     dto.setTotalDietaryFibre(entity.getTotal_Dietary_Fibre());
 //                    dto.setTotalDietaryFibreUnit("g");
                     dto.setUnit("g");
                     break;
-                case "calcium":
+                case "calcium"://
                     dto.setCalcium(entity.getCalcium());
 //                    dto.setCalciumUnit("mg");
                     dto.setUnit("mg");
                     break;
-                case "iron":
+                case "iron"://
                     dto.setIron(entity.getIron());
 //                    dto.setIronUnit("mg");
                     dto.setUnit("mg");
                     break;
-                case "magnesium":
+                case "magnesium"://
                     dto.setMagnesium(entity.getMagnesium());
 //                    dto.setMagnesiumUnit("mg");
                     dto.setUnit("mg");
                     break;
-                case "zinc":
+                case "zinc"://
                     dto.setZinc(entity.getZinc());
 //                    dto.setZincUnit("mg");
                     dto.setUnit("mg");
                     break;
-                case "protein":
+                case "protein"://
                     dto.setProtein(entity.getProtein());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("g");
+                    break;
+                case "thiamine"://
+                    dto.setThiamine(entity.getThiamine_B1());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "riboflavin"://
+                    dto.setRiboflavin(entity.getRiboflavin_B2());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "niacin"://
+                    dto.setNiacin(entity.getNiacin_B3());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "vitb"://
+                    dto.setVitB6(entity.getVit_B6());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+
+                case "totalfloate"://
+                    dto.setTotalFloate(entity.getTotalFolates_B9());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("µg");
+                    break;
+                case "vitc"://
+                    dto.setVitC(entity.getVit_C());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "vita"://
+                    dto.setVitA(entity.getRetinolVit_A());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("µg");
                     break;
                 // add other nutrients as needed
             }
@@ -385,7 +421,7 @@ public class FoodDataService {
         return dtos;
     }
 
-    public List<NinDataDTO> getTop10ByColumnAndTypesOfFoodNolimit(String column, String typesOfFood, String username) {
+    public List<NinDataDTOO> getTop10ByColumnAndTypesOfFoodNolimit(String column, String typesOfFood, String username) {
         List<NinData> top10Results;
 
         if ("all".equalsIgnoreCase(typesOfFood)) {
@@ -395,61 +431,159 @@ public class FoodDataService {
         }
 
         // Create DTOs based on the retrieved entities
-        List<NinDataDTO> dtos = new ArrayList<>();
+        List<NinDataDTOO> dtos = new ArrayList<>();
 
 //        if (top10Results.size() > 10) {
 //            top10Results = top10Results.subList(0, 10);
 //        }
 
         for (NinData entity : top10Results) {
-            NinDataDTO dto = new NinDataDTO();
+            NinDataDTOO dto = new NinDataDTOO();
             dto.setId(entity.getNinDataId());
             dto.setName(entity.getFood());
             dto.setFoodCode(entity.getFoodCode());
             dto.setCategory(entity.getCategory());
 
+//            // Set DTO properties based on the selected column
+//            if ("carbohydrate".equalsIgnoreCase(column)) {
+//                dto.setCarbohydrate(entity.getCarbohydrate());
+//            } else if ("total_fat".equalsIgnoreCase(column)) {
+//                dto.setTotal_Fat(entity.getTotal_Fat());
+//            }
+////            else if ("cholestrol".equalsIgnoreCase(column)) {
+////                dto.setCholestrol(entity.getCholestrol());
+////            }
+//            else if ("sodium".equalsIgnoreCase(column)) {
+//                dto.setSodium(entity.getSodium());
+//            } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
+//                dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
+//            } else if ("calcium".equalsIgnoreCase(column)) {
+//                dto.setCalcium(entity.getCalcium());
+//            } else if ("iron".equalsIgnoreCase(column)) {
+//                dto.setIron(entity.getIron());
+//            }
+////            else if ("potassium".equalsIgnoreCase(column)) {
+////                dto.setPotassium(entity.getPotassium());
+////            } else if ("phosphorus".equalsIgnoreCase(column)) {
+////                dto.setPhosphorus(entity.getPhosphorus());
+////            }
+//            else if ("magnesium".equalsIgnoreCase(column)) {
+//                dto.setMagnesium(entity.getMagnesium());
+//            } else if ("zinc".equalsIgnoreCase(column)) {
+//                dto.setZinc(entity.getZinc());
+//            }
+////            else if ("selenium".equalsIgnoreCase(column)) {
+////                dto.setSelenium(entity.getSelenium());
+////            } else if ("copper".equalsIgnoreCase(column)) {
+////                dto.setCopper(entity.getCopper());
+////            } else if ("manganese".equalsIgnoreCase(column)) {
+////                dto.setManganese(entity.getManganese());
+////            }
+//            else if ("protein".equalsIgnoreCase(column)) {
+//                dto.setProtein(entity.getProtein());
+//            }
+//            // ... add more conditions based on other columns
+//
+//            dtos.add(dto);
+//        }
+//
+//        return dtos;
+//    }
             // Set DTO properties based on the selected column
-            if ("carbohydrate".equalsIgnoreCase(column)) {
-                dto.setCarbohydrate(entity.getCarbohydrate());
-            } else if ("total_fat".equalsIgnoreCase(column)) {
-                dto.setTotal_Fat(entity.getTotal_Fat());
+            switch (column.toLowerCase()) {
+                case "energy"://
+                    dto.setEnergy(entity.getEnergy());
+//                    dto.setEnergyUnit("g");
+                    dto.setUnit("kcal");
+                    break;
+                case "carbohydrate"://
+                    dto.setCarbohydrate(entity.getCarbohydrate());
+//                    dto.setCarbohydrateUnit("g");
+                    dto.setUnit("g");
+                    break;
+                case "total_fat"://
+                    dto.setTotalFat(entity.getTotal_Fat());
+//                    dto.setTotalFatUnit("g");
+                    dto.setUnit("g");
+                    break;
+                case "sodium"://
+                    dto.setSodium(entity.getSodium());
+//                    dto.setSodiumUnit("mg");
+                    dto.setUnit("mg");
+                    break;
+                case "total_dietary_fibre"://
+                    dto.setTotalDietaryFibre(entity.getTotal_Dietary_Fibre());
+//                    dto.setTotalDietaryFibreUnit("g");
+                    dto.setUnit("g");
+                    break;
+                case "calcium"://
+                    dto.setCalcium(entity.getCalcium());
+//                    dto.setCalciumUnit("mg");
+                    dto.setUnit("mg");
+                    break;
+                case "iron"://
+                    dto.setIron(entity.getIron());
+//                    dto.setIronUnit("mg");
+                    dto.setUnit("mg");
+                    break;
+                case "magnesium"://
+                    dto.setMagnesium(entity.getMagnesium());
+//                    dto.setMagnesiumUnit("mg");
+                    dto.setUnit("mg");
+                    break;
+                case "zinc"://
+                    dto.setZinc(entity.getZinc());
+//                    dto.setZincUnit("mg");
+                    dto.setUnit("mg");
+                    break;
+                case "protein"://
+                    dto.setProtein(entity.getProtein());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("g");
+                    break;
+                case "thiamine"://
+                    dto.setThiamine(entity.getThiamine_B1());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "riboflavin"://
+                    dto.setRiboflavin(entity.getRiboflavin_B2());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "niacin"://
+                    dto.setNiacin(entity.getNiacin_B3());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "vitb"://
+                    dto.setVitB6(entity.getVit_B6());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+
+                case "totalfloate"://
+                    dto.setTotalFloate(entity.getTotalFolates_B9());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("µg");
+                    break;
+                case "vitc"://
+                    dto.setVitC(entity.getVit_C());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("mg");
+                    break;
+                case "vita"://
+                    dto.setVitA(entity.getRetinolVit_A());
+//                    dto.setProteinUnit("g");
+                    dto.setUnit("µg");
+                    break;
+                // add other nutrients as needed
             }
-//            else if ("cholestrol".equalsIgnoreCase(column)) {
-//                dto.setCholestrol(entity.getCholestrol());
-//            }
-            else if ("sodium".equalsIgnoreCase(column)) {
-                dto.setSodium(entity.getSodium());
-            } else if ("total_dietary_fibre".equalsIgnoreCase(column)) {
-                dto.setTotal_Dietary_Fibre(entity.getTotal_Dietary_Fibre());
-            } else if ("calcium".equalsIgnoreCase(column)) {
-                dto.setCalcium(entity.getCalcium());
-            } else if ("iron".equalsIgnoreCase(column)) {
-                dto.setIron(entity.getIron());
-            }
-//            else if ("potassium".equalsIgnoreCase(column)) {
-//                dto.setPotassium(entity.getPotassium());
-//            } else if ("phosphorus".equalsIgnoreCase(column)) {
-//                dto.setPhosphorus(entity.getPhosphorus());
-//            }
-            else if ("magnesium".equalsIgnoreCase(column)) {
-                dto.setMagnesium(entity.getMagnesium());
-            } else if ("zinc".equalsIgnoreCase(column)) {
-                dto.setZinc(entity.getZinc());
-            }
-//            else if ("selenium".equalsIgnoreCase(column)) {
-//                dto.setSelenium(entity.getSelenium());
-//            } else if ("copper".equalsIgnoreCase(column)) {
-//                dto.setCopper(entity.getCopper());
-//            } else if ("manganese".equalsIgnoreCase(column)) {
-//                dto.setManganese(entity.getManganese());
-//            }
-            else if ("protein".equalsIgnoreCase(column)) {
-                dto.setProtein(entity.getProtein());
-            }
-            // ... add more conditions based on other columns
 
             dtos.add(dto);
-        }
+
+
+    }
 
         return dtos;
     }
