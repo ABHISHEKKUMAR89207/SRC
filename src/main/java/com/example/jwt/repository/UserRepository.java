@@ -18,6 +18,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
 
+    List<User> findAllByUserProfile_GenderIgnoreCase(String gender);
+
     @Query("SELECT u FROM User u WHERE " +
             "LOWER(u.userName) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR " +
             "LOWER(u.email) LIKE LOWER(CONCAT('%', :searchQuery, '%')) OR " +

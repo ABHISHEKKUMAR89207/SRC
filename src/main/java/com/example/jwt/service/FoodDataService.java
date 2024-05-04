@@ -337,7 +337,7 @@ public class FoodDataService {
                     dto.setUnit("g");
                     break;
                 case "total_fat"://
-                    dto.setTotalFat(entity.getTotal_Fat());
+                    dto.setTotal_fat(entity.getTotal_Fat());
 //                    dto.setTotalFatUnit("g");
                     dto.setUnit("g");
                     break;
@@ -347,7 +347,7 @@ public class FoodDataService {
                     dto.setUnit("mg");
                     break;
                 case "total_dietary_fibre"://
-                    dto.setTotalDietaryFibre(entity.getTotal_Dietary_Fibre());
+                    dto.setTotal_dietary_fibre(entity.getTotal_Dietary_Fibre());
 //                    dto.setTotalDietaryFibreUnit("g");
                     dto.setUnit("g");
                     break;
@@ -392,23 +392,23 @@ public class FoodDataService {
                     dto.setUnit("mg");
                     break;
                 case "vitb"://
-                    dto.setVitB6(entity.getVit_B6());
+                    dto.setVitb(entity.getVit_B6());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("mg");
                     break;
 
                 case "totalfloate"://
-                    dto.setTotalFloate(entity.getTotalFolates_B9());
+                    dto.setTotalfloate(entity.getTotalFolates_B9());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("µg");
                     break;
                 case "vitc"://
-                    dto.setVitC(entity.getVit_C());
+                    dto.setVitc(entity.getVit_C());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("mg");
                     break;
                 case "vita"://
-                    dto.setVitA(entity.getRetinolVit_A());
+                    dto.setVita(entity.getRetinolVit_A());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("µg");
                     break;
@@ -502,7 +502,7 @@ public class FoodDataService {
                     dto.setUnit("g");
                     break;
                 case "total_fat"://
-                    dto.setTotalFat(entity.getTotal_Fat());
+                    dto.setTotal_fat(entity.getTotal_Fat());
 //                    dto.setTotalFatUnit("g");
                     dto.setUnit("g");
                     break;
@@ -512,7 +512,7 @@ public class FoodDataService {
                     dto.setUnit("mg");
                     break;
                 case "total_dietary_fibre"://
-                    dto.setTotalDietaryFibre(entity.getTotal_Dietary_Fibre());
+                    dto.setTotal_dietary_fibre(entity.getTotal_Dietary_Fibre());
 //                    dto.setTotalDietaryFibreUnit("g");
                     dto.setUnit("g");
                     break;
@@ -557,23 +557,23 @@ public class FoodDataService {
                     dto.setUnit("mg");
                     break;
                 case "vitb"://
-                    dto.setVitB6(entity.getVit_B6());
+                    dto.setVitb(entity.getVit_B6());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("mg");
                     break;
 
                 case "totalfloate"://
-                    dto.setTotalFloate(entity.getTotalFolates_B9());
+                    dto.setTotalfloate(entity.getTotalFolates_B9());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("µg");
                     break;
                 case "vitc"://
-                    dto.setVitC(entity.getVit_C());
+                    dto.setVitc(entity.getVit_C());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("mg");
                     break;
                 case "vita"://
-                    dto.setVitA(entity.getRetinolVit_A());
+                    dto.setVita(entity.getRetinolVit_A());
 //                    dto.setProteinUnit("g");
                     dto.setUnit("µg");
                     break;

@@ -16,5 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE YEAR(o.createTimestamp) = :year AND MONTH(o.createTimestamp) = :month AND DAY(o.createTimestamp) = :day")
     List<Order> findOrdersByDate(@Param("year") int year, @Param("month") int month, @Param("day") int day);
 
+    List<Order> findByBookId(Long bookId);
 
+    boolean existsByBookId(Long bookId);
 }

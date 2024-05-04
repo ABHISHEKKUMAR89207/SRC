@@ -48,11 +48,11 @@ public class NinDataDTOO {
 //    private String carbohydrateUnit;
     private Double protein;
 //    private String proteinUnit;
-    private Double totalFat;
+    private Double total_fat;
 //    private String totalFatUnit;
     private Double sodium;
 //    private String sodiumUnit;
-    private Double totalDietaryFibre;
+    private Double total_dietary_fibre;
 //    private String totalDietaryFibreUnit;
     private Double calcium;
 //    private String calciumUnit;
@@ -63,10 +63,10 @@ public class NinDataDTOO {
     private Double zinc;
     private Double niacin;
     private Double thiamine;
-    private Double vitA;
-    private Double vitB6;
-    private Double vitC;
-    private Double totalFloate;
+    private Double vita;
+    private Double vitb;
+    private Double vitc;
+    private Double totalfloate;
     private Double riboflavin;
 //    private String zincUnit;
 

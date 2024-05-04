@@ -6,10 +6,16 @@ import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.MenstrualCycleRepository;
+import com.example.jwt.request.MenstrualCycleRequest;
+import com.example.jwt.security.JwtHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 public class MenstrualCycleService {
@@ -20,6 +26,88 @@ public class MenstrualCycleService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
+    @Autowired
+    private JwtHelper jwtHelper;
+
+    @Scheduled(cron = "0 0 0 * * ?") // Run at midnight every day
+    public void updateMenstrualCycle() {
+        // Fetch all female users
+        List<User> femaleUsers = userRepository.findAllByUserProfile_GenderIgnoreCase("Female");
+
+        for (User user : femaleUsers) {
+            MenstrualCycle menstrualCycle = user.getUserProfile().getMenstrualCycle();
+
+            if (menstrualCycle != null) {
+                // Calculate the new last period start date
+                LocalDate lastPeriodStartDate = menstrualCycle.getLastPeriodStartDate().plusDays(menstrualCycle.getAverageCycleLength());
+
+                // Calculate the difference in days between the current date and the new last period start date
+                long daysUntilLastPeriodStart = ChronoUnit.DAYS.between(LocalDate.now(), lastPeriodStartDate);
+
+                // If the new last period start date is today or in the past, update the menstrual cycle
+                if (daysUntilLastPeriodStart <= 0) {
+                    // Calculate and set the calculated date
+                    LocalDate calculatedDate = lastPeriodStartDate.plusDays(menstrualCycle.getAverageCycleLength());
+                    menstrualCycle.setCalculatedDate(calculatedDate);
+
+                    // Save the updated menstrual cycle
+                    menstrualCycleRepository.save(menstrualCycle);
+                }
+            }
+        }
+    }
+
+    public ResponseEntity<String> updateMenstrualCycle(String tokenHeader, MenstrualCycleRequest request) {
+        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+        if (user.getUserProfile() != null && "Female".equalsIgnoreCase(user.getUserProfile().getGender())) {
+            MenstrualCycle existingMenstrualCycle = user.getUserProfile().getMenstrualCycle();
+
+            if (existingMenstrualCycle != null) {
+                if (request.getAverageCycleLength() != 0) {
+                    existingMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
+                }
+                if (request.getLastPeriodStartDate() != null) {
+                    existingMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
+                }
+
+                // Calculate and set the calculatedDate based on lastPeriodStartDate and averageCycleLength
+                LocalDate calculatedDate = request.getLastPeriodStartDate().plusDays(request.getAverageCycleLength());
+                existingMenstrualCycle.setCalculatedDate(calculatedDate);
+
+                // Save the updated MenstrualCycle
+                menstrualCycleRepository.save(existingMenstrualCycle);
+            } else {
+                MenstrualCycle newMenstrualCycle = new MenstrualCycle();
+                newMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
+                newMenstrualCycle.setUser(user);
+                newMenstrualCycle.setUserProfile(user.getUserProfile());
+                if (request.getLastPeriodStartDate() != null) {
+                    newMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
+                }
+
+                // Calculate and set the calculatedDate based on lastPeriodStartDate and averageCycleLength
+                LocalDate calculatedDate = request.getLastPeriodStartDate().plusDays(request.getAverageCycleLength());
+                newMenstrualCycle.setCalculatedDate(calculatedDate);
+
+                // Save the new MenstrualCycle
+                existingMenstrualCycle = menstrualCycleRepository.save(newMenstrualCycle);
+                user.getUserProfile().setMenstrualCycle(existingMenstrualCycle);
+                userRepository.save(user);
+            }
+
+            return ResponseEntity.ok("MenstrualCycle updated successfully");
+        } else {
+            throw new IllegalArgumentException("This service is only available for female users.");
+        }
+    }
 
     public MenstrualCycle calculateNextPeriodStartDate(String username) {
         User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for email: " + username));

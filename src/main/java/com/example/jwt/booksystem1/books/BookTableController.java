@@ -15,10 +15,40 @@ public class BookTableController {
     @Autowired
     private BookTableRepository bookTableRepository;
 
+
+    @Autowired OrderRepository orderRepository;
 //    @GetMapping
 //    public List<BookTable> getAllBookTables() {
 //        return bookTableRepository.findAll();
 //    }
+
+
+    @DeleteMapping("/delete/{bookId}")
+    public ResponseEntity<?> deleteBookk(@PathVariable Long bookId) {
+        boolean deleted = deleteBook(bookId);
+        if (deleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+public boolean deleteBook(Long bookId) {
+    BookTable book = bookTableRepository.findById(bookId).orElse(null);
+    if (book != null) {
+        // Retrieve and delete associated orders first
+        List<Order> associatedOrders = orderRepository.findByBookId(bookId);
+        for (Order order : associatedOrders) {
+            orderRepository.delete(order);
+        }
+        // Now delete the book
+        bookTableRepository.delete(book);
+        return true;
+    }
+    return false;
+}
+
 
     @GetMapping
     public ResponseEntity<List<BookResponse>> getAllBookTables() {

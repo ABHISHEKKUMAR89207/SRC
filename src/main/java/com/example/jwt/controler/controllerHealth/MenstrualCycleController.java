@@ -5,6 +5,7 @@ import com.example.jwt.entities.dashboardEntity.healthTrends.MenstrualCycle;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.MenstrualCycleRepository;
+import com.example.jwt.request.MenstrualCycleRequest;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.UserService;
 import com.example.jwt.service.serviceHealth.HealthTrendsService;
@@ -253,58 +254,120 @@ public class MenstrualCycleController {
 //
 
 
+//    @PutMapping("/update")
+//    public ResponseEntity<String> updateMenstrualCycle(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestBody MenstrualCycle request) {
+//
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+//
+//        if (user.getUserProfile() != null && "Female".equalsIgnoreCase(user.getUserProfile().getGender())) {
+//            MenstrualCycle existingMenstrualCycle = user.getUserProfile().getMenstrualCycle();
+//
+//
+//
+//            if (existingMenstrualCycle != null) {
+//                if (request.getAverageCycleLength() != 0) {
+//                    existingMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
+//                }
+//                if (request.getLastPeriodStartDate() != null) {
+//                    existingMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
+//                }
+//
+//                // Save the updated MenstrualCycle
+//                menstrualCycleRepository.save(existingMenstrualCycle);
+//            } else {
+//                MenstrualCycle newMenstrualCycle = new MenstrualCycle();
+//                newMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
+//                newMenstrualCycle.setUser(user);
+//                newMenstrualCycle.setUserProfile(user.getUserProfile());
+//                if (request.getLastPeriodStartDate() != null) {
+//                    newMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
+//                }
+//
+//                // Save the new MenstrualCycle
+//                existingMenstrualCycle = menstrualCycleRepository.save(newMenstrualCycle);
+//                user.getUserProfile().setMenstrualCycle(existingMenstrualCycle);
+//                userRepository.save(user);
+//            }
+//
+//            return ResponseEntity.ok("MenstrualCycle updated successfully");
+//        } else {
+//            throw new IllegalArgumentException("This service is only available for female users.");
+//        }
+//    }
+
+//    @PutMapping("/update")
+//    public ResponseEntity<String> updateMenstrualCycle(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestBody MenstrualCycleRequest request) {
+//
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+//
+//        if (user.getUserProfile() != null && "Female".equalsIgnoreCase(user.getUserProfile().getGender())) {
+//            MenstrualCycle existingMenstrualCycle = user.getUserProfile().getMenstrualCycle();
+//
+//            if (existingMenstrualCycle != null) {
+//                if (request.getAverageCycleLength() != 0) {
+//                    existingMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
+//                }
+//                if (request.getLastPeriodStartDate() != null) {
+//                    existingMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
+//                }
+//
+//                // Calculate and set the calculatedDate based on lastPeriodStartDate and averageCycleLength
+//                LocalDate calculatedDate = request.getLastPeriodStartDate().plusDays(request.getAverageCycleLength());
+//                existingMenstrualCycle.setCalculatedDate(calculatedDate);
+//
+//                // Save the updated MenstrualCycle
+//                menstrualCycleRepository.save(existingMenstrualCycle);
+//            } else {
+//                MenstrualCycle newMenstrualCycle = new MenstrualCycle();
+//                newMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
+//                newMenstrualCycle.setUser(user);
+//                newMenstrualCycle.setUserProfile(user.getUserProfile());
+//                if (request.getLastPeriodStartDate() != null) {
+//                    newMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
+//                }
+//
+//                // Calculate and set the calculatedDate based on lastPeriodStartDate and averageCycleLength
+//                LocalDate calculatedDate = request.getLastPeriodStartDate().plusDays(request.getAverageCycleLength());
+//                newMenstrualCycle.setCalculatedDate(calculatedDate);
+//
+//                // Save the new MenstrualCycle
+//                existingMenstrualCycle = menstrualCycleRepository.save(newMenstrualCycle);
+//                user.getUserProfile().setMenstrualCycle(existingMenstrualCycle);
+//                userRepository.save(user);
+//            }
+//
+//            return ResponseEntity.ok("MenstrualCycle updated successfully");
+//        } else {
+//            throw new IllegalArgumentException("This service is only available for female users.");
+//        }
+//    }
+
+
     @PutMapping("/update")
     public ResponseEntity<String> updateMenstrualCycle(
             @RequestHeader("Auth") String tokenHeader,
-            @RequestBody MenstrualCycle request) {
+            @RequestBody MenstrualCycleRequest request) {
 
-        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-        String token = tokenHeader.replace("Bearer ", "");
-
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
-
-        if (user.getUserProfile() != null && "Female".equalsIgnoreCase(user.getUserProfile().getGender())) {
-            MenstrualCycle existingMenstrualCycle = user.getUserProfile().getMenstrualCycle();
-
-
-
-            if (existingMenstrualCycle != null) {
-                if (request.getAverageCycleLength() != 0) {
-                    existingMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
-                }
-                if (request.getLastPeriodStartDate() != null) {
-                    existingMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
-                }
-
-                // Save the updated MenstrualCycle
-                menstrualCycleRepository.save(existingMenstrualCycle);
-            } else {
-                MenstrualCycle newMenstrualCycle = new MenstrualCycle();
-                newMenstrualCycle.setAverageCycleLength(request.getAverageCycleLength());
-                newMenstrualCycle.setUser(user);
-                newMenstrualCycle.setUserProfile(user.getUserProfile());
-                if (request.getLastPeriodStartDate() != null) {
-                    newMenstrualCycle.setLastPeriodStartDate(request.getLastPeriodStartDate());
-                }
-
-                // Save the new MenstrualCycle
-                existingMenstrualCycle = menstrualCycleRepository.save(newMenstrualCycle);
-                user.getUserProfile().setMenstrualCycle(existingMenstrualCycle);
-                userRepository.save(user);
-            }
-
-            return ResponseEntity.ok("MenstrualCycle updated successfully");
-        } else {
-            throw new IllegalArgumentException("This service is only available for female users.");
-        }
+        return menstrualCycleService.updateMenstrualCycle(tokenHeader, request);
     }
-
-
-
     @PostMapping("/toggle-menstrual-cycle")
     public ResponseEntity<String> toggleMenstrualCycleStatus(
             @RequestHeader("Auth") String tokenHeader,
