@@ -29,33 +29,31 @@ public class MenstrualCycleService {
     @Autowired
     private JwtHelper jwtHelper;
 
-    @Scheduled(cron = "0 0 0 * * ?") // Run at midnight every day
-    public void updateMenstrualCycle() {
-        // Fetch all female users
-        List<User> femaleUsers = userRepository.findAllByUserProfile_GenderIgnoreCase("Female");
+@Scheduled(cron = "0 29 11 * * ?")
+public void updateMenstrualCycle() {
+    // Fetch all female users
+    List<User> femaleUsers = userRepository.findAllByUserProfile_GenderIgnoreCase("Female");
 
-        for (User user : femaleUsers) {
-            MenstrualCycle menstrualCycle = user.getUserProfile().getMenstrualCycle();
+    for (User user : femaleUsers) {
+        MenstrualCycle menstrualCycle = user.getUserProfile().getMenstrualCycle();
 
-            if (menstrualCycle != null) {
-                // Calculate the new last period start date
-                LocalDate lastPeriodStartDate = menstrualCycle.getLastPeriodStartDate().plusDays(menstrualCycle.getAverageCycleLength());
+        if (menstrualCycle != null) {
+            // Calculate the new last period start date based on calculatedDate
+            LocalDate newLastPeriodStartDate = menstrualCycle.getCalculatedDate();
 
-                // Calculate the difference in days between the current date and the new last period start date
-                long daysUntilLastPeriodStart = ChronoUnit.DAYS.between(LocalDate.now(), lastPeriodStartDate);
+            // Calculate and set the calculated date based on new last period start date and average cycle length
+            LocalDate calculatedDate = newLastPeriodStartDate.plusDays(menstrualCycle.getAverageCycleLength());
+            menstrualCycle.setCalculatedDate(calculatedDate);
 
-                // If the new last period start date is today or in the past, update the menstrual cycle
-                if (daysUntilLastPeriodStart <= 0) {
-                    // Calculate and set the calculated date
-                    LocalDate calculatedDate = lastPeriodStartDate.plusDays(menstrualCycle.getAverageCycleLength());
-                    menstrualCycle.setCalculatedDate(calculatedDate);
+            // Set the new last period start date
+            menstrualCycle.setLastPeriodStartDate(newLastPeriodStartDate);
 
-                    // Save the updated menstrual cycle
-                    menstrualCycleRepository.save(menstrualCycle);
-                }
-            }
+            // Save the updated menstrual cycle
+            menstrualCycleRepository.save(menstrualCycle);
         }
     }
+}
+
 
     public ResponseEntity<String> updateMenstrualCycle(String tokenHeader, MenstrualCycleRequest request) {
         // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")

@@ -33,7 +33,7 @@ public class mealResponse {
     private Double mealNiacin_B3;
     private Double mealFolates_B9;
     private Double mealRetinolVit_A;
-   private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
+//   private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     // to get the type of meal response we want
     public mealResponse(  List<DishWithIngredientsResponse> rList,
                           Double mealEnergy,
@@ -82,7 +82,7 @@ public class mealResponse {
                           Double mealNiacin_B3,
                           Double mealFolates_B9,
                           Double mealRetinolVit_A){
-        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
+//        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
         this.rList = rList;
         this.mealEnergy = mealEnergy;
         this.mealProteins = mealProteins;
@@ -102,7 +102,8 @@ public class mealResponse {
     }
 
 
-    public mealResponse(  Map<String, String> nutrientsNameWithSIUnit,
+    public mealResponse(
+//                            Map<String, String> nutrientsNameWithSIUnit,
                           List<DishWithIngredientsResponse> rList,
                           Double mealEnergy,
                           Double mealProteins,
@@ -121,7 +122,7 @@ public class mealResponse {
                           LocalDate date
                           ){
 
-        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
+//        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
         this.rList = rList;
         this.mealEnergy = mealEnergy;
         this.mealProteins = mealProteins;
@@ -160,12 +161,12 @@ public class mealResponse {
         return date.format(formatter);
     }
 
-    public mealResponse(Map<String, String> nutrientsNameWithSIUnit, Double calories) {
-
-        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
-        this.mealEnergy = calories;
-    }
-
+//    public mealResponse(Map<String, String> nutrientsNameWithSIUnit, Double calories) {
+//
+//        this.nutrientsNameWithSIUnit = nutrientsNameWithSIUnit;
+//        this.mealEnergy = calories;
+//    }
+//
 
 
 }

@@ -1234,6 +1234,8 @@ private Double calculateNiacin(Ingredients ingredient) {
 
             System.out.println("Final Total Energy: " + finalTotalEnergy);
 
+            System.out.println("Final Total RiboFlavin B2: " + finalRiboflavin_B2);
+
             System.out.println("enryyyy-----"+energy);
             System.out.println(" ttotal Energyy   ====  "+totalEnergy);
 //            }
@@ -1263,13 +1265,16 @@ private Double calculateNiacin(Ingredients ingredient) {
             onegrmRetinolVit_A = finalRetinolVit_A;
 //            onegrmRiboflavin_B2 = (riboflavin_B2/dish.getDishQuantity())*dish.getServingSize();
             onegrmRiboflavin_B2 = finalRiboflavin_B2;
+            System.out.println("one gram RiboFlavin B2 -------------- "+onegrmRiboflavin_B2);
 //            onegrmNiacin_B3 = (niacin_B3/dish.getDishQuantity())*dish.getServingSize();
             onegrmNiacin_B3 = finalNiacin_B3;
+            System.out.println("one gram Niacin -------------- "+onegrmNiacin_B3);
+
 //            onegrmFolates_B9 = (folates_B9/dish.getDishQuantity())*dish.getServingSize();
             onegrmFolates_B9 = finalFolates_B9;
         }
 
-        Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
+//        Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
 
 //        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
 //        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
@@ -1279,7 +1284,8 @@ private Double calculateNiacin(Ingredients ingredient) {
 //        }
 
 //
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
+//        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
+        finalResponseList.add(new mealResponse(responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmCalcium, onegrmIron, onegrmZinc, onegrmMagnesium,    onegramThiamine_B1, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9, onegrmRetinolVit_A, datee));
 
         return finalResponseList;
     }
@@ -2423,7 +2429,7 @@ private static final Logger logger = LoggerFactory.getLogger(IngrdientService.cl
 
 //        }
 
-        Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
+//        Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
 
 //        List<UnitsDatabase> unitsDatabaseList = unitsDatabaseRepository.findAll();
 //        for (UnitsDatabase unitsDatabase : unitsDatabaseList) {
@@ -2433,7 +2439,9 @@ private static final Logger logger = LoggerFactory.getLogger(IngrdientService.cl
 //        }
 
 
-        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
+//        finalResponseList.add(new mealResponse(nutrientsNameWithSIUnit, responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmMagnesium, onegrmZinc, onegrmIron, onegrmCalcium, onegramThiamine_B1, onegrmRetinolVit_A, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9,datee));
+        finalResponseList.add(new mealResponse(responseList, onegrmEng, onegrmPro, onegrmCarb, onegrmFat, onegrmFib, onegrmCalcium, onegrmIron, onegrmZinc, onegrmMagnesium,    onegramThiamine_B1, onegrmRiboflavin_B2, onegrmNiacin_B3, onegrmFolates_B9, onegrmRetinolVit_A, datee));
+
         return finalResponseList;
     }
 
