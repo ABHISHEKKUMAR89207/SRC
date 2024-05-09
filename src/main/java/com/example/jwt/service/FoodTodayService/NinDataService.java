@@ -43,28 +43,59 @@ public class NinDataService {
     public List<NinData> getAllNinData() {
         return ninDataRepository.findAll();
     }
+//    private NinDataDTO convertToDto(NinData ninData) {
+//        NinDataDTO ninDataDTO = new NinDataDTO();
+//        ninDataDTO.setId(ninData.getNinDataId());
+//        ninDataDTO.setName(ninData.getFood());
+//        ninDataDTO.setTypesoffood(ninData.getTypesoffood());
+//        ninDataDTO.setFoodCode(ninData.getFoodCode());
+//        ninDataDTO.setProtein(ninData.getProtein());
+//        ninDataDTO.setEnergy(ninData.getEnergy());
+//        ninDataDTO.setCarbohydrate(ninData.getCarbohydrate());
+//        ninDataDTO.setTotal_Fat(ninData.getTotal_Fat());
+////        ninDataDTO.setCholestrol(ninData.getCholestrol());
+//        ninDataDTO.setSodium(ninData.getSodium());
+//        ninDataDTO.setTotal_Dietary_Fibre(ninData.getTotal_Dietary_Fibre());
+//        ninDataDTO.setCalcium(ninData.getCalcium());
+//        ninDataDTO.setIron(ninData.getIron());
+////        ninDataDTO.setPotassium(ninData.getPotassium());
+////        ninDataDTO.setPhosphorus(ninData.getPhosphorus());
+//        ninDataDTO.setMagnesium(ninData.getMagnesium());
+//        ninDataDTO.setZinc(ninData.getZinc());
+////        ninDataDTO.setSelenium(ninData.getSelenium());
+////        ninDataDTO.setCopper(ninData.getCopper());
+////        ninDataDTO.setManganese(ninData.getManganese());
+//
+//
+//        return ninDataDTO;
+//    }
+
     private NinDataDTO convertToDto(NinData ninData) {
         NinDataDTO ninDataDTO = new NinDataDTO();
         ninDataDTO.setId(ninData.getNinDataId());
         ninDataDTO.setName(ninData.getFood());
         ninDataDTO.setTypesoffood(ninData.getTypesoffood());
         ninDataDTO.setFoodCode(ninData.getFoodCode());
-        ninDataDTO.setProtein(ninData.getProtein());
+        ninDataDTO.setCategory(ninData.getCategory());
+
         ninDataDTO.setEnergy(ninData.getEnergy());
-        ninDataDTO.setCarbohydrate(ninData.getCarbohydrate());
-        ninDataDTO.setTotal_Fat(ninData.getTotal_Fat());
-//        ninDataDTO.setCholestrol(ninData.getCholestrol());
-        ninDataDTO.setSodium(ninData.getSodium());
+        ninDataDTO.setProtein(ninData.getProtein());
+        ninDataDTO.setFats(ninData.getTotal_Fat()); // Assuming Total_Fat corresponds to fats
+        ninDataDTO.setCarbs(ninData.getCarbohydrate()); // Assuming carbohydrate corresponds to carbs
         ninDataDTO.setTotal_Dietary_Fibre(ninData.getTotal_Dietary_Fibre());
         ninDataDTO.setCalcium(ninData.getCalcium());
         ninDataDTO.setIron(ninData.getIron());
-//        ninDataDTO.setPotassium(ninData.getPotassium());
-//        ninDataDTO.setPhosphorus(ninData.getPhosphorus());
-        ninDataDTO.setMagnesium(ninData.getMagnesium());
         ninDataDTO.setZinc(ninData.getZinc());
-//        ninDataDTO.setSelenium(ninData.getSelenium());
-//        ninDataDTO.setCopper(ninData.getCopper());
-//        ninDataDTO.setManganese(ninData.getManganese());
+        ninDataDTO.setMagnesium(ninData.getMagnesium());
+        ninDataDTO.setThiamine_B1(ninData.getThiamine_B1());
+        ninDataDTO.setRiboflavin_B2(ninData.getRiboflavin_B2());
+        ninDataDTO.setNiacin_B3(ninData.getNiacin_B3());
+        ninDataDTO.setFolates_B9(ninData.getTotalFolates_B9()); // Assuming TotalFolates_B9 corresponds to folates_B9
+        ninDataDTO.setRetinolVit_A(ninData.getRetinolVit_A());
+        ninDataDTO.setCarbohydrate(ninData.getCarbohydrate());
+        ninDataDTO.setTotal_Fat(ninData.getTotal_Fat());
+        ninDataDTO.setSodium(ninData.getSodium());
+
 
 
         return ninDataDTO;

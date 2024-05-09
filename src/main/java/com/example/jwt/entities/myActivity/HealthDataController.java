@@ -191,65 +191,136 @@ public class HealthDataController {
 //        return new ResponseEntity<>(responseList, HttpStatus.OK);
 //}
 
-    @GetMapping("/health-dashboard/range")
-    public ResponseEntity<List<HealthDashboardResponse>> getHealthDashboardDataByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestHeader("Auth") String tokenHeader) {
+//    @GetMapping("/health-dashboard/range")
+//    public ResponseEntity<List<HealthDashboardResponse>> getHealthDashboardDataByDateRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//
+//        // Extract user information from the token
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//
+//        // Fetch activities, sleep durations, and exercises for the specified date range and user
+//        List<LocalDate> dateRange = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+//        List<HealthDashboardResponse> responseList = new ArrayList<>();
+//
+//        for (LocalDate date : dateRange) {
+//            List<Activities> activities = activityRepository.findByUserAndActivityDateBetween(user, date, date);
+//            List<SleepDuration> sleepDurations = sleepDurationRepository.findByUserAndDateOfSleepBetween(user, date, date);
+//            List<Exercise> exercises = exerciseRepository.findByUserAndDateBetween(user, date, date);
+//
+//            // Calculate total exercise duration
+//            double totalExerciseDuration = exercises.stream()
+//                    .mapToDouble(exercise -> Objects.requireNonNullElse(exercise.getDuration(), 0.0))
+//                    .sum();
+//
+//            // Extracting required fields from Activities
+//            int totalSteps = activities.stream()
+//                    .mapToInt(activity -> Objects.requireNonNullElse(activity.getSteps(), 0))
+//                    .sum();
+//            double totalCalories = activities.stream()
+//                    .mapToDouble(activity -> Objects.requireNonNullElse(activity.getCalory(), 0.0))
+//                    .sum();
+//
+//            // Extracting required fields from SleepDuration
+//            long totalDuration = sleepDurations.stream()
+//                    .mapToLong(sleepDuration -> Objects.requireNonNullElse(sleepDuration.getDuration(), 0L))
+//                    .sum();
+//            double totalManualDuration = sleepDurations.stream()
+//                    .mapToDouble(sleepDuration -> Objects.requireNonNullElse(sleepDuration.getManualDuration(), 0.0))
+//                    .sum();
+//
+//            // Constructing ExerciseData list
+//            List<HealthDashboardResponse.ExerciseData> exerciseDataList = new ArrayList<>();
+//            for (Exercise exercise : exercises) {
+//                double duration = Objects.requireNonNullElse(exercise.getDuration(), 0.0);
+//                double caloriesBurned = Objects.requireNonNullElse(exercise.getCaloriesBurned(), 0.0);
+//                exerciseDataList.add(new HealthDashboardResponse.ExerciseData(exercise.getActivityType(), duration, caloriesBurned));
+//            }
+//
+//            // Construct response object
+//            HealthDashboardResponse response = new HealthDashboardResponse(date, totalSteps, totalCalories, totalDuration, totalManualDuration, exerciseDataList);
+//            responseList.add(response);
+//        }
+//
+//        return new ResponseEntity<>(responseList, HttpStatus.OK);
+//    }
+@GetMapping("/health-dashboard/range")
+public ResponseEntity<List<HealthDashboardResponse>> getHealthDashboardDataByDateRange(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+        @RequestHeader("Auth") String tokenHeader) {
 
-        // Extract user information from the token
-        String token = tokenHeader.replace("Bearer ", "");
-        String username = jwtHelper.getUsernameFromToken(token);
-        User user = userService.findByUsername(username);
+    // Extract user information from the token
+    String token = tokenHeader.replace("Bearer ", "");
+    String username = jwtHelper.getUsernameFromToken(token);
+    User user = userService.findByUsername(username);
 
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        // Fetch activities, sleep durations, and exercises for the specified date range and user
-        List<LocalDate> dateRange = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
-        List<HealthDashboardResponse> responseList = new ArrayList<>();
-
-        for (LocalDate date : dateRange) {
-            List<Activities> activities = activityRepository.findByUserAndActivityDateBetween(user, date, date);
-            List<SleepDuration> sleepDurations = sleepDurationRepository.findByUserAndDateOfSleepBetween(user, date, date);
-            List<Exercise> exercises = exerciseRepository.findByUserAndDateBetween(user, date, date);
-
-            // Calculate total exercise duration
-            double totalExerciseDuration = exercises.stream()
-                    .mapToDouble(exercise -> Objects.requireNonNullElse(exercise.getDuration(), 0.0))
-                    .sum();
-
-            // Extracting required fields from Activities
-            int totalSteps = activities.stream()
-                    .mapToInt(activity -> Objects.requireNonNullElse(activity.getSteps(), 0))
-                    .sum();
-            double totalCalories = activities.stream()
-                    .mapToDouble(activity -> Objects.requireNonNullElse(activity.getCalory(), 0.0))
-                    .sum();
-
-            // Extracting required fields from SleepDuration
-            long totalDuration = sleepDurations.stream()
-                    .mapToLong(sleepDuration -> Objects.requireNonNullElse(sleepDuration.getDuration(), 0L))
-                    .sum();
-            double totalManualDuration = sleepDurations.stream()
-                    .mapToDouble(sleepDuration -> Objects.requireNonNullElse(sleepDuration.getManualDuration(), 0.0))
-                    .sum();
-
-            // Constructing ExerciseData list
-            List<HealthDashboardResponse.ExerciseData> exerciseDataList = new ArrayList<>();
-            for (Exercise exercise : exercises) {
-                double duration = Objects.requireNonNullElse(exercise.getDuration(), 0.0);
-                double caloriesBurned = Objects.requireNonNullElse(exercise.getCaloriesBurned(), 0.0);
-                exerciseDataList.add(new HealthDashboardResponse.ExerciseData(exercise.getActivityType(), duration, caloriesBurned));
-            }
-
-            // Construct response object
-            HealthDashboardResponse response = new HealthDashboardResponse(date, totalSteps, totalCalories, totalDuration, totalManualDuration, exerciseDataList);
-            responseList.add(response);
-        }
-
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    if (user == null) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    // Fetch activities, sleep durations, and exercises for the specified date range and user
+    List<LocalDate> dateRange = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+    List<HealthDashboardResponse> responseList = new ArrayList<>();
+
+    for (LocalDate date : dateRange) {
+        List<Activities> activities = activityRepository.findByUserAndActivityDateBetween(user, date, date);
+        List<SleepDuration> sleepDurations = sleepDurationRepository.findByUserAndDateOfSleepBetween(user, date, date);
+        List<Exercise> exercises = exerciseRepository.findByUserAndDateBetween(user, date, date);
+
+        // Calculate total exercise duration
+        double totalExerciseDuration = exercises.stream()
+                .mapToDouble(exercise -> Objects.requireNonNullElse(exercise.getDuration(), 0.0))
+                .sum();
+
+        // Extracting required fields from Activities
+        int totalSteps = activities.stream()
+                .mapToInt(activity -> Objects.requireNonNullElse(activity.getSteps(), 0))
+                .sum();
+
+        // Summing up calories from Activities
+        double totalCaloriesFromActivities = activities.stream()
+                .mapToDouble(activity -> Objects.requireNonNullElse(activity.getCalory(), 0.0))
+                .sum();
+
+        // Summing up caloriesBurned from Exercise
+        double totalCaloriesFromExercise = exercises.stream()
+                .mapToDouble(exercise -> Objects.requireNonNullElse(exercise.getCaloriesBurned(), 0.0))
+                .sum();
+
+        // Summing up total calories
+        double totalCalories = totalCaloriesFromActivities + totalCaloriesFromExercise;
+
+        // Extracting required fields from SleepDuration
+        long totalDuration = sleepDurations.stream()
+                .mapToLong(sleepDuration -> Objects.requireNonNullElse(sleepDuration.getDuration(), 0L))
+                .sum();
+        double totalManualDuration = sleepDurations.stream()
+                .mapToDouble(sleepDuration -> Objects.requireNonNullElse(sleepDuration.getManualDuration(), 0.0))
+                .sum();
+
+        // Constructing ExerciseData list
+        List<HealthDashboardResponse.ExerciseData> exerciseDataList = new ArrayList<>();
+        for (Exercise exercise : exercises) {
+            double duration = Objects.requireNonNullElse(exercise.getDuration(), 0.0);
+            double caloriesBurned = Objects.requireNonNullElse(exercise.getCaloriesBurned(), 0.0);
+            exerciseDataList.add(new HealthDashboardResponse.ExerciseData(exercise.getActivityType(), duration, caloriesBurned));
+        }
+
+        // Construct response object
+        HealthDashboardResponse response = new HealthDashboardResponse(date, totalSteps, totalCalories, totalDuration, totalManualDuration, exerciseDataList);
+        responseList.add(response);
+    }
+
+    return new ResponseEntity<>(responseList, HttpStatus.OK);
+}
+
 
 }

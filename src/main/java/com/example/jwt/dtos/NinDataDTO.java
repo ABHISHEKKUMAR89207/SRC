@@ -19,19 +19,31 @@ public class NinDataDTO {
     private  String foodCode;
     private String typesoffood;
     private String Category;
+
     private Double energy;
-    private Double carbohydrate;
     private Double protein;
-    private Double Total_Fat;
-//    private Double cholestrol;
-    private Double  sodium;
+    private Double fats;
+    private Double carbs;
     private Double Total_Dietary_Fibre;
     private Double calcium;
     private Double iron;
+    private Double zinc;
+    private Double magnesium;
+    private Double thiamine_B1;
+    private Double riboflavin_B2;
+    private Double niacin_B3;
+    private Double folates_B9;
+    private Double retinolVit_A;
+    private Double carbohydrate;
+    private Double Total_Fat;
+    private Double  sodium;
+
+
+
 //    private Double potassium;
 //    private Double phosphorus;
-    private Double magnesium;
-    private Double zinc;
+
+
 //    private Double selenium;
 //    private Double copper;
 //    private Double manganese;
