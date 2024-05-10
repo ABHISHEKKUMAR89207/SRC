@@ -65,35 +65,7 @@ public class TargetAnalysisService {
 
         // Check if targetData is null
         if (targetData != null) {
-//            Double targetCalories = targetData.getTargetCalories();
-//            System.out.println("t caloryyy    " + targetCalories);
-//            Double targetProteins = targetData.getTargetProteins();
-//            System.out.println("t protein    " + targetProteins);
-//            Double targetCarbs = targetData.getTargetCarbs();
-//            System.out.println("t carbs    " + targetCarbs);
-//            Double targetFat = targetData.getTargetFat();
-//            System.out.println("t fat    " + targetFat);
-//            Double targetFibers = targetData.getTargetFibers();
-//            System.out.println("t fibers    " + targetFibers);
-//
-//            Double targetMagnesium = targetData.getTargetCalories();
-//            System.out.println("t caloryyy    " + targetCalories);
-//            Double targetZinc = targetData.getTargetProteins();
-//            System.out.println("t protein    " + targetProteins);
-//            Double targetIron = targetData.getTargetCarbs();
-//            System.out.println("t carbs    " + targetCarbs);
-//            Double targetCalcium = targetData.getTargetFat();
-//            System.out.println("t fat    " + targetFat);
-//            Double targetThiamine_B1 = targetData.getTargetFibers();
-//            System.out.println("t fibers    " + targetFibers);
-//            Double targetRetinol_Vit_A = targetData.getTargetCalories();
-//            System.out.println("t caloryyy    " + targetCalories);
-//            Double targetRiboflavin_B2 = targetData.getTargetProteins();
-//            System.out.println("t protein    " + targetProteins);
-//            Double targetNiacin_B3 = targetData.getTargetCarbs();
-//            System.out.println("t carbs    " + targetCarbs);
-//            Double targetFolates_B9 = targetData.getTargetFat();
-//            System.out.println("t fat    " + targetFat);
+
             Double targetCalories = targetData.getTargetCalories();
             Double targetProteins = targetData.getTargetProteins();
             Double targetCarbs = targetData.getTargetCarbs();

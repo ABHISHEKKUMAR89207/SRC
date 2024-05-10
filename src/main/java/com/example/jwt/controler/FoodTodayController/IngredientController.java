@@ -48,613 +48,335 @@ public class IngredientController {
     @Autowired
     private JwtHelper jwtHelper;
 
+    @Autowired
+    private NinDataService ninDataService;
+
 
 
     @Value("${upload.path}") // This will get the base path
     private String basePath;
 
-//    @PostMapping("/uploadImages")
-//    public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
-//        try {
-//            // Create "rowIngImage" directory inside the "images" folder if it doesn't exist
-//            File rowIngImageDir = new File(basePath, "rowIngImage");
-//            if (!rowIngImageDir.exists()) {
-//                rowIngImageDir.mkdirs();
-//            }
-//
-//            for (MultipartFile image : images) {
-//                String fileName = image.getOriginalFilename();
-//                // Save the image to the "rowIngImage" folder within the "images" folder
-//                File dest = new File(rowIngImageDir.getAbsolutePath(), fileName);
-//                image.transferTo(dest);
-//            }
-//            return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    //    @PostMapping("/uploadImages")
+    //    public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
+    //        try {
+    //            // Create "rowIngImage" directory inside the "images" folder if it doesn't exist
+    //            File rowIngImageDir = new File(basePath, "rowIngImage");
+    //            if (!rowIngImageDir.exists()) {
+    //                rowIngImageDir.mkdirs();
+    //            }
+    //
+    //            for (MultipartFile image : images) {
+    //                String fileName = image.getOriginalFilename();
+    //                // Save the image to the "rowIngImage" folder within the "images" folder
+    //                File dest = new File(rowIngImageDir.getAbsolutePath(), fileName);
+    //                image.transferTo(dest);
+    //            }
+    //            return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
+    //        } catch (IOException e) {
+    //            e.printStackTrace();
+    //            return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
+    //        }
+    //    }
 
-    @PostMapping("/uploadImages")
-    public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
-        try {
-            // Create "images" directory if it doesn't exist
-            File imagesDir = new File(basePath);
-            if (!imagesDir.exists()) {
-                imagesDir.mkdirs();
-            }
+        @PostMapping("/uploadImages")
+        public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
+            try {
+                // Create "images" directory if it doesn't exist
+                File imagesDir = new File(basePath);
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs();
+                }
 
-            for (MultipartFile image : images) {
-                String fileName = image.getOriginalFilename();
-                // Save the image to the "images" folder
-                File dest = new File(imagesDir.getAbsolutePath(), fileName);
-                image.transferTo(dest);
-            }
-            return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/save")
-    public ResponseEntity<String> saveNutrient(@RequestBody NutrientRequest nutrientRequest) {
-        NinData nutrient = ingrdientService.saveNutrient(nutrientRequest);
-        if (nutrient != null) {
-            return ResponseEntity.ok("Nutrient saved successfully with ID: " + nutrient.getNinDataId());
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save nutrient");
-        }
-    }
-
-    //    @PostMapping("/setIngredientsForDish")
-//    @PostMapping("/setIngredientsForDish")
-//    public IngredientsResponse setIngredientsForDish(@RequestHeader("Auth") String tokenHeader, @RequestParam String mealName, @RequestParam String dishName, @RequestBody List<IngredientDTO> ingredientDTOList) {
-//
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//        return ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
-//    }
-
-//    @PostMapping("/setIngredientsForDish")
-//    public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") String tokenHeader,
-//                                                        @RequestParam String mealName,
-//                                                        @RequestParam String dishName,
-//                                                        @RequestBody List<IngredientDTO> ingredientDTOList) {
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//
-//        ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
-//
-//        return ResponseEntity.ok().build();    }
-@PostMapping("/setIngredientsForDish")
-public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") String tokenHeader,
-                                                    @RequestParam String mealName,
-                                                    @RequestParam String dishName,
-                                                    @RequestBody List<IngredientDTO> ingredientDTOList) {
-    String token = tokenHeader.replace("Bearer ", "");
-
-    // Extract the username (email) from the token
-    String username = jwtHelper.getUsernameFromToken(token);
-
-    // Use the username to fetch the userId from your user service
-    User user = userService.findByUsername(username);
-
-    try {
-        ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
-        return ResponseEntity.ok().build();
-    } catch (Exception e) {
-        return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-    }
-}
-
-
-
-    //get all ingredient with date
-    @GetMapping("/getDishesWithIngredients-by-date")
-    public List<mealResponse> getDishesWithIngredientsByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-
-        String token = tokenHeader.replace("Bearer ", "");
-
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-        return ingrdientService.getDishesWithIngredientsByDate(user, date);
-    }
-
-
-//    @GetMapping("/getDishesWithIngredients-by-date-range")
-//    public List<mealResponse> getDishesWithIngredientsByDateRange(@RequestHeader("Auth") String tokenHeader,
-//                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-//                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-//
-//        String token = tokenHeader.replace("Bearer ", "");
-//
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//
-//        List<mealResponse> finalResponseList = new ArrayList<>();
-//
-//        // Loop through the date range
-//        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-//            List<mealResponse> dailyResponse = ingrdientService.getDishesWithIngredientsByDate(user, date);
-//            finalResponseList.addAll(dailyResponse);
-//        }
-//
-//        return finalResponseList;
-//    }
-
-    @GetMapping("/getDishesWithIngredients-by-date-range")
-    public List<mealResponse> getDishesWithIngredientsByDateRange(@RequestHeader("Auth") String tokenHeader,
-                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                                                  @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-
-        String token = tokenHeader.replace("Bearer ", "");
-
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-        List<mealResponse> finalResponseList = new ArrayList<>();
-
-        // Loop through the date range
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            List<mealResponse> dailyResponse = ingrdientService.getDishesWithIngredientsByDate(user, date);
-
-            // Check if there are dishes for the current date
-            if (!dailyResponse.isEmpty()) {
-                finalResponseList.addAll(dailyResponse);
+                for (MultipartFile image : images) {
+                    String fileName = image.getOriginalFilename();
+                    // Save the image to the "images" folder
+                    File dest = new File(imagesDir.getAbsolutePath(), fileName);
+                    image.transferTo(dest);
+                }
+                return new ResponseEntity<>("Images uploaded successfully", HttpStatus.OK);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
-        return finalResponseList;
-    }
+        @PostMapping("/save")
+        public ResponseEntity<String> saveNutrient(@RequestBody NutrientRequest nutrientRequest) {
+            NinData nutrient = ingrdientService.saveNutrient(nutrientRequest);
+            if (nutrient != null) {
+                return ResponseEntity.ok("Nutrient saved successfully with ID: " + nutrient.getNinDataId());
+            } else {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save nutrient");
+            }
+        }
 
-    //get dish with ingreddient using mealName
-    @GetMapping("/getDishesWithIngredients")
-    public List<mealResponse> getDishesWithIngredientsByDateAndMealType(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {
 
-
+    @PostMapping("/setIngredientsForDish")
+    public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") String tokenHeader,
+                                                        @RequestParam String mealName,
+                                                        @RequestParam String dishName,
+                                                        @RequestBody List<IngredientDTO> ingredientDTOList) {
         String token = tokenHeader.replace("Bearer ", "");
+
         // Extract the username (email) from the token
         String username = jwtHelper.getUsernameFromToken(token);
 
         // Use the username to fetch the userId from your user service
         User user = userService.findByUsername(username);
-
-        return ingrdientService.getDishesWithIngredientsByDateAndMealType(user, date, mealType);
-    }
-
-
-
-    //get dish with ingreddient using mealName
-//    @GetMapping("/getDishesWithIngredientss")
-//    public List<mealResponse> getDishesWithIngredientsByDateAndMealTypee(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {
-//
-//
-//        String token = tokenHeader.replace("Bearer ", "");
-//        // Extract the username (email) from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the userId from your user service
-//        User user = userService.findByUsername(username);
-//
-//        return ingrdientService.getDishesWithIngredientsByDateAndMealTypee(user, date, mealType);
-//    }
-
-
-    @GetMapping("/get-calories-with-date")
-    public Map<String, Double> getCaloriesByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-
-        String token = tokenHeader.replace("Bearer ", "");
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-//        return ingrdientService.getEnergyByDate(user, date);
-        return ingrdientService.getEnergyByDate(user, date);
-    }
-
-
-
-    @GetMapping("/nutrition-summary-detailed")
-    public ResponseEntity<Map<String, Map<String, Map<String, Map<String, Double>>>>> getDetailedNutritionSummary(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestHeader("Auth") String tokenHeader) {
-
-        String token = tokenHeader.replace("Bearer ", "");
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-        // Calculate nutrition summary
-        Map<String, Map<String, Map<String, Map<String, Double>>>> summary = ingrdientService. getNutritionByMealTypeDishNameAndDate(user, startDate, endDate);
-        return ResponseEntity.ok(summary);
-    }
-
-
-
-    @GetMapping("/nutrition-summary")
-    public ResponseEntity<List<Map<String, Object>>> getNutritionSummary(
-            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestHeader("Auth") String tokenHeader) {
-
-        String token = tokenHeader.replace("Bearer ", "");
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
-
-
-        List<Map<String, Object>> summary = ingrdientService.calculateNutritionSummary(user, startDate, endDate);
-        return ResponseEntity.ok( summary);
-    }
-
-
-//    @GetMapping("/calculate")
-//    public NutritionalInfoResponse calculateNutritionalInfo(
-//            @RequestParam String ingredientName,
-//            @RequestParam Double ingredientQuantity) {
-//        return ingrdientService.getNutritionalInfo(ingredientName, ingredientQuantity);
-//    }
-//@GetMapping("/calculate")
-//public ResponseEntity<NutritionalInfoResponse> calculateNutritionalInfo(
-//        @RequestParam String ingredientName,
-//        @RequestParam Double ingredientQuantity,
-//        @RequestHeader("Authorization") String authorizationHeader) {
-//
-//    try {
-//        // Extract the token from the authorization header
-//        String token = authorizationHeader.replace("Bearer ", "");
-//
-//        // Use the jwtHelper to validate and extract information from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the user from your user service
-//        User user = userService.findByUsername(username);
-//
-//        // Call the service method to get nutritional information
-//        NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(ingredientName, ingredientQuantity);
-//
-//        return new ResponseEntity<>(nutritionalInfo, HttpStatus.OK);
-//    } catch (Exception e) {
-//        // Handle exceptions (e.g., invalid token, user not found) and return an appropriate response
-//        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // You can customize the response code as needed
-//    }
-//}
-
-//    @PostMapping("/calculate")
-//    public ResponseEntity<List<NutritionalInfoResponse>> calculateNutritionalInfo(
-//            @RequestBody IngredientRequestt ingredientRequest,
-//            @RequestHeader("Auth") String authorizationHeader) {
-//
-//        try {
-//            // Extract the token from the authorization header
-//            String token = authorizationHeader.replace("Bearer ", "");
-//
-//            // Use the jwtHelper to validate and extract information from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Use the username to fetch the user from your user service
-//            User user = userService.findByUsername(username);
-//
-//            List<NutritionalInfoResponse> nutritionalInfoList = new ArrayList<>();
-//
-//            for (com.example.jwt.entities.FoodToday.NewRecipe.Ing.IngredientRequestt ingredientInfo : ingredientRequest.getIngredients()) {
-//                // Call the service method to get nutritional information for each ingredient
-//                NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(
-//                        ingredientInfo.getIngredientName(), ingredientInfo.getWeight());
-//                nutritionalInfoList.add(nutritionalInfo);
-//            }
-//
-//            return new ResponseEntity<>(nutritionalInfoList, HttpStatus.OK);
-//        } catch (Exception e) {
-//            // Handle exceptions (e.g., invalid token, user not found) and return an appropriate response
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // You can customize the response code as needed
-//        }
-//    }
-
-
-    @PostMapping("/calculate-nutrition")
-    public ResponseEntity<AggregatedNutritionalInfoResponse> calculateNutritionalInfo(
-            @RequestBody IngredientRequestt ingredientRequest,
-            @RequestHeader("Auth") String authorizationHeader) {
 
         try {
-            // Extract the token from the authorization header
-            String token = authorizationHeader.replace("Bearer ", "");
-
-            // Use the jwtHelper to validate and extract information from the token
-            String username = jwtHelper.getUsernameFromToken(token);
-
-            // Use the username to fetch the user from your user service
-            User user = userService.findByUsername(username);
-
-            List<NutritionalInfoResponse> nutritionalInfoList = new ArrayList<>();
-
-            for (IngredientRequest ingredientInfo : ingredientRequest.getIngredients()) {
-                // Call the service method to get nutritional information for each ingredient
-                NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(
-                        ingredientInfo.getFoodCode(), ingredientInfo.getIngredientQuantity());
-                nutritionalInfoList.add(nutritionalInfo);
-            }
-
-            // Create the aggregated response
-            AggregatedNutritionalInfoResponse aggregatedResponse = new AggregatedNutritionalInfoResponse(nutritionalInfoList);
-
-            return new ResponseEntity<>(aggregatedResponse, HttpStatus.OK);
+            ingrdientService.setIngredientsForDish(user, mealName, dishName, ingredientDTOList);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
-            // Handle exceptions (e.g., invalid token, user not found) and return an appropriate response
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // You can customize the response code as needed
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
 
 
 
-//    @GetMapping("/get-salt")
-//    public ResponseEntity<Map<String, Double>> getSaltQuantity(
-//            @RequestHeader("Auth") String authorizationHeader) {
-//        try {
-//            String token = authorizationHeader.replace("Bearer ", "");
-//
-//            // Use the jwtHelper to validate and extract information from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Use the username to fetch the user from your user service
-//            User user = userService.findByUsername(username);
-//
-//            // Check if the user exists
-//            if (user == null) {
-//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            }
-//
-//            // Retrieve the user's dishes
-//            List<Dishes> dishes = user.getDishesList();
-//            double totalSaltQuantity = 0.0;
-//
-//            // Iterate through the user's dishes to find the ingredients
-//            for (Dishes dish : dishes) {
-//                List<Ingredients> ingredients = dish.getIngredientList();
-//                for (Ingredients ingredient : ingredients) {
-//                    // Check if the ingredient name is either "Common Salt" or "Iodised Salt"
-//                    if (ingredient.getIngredientName().equalsIgnoreCase("Common Salt")
-//                            || ingredient.getIngredientName().equalsIgnoreCase("Iodised Salt")) {
-//                        // Calculate the total quantity by adding the ingredient quantity
-//                        totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                    }
-//                }
-//            }
-//
-//            // Create a map to hold the response
-//            Map<String, Double> response = new HashMap<>();
-//            response.put("Salt", totalSaltQuantity);
-//
-//            // Return the response
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+        //get all ingredient with date
+        @GetMapping("/getDishesWithIngredients-by-date")
+        public List<mealResponse> getDishesWithIngredientsByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
-//    @GetMapping("/get-salt-and-sugar")
-//    public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
-//            @RequestHeader("Auth") String authorizationHeader) {
-//        try {
-//            String token = authorizationHeader.replace("Bearer ", "");
-//
-//            // Use the jwtHelper to validate and extract information from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Use the username to fetch the user from your user service
-//            User user = userService.findByUsername(username);
-//
-//            // Check if the user exists
-//            if (user == null) {
-//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            }
-//
-//            // Retrieve the user's dishes
-//            List<Dishes> dishes = user.getDishesList();
-//            double totalSaltQuantity = 0.0;
-//            double totalSugarQuantity = 0.0;
-//
-//            // Iterate through the user's dishes to find the ingredients
-//            for (Dishes dish : dishes) {
-//                List<Ingredients> ingredients = dish.getIngredientList();
-//                for (Ingredients ingredient : ingredients) {
-//                    // Check if the ingredient name is either "Common Salt" or "Iodised Salt"
-//                    if (ingredient.getCategory().equalsIgnoreCase("Salt")
-////                            || ingredient.getIngredientName().equalsIgnoreCase("Iodised Salt")
-//                    ) {
-//                        // Calculate the total quantity of salt
-//                        totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                    } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
-//                        // Calculate the total quantity of sugar
-//                        totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                    }
-//                }
-//            }
-//
-//            // Create a map to hold the response
-//            Map<String, Double> response = new HashMap<>();
-//            response.put("Salt", totalSaltQuantity);
-//            response.put("Sugar", totalSugarQuantity);
-//
-//            // Return the response
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//@GetMapping("/get-salt-and-sugar")
-//public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
-//        @RequestHeader("Auth") String authorizationHeader) {
-//    try {
-//        String token = authorizationHeader.replace("Bearer ", "");
-//
-//        // Use the jwtHelper to validate and extract information from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the user from your user service
-//        User user = userService.findByUsername(username);
-//
-//        // Check if the user exists
-//        if (user == null) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-//
-//        // Retrieve the user's dishes for the current date
-//        List<Dishes> dishes = user.getDishesList();
-//        double totalSaltQuantity = 0.0;
-//        double totalSugarQuantity = 0.0;
-//
-//        // Get the current date
-//        LocalDate currentDate = LocalDate.now();
-//
-//        // Iterate through the user's dishes for the current date to find the ingredients
-//        for (Dishes dish : dishes) {
-//            // Check if the dish was taken on the current date
-//            if (dish.getDate().isEqual(currentDate)) {
-//                List<Ingredients> ingredients = dish.getIngredientList();
-//                for (Ingredients ingredient : ingredients) {
-//                    // Check if the ingredient name is either "Common Salt" or "Iodised Salt"
-//                    if (ingredient.getCategory().equalsIgnoreCase("Salt")
-////                            || ingredient.getIngredientName().equalsIgnoreCase("Iodised Salt")
-//                    ) {
-//                        // Calculate the total quantity of salt
-//                        totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                    } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
-//                        // Calculate the total quantity of sugar
-//                        totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                    }
-//                }
-//            }
-//        }
-//
-//        // Create a map to hold the response
-//        Map<String, Double> response = new HashMap<>();
-//        response.put("Salt", totalSaltQuantity);
-//        response.put("Sugar", totalSugarQuantity);
-//
-//        // Return the response
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//}
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+            return ingrdientService.getDishesWithIngredientsByDate(user, date);
+        }
 
 
-//    @GetMapping("/get-salt-and-sugar")
-//    public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
-//            @RequestHeader("Auth") String authorizationHeader) {
-//        try {
-//            String token = authorizationHeader.replace("Bearer ", "");
-//
-//            // Use the jwtHelper to validate and extract information from the token
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Use the username to fetch the user from your user service
-//            User user = userService.findByUsername(username);
-//
-//            // Check if the user exists
-//            if (user == null) {
-//                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            }
-//
-//            // Retrieve the user's dishes for the current date
-//            List<Dishes> dishes = user.getDishesList();
-//            List<Personal> personals = user.getPersonals();
-//            double totalSaltQuantity = 0.0;
-//            double totalSugarQuantity = 0.0;
-//
-//            // Get the current date
-//            LocalDate currentDate = LocalDate.now();
-//
-//            // Iterate through the user's dishes for the current date to find the ingredients
-//            for (Dishes dish : dishes) {
-//                // Check if the dish was taken on the current date
-//                if (dish.getDate().isEqual(currentDate)) {
-//                    List<Ingredients> ingredients = dish.getIngredientList();
-//                    for (Ingredients ingredient : ingredients) {
-//                        System.out.println("Dishes ingredient name: " + ingredient.getIngredientName());
-//
-//                        // Check if the ingredient category is "Salt" or "Sugars"
-//                        if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
-//                            // Calculate the total quantity of salt from dish ingredients
-//                            totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                        } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
-//                            // Calculate the total quantity of sugar from dish ingredients
-//                            totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-//                        }
-//                    }
-//                }
-//            }
-//
-//            // Iterate through the user's personals for the current date to find the ingredients
-//            for (Personal personal : personals) {
-//                // Check if the personal was recorded on the current date
-//                if (personal.getDate().isEqual(currentDate)) {
-//                    List<Ingredients> ingredients = personal.getIngredientList();
-//                    for (Ingredients ingredient : ingredients) {
-//                        System.out.println("Personal ingredient name: " + ingredient.getIngredientName());
-//                        // Check if the ingredient category is "Salt" or "Sugars"
-//                        if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
-//                            // Calculate the total quantity of salt from personal ingredients
-//                            totalSaltQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
-//                        } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
-//                            // Calculate the total quantity of sugar from personal ingredients
-//                            totalSugarQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
-//                        }
-//                    }
-//                }
-//            }
-//
-//            // Create a map to hold the response
-//            Map<String, Double> response = new HashMap<>();
-//            response.put("Salt", totalSaltQuantity);
-//            response.put("Sugar", totalSugarQuantity);
-//
-//            // Return the response
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
 
 
-    @GetMapping("/get-salt-and-sugar")
-    public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
-            @RequestHeader("Auth") String authorizationHeader) {
-        try {
+        @GetMapping("/getDishesWithIngredients-by-date-range")
+        public List<mealResponse> getDishesWithIngredientsByDateRange(@RequestHeader("Auth") String tokenHeader,
+                                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+            List<mealResponse> finalResponseList = new ArrayList<>();
+
+            // Loop through the date range
+            for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+                List<mealResponse> dailyResponse = ingrdientService.getDishesWithIngredientsByDate(user, date);
+
+                // Check if there are dishes for the current date
+                if (!dailyResponse.isEmpty()) {
+                    finalResponseList.addAll(dailyResponse);
+                }
+            }
+
+            return finalResponseList;
+        }
+
+        //get dish with ingreddient using mealName
+        @GetMapping("/getDishesWithIngredients")
+        public List<mealResponse> getDishesWithIngredientsByDateAndMealType(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam String mealType) {
+
+
+            String token = tokenHeader.replace("Bearer ", "");
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+            return ingrdientService.getDishesWithIngredientsByDateAndMealType(user, date, mealType);
+        }
+
+
+
+
+
+
+        @GetMapping("/get-calories-with-date")
+        public Map<String, Double> getCaloriesByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+            String token = tokenHeader.replace("Bearer ", "");
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+    //        return ingrdientService.getEnergyByDate(user, date);
+            return ingrdientService.getEnergyByDate(user, date);
+        }
+
+
+
+        @GetMapping("/nutrition-summary-detailed")
+        public ResponseEntity<Map<String, Map<String, Map<String, Map<String, Double>>>>> getDetailedNutritionSummary(
+                @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                @RequestHeader("Auth") String tokenHeader) {
+
+            String token = tokenHeader.replace("Bearer ", "");
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+            // Calculate nutrition summary
+            Map<String, Map<String, Map<String, Map<String, Double>>>> summary = ingrdientService. getNutritionByMealTypeDishNameAndDate(user, startDate, endDate);
+            return ResponseEntity.ok(summary);
+        }
+
+
+
+        @GetMapping("/nutrition-summary")
+        public ResponseEntity<List<Map<String, Object>>> getNutritionSummary(
+                @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+                @RequestHeader("Auth") String tokenHeader) {
+
+            String token = tokenHeader.replace("Bearer ", "");
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Use the username to fetch the userId from your user service
+            User user = userService.findByUsername(username);
+
+
+            List<Map<String, Object>> summary = ingrdientService.calculateNutritionSummary(user, startDate, endDate);
+            return ResponseEntity.ok( summary);
+        }
+
+
+
+
+        @PostMapping("/calculate-nutrition")
+        public ResponseEntity<AggregatedNutritionalInfoResponse> calculateNutritionalInfo(
+                @RequestBody IngredientRequestt ingredientRequest,
+                @RequestHeader("Auth") String authorizationHeader) {
+
+            try {
+                // Extract the token from the authorization header
+                String token = authorizationHeader.replace("Bearer ", "");
+
+                // Use the jwtHelper to validate and extract information from the token
+                String username = jwtHelper.getUsernameFromToken(token);
+
+                // Use the username to fetch the user from your user service
+                User user = userService.findByUsername(username);
+
+                List<NutritionalInfoResponse> nutritionalInfoList = new ArrayList<>();
+
+                for (IngredientRequest ingredientInfo : ingredientRequest.getIngredients()) {
+                    // Call the service method to get nutritional information for each ingredient
+                    NutritionalInfoResponse nutritionalInfo = ingrdientService.getNutritionalInfo(
+                            ingredientInfo.getFoodCode(), ingredientInfo.getIngredientQuantity());
+                    nutritionalInfoList.add(nutritionalInfo);
+                }
+
+                // Create the aggregated response
+                AggregatedNutritionalInfoResponse aggregatedResponse = new AggregatedNutritionalInfoResponse(nutritionalInfoList);
+
+                return new ResponseEntity<>(aggregatedResponse, HttpStatus.OK);
+            } catch (Exception e) {
+                // Handle exceptions (e.g., invalid token, user not found) and return an appropriate response
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); // You can customize the response code as needed
+            }
+        }
+
+
+
+
+        @GetMapping("/get-salt-and-sugar")
+        public ResponseEntity<Map<String, Double>> getSaltAndSugarQuantity(
+                @RequestHeader("Auth") String authorizationHeader) {
+            try {
+                String token = authorizationHeader.replace("Bearer ", "");
+
+                // Use the jwtHelper to validate and extract information from the token
+                String username = jwtHelper.getUsernameFromToken(token);
+
+                // Use the username to fetch the user from your user service
+                User user = userService.findByUsername(username);
+
+                // Check if the user exists
+                if (user == null) {
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                }
+
+                // Retrieve the user's dishes for the current date
+                List<Dishes> dishes = user.getDishesList();
+                List<Personal> personals = user.getPersonals();
+                double totalSaltQuantity = 0.0;
+                double totalSugarQuantity = 0.0;
+
+                // Get the current date
+                LocalDate currentDate = LocalDate.now();
+
+                // Iterate through the user's dishes for the current date to find the ingredients
+                for (Dishes dish : dishes) {
+                    // Check if the dish was taken on the current date
+                    if (dish.getDate().isEqual(currentDate)) {
+                        List<Ingredients> ingredients = dish.getIngredientList();
+                        for (Ingredients ingredient : ingredients) {
+                            // Check if the ingredient category is "Salt" or "Sugars"
+                            if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
+                                // Calculate the total quantity of salt from dish ingredients
+                                totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+                            } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
+                                // Calculate the total quantity of sugar from dish ingredients
+                                totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+                            }
+                        }
+                    }
+                }
+
+                // Iterate through the user's personals for the current date to find the ingredients
+                for (Personal personal : personals) {
+                    // Check if the personal was recorded on the current date
+                    if (personal.getDate().isEqual(currentDate)) {
+                        List<Ingredients> ingredients = personal.getIngredientList();
+                        for (Ingredients ingredient : ingredients) {
+
+                            System.out.println("Personal ingredient name: " + ingredient.getIngredientName());
+
+                            // Check if the ingredient category is "Salt" or "Sugars"
+                            if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
+                                // Calculate the total quantity of salt from personal ingredients
+                                totalSaltQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
+                            } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
+                                // Calculate the total quantity of sugar from personal ingredients
+                                totalSugarQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
+                            }
+                        }
+                    }
+                }
+
+                // Create a map to hold the response
+                Map<String, Double> response = new HashMap<>();
+                response.put("Salt", totalSaltQuantity);
+                response.put("Sugar", totalSugarQuantity);
+
+                // Return the response
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+
+
+
+        @GetMapping("/category-wise-ingredient-quantity")
+        public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
             String token = authorizationHeader.replace("Bearer ", "");
 
             // Use the jwtHelper to validate and extract information from the token
@@ -663,268 +385,50 @@ public ResponseEntity<String> setIngredientsForDish(@RequestHeader("Auth") Strin
             // Use the username to fetch the user from your user service
             User user = userService.findByUsername(username);
 
-            // Check if the user exists
             if (user == null) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                return ResponseEntity.notFound().build();
             }
 
-            // Retrieve the user's dishes for the current date
-            List<Dishes> dishes = user.getDishesList();
-            List<Personal> personals = user.getPersonals();
-            double totalSaltQuantity = 0.0;
-            double totalSugarQuantity = 0.0;
+            // Map to hold category-wise ingredient quantity totals
+            Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
 
             // Get the current date
             LocalDate currentDate = LocalDate.now();
 
-            // Iterate through the user's dishes for the current date to find the ingredients
-            for (Dishes dish : dishes) {
-                // Check if the dish was taken on the current date
-                if (dish.getDate().isEqual(currentDate)) {
-                    List<Ingredients> ingredients = dish.getIngredientList();
-                    for (Ingredients ingredient : ingredients) {
-                        // Check if the ingredient category is "Salt" or "Sugars"
-                        if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
-                            // Calculate the total quantity of salt from dish ingredients
-                            totalSaltQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
-                        } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
-                            // Calculate the total quantity of sugar from dish ingredients
-                            totalSugarQuantity += (dish.getServingSize() / dish.getDishQuantity()) * ingredient.getIngredientQuantity();
+            // Retrieve all categories from ninData and initialize their quantities to 0.0
+            List<NinData> allNinData = ninDataService.getAllNinData();
+            for (NinData ninData : allNinData) {
+                categoryWiseIngredientQuantity.put(ninData.getDDS_Category(), 0.0);
+            }
+
+            // Iterate through each dish of the user
+            for (Dishes dish : user.getDishesList()) {
+                // Check if the date of the dish matches the current date
+                if (dish.getDate().equals(currentDate)) {
+                    // Iterate through each ingredient of the dish
+                    for (Ingredients ingredient : dish.getIngredientList()) {
+                        // Get the foodCode of the ingredient
+                        String foodCode = ingredient.getFoodCode();
+
+                        // Find the NinData record corresponding to the foodCode
+                        NinData ninData = ninDataService.findByFoodCode(foodCode);
+
+                        if (ninData != null) {
+                            // Get the DDS_Category
+                            String ddsCategory = ninData.getDDS_Category();
+
+                            // Get the ingredient quantity
+                            double ingredientQuantity = ingredient.getIngredientQuantity();
+
+                            // Update the total quantity for the DDS_Category
+                            categoryWiseIngredientQuantity.put(ddsCategory,
+                                    categoryWiseIngredientQuantity.get(ddsCategory) + ingredientQuantity);
                         }
                     }
                 }
             }
 
-            // Iterate through the user's personals for the current date to find the ingredients
-            for (Personal personal : personals) {
-                // Check if the personal was recorded on the current date
-                if (personal.getDate().isEqual(currentDate)) {
-                    List<Ingredients> ingredients = personal.getIngredientList();
-                    for (Ingredients ingredient : ingredients) {
-
-                        System.out.println("Personal ingredient name: " + ingredient.getIngredientName());
-
-                        // Check if the ingredient category is "Salt" or "Sugars"
-                        if (ingredient.getCategory().equalsIgnoreCase("Salt")) {
-                            // Calculate the total quantity of salt from personal ingredients
-                            totalSaltQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
-                        } else if (ingredient.getCategory().equalsIgnoreCase("Sugars")) {
-                            // Calculate the total quantity of sugar from personal ingredients
-                            totalSugarQuantity += (personal.getOneServingWtG() / personal.getOneUnitSize()) * ingredient.getIngredientQuantity();
-                        }
-                    }
-                }
-            }
-
-            // Create a map to hold the response
-            Map<String, Double> response = new HashMap<>();
-            response.put("Salt", totalSaltQuantity);
-            response.put("Sugar", totalSugarQuantity);
-
-            // Return the response
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            // Now you have category-wise ingredient quantity totals in the map
+            return ResponseEntity.ok(categoryWiseIngredientQuantity);
         }
-    }
-
-
-
-
-
-
-//    @GetMapping("/category-wise-ingredient-quantity")
-//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
-//        String token = authorizationHeader.replace("Bearer ", "");
-//
-//        // Use the jwtHelper to validate and extract information from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the user from your user service
-//        User user = userService.findByUsername(username);
-//
-//        if (user == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        // Map to hold category-wise ingredient quantity totals
-//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
-//
-//        // Iterate through each dish of the user
-//        for (Dishes dish : user.getDishesList()) {
-//            // Iterate through each ingredient of the dish
-//            for (Ingredients ingredient : dish.getIngredientList()) {
-//                // Get the category of the ingredient
-//                String category = ingredient.getCategory();
-//
-//                // Get the ingredient quantity
-//                double ingredientQuantity = ingredient.getIngredientQuantity();
-//
-//                // Update the total quantity for the category
-//                categoryWiseIngredientQuantity.put(category,
-//                        categoryWiseIngredientQuantity.getOrDefault(category, 0.0) + ingredientQuantity);
-//            }
-//        }
-//
-//        // Now you have category-wise ingredient quantity totals in the map
-//        return ResponseEntity.ok(categoryWiseIngredientQuantity);
-//    }
-
-
-    @Autowired
-    private NinDataService ninDataService;
-//    @GetMapping("/category-wise-ingredient-quantity")
-//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
-//        String token = authorizationHeader.replace("Bearer ", "");
-//
-//        // Use the jwtHelper to validate and extract information from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the user from your user service
-//        User user = userService.findByUsername(username);
-//
-//        if (user == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        // Map to hold category-wise ingredient quantity totals
-//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
-//
-//        // Iterate through each dish of the user
-//        for (Dishes dish : user.getDishesList()) {
-//            // Iterate through each ingredient of the dish
-//            for (Ingredients ingredient : dish.getIngredientList()) {
-//                // Get the foodCode of the ingredient
-//                String foodCode = ingredient.getFoodCode();
-//
-//                // Find the NinData record corresponding to the foodCode
-//                NinData ninData = ninDataService.findByFoodCode(foodCode);
-//
-//                if (ninData != null) {
-//                    // Get the DDS_Category
-//                    String ddsCategory = ninData.getDDS_Category();
-//
-//                    // Get the ingredient quantity
-//                    double ingredientQuantity = ingredient.getIngredientQuantity();
-//
-//                    // Update the total quantity for the DDS_Category
-//                    categoryWiseIngredientQuantity.put(ddsCategory,
-//                            categoryWiseIngredientQuantity.getOrDefault(ddsCategory, 0.0) + ingredientQuantity);
-//                }
-//            }
-//        }
-//
-//        // Now you have category-wise ingredient quantity totals in the map
-//        return ResponseEntity.ok(categoryWiseIngredientQuantity);
-//    }
-
-
-//    @GetMapping("/category-wise-ingredient-quantity")
-//    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
-//        String token = authorizationHeader.replace("Bearer ", "");
-//
-//        // Use the jwtHelper to validate and extract information from the token
-//        String username = jwtHelper.getUsernameFromToken(token);
-//
-//        // Use the username to fetch the user from your user service
-//        User user = userService.findByUsername(username);
-//
-//        if (user == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        // Map to hold category-wise ingredient quantity totals
-//        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
-//
-//        // Get the current date
-//        LocalDate currentDate = LocalDate.now();
-//
-//        // Iterate through each dish of the user
-//        for (Dishes dish : user.getDishesList()) {
-//            // Check if the date of the dish matches the current date
-//            if (dish.getDate().equals(currentDate)) {
-//                // Iterate through each ingredient of the dish
-//                for (Ingredients ingredient : dish.getIngredientList()) {
-//                    // Get the foodCode of the ingredient
-//                    String foodCode = ingredient.getFoodCode();
-//
-//                    // Find the NinData record corresponding to the foodCode
-//                    NinData ninData = ninDataService.findByFoodCode(foodCode);
-//
-//                    if (ninData != null) {
-//                        // Get the DDS_Category
-//                        String ddsCategory = ninData.getDDS_Category();
-//
-//                        // Get the ingredient quantity
-//                        double ingredientQuantity = ingredient.getIngredientQuantity();
-//
-//                        // Update the total quantity for the DDS_Category
-//                        categoryWiseIngredientQuantity.put(ddsCategory,
-//                                categoryWiseIngredientQuantity.getOrDefault(ddsCategory, 0.0) + ingredientQuantity);
-//                    }
-//                }
-//            }
-//        }
-//
-//        // Now you have category-wise ingredient quantity totals in the map
-//        return ResponseEntity.ok(categoryWiseIngredientQuantity);
-//    }
-
-    @GetMapping("/category-wise-ingredient-quantity")
-    public ResponseEntity<Map<String, Double>> getCategoryWiseIngredientQuantity(@RequestHeader("Auth") String authorizationHeader) {
-        String token = authorizationHeader.replace("Bearer ", "");
-
-        // Use the jwtHelper to validate and extract information from the token
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Use the username to fetch the user from your user service
-        User user = userService.findByUsername(username);
-
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        // Map to hold category-wise ingredient quantity totals
-        Map<String, Double> categoryWiseIngredientQuantity = new HashMap<>();
-
-        // Get the current date
-        LocalDate currentDate = LocalDate.now();
-
-        // Retrieve all categories from ninData and initialize their quantities to 0.0
-        List<NinData> allNinData = ninDataService.getAllNinData();
-        for (NinData ninData : allNinData) {
-            categoryWiseIngredientQuantity.put(ninData.getDDS_Category(), 0.0);
-        }
-
-        // Iterate through each dish of the user
-        for (Dishes dish : user.getDishesList()) {
-            // Check if the date of the dish matches the current date
-            if (dish.getDate().equals(currentDate)) {
-                // Iterate through each ingredient of the dish
-                for (Ingredients ingredient : dish.getIngredientList()) {
-                    // Get the foodCode of the ingredient
-                    String foodCode = ingredient.getFoodCode();
-
-                    // Find the NinData record corresponding to the foodCode
-                    NinData ninData = ninDataService.findByFoodCode(foodCode);
-
-                    if (ninData != null) {
-                        // Get the DDS_Category
-                        String ddsCategory = ninData.getDDS_Category();
-
-                        // Get the ingredient quantity
-                        double ingredientQuantity = ingredient.getIngredientQuantity();
-
-                        // Update the total quantity for the DDS_Category
-                        categoryWiseIngredientQuantity.put(ddsCategory,
-                                categoryWiseIngredientQuantity.get(ddsCategory) + ingredientQuantity);
-                    }
-                }
-            }
-        }
-
-        // Now you have category-wise ingredient quantity totals in the map
-        return ResponseEntity.ok(categoryWiseIngredientQuantity);
-    }
 }

@@ -20,69 +20,17 @@ public class FoodDataController {
     @Autowired
     private JwtHelper jwtHelper;
 
-//        @GetMapping("/top10")
-//        public ResponseEntity<List<NinDataDTO>>getTop10ByColumn(@RequestHeader("Auth") String tokenHeader, @RequestParam("column") String column) {
-//            try {
-//                // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//                String token = tokenHeader.replace("Bearer ", "");
-//
-//                // Extract the username (email) from the token
-//                String username = jwtHelper.getUsernameFromToken(token);
-//
-//                // Call your service method to retrieve the top 10 data based on the specified column and the authenticated user
-//                List<NinDataDTO> top10Data = foodDataService.getTop10ByColumn(column, username);
-//
-//                return ResponseEntity.ok(top10Data);
-//            } catch (Exception e) {
-//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
-//            }
-//        }
 
 
 
-//    @GetMapping("/top10")
-//    public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
-//            @RequestHeader("Auth") String tokenHeader,
-//            @RequestParam("column") String column,
-//            @RequestParam("typesOfFood") String typesOfFood) {
-//        try {
-//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-//            String token = tokenHeader.replace("Bearer ", "");
-//
-//            // Extract the username (email) from the token using your jwtHelper (replace jwtHelper with your actual class/method)
-//            String username = jwtHelper.getUsernameFromToken(token);
-//
-//            // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
-//            List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFood(column, typesOfFood, username);
-//
-//            return ResponseEntity.ok(top10Data);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
-//        }
-//    }
-@GetMapping("/top10")
-public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
-        @RequestHeader("Auth") String tokenHeader,
-        @RequestParam("column") String column,
-        @RequestParam("typesOfFood") String typesOfFood) {
-    try {
-        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-        String token = tokenHeader.replace("Bearer ", "");
 
-        // Extract the username (email) from the token using your jwtHelper (replace jwtHelper with your actual class/method)
-        String username = jwtHelper.getUsernameFromToken(token);
-
-        // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
-        List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFood(column, typesOfFood, username);
-
-        return ResponseEntity.ok(top10Data);
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
+    @GetMapping("/all-row-food")
+    public List<NinDataDTO> getAllNinData() {
+        return foodDataService.getAllNinData();
     }
-}
 
-    @GetMapping("/nolimit")
-    public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFoodnolimits(
+    @GetMapping("/top10")
+    public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
             @RequestHeader("Auth") String tokenHeader,
             @RequestParam("column") String column,
             @RequestParam("typesOfFood") String typesOfFood) {
@@ -94,7 +42,7 @@ public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
             String username = jwtHelper.getUsernameFromToken(token);
 
             // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
-            List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFoodNolimit(column, typesOfFood, username);
+            List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFood(column, typesOfFood, username);
 
             return ResponseEntity.ok(top10Data);
         } catch (Exception e) {
@@ -102,40 +50,51 @@ public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFood(
         }
     }
 
+        @GetMapping("/nolimit")
+        public ResponseEntity<List<NinDataDTOO>> getTop10ByColumnAndTypesOfFoodnolimits(
+                @RequestHeader("Auth") String tokenHeader,
+                @RequestParam("column") String column,
+                @RequestParam("typesOfFood") String typesOfFood) {
+            try {
+                // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+                String token = tokenHeader.replace("Bearer ", "");
 
-    @GetMapping("/all-food-nolimit")
-    public ResponseEntity<List<NinDataDTO>> getTop10ByColumnAndTypesOfFoodremovenutrients(
-            @RequestHeader("Auth") String tokenHeader,
-//            @RequestParam("column") String column,
-            @RequestParam("typesOfFood") String typesOfFood) {
-        try {
-            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-            String token = tokenHeader.replace("Bearer ", "");
+                // Extract the username (email) from the token using your jwtHelper (replace jwtHelper with your actual class/method)
+                String username = jwtHelper.getUsernameFromToken(token);
 
-            // Extract the username (email) from the token using your jwtHelper (replace jwtHelper with your actual class/method)
-            String username = jwtHelper.getUsernameFromToken(token);
+                // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
+                List<NinDataDTOO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFoodNolimit(column, typesOfFood, username);
 
-            // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
-            List<NinDataDTO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFoodNolimitremovenutrients( typesOfFood, username);
-
-            return ResponseEntity.ok(top10Data);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
+                return ResponseEntity.ok(top10Data);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
+            }
         }
-    }
+
+
+        @GetMapping("/all-food-nolimit")
+        public ResponseEntity<List<NinDataDTO>> getTop10ByColumnAndTypesOfFoodremovenutrients(
+                @RequestHeader("Auth") String tokenHeader,
+    //            @RequestParam("column") String column,
+                @RequestParam("typesOfFood") String typesOfFood) {
+            try {
+                // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+                String token = tokenHeader.replace("Bearer ", "");
+
+                // Extract the username (email) from the token using your jwtHelper (replace jwtHelper with your actual class/method)
+                String username = jwtHelper.getUsernameFromToken(token);
+
+                // Call your service method to retrieve the top 10 data based on the specified column, typesOfFood, and the authenticated user
+                List<NinDataDTO> top10Data = foodDataService.getTop10ByColumnAndTypesOfFoodNolimitremovenutrients( typesOfFood, username);
+
+                return ResponseEntity.ok(top10Data);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Internal server error
+            }
+        }
 
 
 
-
-
-
-
-
-
-    @GetMapping("/all-row-food")
-    public List<NinDataDTO> getAllNinData() {
-        return foodDataService.getAllNinData();
-    }
 }
 
 
