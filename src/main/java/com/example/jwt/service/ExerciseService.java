@@ -2,6 +2,7 @@ package com.example.jwt.service;
 
 import com.example.jwt.entities.Exercise;
 import com.example.jwt.entities.User;
+import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.repository.ExerciseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,10 @@ public class ExerciseService {
         exercise.setUser(user);
 
         return exerciseRepository.save(exercise);
+    }
+
+    public List<Exercise> getExerciseForUserAndDate(User user, LocalDate date) {
+        return exerciseRepository.findByUserAndDate(user, date);
     }
 
     public List<Exercise> findByUserAndDateAndActivityType(User user, LocalDate date, String activityType) {

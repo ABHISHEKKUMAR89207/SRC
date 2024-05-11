@@ -17,5 +17,7 @@ List<Exercise> findByUserAndDateAndActivityType(User user, LocalDate date, Strin
     List<Exercise> findByUserAndDateBetween(User user, LocalDate startDate, LocalDate endDate);
 
     List<Exercise> findByUserAndDate(User user, LocalDate date);
+
+//    List<Exercise> findByUserAndDate(User user, LocalDate date);
     // You can add custom queries if needed
 }

@@ -358,25 +358,83 @@ public ResponseEntity<SystolicBloodPressure> addBloodPressure(@RequestHeader("Au
 //        }
 //    }
 
-    @GetMapping("/getByDateRange")
-    public ResponseEntity<List<BloodPressureResponse>> getBloodPressureByDateRange(
-            @RequestHeader("Auth") String tokenHeader,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//    @GetMapping("/getByDateRange")
+//    public ResponseEntity<List<BloodPressureResponse>> getBloodPressureByDateRange(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//            User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+//
+//            if (user == null) {
+//                return ResponseEntity.notFound().build();
+//            }
+//
+//            List<BloodPressureResponse> responseList = new ArrayList<>();
+//            LocalDate currentDate = endDate; // Start from endDate
+//            while (!currentDate.isBefore(startDate)) { // Continue until after startDate
+//                List<SystolicBloodPressure> systolicBloodPressures = systolicBloodPressureService.getSystolicBloodPressureForUserAndDate(user, currentDate);
+//                List<BloodPressureResponse> dailyResponses = new ArrayList<>();
+//
+//                for (SystolicBloodPressure systolicBloodPressure : systolicBloodPressures) {
+//                    BloodPressureResponse response = new BloodPressureResponse(
+//                            systolicBloodPressure.getTimeStamp(),
+//                            systolicBloodPressure.getSystolicValue(),
+//                            systolicBloodPressure.getDiastolicValue()
+//                    );
+//                    dailyResponses.add(response);
+//                }
+//
+//                // Sort the daily responses based on the timestamp in descending order
+//                dailyResponses.sort(Comparator.comparing(BloodPressureResponse::getTimeStamp).reversed());
+//                responseList.addAll(dailyResponses);
+//
+//                // If no blood pressure data available for the current date, add a default response
+//                if (dailyResponses.isEmpty()) {
+//                    BloodPressureResponse defaultResponse = new BloodPressureResponse(
+//                            currentDate.atStartOfDay(),
+//                            0.0,
+//                            0.0
+//                    );
+//                    responseList.add(defaultResponse);
+//                }
+//
+//                currentDate = currentDate.minusDays(1); // Move to the previous date
+//            }
+//
+//            return ResponseEntity.ok(responseList);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+@GetMapping("/getByDateRange")
+public ResponseEntity<List<BloodPressureResponse>> getBloodPressureByDateRange(
+        @RequestHeader("Auth") String tokenHeader,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
 
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-            User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+    try {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
 
-            if (user == null) {
-                return ResponseEntity.notFound().build();
-            }
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-            List<BloodPressureResponse> responseList = new ArrayList<>();
-            LocalDate currentDate = endDate; // Start from endDate
-            while (!currentDate.isBefore(startDate)) { // Continue until after startDate
-                List<SystolicBloodPressure> systolicBloodPressures = systolicBloodPressureService.getSystolicBloodPressureForUserAndDate(user, currentDate);
+        List<BloodPressureResponse> responseList = new ArrayList<>();
+        LocalDate currentDate = endDate; // Start from endDate
+        boolean dataFoundInRange = false; // Flag to check if data found within the range
+
+        while (!currentDate.isBefore(startDate)) { // Continue until after startDate
+            List<SystolicBloodPressure> systolicBloodPressures = systolicBloodPressureService.getSystolicBloodPressureForUserAndDate(user, currentDate);
+
+            // If blood pressure data is found for the current date
+            if (!systolicBloodPressures.isEmpty()) {
+                dataFoundInRange = true; // Set flag to true
                 List<BloodPressureResponse> dailyResponses = new ArrayList<>();
 
                 for (SystolicBloodPressure systolicBloodPressure : systolicBloodPressures) {
@@ -391,25 +449,22 @@ public ResponseEntity<SystolicBloodPressure> addBloodPressure(@RequestHeader("Au
                 // Sort the daily responses based on the timestamp in descending order
                 dailyResponses.sort(Comparator.comparing(BloodPressureResponse::getTimeStamp).reversed());
                 responseList.addAll(dailyResponses);
-
-                // If no blood pressure data available for the current date, add a default response
-                if (dailyResponses.isEmpty()) {
-                    BloodPressureResponse defaultResponse = new BloodPressureResponse(
-                            currentDate.atStartOfDay(),
-                            0.0,
-                            0.0
-                    );
-                    responseList.add(defaultResponse);
-                }
-
-                currentDate = currentDate.minusDays(1); // Move to the previous date
             }
 
-            return ResponseEntity.ok(responseList);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            currentDate = currentDate.minusDays(1); // Move to the previous date
         }
+
+        // If no data found within the range, return an empty list
+        if (!dataFoundInRange) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+
+        return ResponseEntity.ok(responseList);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
+}
+
 
     //get blood pressure by date
 //    @GetMapping("/get/{date}")

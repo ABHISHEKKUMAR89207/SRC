@@ -2,6 +2,7 @@ package com.example.jwt.controler;
 
 import com.example.jwt.dtos.ActivitiesDTO;
 import com.example.jwt.dtos.UserHealthData;
+import com.example.jwt.entities.Exercise;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.Activities;
 import com.example.jwt.entities.dashboardEntity.healthTrends.HeartRate;
@@ -540,56 +541,111 @@ private HeartRateService heartRateService;
 //    return userHealthData;
 //}
 
-    @GetMapping("/get-health-data")
-    public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
-        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
-        String token = tokenHeader.replace("Bearer ", "");
+//    @GetMapping("/get-health-data")
+//    public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
+//        // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//        String token = tokenHeader.replace("Bearer ", "");
+//
+//        // Extract the username (email) from the token
+//        String username = jwtHelper.getUsernameFromToken(token);
+//
+//        // Use the username to fetch the userId from your user service
+//        User user = userService.findByUsername(username);
+//
+//        UserHealthData userHealthData = new UserHealthData();
+//
+//        if (user != null) {
+//            // Get heart rate data
+//            HeartRate heartRate = heartRateService.getHeartRateForUserAndDateee(user, LocalDate.now());
+//            if (heartRate != null) {
+//                userHealthData.setLocalDate(heartRate.getLocalDate());
+//                userHealthData.setHeartRateValue(heartRate.getValue());
+//            } else {
+//                // Set default values when no data is available
+//                userHealthData.setLocalDate(LocalDate.now());
+//                userHealthData.setHeartRateValue(0.0); // You may set a default value if needed
+//            }
+//
+//            // Get activity data
+//            Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+//            if (activities != null) {
+//                userHealthData.setSteps(activities.getSteps());
+////                userHealthData.setCalorie(activities.getCalory());
+//                userHealthData.setCalorie(activities.getCalory() != null ? activities.getCalory() : 0.0);
+//
+//            } else {
+//                // Set default values when no data is available
+//                userHealthData.setSteps(0); // You may set a default value if needed
+//                userHealthData.setCalorie(0.0); // You may set a default value if needed
+//            }
+//
+//            // Get sleep data
+//            SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
+//            if (sleepDuration != null) {
+//                userHealthData.setSleepDuration(sleepDuration.getDuration());
+//            } else {
+//                // Set default values when no data is available
+//                userHealthData.setSleepDuration(0);
+//            }
+//        }
+//
+//        return userHealthData;
+//    }
+@GetMapping("/get-health-data")
+public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeader) {
+    // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+    String token = tokenHeader.replace("Bearer ", "");
 
-        // Extract the username (email) from the token
-        String username = jwtHelper.getUsernameFromToken(token);
+    // Extract the username (email) from the token
+    String username = jwtHelper.getUsernameFromToken(token);
 
-        // Use the username to fetch the userId from your user service
-        User user = userService.findByUsername(username);
+    // Use the username to fetch the userId from your user service
+    User user = userService.findByUsername(username);
 
-        UserHealthData userHealthData = new UserHealthData();
+    UserHealthData userHealthData = new UserHealthData();
 
-        if (user != null) {
-            // Get heart rate data
-            HeartRate heartRate = heartRateService.getHeartRateForUserAndDateee(user, LocalDate.now());
-            if (heartRate != null) {
-                userHealthData.setLocalDate(heartRate.getLocalDate());
-                userHealthData.setHeartRateValue(heartRate.getValue());
-            } else {
-                // Set default values when no data is available
-                userHealthData.setLocalDate(LocalDate.now());
-                userHealthData.setHeartRateValue(0.0); // You may set a default value if needed
-            }
-
-            // Get activity data
-            Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
-            if (activities != null) {
-                userHealthData.setSteps(activities.getSteps());
-//                userHealthData.setCalorie(activities.getCalory());
-                userHealthData.setCalorie(activities.getCalory() != null ? activities.getCalory() : 0.0);
-
-            } else {
-                // Set default values when no data is available
-                userHealthData.setSteps(0); // You may set a default value if needed
-                userHealthData.setCalorie(0.0); // You may set a default value if needed
-            }
-
-            // Get sleep data
-            SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
-            if (sleepDuration != null) {
-                userHealthData.setSleepDuration(sleepDuration.getDuration());
-            } else {
-                // Set default values when no data is available
-                userHealthData.setSleepDuration(0);
-            }
+    if (user != null) {
+        // Get heart rate data
+        HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
+        if (heartRate != null) {
+            userHealthData.setLocalDate(heartRate.getLocalDate());
+            userHealthData.setHeartRateValue(heartRate.getValue());
+        } else {
+            // Set default values when no data is available
+            userHealthData.setLocalDate(LocalDate.now());
+            userHealthData.setHeartRateValue(0.0); // You may set a default value if needed
         }
 
-        return userHealthData;
+        // Get activity data
+        Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+        if (activities != null) {
+            // Sum up the calories from Activities and Exercises
+            double totalCalories = activities.getCalory() != null ? activities.getCalory() : 0.0;
+            List<Exercise> exercises = exerciseService.getExerciseForUserAndDate(user, LocalDate.now());
+            for (Exercise exercise : exercises) {
+                totalCalories += exercise.getCaloriesBurned();
+            }
+            userHealthData.setCalorie(totalCalories);
+            userHealthData.setSteps(activities.getSteps());
+        } else {
+            // Set default values when no activity data is available
+            userHealthData.setSteps(0); // You may set a default value if needed
+            userHealthData.setCalorie(0.0); // You may set a default value if needed
+        }
+
+        // Get sleep data
+        SleepDuration sleepDuration = sleepDurationService.getSleepForUserAndDate(user, LocalDate.now());
+        if (sleepDuration != null) {
+            userHealthData.setSleepDuration(sleepDuration.getDuration());
+        } else {
+            // Set default values when no sleep data is available
+            userHealthData.setSleepDuration(0);
+        }
     }
+
+    return userHealthData;
+}
+
 
 
 //    @GetMapping("/get-calory")
@@ -853,6 +909,57 @@ public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
 //        }
 //    }
 
+//    @GetMapping("/get-calories/custom-range")
+//    public ResponseEntity<List<Map<String, Object>>> getUserCaloriesForCustomRange(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+//            @RequestHeader("Auth") String tokenHeader) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the username to fetch the userId from your user service
+//            User user = userService.findByUsername(username);
+//
+//            if (user != null) {
+//                // Get activities for the custom date range and user
+//                List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+//
+//                // Create a list to store activity details for each day
+//                List<Map<String, Object>> activitiesForRange = new ArrayList<>();
+//
+//                // Iterate over each day in the date range
+//                for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
+//                    final LocalDate finalCurrentDate = currentDate; // Declare a final variable
+//
+//                    // Check if there is an activity for the current date
+//                    Activities activityForDate = activitiesList.stream()
+//                            .filter(activity -> activity.getActivityDate().equals(finalCurrentDate))
+//                            .findFirst()
+//                            .orElse(null);
+//
+//                    // Create a map with formatted activityDate and calories (set to 0.0 if no activity)
+//                    Map<String, Object> activityMap = new HashMap<>();
+//                    String formattedActivityDate = finalCurrentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//                    activityMap.put("date", formattedActivityDate);
+//                    activityMap.put("value", (activityForDate != null && activityForDate.getCalory() != null) ? activityForDate.getCalory() : 0.0);
+//                    activitiesForRange.add(activityMap);
+//                }
+//
+//                return ResponseEntity.ok(activitiesForRange);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+
+
     @GetMapping("/get-calories/custom-range")
     public ResponseEntity<List<Map<String, Object>>> getUserCaloriesForCustomRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -871,25 +978,51 @@ public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
             if (user != null) {
                 // Get activities for the custom date range and user
                 List<Activities> activitiesList = activityService.getActivitiesForUserAndCustomRange(user, startDate, endDate);
+                List<Exercise> exercisesList = exerciseService.getExercisesForUserAndCustomRange(user, startDate, endDate);
+
+                // Combine activities and exercises into a single list
+                List<Object> combinedList = new ArrayList<>();
+                combinedList.addAll(activitiesList);
+                combinedList.addAll(exercisesList);
+
+                // Create a map to store the sum of calories for each day
+                Map<LocalDate, Double> caloriesMap = new HashMap<>();
+
+                // Iterate over each item (activity or exercise) in the combined list
+                for (Object item : combinedList) {
+                    LocalDate itemDate;
+                    double calories;
+
+                    // Determine item type and get date and calories accordingly
+                    if (item instanceof Activities) {
+                        Activities activity = (Activities) item;
+                        itemDate = activity.getActivityDate();
+                        calories = activity.getCalory();
+                    } else if (item instanceof Exercise) {
+                        Exercise exercise = (Exercise) item;
+                        itemDate = exercise.getDate();
+                        calories = exercise.getCaloriesBurned();
+                    } else {
+                        // Unsupported item type, skip
+                        continue;
+                    }
+
+                    // Update calories sum for the corresponding date
+                    caloriesMap.put(itemDate, caloriesMap.getOrDefault(itemDate, 0.0) + calories);
+                }
 
                 // Create a list to store activity details for each day
                 List<Map<String, Object>> activitiesForRange = new ArrayList<>();
 
                 // Iterate over each day in the date range
                 for (LocalDate currentDate = startDate; !currentDate.isAfter(endDate); currentDate = currentDate.plusDays(1)) {
-                    final LocalDate finalCurrentDate = currentDate; // Declare a final variable
+                    Double totalCalories = caloriesMap.getOrDefault(currentDate, 0.0);
 
-                    // Check if there is an activity for the current date
-                    Activities activityForDate = activitiesList.stream()
-                            .filter(activity -> activity.getActivityDate().equals(finalCurrentDate))
-                            .findFirst()
-                            .orElse(null);
-
-                    // Create a map with formatted activityDate and calories (set to 0.0 if no activity)
+                    // Create a map with formatted activityDate and total calories for the day
                     Map<String, Object> activityMap = new HashMap<>();
-                    String formattedActivityDate = finalCurrentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    String formattedActivityDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     activityMap.put("date", formattedActivityDate);
-                    activityMap.put("value", (activityForDate != null && activityForDate.getCalory() != null) ? activityForDate.getCalory() : 0.0);
+                    activityMap.put("value", totalCalories);
                     activitiesForRange.add(activityMap);
                 }
 
@@ -902,6 +1035,7 @@ public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 
     @Autowired
