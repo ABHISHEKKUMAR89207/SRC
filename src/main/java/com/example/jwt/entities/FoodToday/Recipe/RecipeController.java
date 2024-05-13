@@ -6,10 +6,12 @@ import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.FoodTodayService.DishesService;
 import com.example.jwt.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,10 +25,41 @@ public class RecipeController {
     }
 
     @GetMapping("/all")
-    public List<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
+//    public List<Recipe> getAllRecipes() {
+//        return recipeService.getAllRecipes();
+//    }
+//@GetMapping
+public ResponseEntity<List<RecipeDTOs>> getAllRecipes() {
+    List<Recipe> recipes = recipeService.getAllRecipes();
+    List<RecipeDTOs> recipeDTOsList = new ArrayList<>();
+
+    for (Recipe recipe : recipes) {
+        RecipeDTOs recipeDTO = new RecipeDTOs();
+        recipeDTO.setRecipesId(recipe.getRecipesId());
+        recipeDTO.setRecipeName(recipe.getRecipe_name());
+        recipeDTO.setProtein(recipe.getProtein());
+        recipeDTO.setTotalFat(recipe.getTotal_fat());
+        recipeDTO.setTotalDietaryFibre(recipe.getTotal_dietary_fibre());
+        recipeDTO.setCarbohydrate(recipe.getCarbohydrate());
+        recipeDTO.setEnergyKcal(recipe.getEnergy_joules());
+        recipeDTO.setThiamine(recipe.getThiamine());
+        recipeDTO.setRiboflavinB2(recipe.getRiboflavinB2());
+        recipeDTO.setNiacin(recipe.getNiacin());
+        recipeDTO.setVitaminB6(recipe.getVitaminB6());
+        recipeDTO.setFolateB9(recipe.getFolateB9());
+        recipeDTO.setVitaminC(recipe.getVitaminC());
+        recipeDTO.setVitaminA(recipe.getVitaminA());
+        recipeDTO.setIron(recipe.getIron());
+        recipeDTO.setZinc(recipe.getZinc());
+        recipeDTO.setSodium(recipe.getSodium());
+        recipeDTO.setCalcium(recipe.getCalcium());
+        recipeDTO.setMagnesium(recipe.getMagnesium());
+
+        recipeDTOsList.add(recipeDTO);
     }
 
+    return new ResponseEntity<>(recipeDTOsList, HttpStatus.OK);
+}
 //    @GetMapping("/{id}")
 //    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) {
 //        return recipeService.getRecipeById(id)

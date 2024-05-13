@@ -269,6 +269,14 @@ public class UserProfileController {
                     user.setMobileNo(updateData.get("mobile").toString());
                 }
 
+                if (updateData.containsKey("firstName")) {
+                    userProfile.setFirstName(updateData.get("firstName").toString());
+                }
+
+                if (updateData.containsKey("lastName")) {
+                    userProfile.setLastName(updateData.get("lastName").toString());
+                }
+
                 if (updateData.containsKey("weight")) {
                     double newWeight = Double.parseDouble(updateData.get("weight").toString());
                     userProfile.setWeight(newWeight);
