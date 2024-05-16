@@ -1,5 +1,7 @@
 package com.example.jwt.controler.controllerHealth;
 
+import com.example.jwt.dtos.BloodSisGlo;
+
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.OxygenSaturatedLevel;
 import com.example.jwt.exception.UserNotFoundException;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/oxygen-saturated-level")
@@ -37,8 +40,26 @@ public class OxygenSaturatedLevelController {
     }
 
     // add heart rate of the user
+//    @PostMapping("/")
+//    public ResponseEntity<OxygenSaturatedLevel> addHeartRate(@RequestHeader("Auth") String tokenHeader, @RequestBody BloodSisGlo bloodSisGlo) {
+//        try {
+//            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+//            String token = tokenHeader.replace("Bearer ", "");
+//
+//            // Extract the username (email) from the token
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            // Use the extracted username to associate the heart rate data with the user
+//             oxygenSaturatedLevelService.addOxygenSaturatedLevel(bloodSisGlo, username);
+//
+//            return new ResponseEntity.ok();
+//        } catch (Exception e) {
+//            // Handle exceptions, e.g., validation errors or database errors
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // You can customize the error response as needed
+//        }
+//    }
     @PostMapping("/")
-    public ResponseEntity<OxygenSaturatedLevel> addHeartRate(@RequestHeader("Auth") String tokenHeader, @RequestBody OxygenSaturatedLevel oxygenSaturatedLevelValue) {
+    public ResponseEntity<BloodSisGlo> addHeartRate(@RequestHeader("Auth") String tokenHeader, @RequestBody BloodSisGlo bloodSisGlo) {
         try {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
@@ -46,15 +67,20 @@ public class OxygenSaturatedLevelController {
             // Extract the username (email) from the token
             String username = jwtHelper.getUsernameFromToken(token);
 
-            // Use the extracted username to associate the heart rate data with the user
-            OxygenSaturatedLevel oxygenSaturatedLevel = oxygenSaturatedLevelService.addOxygenSaturatedLevel(oxygenSaturatedLevelValue, username);
+            // Convert BloodSisGlo to OxygenSaturatedLevel
+            OxygenSaturatedLevel oxygenSaturatedLevel = oxygenSaturatedLevelService.convertToOxygenSaturatedLevel(bloodSisGlo);
 
-            return new ResponseEntity<>(oxygenSaturatedLevel, HttpStatus.CREATED);
+            // Use the extracted username to associate the heart rate data with the user
+            oxygenSaturatedLevelService.addOxygenSaturatedLevel(oxygenSaturatedLevel, username);
+
+            // Return the added object along with status code 200
+            return ResponseEntity.ok(bloodSisGlo);
         } catch (Exception e) {
             // Handle exceptions, e.g., validation errors or database errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // You can customize the error response as needed
         }
     }
+
 
     //get blood glucose by date
     @GetMapping("/get/{date}")
@@ -69,6 +95,44 @@ public class OxygenSaturatedLevelController {
         List<OxygenSaturatedLevel> oxygenSaturatedLevels = oxygenSaturatedLevelService.getOxygenSaturatedLevelForUserAndDate(user, date);
         return ResponseEntity.ok(oxygenSaturatedLevels);
     }
+
+//    @GetMapping("/get/{date}")
+//    public ResponseEntity<List<OxygenSaturatedLevelDTO>> getHeartRateForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        // Find the user by the username, and associate the heart rate with that user
+//        User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+//        if (user == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        List<OxygenSaturatedLevel> oxygenSaturatedLevels = oxygenSaturatedLevelService.getOxygenSaturatedLevelForUserAndDate(user, date);
+//
+//        // Map the OxygenSaturatedLevel objects to OxygenSaturatedLevelDTO objects
+//        List<OxygenSaturatedLevelDTO> oxygenSaturatedLevelDTOs = oxygenSaturatedLevels.stream()
+//                .map(level -> new OxygenSaturatedLevelDTO(level.getOxygenSaturatedLevelId(), level.getLocalDate(), level.getValue()))
+//                .collect(Collectors.toList());
+//
+//        return ResponseEntity.ok(oxygenSaturatedLevelDTOs);
+//    }
+//@GetMapping("/get/{date}")
+//public ResponseEntity<List<BloodSisGlo>> getOxygenSaturatedForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//    String token = tokenHeader.replace("Bearer ", "");
+//    String username = jwtHelper.getUsernameFromToken(token);
+//    // Find the user by the username, and associate the oxygen saturated level with that user
+//    User user = userRepository.findByEmail(username).orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+//    if (user == null) {
+//        return ResponseEntity.notFound().build();
+//    }
+//    List<OxygenSaturatedLevel> oxygenSaturatedLevels = oxygenSaturatedLevelService.getOxygenSaturatedLevelForUserAndDate(user, date);
+//
+//    // Map the OxygenSaturatedLevel objects to BloodSisGlo DTOs
+//    List<BloodSisGlo> bloodSisGlos = oxygenSaturatedLevels.stream()
+//            .map(level -> new BloodSisGlo(level.getValue(), level.getLocalDate()))
+//            .collect(Collectors.toList());
+//
+//    return ResponseEntity.ok(bloodSisGlos);
+//}
+
 
     // get the oxygen saturation for user of one week ago
     @GetMapping("/get/one-week-ago")

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,6 +18,8 @@ public class BloodPressureRequest {
 
 //    private SystolicBloodPressure systolicBloodPressure;
 //    private DiastolicBloodPressure diastolicBloodPressure;
+
+    private LocalDate localDate;
 
     private double systolicValue;
     private double diastolicValue;

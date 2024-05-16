@@ -17,11 +17,12 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class SystolicBloodPressure {
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-    LocalDateTime timeStamp = LocalDateTime.now();
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+//    LocalDateTime timeStamp = LocalDateTime.now();
     @JsonFormat(pattern = "yyyy-MM-dd")
 
-    LocalDate localDate = LocalDate.now();
+//    LocalDate localDate;
+    LocalDate localDate;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore

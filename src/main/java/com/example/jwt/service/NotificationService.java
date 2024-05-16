@@ -114,28 +114,54 @@ private AllToggleRepository allToggleRepository;
 //        throw new RuntimeException("Failed to delete notification", e);
 //    }
 //}
+//old
+//    public void deleteNotification(User user, Long notificationId) {
+//        try {
+//            Optional<NotificationEntity> notificationOptional = notificationRepository.findById(notificationId);
+//
+//            if (notificationOptional.isPresent()) {
+//                NotificationEntity notification = notificationOptional.get();
+//
+//                // Remove the notification from the user's collection
+//                user.getNotifications().remove(notification);
+//
+//                notificationRepository.delete(notification);
+//                log.info("Notification deleted successfully: {}", notificationId);
+//            } else {
+//                log.error("Notification with ID {} not found", notificationId);
+//                throw new RuntimeException("Notification not found");
+//            }
+//        } catch (Exception e) {
+//            log.error("Failed to delete notification with ID {}", notificationId, e);
+//            throw new RuntimeException("Failed to delete notification", e);
+//        }
+//    }
+public void deleteNotification(User user, Long notificationId) {
+    try {
+        Optional<NotificationEntity> notificationOptional = notificationRepository.findById(notificationId);
 
-    public void deleteNotification(User user, Long notificationId) {
-        try {
-            Optional<NotificationEntity> notificationOptional = notificationRepository.findById(notificationId);
+        if (notificationOptional.isPresent()) {
+            NotificationEntity notification = notificationOptional.get();
 
-            if (notificationOptional.isPresent()) {
-                NotificationEntity notification = notificationOptional.get();
+            // Remove associated NotifySendSuccess records
+            List<NotifySendSuccess> notifySendSuccessList = notifySendSuccessRepository.findByNotificationEntity(notification);
+            notifySendSuccessList.forEach(notifySendSuccess -> notifySendSuccess.setUser(null)); // Or handle deletion/update as per your application logic
+            notifySendSuccessRepository.deleteAll(notifySendSuccessList);
 
-                // Remove the notification from the user's collection
-                user.getNotifications().remove(notification);
+            // Remove the notification from the user's collection
+            user.getNotifications().remove(notification);
 
-                notificationRepository.delete(notification);
-                log.info("Notification deleted successfully: {}", notificationId);
-            } else {
-                log.error("Notification with ID {} not found", notificationId);
-                throw new RuntimeException("Notification not found");
-            }
-        } catch (Exception e) {
-            log.error("Failed to delete notification with ID {}", notificationId, e);
-            throw new RuntimeException("Failed to delete notification", e);
+            notificationRepository.delete(notification);
+            log.info("Notification deleted successfully: {}", notificationId);
+        } else {
+            log.error("Notification with ID {} not found", notificationId);
+            throw new RuntimeException("Notification not found");
         }
+    } catch (Exception e) {
+        log.error("Failed to delete notification with ID {}", notificationId, e);
+        throw new RuntimeException("Failed to delete notification", e);
     }
+}
 
 
     @Transactional
@@ -199,6 +225,67 @@ private AllToggleRepository allToggleRepository;
         }
     }
 
+//    @Transactional
+//    public void scheduleNotification(String username, NotificationEntity request) {
+//        // Retrieve the user by username
+//        User user = userRepository.findByEmail(username)
+//                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        // Check if a notification with the same type for the same user exists
+//        NotificationEntity existingNotification = notificationRepository.findByUserAndNotificationType(user, request.getNotificationType());
+//
+//        // Associate the user with the notification
+//        request.setUser(user);
+//
+//        // Set the time zone to Indian Standard Time (IST)
+//        ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
+//
+//        // Convert the start time and last time to Indian Standard Time (IST)
+//        ZonedDateTime startTimeIST = ZonedDateTime.of(LocalDate.now(), request.getStartTime(), ZoneId.of("UTC")).withZoneSameInstant(indianTimeZone);
+//        ZonedDateTime lastTimeIST = ZonedDateTime.of(LocalDate.now(), request.getLastTime(), ZoneId.of("UTC")).withZoneSameInstant(indianTimeZone);
+//
+//        // Set the start time and last time in the Indian time zone
+//        request.setStartTime(startTimeIST.toLocalTime());
+//        request.setLastTime(lastTimeIST.toLocalTime());
+//
+//        if (existingNotification == null) {
+//            // If a notification with the same type doesn't exist, save the new notification
+//            notificationRepository.save(request);
+//        } else {
+//            // If a notification with the same type exists, update the existing notification
+//            existingNotification.setStartTime(request.getStartTime());
+//            existingNotification.setLastTime(request.getLastTime());
+//
+//            notificationRepository.save(existingNotification);
+//        }
+//
+//        // Now you can use startTimeIST and lastTimeIST for scheduling comparisons
+//        ZonedDateTime currentUtcTime = ZonedDateTime.now(ZoneId.of("UTC"));
+//        if (currentUtcTime.isAfter(startTimeIST) && currentUtcTime.isBefore(lastTimeIST)) {
+//            // Perform your scheduling logic here
+//            if (user != null && user.getNotificationToken() != null) {
+//                // Check if the user has notificationOn set to true
+//                if (user.getAllToggle() != null && user.getAllToggle().isNotificationOn()) {
+//                    // Create a new notification
+//                    NotificationEntity newNotification = createNotificationForUser(user);
+//
+//                    // Set the recipient token for the notification
+//                    newNotification.setRecipientToken(user.getNotificationToken());
+//
+//                    // Send the notification
+//                    log.debug("Sending scheduled notification: {}", newNotification);
+//                    firebaseMessagingService.sendNotificationByToken(newNotification);
+//                } else {
+//                    // Log a message or handle the case where the user has notificationOn set to false
+//                    log.debug("User {} has notificationOn set to false. Skipping scheduled notification.", user.getUsername());
+//                }
+//            } else {
+//                // Handle the case where the user or the notification token is null
+//                // You might want to log a warning or handle it based on your requirements
+//                log.warn("Invalid user or notification token for scheduled notification.");
+//            }
+//        }
+//    }
     // to save notification in backend with Indian time zone
     private void saveNotificationWithIndianTimeZone(String username, NotificationEntity request, ZoneId indianTimeZone) {
         // Retrieve the user by username
@@ -231,15 +318,17 @@ private AllToggleRepository allToggleRepository;
     private List<NotificationEntity> getNotificationsForCurrentTime() {
         ZoneId indianTimeZone = ZoneId.of("Asia/Kolkata");
         LocalTime currentTime = LocalTime.now(indianTimeZone);
-
+        System.out.println("Current Time ----------"+currentTime);
         // Fetch notifications where startTime is exactly at the current time
         return notificationRepository.findAll().stream()
                 .filter(notification -> {
                     LocalTime startTime = notification.getStartTime();
+                    System.out.println("Start Time --------- "+startTime);
                     // Check if startTime is not null before accessing its properties
                     return startTime != null &&
                             currentTime.getHour() == startTime.getHour() &&
                             currentTime.getMinute() == startTime.getMinute();
+
                 })
                 .collect(Collectors.toList());
     }

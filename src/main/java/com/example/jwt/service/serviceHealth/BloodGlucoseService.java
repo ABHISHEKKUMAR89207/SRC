@@ -1,5 +1,6 @@
 package com.example.jwt.service.serviceHealth;
 
+import com.example.jwt.dtos.BloodSisGlo;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
 import com.example.jwt.exception.UserNotFoundException;
@@ -50,6 +51,14 @@ public class BloodGlucoseService {
             // Handle the case where the user is not found
             throw new UserNotFoundException("User not found for username: " + username);
         }
+    }
+
+    public BloodGlucose convertToBloodGlucose(BloodSisGlo bloodSisGlo) {
+        BloodGlucose bloodGlucose = new BloodGlucose();
+        bloodGlucose.setValue(bloodSisGlo.getValue());
+        bloodGlucose.setLocalDate(bloodSisGlo.getLocalDate());
+        // Set other properties as needed
+        return bloodGlucose;
     }
 
     //get blood glucose by user and date

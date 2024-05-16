@@ -22,9 +22,8 @@ public class NinDataDTO {
 
     private Double energy;
     private Double protein;
-    private Double fats;
-    private Double carbs;
-    private Double Total_Dietary_Fibre;
+//    private Double fats;
+    private Double Total_Fat;
     private Double calcium;
     private Double iron;
     private Double zinc;
@@ -34,9 +33,21 @@ public class NinDataDTO {
     private Double niacin_B3;
     private Double folates_B9;
     private Double retinolVit_A;
+//    private Double carbs;
+
     private Double carbohydrate;
-    private Double Total_Fat;
     private Double  sodium;
+    private Double Total_Dietary_Fibre;
+    private Double vitb6;
+    private Double vitc;
+
+
+
+
+
+
+
+
 
 
 

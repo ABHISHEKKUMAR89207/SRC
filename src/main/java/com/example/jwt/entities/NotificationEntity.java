@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,6 +44,9 @@ public class NotificationEntity {
     public boolean hasNotificationType(String targetType) {
         return notificationType != null && notificationType.equals(targetType);
     }
+
+//    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<NotifySendSuccess> sendSuccessList = new ArrayList<>();
 
     public boolean shouldSendNotification() {
         LocalTime currentTime = LocalTime.now();

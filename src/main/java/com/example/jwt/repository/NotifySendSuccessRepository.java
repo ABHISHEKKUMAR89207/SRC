@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface NotifySendSuccessRepository extends JpaRepository<NotifySendSuccess, Long> {
     List<NotifySendSuccess> findByUserEmail(String email);
+    List<NotifySendSuccess> findByNotificationEntity(NotificationEntity notificationEntity);
+
+
 
 }

@@ -54,8 +54,8 @@ public class NinDataService {
 
         ninDataDTO.setEnergy(ninData.getEnergy());
         ninDataDTO.setProtein(ninData.getProtein());
-        ninDataDTO.setFats(ninData.getTotal_Fat()); // Assuming Total_Fat corresponds to fats
-        ninDataDTO.setCarbs(ninData.getCarbohydrate()); // Assuming carbohydrate corresponds to carbs
+//        ninDataDTO.setFats(ninData.getTotal_Fat()); // Assuming Total_Fat corresponds to fats
+//        ninDataDTO.setCarbs(ninData.getCarbohydrate()); // Assuming carbohydrate corresponds to carbs
         ninDataDTO.setTotal_Dietary_Fibre(ninData.getTotal_Dietary_Fibre());
         ninDataDTO.setCalcium(ninData.getCalcium());
         ninDataDTO.setIron(ninData.getIron());
@@ -68,6 +68,8 @@ public class NinDataService {
         ninDataDTO.setRetinolVit_A(ninData.getRetinolVit_A());
         ninDataDTO.setCarbohydrate(ninData.getCarbohydrate());
         ninDataDTO.setTotal_Fat(ninData.getTotal_Fat());
+        ninDataDTO.setVitc(ninData.getVit_C());
+        ninDataDTO.setVitb6(ninData.getVit_B6());
         ninDataDTO.setSodium(ninData.getSodium());
 
 

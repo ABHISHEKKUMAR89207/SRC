@@ -110,7 +110,7 @@ public class SystolicBloodPressureController {
 //        }
 //    }
 @PostMapping("/bloodpressure")
-public ResponseEntity<SystolicBloodPressure> addBloodPressure(@RequestHeader("Auth") String tokenHeader, @RequestBody BloodPressureRequest bloodPressureRequest) {
+public ResponseEntity<SystolicBloodPressure> addSisAndDis(@RequestHeader("Auth") String tokenHeader, @RequestBody BloodPressureRequest bloodPressureRequest) {
     try {
         String token = tokenHeader.replace("Bearer ", "");
         String username = jwtHelper.getUsernameFromToken(token);
@@ -122,11 +122,13 @@ public ResponseEntity<SystolicBloodPressure> addBloodPressure(@RequestHeader("Au
         // Extract systolic and diastolic blood pressure values from the request
         double systolicValue = bloodPressureRequest.getSystolicValue();
         double diastolicValue = bloodPressureRequest.getDiastolicValue();
+        LocalDate date = bloodPressureRequest.getLocalDate();
 
         // Create a new SystolicBloodPressure object
         SystolicBloodPressure systolicBloodPressure = new SystolicBloodPressure();
         systolicBloodPressure.setSystolicValue(systolicValue);
         systolicBloodPressure.setDiastolicValue(diastolicValue);
+        systolicBloodPressure.setLocalDate(date);
         systolicBloodPressure.setUser(user);
 
         // Save the systolic blood pressure
@@ -205,14 +207,14 @@ public ResponseEntity<SystolicBloodPressure> addBloodPressure(@RequestHeader("Au
 
             for (SystolicBloodPressure systolicBloodPressure : systolicBloodPressures) {
                 BloodPressureResponse response = new BloodPressureResponse();
-                response.setTimeStamp(systolicBloodPressure.getTimeStamp());
+                response.setLocalDate(systolicBloodPressure.getLocalDate());
                 response.setSystolicValue(systolicBloodPressure.getSystolicValue());
                 response.setDiastolicValue(systolicBloodPressure.getDiastolicValue());
                 responseList.add(response);
             }
 
             // Sort the responseList based on the timestamp in descending order
-            responseList.sort(Comparator.comparing(BloodPressureResponse::getTimeStamp).reversed());
+            responseList.sort(Comparator.comparing(BloodPressureResponse::getLocalDate).reversed());
 
             return ResponseEntity.ok(responseList);
         } catch (Exception e) {
@@ -439,7 +441,7 @@ public ResponseEntity<List<BloodPressureResponse>> getBloodPressureByDateRange(
 
                 for (SystolicBloodPressure systolicBloodPressure : systolicBloodPressures) {
                     BloodPressureResponse response = new BloodPressureResponse(
-                            systolicBloodPressure.getTimeStamp(),
+                            systolicBloodPressure.getLocalDate(),
                             systolicBloodPressure.getSystolicValue(),
                             systolicBloodPressure.getDiastolicValue()
                     );
@@ -447,7 +449,7 @@ public ResponseEntity<List<BloodPressureResponse>> getBloodPressureByDateRange(
                 }
 
                 // Sort the daily responses based on the timestamp in descending order
-                dailyResponses.sort(Comparator.comparing(BloodPressureResponse::getTimeStamp).reversed());
+                dailyResponses.sort(Comparator.comparing(BloodPressureResponse::getLocalDate).reversed());
                 responseList.addAll(dailyResponses);
             }
 

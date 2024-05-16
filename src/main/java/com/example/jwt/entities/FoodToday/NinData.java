@@ -93,59 +93,59 @@ private Double retinolVit_A;
     @JsonIgnore
     private UnitsDatabase unitsDatabase;
 
-    public String getCarbohydrateWithUnit() {
-        return String.format("%.2f g", this.carbohydrate);
-    }
-
-    // Custom getters for nutrients with units
-    public String getEnergyWithUnit() {
-        return String.format("%.2f g", this.Energy);
-    }
-
-    public String getProteinWithUnit() {
-        return String.format("%.2f g", this.Protein);
-    }
-
-    public String getTotal_FatWithUnit() {
-        return String.format("%.2f g", this.Total_Fat);
-    }
-
-    public String getSodiumWithUnit() {
-        return String.format("%.2f mg", this.sodium);
-    }
-
-
-
-    // Custom getter for total fat with unit
-    public String getTotalFatWithUnit() {
-        return String.format("%.2f g", this.Total_Fat);
-    }
-
-
-
-    // Custom getter for total dietary fibre with unit
-    public String getTotalDietaryFibreWithUnit() {
-        return String.format("%.2f g", this.Total_Dietary_Fibre);
-    }
-
-    // Custom getter for calcium with unit
-    public String getCalciumWithUnit() {
-        return String.format("%.2f mg", this.calcium);
-    }
-
-    // Custom getter for iron with unit
-    public String getIronWithUnit() {
-        return String.format("%.2f mg", this.iron);
-    }
-
-    // Custom getter for magnesium with unit
-    public String getMagnesiumWithUnit() {
-        return String.format("%.2f mg", this.magnesium);
-    }
-
-    // Custom getter for zinc with unit
-    public String getZincWithUnit() {
-        return String.format("%.2f mg", this.zinc);
-    }
+//    public String getCarbohydrateWithUnit() {
+//        return String.format("%.2f g", this.carbohydrate);
+//    }
+//
+//    // Custom getters for nutrients with units
+//    public String getEnergyWithUnit() {
+//        return String.format("%.2f g", this.Energy);
+//    }
+//
+//    public String getProteinWithUnit() {
+//        return String.format("%.2f g", this.Protein);
+//    }
+//
+//    public String getTotal_FatWithUnit() {
+//        return String.format("%.2f g", this.Total_Fat);
+//    }
+//
+//    public String getSodiumWithUnit() {
+//        return String.format("%.2f mg", this.sodium);
+//    }
+//
+//
+//
+//    // Custom getter for total fat with unit
+//    public String getTotalFatWithUnit() {
+//        return String.format("%.2f g", this.Total_Fat);
+//    }
+//
+//
+//
+//    // Custom getter for total dietary fibre with unit
+//    public String getTotalDietaryFibreWithUnit() {
+//        return String.format("%.2f g", this.Total_Dietary_Fibre);
+//    }
+//
+//    // Custom getter for calcium with unit
+//    public String getCalciumWithUnit() {
+//        return String.format("%.2f mg", this.calcium);
+//    }
+//
+//    // Custom getter for iron with unit
+//    public String getIronWithUnit() {
+//        return String.format("%.2f mg", this.iron);
+//    }
+//
+//    // Custom getter for magnesium with unit
+//    public String getMagnesiumWithUnit() {
+//        return String.format("%.2f mg", this.magnesium);
+//    }
+//
+//    // Custom getter for zinc with unit
+//    public String getZincWithUnit() {
+//        return String.format("%.2f mg", this.zinc);
+//    }
 
 }

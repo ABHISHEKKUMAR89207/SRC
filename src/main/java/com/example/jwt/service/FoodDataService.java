@@ -308,15 +308,38 @@ public class FoodDataService {
 
 
 
-    public List<NinDataDTO> getAllNinData() {
-        Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
-                "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
-                "nd.Energy, nd.Protein, nd.Total_Fat, " +
-                "nd.Total_Dietary_Fibre, nd.carbohydrate, nd.calcium, " +
-                "nd.iron, nd.zinc, nd.sodium, nd.magnesium, " +
-                "nd.thiamine_B1, nd.riboflavin_B2, nd.niacin_B3, " +
-                "nd.vit_B6, nd.totalFolates_B9, nd.vit_C, nd.retinolVit_A) FROM NinData nd");
-        return query.getResultList();
-    }
+//    public List<NinDataDTO> getAllNinData() {
+//        Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
+//                "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
+//                "nd.Energy, nd.Protein, nd.Total_Fat, " +
+//                "nd.Total_Dietary_Fibre, nd.carbohydrate, nd.calcium, " +
+//                "nd.iron, nd.zinc, nd.sodium, nd.magnesium, " +
+//                "nd.thiamine_B1, nd.riboflavin_B2, nd.niacin_B3, " +
+//                "nd.vit_B6, nd.totalFolates_B9, nd.vit_C, nd.retinolVit_A) FROM NinData nd");
+//        return query.getResultList();
+//    }
+//public List<NinDataDTO> getAllNinData() {
+//    Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
+//            "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
+//            "nd.Energy, nd.Protein, nd.Total_Fat, " +
+//            "nd.Total_Dietary_Fibre, nd.carbohydrate, nd.sodium, " +
+//            "nd.calcium, nd.iron, nd.zinc, nd.magnesium, " +
+//            "nd.thiamine_B1, nd.riboflavin_B2, nd.niacin_B3, " +
+//            "nd.vit_B6, nd.vit_C, nd.totalFolates_B9, nd.retinolVit_A) FROM NinData nd");
+//    return query.getResultList();
+//}
 
+//    public List<NinDataDTO> getAllNinData() {
+//        Query query = entityManager.createQuery("SELECT new com.example.jwt.dtos.NinDataDTO(" +
+//                "nd.ninDataId, nd.food, nd.foodCode, nd.Typesoffood, nd.category, " +
+//                "nd.Energy, nd.Protein, nd.Total_Fat, " +
+//                "nd.Total_Dietary_Fibre, nd.carbohydrate, nd.sodium, " +
+//                "nd.calcium, nd.iron, nd.zinc, nd.magnesium, " +
+//                "nd.thiamine_B1, nd.riboflavin_B2, nd.niacin_B3, " +
+//                "nd.vit_B6, nd.vit_C, nd.totalFolates_B9, nd.retinolVit_A) FROM NinData nd");
+//        return query.getResultList();
+//    }
+public List<NinData> getAllNinData() {
+    return ninDataRepository.getAllNinData();
+}
 }

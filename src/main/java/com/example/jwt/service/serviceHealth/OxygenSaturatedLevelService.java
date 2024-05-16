@@ -1,5 +1,6 @@
 package com.example.jwt.service.serviceHealth;
 
+import com.example.jwt.dtos.BloodSisGlo;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.OxygenSaturatedLevel;
 import com.example.jwt.exception.UserNotFoundException;
@@ -54,6 +55,14 @@ public class OxygenSaturatedLevelService {
             // Handle the case where the user is not found
             throw new UserNotFoundException("User not found for username: " + username);
         }
+    }
+
+    public OxygenSaturatedLevel convertToOxygenSaturatedLevel(BloodSisGlo bloodSisGlo) {
+        OxygenSaturatedLevel oxygenSaturatedLevel = new OxygenSaturatedLevel();
+        oxygenSaturatedLevel.setValue(bloodSisGlo.getValue());
+        oxygenSaturatedLevel.setLocalDate(bloodSisGlo.getLocalDate());
+        // You might need to set other properties as well if they exist
+        return oxygenSaturatedLevel;
     }
 
     //get heart rate by user and date

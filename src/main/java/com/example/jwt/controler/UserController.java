@@ -32,7 +32,8 @@ public class UserController {
         User updatedUser = userService.updateUserNotificationToken(username, newToken);
 
         if (updatedUser != null) {
-            return ResponseEntity.ok(updatedUser);
+//            return ResponseEntity.ok(updatedUser);
+            return ResponseEntity.ok().build();
         } else {
             // Handle the case when the user with the given username is not found
             return ResponseEntity.notFound().build();
