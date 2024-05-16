@@ -17,6 +17,7 @@ import java.util.List;
 public class BloodPressureResponse {
 //    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
 //    private LocalDateTime timeStamp;
+    private Long id;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate localDate;
     private double systolicValue;

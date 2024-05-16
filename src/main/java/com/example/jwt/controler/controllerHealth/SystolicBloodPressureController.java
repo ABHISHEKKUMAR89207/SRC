@@ -5,6 +5,8 @@ import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.BloodPressure;
 import com.example.jwt.entities.dashboardEntity.healthTrends.DiastolicBloodPressure;
 import com.example.jwt.entities.dashboardEntity.healthTrends.SystolicBloodPressure;
+import com.example.jwt.entities.error.RecordNotFoundException;
+import com.example.jwt.entities.error.UnauthorizedAccessException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.BloodPressureRepository;
@@ -141,6 +143,38 @@ public ResponseEntity<SystolicBloodPressure> addSisAndDis(@RequestHeader("Auth")
 }
 
 
+
+    @DeleteMapping("/delete/{systolicId}")
+    public ResponseEntity<String> deleteBloodPressureRecord(@RequestHeader("Auth") String tokenHeader, @PathVariable Long systolicId) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Fetch the user from the database
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+            // Fetch the SystolicBloodPressure record to delete
+            SystolicBloodPressure systolicBloodPressure = systolicBloodPressureRepository.findById(systolicId)
+                    .orElseThrow(() -> new RecordNotFoundException("Blood pressure record not found for ID: " + systolicId));
+
+            // Check if the record belongs to the authenticated user
+            if (!systolicBloodPressure.getUser().equals(user)) {
+                throw new UnauthorizedAccessException("You are not authorized to delete this record.");
+            }
+
+            // Delete the SystolicBloodPressure record
+            systolicBloodPressureRepository.delete(systolicBloodPressure);
+
+            return ResponseEntity.ok("Blood pressure record deleted successfully.");
+        } catch (UserNotFoundException | RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UnauthorizedAccessException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
+        }
+    }
 //    @GetMapping("/gett/{date}")
 //    public ResponseEntity<BloodPressureResponse> getBloodPressureForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 //        try {
@@ -207,6 +241,7 @@ public ResponseEntity<SystolicBloodPressure> addSisAndDis(@RequestHeader("Auth")
 
             for (SystolicBloodPressure systolicBloodPressure : systolicBloodPressures) {
                 BloodPressureResponse response = new BloodPressureResponse();
+                response.setId(systolicBloodPressure.getSystolicId());
                 response.setLocalDate(systolicBloodPressure.getLocalDate());
                 response.setSystolicValue(systolicBloodPressure.getSystolicValue());
                 response.setDiastolicValue(systolicBloodPressure.getDiastolicValue());
@@ -441,6 +476,7 @@ public ResponseEntity<List<BloodPressureResponse>> getBloodPressureByDateRange(
 
                 for (SystolicBloodPressure systolicBloodPressure : systolicBloodPressures) {
                     BloodPressureResponse response = new BloodPressureResponse(
+                            systolicBloodPressure.getSystolicId(),
                             systolicBloodPressure.getLocalDate(),
                             systolicBloodPressure.getSystolicValue(),
                             systolicBloodPressure.getDiastolicValue()

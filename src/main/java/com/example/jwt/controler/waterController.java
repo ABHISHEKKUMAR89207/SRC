@@ -334,11 +334,15 @@ public ResponseEntity<List<Map<String, Object>>> getUserWaterIntakeForCustomRang
 //        return String.format("%.0fl", waterIntake);
 //    }
 
+//    private String formatWaterIntake(Double waterIntakeInMilliliters) {
+//        // Assuming waterIntakeInMilliliters is already in milliliters
+//        return String.format("%.1fL", waterIntakeInMilliliters);
+//    }
+
     private String formatWaterIntake(Double waterIntakeInMilliliters) {
         // Assuming waterIntakeInMilliliters is already in milliliters
-        return String.format("%.1fL", waterIntakeInMilliliters);
+        return String.valueOf(waterIntakeInMilliliters) + "L";
     }
-
 
 
 }

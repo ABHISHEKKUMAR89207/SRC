@@ -3,8 +3,11 @@ package com.example.jwt.controler.controllerHealth;
 import com.example.jwt.dtos.BloodSisGlo;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.BloodGlucose;
+import com.example.jwt.entities.error.RecordNotFoundException;
+import com.example.jwt.entities.error.UnauthorizedAccessException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
+import com.example.jwt.repository.repositoryHealth.BloodGlucoseRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.serviceHealth.BloodGlucoseService;
 import com.example.jwt.service.serviceHealth.HealthTrendsService;
@@ -25,13 +28,15 @@ public class BloodGlucoseController {
     private final BloodGlucoseService bloodGlucoseService;
     private final HealthTrendsService healthTrendsService;
     private final UserRepository userRepository;
+    private final BloodGlucoseRepository bloodGlucoseRepository;
     private final JwtHelper jwtHelper;
 
     @Autowired
-    public BloodGlucoseController(BloodGlucoseService bloodGlucoseService, HealthTrendsService healthTrendsService, JwtHelper jwtHelper, UserRepository userRepository) {
+    public BloodGlucoseController(BloodGlucoseService bloodGlucoseService, HealthTrendsService healthTrendsService,BloodGlucoseRepository bloodGlucoseRepository, JwtHelper jwtHelper, UserRepository userRepository) {
         this.bloodGlucoseService = bloodGlucoseService;
         this.healthTrendsService = healthTrendsService;
         this.jwtHelper = jwtHelper;
+        this.bloodGlucoseRepository = bloodGlucoseRepository;
         this.userRepository = userRepository;
     }
 
@@ -74,6 +79,38 @@ public ResponseEntity<BloodSisGlo> addBloodGlucose(@RequestHeader("Auth") String
     }
 }
 
+
+    @DeleteMapping("/delete/{bloodGlucoseId}")
+    public ResponseEntity<String> deleteBloodGlucoseRecord(@RequestHeader("Auth") String tokenHeader, @PathVariable Long bloodGlucoseId) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Fetch the user from the database
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+            // Fetch the BloodGlucose record to delete
+            BloodGlucose bloodGlucose = bloodGlucoseRepository.findById(bloodGlucoseId)
+                    .orElseThrow(() -> new RecordNotFoundException("Blood glucose record not found for ID: " + bloodGlucoseId));
+
+            // Check if the record belongs to the authenticated user
+            if (!bloodGlucose.getUser().equals(user)) {
+                throw new UnauthorizedAccessException("You are not authorized to delete this record.");
+            }
+
+            // Delete the BloodGlucose record
+            bloodGlucoseRepository.delete(bloodGlucose);
+
+            return ResponseEntity.ok("Blood glucose record deleted successfully.");
+        } catch (UserNotFoundException | RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UnauthorizedAccessException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
+        }
+    }
     //get blood glucose by date
     @GetMapping("/get/{date}")
     public ResponseEntity<List<BloodGlucose>> getHeartRateForUserAndDate(@RequestHeader("Auth") String tokenHeader, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {

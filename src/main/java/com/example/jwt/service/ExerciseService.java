@@ -119,8 +119,24 @@ public class ExerciseService {
                 caloriesPerHour = 360; // Adjust this value based on accurate data
                 break;
 
-            case "Walking":
+            case "Walking(4 km per hr)":
                 caloriesPerHour = 160; // Adjust this value based on accurate data
+                break;
+
+            case "Running(12 km per hr)":
+                caloriesPerHour = 750; // Adjust this value based on accurate data
+                break;
+
+            case "Running(10 km per hr)":
+                caloriesPerHour = 655; // Adjust this value based on accurate data
+                break;
+
+            case "Running(8 km per hr)":
+                caloriesPerHour = 522; // Adjust this value based on accurate data
+                break;
+
+            case "Running(6 km per hr)":
+                caloriesPerHour = 353; // Adjust this value based on accurate data
                 break;
             // Add more cases for other activity types as needed
 

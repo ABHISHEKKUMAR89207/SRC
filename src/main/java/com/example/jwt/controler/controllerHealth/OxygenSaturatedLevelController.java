@@ -4,6 +4,8 @@ import com.example.jwt.dtos.BloodSisGlo;
 
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.dashboardEntity.healthTrends.OxygenSaturatedLevel;
+import com.example.jwt.entities.error.RecordNotFoundException;
+import com.example.jwt.entities.error.UnauthorizedAccessException;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.repositoryHealth.OxygenSaturatedLevelRepository;
@@ -81,6 +83,37 @@ public class OxygenSaturatedLevelController {
         }
     }
 
+    @DeleteMapping("/delete/{oxygenSaturatedLevelId}")
+    public ResponseEntity<String> deleteOxygenSaturatedLevelRecord(@RequestHeader("Auth") String tokenHeader, @PathVariable Long oxygenSaturatedLevelId) {
+        try {
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Fetch the user from the database
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+            // Fetch the OxygenSaturatedLevel record to delete
+            OxygenSaturatedLevel oxygenSaturatedLevel = oxygenSaturatedLevelRepository.findById(oxygenSaturatedLevelId)
+                    .orElseThrow(() -> new RecordNotFoundException("Oxygen saturated level record not found for ID: " + oxygenSaturatedLevelId));
+
+            // Check if the record belongs to the authenticated user
+            if (!oxygenSaturatedLevel.getUser().equals(user)) {
+                throw new UnauthorizedAccessException("You are not authorized to delete this record.");
+            }
+
+            // Delete the OxygenSaturatedLevel record
+            oxygenSaturatedLevelRepository.delete(oxygenSaturatedLevel);
+
+            return ResponseEntity.ok("Oxygen saturated level record deleted successfully.");
+        } catch (UserNotFoundException | RecordNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UnauthorizedAccessException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
+        }
+    }
 
     //get blood glucose by date
     @GetMapping("/get/{date}")
