@@ -64,57 +64,17 @@ public class ContactUsController {
 private String path;
 
 //old
-//    @PostMapping("/upload")
-//    public ResponseEntity<FileResponse> fileUpload(
-//            @RequestParam("image") MultipartFile image,
-//            @RequestParam("name") String name,
-//            @RequestParam("number") String number,
-//            @RequestParam("email") String email,
-//            @RequestParam("queries") String queries,
-//            @RequestParam("requestType") String requestType) {
-//        String fileName;
-//        try {
-//            fileName = this.contactUsService.uploadImage(path, image);
-//
-//            // Create a new ContactUs object with the details
-//            ContactUs contactUs = new ContactUs();
-//            contactUs.setName(name);
-//            contactUs.setNumber(number);
-//            contactUs.setEmail(email);
-//            contactUs.setQueries(queries);
-//            contactUs.setReqType(requestType);
-////            contactUs.setImageUrl(fileName); // Set the image URL
-//            contactUs.setImageData(fileName);
-//
-//            // Save the ContactUs entity to the database
-//            this.contactUsService.saveContactUs(contactUs);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(new FileResponse(null, "Image is Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//
-//        return new ResponseEntity<>(new FileResponse(fileName, "Image is Successfully Uploaded"), HttpStatus.OK);
-//    }
-
-
-
     @PostMapping("/upload")
     public ResponseEntity<FileResponse> fileUpload(
-            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam("image") MultipartFile image,
             @RequestParam("name") String name,
             @RequestParam("number") String number,
             @RequestParam("email") String email,
             @RequestParam("queries") String queries,
             @RequestParam("requestType") String requestType) {
-
-        List<String> fileNames = new ArrayList<>();
+        String fileName;
         try {
-            for (MultipartFile image : images) {
-                if (!image.isEmpty()) {
-                    String fileName = this.contactUsService.uploadImage(path, image);
-                    fileNames.add(fileName);
-                }
-            }
+            fileName = this.contactUsService.uploadImage(path, image);
 
             // Create a new ContactUs object with the details
             ContactUs contactUs = new ContactUs();
@@ -123,17 +83,57 @@ private String path;
             contactUs.setEmail(email);
             contactUs.setQueries(queries);
             contactUs.setReqType(requestType);
-            contactUs.setImageData(String.join(",", fileNames)); // Store comma-separated filenames
+//            contactUs.setImageUrl(fileName); // Set the image URL
+            contactUs.setImageData(fileName);
 
             // Save the ContactUs entity to the database
             this.contactUsService.saveContactUs(contactUs);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new FileResponse(null, "Image(s) Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new FileResponse(null, "Image is Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(new FileResponse(String.join(",", fileNames), "Image(s) Successfully Uploaded"), HttpStatus.OK);
+        return new ResponseEntity<>(new FileResponse(fileName, "Image is Successfully Uploaded"), HttpStatus.OK);
     }
+
+
+
+//    @PostMapping("/upload")
+//    public ResponseEntity<FileResponse> fileUpload(
+//            @RequestParam("images") List<MultipartFile> images,
+//            @RequestParam("name") String name,
+//            @RequestParam("number") String number,
+//            @RequestParam("email") String email,
+//            @RequestParam("queries") String queries,
+//            @RequestParam("requestType") String requestType) {
+//
+//        List<String> fileNames = new ArrayList<>();
+//        try {
+//            for (MultipartFile image : images) {
+//                if (!image.isEmpty()) {
+//                    String fileName = this.contactUsService.uploadImage(path, image);
+//                    fileNames.add(fileName);
+//                }
+//            }
+//
+//            // Create a new ContactUs object with the details
+//            ContactUs contactUs = new ContactUs();
+//            contactUs.setName(name);
+//            contactUs.setNumber(number);
+//            contactUs.setEmail(email);
+//            contactUs.setQueries(queries);
+//            contactUs.setReqType(requestType);
+//            contactUs.setImageData(String.join(",", fileNames)); // Store comma-separated filenames
+//
+//            // Save the ContactUs entity to the database
+//            this.contactUsService.saveContactUs(contactUs);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(new FileResponse(null, "Image(s) Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        return new ResponseEntity<>(new FileResponse(String.join(",", fileNames), "Image(s) Successfully Uploaded"), HttpStatus.OK);
+//    }
 
 //    @PostMapping
 //    public ResponseEntity<ContactUs> saveContactUs(@RequestBody ContactUs contactUs) {

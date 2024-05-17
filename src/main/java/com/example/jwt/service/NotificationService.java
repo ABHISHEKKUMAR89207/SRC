@@ -661,14 +661,23 @@ public void deleteNotification(User user, Long notificationId) {
             NotificationEntity matchingNotification = currentNotifications.get(0);
             String notificationType = matchingNotification.getNotificationType();
 
-            if (notificationType.equals("Sleep") || notificationType.equals("Drinking Water")) {
+//            if (notificationType.equals("Sleep") || notificationType.equals("Drinking Water")) {
+//                newNotification.setBody("Time to " + notificationType);
+//
+//            }
+            if (notificationType.equals("Sleep") ) {
                 newNotification.setBody("Time to " + notificationType);
-            } else {
+
+            }
+            else if ( notificationType.equals("Drinking Water")) {
+                newNotification.setBody("Time to Drink Water" );}
+            else {
                 newNotification.setBody("Time for " + notificationType);
             }
-        } else {
-            log.warn("No matching notifications found for user: {}", user.getUserId());
         }
+//            else {
+//            log.warn("No matching notifications found for user: {}", user.getUserId());
+
 
 
         {
