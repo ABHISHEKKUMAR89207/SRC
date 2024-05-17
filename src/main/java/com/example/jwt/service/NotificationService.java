@@ -652,11 +652,26 @@ public void deleteNotification(User user, Long notificationId) {
                 })
                 .collect(Collectors.toList());
 
+//        if (!currentNotifications.isEmpty()) {
+//            // Use the first matching notification for the current time
+//            NotificationEntity matchingNotification = currentNotifications.get(0);
+//            newNotification.setBody("Time for " + matchingNotification.getNotificationType());
+//        } else
         if (!currentNotifications.isEmpty()) {
-            // Use the first matching notification for the current time
             NotificationEntity matchingNotification = currentNotifications.get(0);
-            newNotification.setBody("Time to " + matchingNotification.getNotificationType());
+            String notificationType = matchingNotification.getNotificationType();
+
+            if (notificationType.equals("Sleep") || notificationType.equals("Drinking Water")) {
+                newNotification.setBody("Time to " + notificationType);
+            } else {
+                newNotification.setBody("Time for " + notificationType);
+            }
         } else {
+            log.warn("No matching notifications found for user: {}", user.getUserId());
+        }
+
+
+        {
             // Handle the case where there are no notifications for the current time
             log.warn("No matching notifications found for user: {}", user.getUserId());
         }
@@ -942,4 +957,24 @@ public void deleteNotification(User user, Long notificationId) {
 
         return dto;
     }
+
+
+
+
+
+    public boolean deleteByIdAndUser(Long id, User user) {
+        Optional<NotifySendSuccess> record = notifySendSuccessRepository.findByIdAndUser(id, user);
+        if (record.isPresent()) {
+            notifySendSuccessRepository.delete(record.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Transactional
+    public void deleteAllByUser(User user) {
+        notifySendSuccessRepository.deleteByUser(user);
+    }
+
 }

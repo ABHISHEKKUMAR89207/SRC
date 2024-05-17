@@ -16,7 +16,7 @@ public class AllToggle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private boolean notificationOn=false;
+    private boolean notificationOn=true;
     private boolean registration_term_condition;
 
     @JsonIgnore

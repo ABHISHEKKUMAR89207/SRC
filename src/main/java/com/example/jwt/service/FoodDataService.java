@@ -127,7 +127,7 @@ public class FoodDataService {
                 case "totalfloate"://
                     dto.setTotalfloate(entity.getTotalFolates_B9());
 //                    dto.setProteinUnit("g");
-                    dto.setUnit("Aug");
+                    dto.setUnit("µg");
                     break;
                 case "vitc"://
                     dto.setVitc(entity.getVit_C());

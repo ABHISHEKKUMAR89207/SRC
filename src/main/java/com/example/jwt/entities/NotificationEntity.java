@@ -32,7 +32,7 @@ public class NotificationEntity {
     private LocalTime startTime;
     private LocalTime lastTime;
     private String notificationType;
-    private boolean notificationOn;
+    private boolean notificationOn = true;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

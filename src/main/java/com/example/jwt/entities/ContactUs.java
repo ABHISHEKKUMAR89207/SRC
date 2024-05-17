@@ -40,6 +40,8 @@ public class ContactUs {
 
     private boolean status;
 
+    private String reqType;
+
     // Getters and Setters
 
     public Long getId() {

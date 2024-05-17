@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,16 +62,59 @@ public class ContactUsController {
 //    }
 @Value("${project.image}")
 private String path;
+
+//old
+//    @PostMapping("/upload")
+//    public ResponseEntity<FileResponse> fileUpload(
+//            @RequestParam("image") MultipartFile image,
+//            @RequestParam("name") String name,
+//            @RequestParam("number") String number,
+//            @RequestParam("email") String email,
+//            @RequestParam("queries") String queries,
+//            @RequestParam("requestType") String requestType) {
+//        String fileName;
+//        try {
+//            fileName = this.contactUsService.uploadImage(path, image);
+//
+//            // Create a new ContactUs object with the details
+//            ContactUs contactUs = new ContactUs();
+//            contactUs.setName(name);
+//            contactUs.setNumber(number);
+//            contactUs.setEmail(email);
+//            contactUs.setQueries(queries);
+//            contactUs.setReqType(requestType);
+////            contactUs.setImageUrl(fileName); // Set the image URL
+//            contactUs.setImageData(fileName);
+//
+//            // Save the ContactUs entity to the database
+//            this.contactUsService.saveContactUs(contactUs);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(new FileResponse(null, "Image is Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//
+//        return new ResponseEntity<>(new FileResponse(fileName, "Image is Successfully Uploaded"), HttpStatus.OK);
+//    }
+
+
+
     @PostMapping("/upload")
     public ResponseEntity<FileResponse> fileUpload(
-            @RequestParam("image") MultipartFile image,
+            @RequestParam("images") List<MultipartFile> images,
             @RequestParam("name") String name,
             @RequestParam("number") String number,
             @RequestParam("email") String email,
-            @RequestParam("queries") String queries) {
-        String fileName;
+            @RequestParam("queries") String queries,
+            @RequestParam("requestType") String requestType) {
+
+        List<String> fileNames = new ArrayList<>();
         try {
-            fileName = this.contactUsService.uploadImage(path, image);
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String fileName = this.contactUsService.uploadImage(path, image);
+                    fileNames.add(fileName);
+                }
+            }
 
             // Create a new ContactUs object with the details
             ContactUs contactUs = new ContactUs();
@@ -78,17 +122,17 @@ private String path;
             contactUs.setNumber(number);
             contactUs.setEmail(email);
             contactUs.setQueries(queries);
-//            contactUs.setImageUrl(fileName); // Set the image URL
-            contactUs.setImageData(fileName);
+            contactUs.setReqType(requestType);
+            contactUs.setImageData(String.join(",", fileNames)); // Store comma-separated filenames
 
             // Save the ContactUs entity to the database
             this.contactUsService.saveContactUs(contactUs);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new FileResponse(null, "Image is Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new FileResponse(null, "Image(s) Not Uploaded due to an error on the server"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(new FileResponse(fileName, "Image is Successfully Uploaded"), HttpStatus.OK);
+        return new ResponseEntity<>(new FileResponse(String.join(",", fileNames), "Image(s) Successfully Uploaded"), HttpStatus.OK);
     }
 
 //    @PostMapping

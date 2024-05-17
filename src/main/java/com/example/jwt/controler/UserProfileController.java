@@ -320,7 +320,11 @@ public class UserProfileController {
                     userProfile.setWorkLevel(newWorkLevel);
                 }
 
-
+                // Update date of birth
+                if (updateData.containsKey("dateOfBirth")) {
+                    LocalDate newDateOfBirth = LocalDate.parse(updateData.get("dateOfBirth").toString());
+                    userProfile.setDateOfBirth(newDateOfBirth);
+                }
 //                // Update occupation and work level
 //                if (updateData.containsKey("occupation")) {
 //                    String newOccupation = updateData.get("occupation").toString();

@@ -290,6 +290,53 @@ public ResponseEntity<String> deleteNotification(
         }
     }
 
+
+
+
+
+    @DeleteMapping("/delete-notify-byId/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id, @RequestHeader("Auth") String tokenHeader) {
+        // Extract the JWT token from the Authorization header
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username from the JWT token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Fetch the user by username
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            boolean isDeleted = notificationService.deleteByIdAndUser(id, user);
+            if (isDeleted) {
+                return ResponseEntity.ok("Deleted successfully.");
+            } else {
+                return ResponseEntity.status(404).body("Record not found or does not belong to the user.");
+            }
+        } else {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+    }
+
+    @DeleteMapping("/deleteAll-notify")
+    public ResponseEntity<?> deleteAll(@RequestHeader("Auth") String tokenHeader) {
+        // Extract the JWT token from the Authorization header
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username from the JWT token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Fetch the user by username
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            notificationService.deleteAllByUser(user);
+            return ResponseEntity.ok("All records deleted successfully.");
+        } else {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+    }
+
+
     }
 
 
