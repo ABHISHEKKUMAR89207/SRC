@@ -28,5 +28,10 @@ public class SleepDuration {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
+
+    public SleepDuration(LocalDate dateOfSleep, long duration) {
+        this.dateOfSleep = dateOfSleep;
+        this.duration = duration;
+    }
 }
 

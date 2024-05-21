@@ -453,6 +453,31 @@ public Map<LocalDate, SleepDuration> recordSleepForPreviousWeek(@RequestHeader("
     return recordedSleep;
 }
 
+    @PostMapping("/sleep-duration-by-googlefit")
+    public ResponseEntity<String> saveSleepDurations(@RequestHeader("Auth") String tokenHeader,
+                                                     @RequestBody Map<String, Long> sleepData) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+            User user = userService.findByUsername(username);
+            // Convert keys from String to LocalDate and save
+            Map<LocalDate, Long> parsedSleepData = new HashMap<>();
+            sleepData.forEach((key, value) -> parsedSleepData.put(LocalDate.parse(key), value));
+
+            sleepDurationService.saveSleepDurations(parsedSleepData, user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Sleep durations saved successfully.");
+        } catch (Exception e) {
+            // Handle exceptions, e.g., validation errors or database errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save sleep durations.");
+        }
+    }
+
+
+
+
     @GetMapping("/weekly-steps")
     public ResponseEntity<Map<String, Double>> StepsForLastWeek(@RequestHeader("Auth") String tokenHeader) {
         String token = tokenHeader.replace("Bearer ", "");

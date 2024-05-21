@@ -988,6 +988,25 @@ public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
                 // Create a map to store the sum of calories for each day
                 Map<LocalDate, Double> caloriesMap = new HashMap<>();
 
+//                // Iterate over each item (activity or exercise) in the combined list
+//                for (Object item : combinedList) {
+//                    LocalDate itemDate;
+//                    double calories;
+//
+//                    // Determine item type and get date and calories accordingly
+//                    if (item instanceof Activities) {
+//                        Activities activity = (Activities) item;
+//                        itemDate = activity.getActivityDate();
+//                        calories = activity.getCalory();
+//                    } else if (item instanceof Exercise) {
+//                        Exercise exercise = (Exercise) item;
+//                        itemDate = exercise.getDate();
+//                        calories = exercise.getCaloriesBurned();
+//                    } else {
+//                        // Unsupported item type, skip
+//                        continue;
+//                    }
+
                 // Iterate over each item (activity or exercise) in the combined list
                 for (Object item : combinedList) {
                     LocalDate itemDate;
@@ -997,16 +1016,15 @@ public ResponseEntity<List<Map<String, Object>>> getUserStepsForCustomRange(
                     if (item instanceof Activities) {
                         Activities activity = (Activities) item;
                         itemDate = activity.getActivityDate();
-                        calories = activity.getCalory();
+                        calories = (activity.getCalory() != null) ? activity.getCalory() : 0.0;
                     } else if (item instanceof Exercise) {
                         Exercise exercise = (Exercise) item;
                         itemDate = exercise.getDate();
-                        calories = exercise.getCaloriesBurned();
+                        calories = (exercise.getCaloriesBurned() != null) ? exercise.getCaloriesBurned() : 0.0;
                     } else {
                         // Unsupported item type, skip
                         continue;
                     }
-
                     // Update calories sum for the corresponding date
                     caloriesMap.put(itemDate, caloriesMap.getOrDefault(itemDate, 0.0) + calories);
                 }

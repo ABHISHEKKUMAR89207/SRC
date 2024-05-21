@@ -170,5 +170,57 @@ public class SleepDurationService {
     public List<SleepDuration> getSleepDurationsForToday(LocalDate today) {
         return sleepDurationRepository.findByDateOfSleep(today);
     }
+
+//    public void saveSleepDurations(Map<LocalDate, Long> sleepData, User user) {
+//        for (Map.Entry<LocalDate, Long> entry : sleepData.entrySet()) {
+//            SleepDuration sleepDuration = new SleepDuration(entry.getKey(), entry.getValue());
+//            sleepDuration.setUser(user);
+//            sleepDurationRepository.save(sleepDuration);
+//        }
+//    }
+//public void saveSleepDurations(Map<LocalDate, Long> sleepData, User user) {
+//    for (Map.Entry<LocalDate, Long> entry : sleepData.entrySet()) {
+//        LocalDate date = entry.getKey();
+//        Long duration = entry.getValue();
+//
+//        // Check if sleep duration already exists for this user and date
+//        Optional<SleepDuration> existingSleepDuration = sleepDurationRepository.findByUserAndDate(user, date);
+//
+//        if (existingSleepDuration.isPresent()) {
+//            // Update existing record
+//            SleepDuration sleepDuration = existingSleepDuration.get();
+//            sleepDuration.setDuration(duration);
+//            sleepDurationRepository.save(sleepDuration);
+//        } else {
+//            // Create new record
+//            SleepDuration newSleepDuration = new SleepDuration(date, duration);
+//            newSleepDuration.setUser(user);
+//            sleepDurationRepository.save(newSleepDuration);
+//        }
+//    }
+public void saveSleepDurations(Map<LocalDate, Long> sleepData, User user) {
+    for (Map.Entry<LocalDate, Long> entry : sleepData.entrySet()) {
+        LocalDate date = entry.getKey();
+        Long duration = entry.getValue();
+
+        // Check if sleep duration already exists for this user and date
+        Optional<SleepDuration> existingSleepDuration = sleepDurationRepository.findByUserAndDate(user, date);
+
+        if (existingSleepDuration.isPresent()) {
+            // Update existing record
+            SleepDuration sleepDuration = existingSleepDuration.get();
+            sleepDuration.setDuration(duration);
+            sleepDurationRepository.save(sleepDuration);
+        } else {
+            // Create new record
+            SleepDuration newSleepDuration = new SleepDuration(date, duration);
+            newSleepDuration.setUser(user);
+            sleepDurationRepository.save(newSleepDuration);
+        }
+    }
 }
+
+}
+
+
 

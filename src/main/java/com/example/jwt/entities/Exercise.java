@@ -32,7 +32,7 @@ private LocalDate date= LocalDate.now();;
     private Time startTime;
     private Time endTime;
     private double duration; // in minutes
-    private double caloriesBurned;
+    private Double caloriesBurned;
 
 //  getters and setters
 
