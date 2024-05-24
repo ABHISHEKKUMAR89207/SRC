@@ -606,7 +606,7 @@ public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeade
 
     if (user != null) {
         // Get heart rate data
-        HeartRate heartRate = heartRateService.getHeartRateForUserAndDate(user, LocalDate.now());
+        HeartRate heartRate = heartRateService.getHeartRateForUserAndDateeee(user, LocalDate.now());
         if (heartRate != null) {
             userHealthData.setLocalDate(heartRate.getLocalDate());
             userHealthData.setHeartRateValue(heartRate.getValue());

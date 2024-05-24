@@ -29,7 +29,7 @@ public class FoodDataService {
 
 
 
-    public List<NinDataDTOO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood, String username) {
+    public List<NinDataDTOO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood) {
         List<NinData> top10Results;
 
         if ("all".equalsIgnoreCase(typesOfFood)) {

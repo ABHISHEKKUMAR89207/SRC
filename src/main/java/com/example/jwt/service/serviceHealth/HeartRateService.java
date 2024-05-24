@@ -61,6 +61,10 @@ private HeartRateRepositoryy heartRateRepositoryy;
         return heartRateRepository.findByUserAndLocalDate(user, date);
     }
 
+    public HeartRate getHeartRateForUserAndDateeee(User user, LocalDate date) {
+        List<HeartRate> heartRates = heartRateRepository.findLatestHeartRateForUserAndDate(user, date);
+        return heartRates.isEmpty() ? null : heartRates.get(0); // Return the latest heart rate or null if not found
+    }
 //    public HeartRate getHeartRateForUserAndTime(User user, LocalTime localTime) {
 //        return heartRateRepository.findByUserAndTimeStamp(user, localTime);
 //    }
