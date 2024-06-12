@@ -94,7 +94,7 @@ public class NIN_2023 implements CommandLineRunner {
                 .fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
         FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                 .setCredentials(googleCredentials).build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"nutrifyindianow");
+        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions,"nin2byo2i");
         return FirebaseMessaging.getInstance(app);
     }
 
@@ -122,9 +122,9 @@ public class NIN_2023 implements CommandLineRunner {
             InputStream serviceAccount = new ClassPathResource("firebase-service-account.json").getInputStream();
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                    .setDatabaseUrl("https://nutrifyindianow-default-rtdb.firebaseio.com")
+                    .setDatabaseUrl("https://nin2byo2i-default-rtdb.firebaseio.com")
                     .build();
-            app = FirebaseApp.initializeApp(options, "nutrifyindianow");
+            app = FirebaseApp.initializeApp(options, "nin2byo2i");
         }
         return app;
     }
