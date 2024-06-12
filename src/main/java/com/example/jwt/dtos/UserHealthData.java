@@ -18,6 +18,8 @@ public class UserHealthData {
     private Integer steps;
     private Double calorie;
     private long sleepDuration;
+    private Double totalExerciseDuration;
+    private Double totalExerciseCalories;
 
     // Constructor, getters, and setters
 }

@@ -604,6 +604,7 @@ public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeade
 
     UserHealthData userHealthData = new UserHealthData();
 
+
     if (user != null) {
         // Get heart rate data
         HeartRate heartRate = heartRateService.getHeartRateForUserAndDateeee(user, LocalDate.now());
@@ -616,21 +617,55 @@ public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeade
             userHealthData.setHeartRateValue(0.0); // You may set a default value if needed
         }
 
+//        // Get activity data
+//        Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+//        if (activities != null) {
+//            // Sum up the calories from Activities and Exercises
+//            double totalCalories = activities.getCalory() != null ? activities.getCalory() : 0.0;
+//            System.out.println("calyy========= "+totalCalories);
+//            List<Exercise> exercises = exerciseService.getExerciseForUserAndDate(user, LocalDate.now());
+//            for (Exercise exercise : exercises) {
+//                System.out.println("Exercise cal----------------"+exercise.getCaloriesBurned());
+//                totalCalories += exercise.getCaloriesBurned();
+//                System.out.println("callory burned -----------"+totalCalories);
+//            }
+//            userHealthData.setCalorie(totalCalories);
+//            userHealthData.setSteps(activities.getSteps());
+//        } else {
+//            // Set default values when no activity data is available
+//            userHealthData.setSteps(0); // You may set a default value if needed
+//            userHealthData.setCalorie(0.0); // You may set a default value if needed
+//        }
+
         // Get activity data
         Activities activities = activityService.getActivitiesForUserAndDate(user, LocalDate.now());
+        double totalCalories = 0.0;
+
         if (activities != null) {
             // Sum up the calories from Activities and Exercises
-            double totalCalories = activities.getCalory() != null ? activities.getCalory() : 0.0;
-            List<Exercise> exercises = exerciseService.getExerciseForUserAndDate(user, LocalDate.now());
-            for (Exercise exercise : exercises) {
-                totalCalories += exercise.getCaloriesBurned();
-            }
-            userHealthData.setCalorie(totalCalories);
+            totalCalories += activities.getCalory() != null ? activities.getCalory() : 0.0;
+        }
+
+        // Get exercise data
+        List<Exercise> exercises = exerciseService.getExerciseForUserAndDate(user, LocalDate.now());
+        double totalExerciseDuration = 0.0; // Initialize total exercise duration
+        double totalExerciseCalories = 0.0;
+
+        for (Exercise exercise : exercises) {
+            totalCalories += exercise.getCaloriesBurned();
+            totalExerciseDuration += exercise.getDuration();
+            totalExerciseCalories += exercise.getCaloriesBurned();
+
+        }
+
+        userHealthData.setCalorie(totalCalories);
+        userHealthData.setTotalExerciseDuration(totalExerciseDuration/60); // Set total exercise duration
+        userHealthData.setTotalExerciseCalories(totalExerciseCalories);
+
+        if (activities != null) {
             userHealthData.setSteps(activities.getSteps());
         } else {
-            // Set default values when no activity data is available
-            userHealthData.setSteps(0); // You may set a default value if needed
-            userHealthData.setCalorie(0.0); // You may set a default value if needed
+            userHealthData.setSteps(0); // Set default steps value if needed
         }
 
         // Get sleep data
