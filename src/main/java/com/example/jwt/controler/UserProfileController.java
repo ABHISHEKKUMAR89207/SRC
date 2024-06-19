@@ -184,7 +184,14 @@ public class UserProfileController {
                 response.put("weight", userProfile.getWeight());
                 response.put("bmi", userProfile.getBmi());
                 response.put("bmr", userProfile.getBmr());
-                response.put("wakeupTime", userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+
+//                response.put("wakeupTime", userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+
+                // Handle null wakeupTime
+                String wakeupTime = userProfile.getWakeupTime() != null ?
+                        userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")) :
+                        "00:00";
+                response.put("wakeupTime", wakeupTime);
 
 //                response.put("wakeupTime", userProfile.getWakeupTime());
                 response.put("googleAccountLink", userProfile.getGoogleAccountLink());
