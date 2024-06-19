@@ -12,6 +12,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -29,8 +30,8 @@ public class Exercise {
 private LocalDate date= LocalDate.now();;
     private String activityType;
     private double distance;
-    private Time startTime;
-    private Time endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private double duration; // in minutes
     private Double caloriesBurned;
 

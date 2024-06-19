@@ -96,4 +96,13 @@ public class IngredientDTO {
         this.energy = v;
 
     }
+
+
+    public IngredientDTO(String ingredientName, String imageIngUrl, Double ingredientQuantity, Double energy) {
+        this.ingredientName = ingredientName;
+        this.imageIngUrl = imageIngUrl;
+        this.ingredientQuantity = ingredientQuantity;
+        this.energy = energy;
+    }
+
 }

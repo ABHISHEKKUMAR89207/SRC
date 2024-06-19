@@ -4,13 +4,19 @@ package com.example.jwt.entities;
 
 import com.example.jwt.entities.FoodToday.ear.Ear;
 import com.example.jwt.entities.dashboardEntity.healthTrends.MenstrualCycle;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -37,7 +43,13 @@ public class UserProfile {
     private Integer heightIn;
 
     private String workLevel;
-//    private String occupation;
+//    @JsonDeserialize(using = SqlTimeDeserializer.class)
+//@JsonDeserialize(using = LocalTimeDeserializer.class)
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+private LocalTime wakeupTime;
+
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+//private Time wakeupTime;
 
 
 
@@ -59,4 +71,6 @@ public class UserProfile {
 
     @OneToMany(mappedBy = "userProfile")
     private List<Ear> ears;
+
+
 }

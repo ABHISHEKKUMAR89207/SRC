@@ -1,5 +1,7 @@
 package com.example.jwt.FoodTodayResponse;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +16,9 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class mealResponse {
+//    @JsonIgnore
     private List<DishWithIngredientsResponse> rList = new ArrayList<>();
     private String date;
     private Double mealEnergy;
@@ -101,6 +104,10 @@ public class mealResponse {
 
     }
 
+    public mealResponse(Double mealEnergy, LocalDate date) {
+        this.mealEnergy = mealEnergy;
+        this.date = formatDate(date);
+    }
 
     public mealResponse(
 //                            Map<String, String> nutrientsNameWithSIUnit,

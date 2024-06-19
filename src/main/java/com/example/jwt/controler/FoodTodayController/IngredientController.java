@@ -150,6 +150,20 @@ public class IngredientController {
         }
 
 
+    @GetMapping("/getTotalEnergyIntake-by-date")
+    public List<mealResponse> getTotalEnergyIntakeByDate(@RequestHeader("Auth") String tokenHeader, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+
+        // Extract the username (email) from the token
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        // Use the username to fetch the userId from your user service
+        User user = userService.findByUsername(username);
+
+        return ingrdientService.getTotalEnergyIntakeByDate(user, date);
+    }
+
 
 
         @GetMapping("/getDishesWithIngredients-by-date-range")

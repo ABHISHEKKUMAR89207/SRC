@@ -1,6 +1,7 @@
 package com.example.jwt.FoodTodayResponse;
 
 import com.example.jwt.dtos.FoodTodayDtos.IngredientDTO;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DishWithIngredientsResponse {
 
     private Long dishId;
@@ -39,7 +41,30 @@ public class DishWithIngredientsResponse {
     private Double totalRetinolVit_A;
 
 
-//    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
+    public DishWithIngredientsResponse(Long dishId,
+                                       String dishName,
+                                       String mealType,
+                                       boolean favourite,
+                                       List<IngredientDTO> ingredients,
+                                       Double totalEnergy,
+                                       Double dishQuantity,
+                                       Double servingSize,
+                                       String unit,
+                                       Double valueForOneUnit) {
+        this.dishId = dishId;
+        this.dishName = dishName;
+        this.mealType = mealType;
+        this.favourite = favourite;
+        this.ingredients = ingredients;
+        this.totalEnergy = calculateTotalEnergy(totalEnergy, dishQuantity, servingSize);
+        this.dishQuantity = dishQuantity;
+        this.servingSize = servingSize;
+        this.unit = unit;
+        this.valueForOneUnit = valueForOneUnit;
+    }
+
+
+    //    private  Map<String, String> nutrientsNameWithSIUnit = new HashMap<>();
     public DishWithIngredientsResponse(Long dishId,
                                        String dishName,
                                        String mealType,
@@ -191,5 +216,18 @@ public class DishWithIngredientsResponse {
     }
 
 
+    public DishWithIngredientsResponse(Long dishId,
+                                       String dishName,
+                                       String mealType,
+                                       boolean favourite,
+                                       List<IngredientDTO> ingredients,
+                                       Double totalEnergy) {
+        this.dishId = dishId;
+        this.dishName = dishName;
+        this.mealType = mealType;
+        this.favourite = favourite;
+        this.ingredients = ingredients;
+        this.totalEnergy = totalEnergy;
+    }
 
 }

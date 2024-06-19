@@ -26,10 +26,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -181,6 +184,9 @@ public class UserProfileController {
                 response.put("weight", userProfile.getWeight());
                 response.put("bmi", userProfile.getBmi());
                 response.put("bmr", userProfile.getBmr());
+                response.put("wakeupTime", userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+
+//                response.put("wakeupTime", userProfile.getWakeupTime());
                 response.put("googleAccountLink", userProfile.getGoogleAccountLink());
                 response.put("facebookAccountLink", userProfile.getFacebookAccountLink());
                 response.put("twitterAccountLink", userProfile.getTwitterAccountLink());
@@ -275,6 +281,37 @@ public class UserProfileController {
 
                 if (updateData.containsKey("lastName")) {
                     userProfile.setLastName(updateData.get("lastName").toString());
+                }
+
+//                if (updateData.containsKey("wakeupTime")) {
+//                    userProfile.setWakeupTime(updateData.get("wakeupTime").toString());
+//                }
+//                if (updateData.containsKey("wakeupTime")) {
+//                    String wakeupTimeString = updateData.get("wakeupTime").toString();
+//                    // Assuming wakeupTimeString is in HH:mm format
+//                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+//                    java.util.Date parsedDate;
+//                    try {
+//                        parsedDate = sdf.parse(wakeupTimeString);
+//                        java.sql.Time wakeupTime = new java.sql.Time(parsedDate.getTime());
+//                        userProfile.setWakeupTime(wakeupTime);
+//                    } catch (ParseException e) {
+//                        // Handle parsing exception
+//                        e.printStackTrace();
+//                    }
+//                }
+// Assuming updateData.containsKey("wakeupTime") check is already in place
+                if (updateData.containsKey("wakeupTime")) {
+                    String wakeupTimeString = updateData.get("wakeupTime").toString();
+                    // Assuming wakeupTimeString is in HH:mm format
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                    LocalTime wakeupTime = LocalTime.parse(wakeupTimeString, formatter);
+
+                    // Convert LocalTime to java.sql.Time
+//                    Time sqlTime = Time.valueOf(wakeupTime);
+
+                    // Set the java.sql.Time object in userProfile
+                    userProfile.setWakeupTime(wakeupTime);
                 }
 
                 if (updateData.containsKey("weight")) {

@@ -789,7 +789,178 @@ public class IngrdientService {
 
 
 
-        public List<mealResponse> getDishesWithIngredientsByDate(User user, LocalDate date) {
+
+//    private Double calculateEnergy(Ingredients ingredient, Double servingSize) {
+//        // Calculation logic based on serving size
+//        return ingredient.getEnergyPerUnit() * servingSize; // Assuming getEnergyPerUnit() method exists
+//    }
+
+//    public List<mealResponse> getTotalEnergyIntakeByDatee(User user, LocalDate date) {
+//        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+//        List<mealResponse> finalResponseList = new ArrayList<>();
+//
+//        Double totalEnergyForDay = 0.0;
+//
+//        for (Dishes dish : dishesList) {
+//            List<Ingredients> ingredients = dish.getIngredientList();
+//            Double totalEnergyForDish = 0.0;
+//
+//            for (Ingredients ingredient : ingredients) {
+//                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+//                if (ninData != null) {
+//                    totalEnergyForDish += (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+//                } else {
+//                    UserRowIng userRowIng = userRowIngRepository.findByFoodCodeAndUser(ingredient.getFoodCode(), user);
+//                    if (userRowIng != null) {
+//                        totalEnergyForDish += (ingredient.getIngredientQuantity() / 100) * userRowIng.getEnergy();
+//                    }
+//                }
+//            }
+//
+//            totalEnergyForDay += totalEnergyForDish;
+//
+//            mealResponse meal = new mealResponse(totalEnergyForDish, dish.getDate());
+//            finalResponseList.add(meal);
+//        }
+//
+//        System.out.println("Total Energy for the day: " + totalEnergyForDay);
+//
+//        return finalResponseList;
+//    }
+
+
+    public List<mealResponse> getTotalEnergyIntakeByDate(User user, LocalDate date) {
+        List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+        List<DishWithIngredientsResponse> responseList = new ArrayList<>();
+        List<mealResponse> finalResponseList = new ArrayList<>();
+
+        Double onegrmEng=0.0;
+
+        LocalDate datee = date;
+        Double energy = 0.0;
+
+        for (Dishes dish : dishesList) {
+
+            List<Ingredients> ingredients = dish.getIngredientList();
+            List<IngredientDTO> ingredientsList = new ArrayList<>();
+            Double finalTotalEnergy =0.0;
+
+            Double totalEnergy = 0.0;
+
+            // Inside your for loop where you're iterating over ingredients
+            for (Ingredients ingredient : ingredients) {
+                NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+                if (ninData != null) {
+                    // Use NinData if found
+                    ingredientsList.add(new IngredientDTO(
+                            ingredient.getIngredientName(),
+                            constructImageUrl(baseUrl, ingredient.getFoodCode()),
+
+                            ingredient.getIngredientQuantity(),
+                            calculateEnergy(ingredient)
+
+                    ));
+
+                    totalEnergy += (ingredient.getIngredientQuantity()/100) * ninData.getEnergy();
+
+                } else {
+                    UserRowIng userRowIng = userRowIngRepository.findByFoodCodeAndUser(ingredient.getFoodCode(), user);
+                    if (userRowIng != null) {
+                        // Use UserRowIng if found
+                        ingredientsList.add(new IngredientDTO(
+                                ingredient.getIngredientName(),
+                                constructImageUrl(baseUrl, ingredient.getFoodCode()),
+
+                                ingredient.getIngredientQuantity(),
+                                calculateEnergy(ingredient)
+
+                        ));
+
+                        totalEnergy += (ingredient.getIngredientQuantity()/100) * userRowIng.getEnergy();
+
+                    }
+                }
+            }
+
+            datee = dish.getDate(); // Assign the value here
+            energy = energy + totalEnergy;
+
+            // Update the response list without recipe details
+            responseList.add(new DishWithIngredientsResponse(
+                    dish.getDishId(),
+                    dish.getDishName(),
+                    dish.getMealName(),
+                    dish.isFavourite(),
+                    ingredientsList,
+                    totalEnergy,
+                    dish.getDishQuantity(),  // provide dish quantity here
+                    dish.getServingSize(),  // provide serving size here
+                    dish.getUnit(),
+                    dish.getValueForOneUnit()
+            ));
+
+            // Loop through each DishWithIngredientsResponse in responseList
+            for (DishWithIngredientsResponse response : responseList) {
+                // Print details of each dish
+                System.out.println("Dish ID: " + response.getDishId());
+                System.out.println("Dish Name: " + response.getDishName());
+                System.out.println("Response List Total Energy: " + response.getTotalEnergy());
+
+                // Add the energy of the current dish to the final total energy
+                finalTotalEnergy += response.getTotalEnergy();
+
+                // Print separator between dishes
+                System.out.println("----------------------------------");
+            }
+
+            System.out.println("Final Total Energy: " + finalTotalEnergy);
+
+            System.out.println("enryyyy-----"+energy);
+            System.out.println(" ttotal Energyy   ====  "+totalEnergy);
+            onegrmEng = finalTotalEnergy;
+            System.out.println("one gram energy -------------- "+onegrmEng);
+
+        }
+
+        finalResponseList.add(new mealResponse( onegrmEng, datee));
+
+        return finalResponseList;
+    }
+
+    public List<mealResponse> getTotalEnergyIntakeByDate(User user, LocalDate startDate, LocalDate endDate) {
+        List<mealResponse> finalResponseList = new ArrayList<>();
+
+        // Loop through each date within the range
+        for (LocalDate date = startDate; date.isBefore(endDate.plusDays(1)); date = date.plusDays(1)) {
+            List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
+            Double totalEnergy = 0.0;
+
+            for (Dishes dish : dishesList) {
+                List<Ingredients> ingredients = dish.getIngredientList();
+                Double dishTotalEnergy = 0.0;
+
+                for (Ingredients ingredient : ingredients) {
+                    NinData ninData = ninDataRepository.findByFoodCode(ingredient.getFoodCode());
+                    if (ninData != null) {
+                        dishTotalEnergy += (ingredient.getIngredientQuantity() / 100) * ninData.getEnergy();
+                    } else {
+                        UserRowIng userRowIng = userRowIngRepository.findByFoodCodeAndUser(ingredient.getFoodCode(), user);
+                        if (userRowIng != null) {
+                            dishTotalEnergy += (ingredient.getIngredientQuantity() / 100) * userRowIng.getEnergy();
+                        }
+                    }
+                }
+
+                totalEnergy += dishTotalEnergy;
+            }
+
+            finalResponseList.add(new mealResponse(totalEnergy, date));
+        }
+
+        return finalResponseList;
+    }
+
+    public List<mealResponse> getDishesWithIngredientsByDate(User user, LocalDate date) {
             List<Dishes> dishesList = dishesRepository.findDishesByUserUserIdAndDate(user.getUserId(), date);
             List<DishWithIngredientsResponse> responseList = new ArrayList<>();
             List<mealResponse> finalResponseList = new ArrayList<>();

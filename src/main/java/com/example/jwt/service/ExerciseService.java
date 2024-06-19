@@ -1,15 +1,23 @@
 package com.example.jwt.service;
 
+import com.example.jwt.dtos.CalculationResult;
 import com.example.jwt.entities.Exercise;
 import com.example.jwt.entities.User;
+import com.example.jwt.entities.UserProfile;
 import com.example.jwt.entities.dashboardEntity.Activities;
+import com.example.jwt.exception.ExceedsDurationLimitException;
 import com.example.jwt.repository.ExerciseRepository;
 import com.example.jwt.repository.UserProfileRepository;
+import com.example.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -24,10 +32,34 @@ public class ExerciseService {
         this.userProfileRepository = userProfileRepository;
     }
 
+//    public Exercise calculateAndSaveExercise(Exercise exercise, User user, double duration) {
+//        String activityType = exercise.getActivityType();
+//
+//        LocalTime startTime = exercise.getStartTime();
+//
+//
+//        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//
+//        double caloriesBurned = calculateCaloriesBurned(startTime,activityType, duration,user);
+//
+//        exercise.setCaloriesBurned(caloriesBurned);
+//        exercise.setUser(user);
+//
+//        return exerciseRepository.save(exercise);
+//    }
+
     public Exercise calculateAndSaveExercise(Exercise exercise, User user, double duration) {
         String activityType = exercise.getActivityType();
-        double caloriesBurned = calculateCaloriesBurned(activityType, duration,user);
+        LocalTime startTime = exercise.getStartTime();
+        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
 
+        CalculationResult result = calculateCaloriesBurned(startTime, activityType, duration, user);
+
+        if (result.getErrorMessage() != null) {
+            // Throw the custom exception with the error message
+            throw new ExceedsDurationLimitException(result.getErrorMessage());
+        }
+        double caloriesBurned = result.getCaloriesBurned();
         exercise.setCaloriesBurned(caloriesBurned);
         exercise.setUser(user);
 
@@ -57,146 +89,370 @@ public class ExerciseService {
 
 
 
-    private double calculateCaloriesBurned(String activityType, double duration, User user) {
-        // Simple assumption: Calories burned per hour for different activities
-        double caloriesPerHour;
+//    private double calculateCaloriesBurned(LocalTime startTime, String activityType, double duration, User user) {
+//        // Simple assumption: Calories burned per hour for different activities
+//        double caloriesPerHour;
+//
+//        double totalDuration = 0.0;
+//        double totalNewDuration = 0.0;
+//        double totalHour = 0.0;
+//
+//
+//        // Calculate total duration from exercises within wakeupTime range
+//        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//        LocalDateTime startDateTime = LocalDate.now().atTime(wakeupTime);
+//        System.out.println("Start date ----------" + startDateTime);
+//        LocalDateTime endDateTime = startDateTime.minusDays(1);
+//        System.out.println("End Date ---------" + endDateTime);
+//
+//
+////        for (Exercise exercise : user.getExercises()) {
+////            // Check if exercise date is yesterday or today and if startTime is between wakeupTimes
+////            if ((exercise.getDate().isEqual(endDateTime.toLocalDate()) && exercise.getStartTime().isAfter(wakeupTime)) ||
+////                    (exercise.getDate().isEqual(startDateTime.toLocalDate()) && exercise.getStartTime().isBefore(wakeupTime))) {
+////
+////                if (exercise.getCaloriesBurned() != null) {
+////                    totalDuration += exercise.getDuration();
+////                }
+////            }
+////        }
+//
+////        if (startTime.isAfter(wakeupTime)) {
+////            System.out.println("duration if condition-------");
+////            // Iterate over exercises and calculate the total duration
+////            for (Exercise exercise : user.getExercises()) {
+////                if ((exercise.getDate().isEqual(endDateTime.toLocalDate()) && exercise.getStartTime().isAfter(wakeupTime)) ||
+////                        (exercise.getDate().isEqual(startDateTime.toLocalDate()) && exercise.getStartTime().isBefore(wakeupTime))) {
+////
+////                    if (exercise.getCaloriesBurned() != null) {
+////                        totalDuration += exercise.getDuration();
+////                        System.out.println("duration if condition-------duration"+totalDuration);
+////                    }
+////                }
+////            }
+//        if (startTime.isAfter(wakeupTime)) {
+//            System.out.println("Duration if condition (startTime is after wakeupTime)");
+//            // Iterate over exercises and calculate the total duration for today after wakeup time
+//            for (Exercise exercise : user.getExercises()) {
+//                if (exercise.getDate().isEqual(LocalDate.now()) && exercise.getStartTime().isAfter(wakeupTime)) {
+//                    if (exercise.getCaloriesBurned() != null) {
+//                        totalDuration += exercise.getDuration();
+//                        System.out.println("Duration if condition (current date, after wakeupTime): " + totalDuration);
+//                    }
+//                }
+//            }
+//        } else {
+//            System.out.println("duration else condition-------");
+//            // If startTime is before wakeupTime
+//            for (Exercise exercise : user.getExercises()) {
+//                if ((exercise.getDate().isEqual(endDateTime.toLocalDate()) && exercise.getStartTime().isAfter(wakeupTime)) ||
+//                        (exercise.getDate().isEqual(startDateTime.toLocalDate()) && exercise.getStartTime().isBefore(wakeupTime))) {
+//
+//                    if (exercise.getCaloriesBurned() != null) {
+//                        totalDuration += exercise.getDuration();
+//                        System.out.println("duration else condition-------duration" + totalDuration);
+//                    }
+//                }
+//            }
+//        }
+//
+//        totalNewDuration = totalDuration + duration;
+//
+//        System.out.println("total new duration -------" + totalNewDuration);
+//
+//        totalHour = totalNewDuration / 60;
+//
+//        System.out.println("total hour ----------" + totalHour);
+//
+//        if (totalHour <= 24) {
+//            switch (activityType) {
+//                case "SLEEPING":
+//                    caloriesPerHour = 1;
+//                    break;
+//
+//                case "SITTING ONLY":
+//                    caloriesPerHour = 1.2;
+//                    break;
+//
+//                case "WATCHING T.V":
+//                    caloriesPerHour = 1.4;
+//                    break;
+//
+//                case "WORKING ON COMPUTERS":
+//                    caloriesPerHour = 1.5;
+//                    break;
+//
+//                case "PLAYING GAMES WHILE SITTING (INDOOR GAMES)":
+//                    caloriesPerHour = 1.5;
+//                    break;
+//
+//                case "READING PAPER, PUBLIC MAGAZINE, DOING HOMEWORK":
+//                    caloriesPerHour = 1.5;
+//                    break;
+//
+//                case "EATING (BREAKFAST/LUNCH/DINNER)":
+//                    caloriesPerHour = 1.5;
+//                    break;
+//
+//                case "FRESH UP (BATHING/DRESSING)":
+//                    caloriesPerHour = 2.3;
+//                    break;
+//
+//                case "DOING PRAYER/POOJA":
+//                    caloriesPerHour = 2;
+//                    break;
+//
+//                case "SOCIALIZATION (TIME PASS WITH FRIENDS/ RELATIVES)":
+//                    caloriesPerHour = 1.4;
+//                    break;
+//
+//                case "WALKING/STANDING":
+//                    caloriesPerHour = 2;
+//                    break;
+//
+//                case "HOUSEHOLD ACTIVITIES (CLEANING, SWEEPING, WASHING CLOTHES, COOKING)":
+//                    caloriesPerHour = 2.5;
+//                    break;
+//
+//                case "GARDENING":
+//                    caloriesPerHour = 3.5;
+//                    break;
+//
+//                case "FETCHING WATER":
+//                    caloriesPerHour = 4.4;
+//                    break;
+//
+//                case "ANIMAL/CHILD/DEPENDANT CARE":
+//                    caloriesPerHour = 2.5;
+//                    break;
+//
+//                case "SHOPPING":
+//                    caloriesPerHour = 4;
+//                    break;
+//
+//                case "ARTISAN WORK":
+//                    caloriesPerHour = 3.1;
+//                    break;
+//
+//                case "LABOUR WORK":
+//                    caloriesPerHour = 5.1;
+//                    break;
+//
+//                case "CULTIVATION":
+//                    caloriesPerHour = 5.7;
+//                    break;
+//
+//                case "TRAVELLING":
+//                    caloriesPerHour = 2.3;
+//                    break;
+//
+//                case "DRIVING":
+//                    caloriesPerHour = 2.3;
+//                    break;
+//
+//                case "CYCLING":
+//                    caloriesPerHour = 4.6;
+//                    break;
+//
+//                case "BRISK WALKING":
+//                    caloriesPerHour = 3.2;
+//                    break;
+//
+//                case "JOGGING":
+//                    caloriesPerHour = 3.8;
+//                    break;
+//
+//                case "ANY EXERCISE":
+//                    caloriesPerHour = 3.6;
+//                    break;
+//
+//                case "YOGA":
+//                    caloriesPerHour = 2;
+//                    break;
+//
+//                case "SWIMMING":
+//                    caloriesPerHour = 9;
+//                    break;
+//
+//                case "PLAYING ANY OUTDOOR GAME":
+//                    caloriesPerHour = 6;
+//                    break;
+//
+//                case "LIFTING OF LOADS":
+//                    caloriesPerHour = 5.1;
+//                    break;
+//
+//                case "RICKSHAW PULLING":
+//                    caloriesPerHour = 5.3;
+//                    break;
+//
+//                case "ANY HEAVY DUTY ACTIVITY":
+//                    caloriesPerHour = 7;
+//                    break;
+//
+//                case "MOBILE USAGE":
+//                    caloriesPerHour = 1.5;
+//                    break;
+//
+//                default:
+//                    caloriesPerHour = 0; // Default value if activity type not recognized
+//            }
+//
+//            // Calculate calories burned based on duration
+//            return (user.getUserProfile().getBmr() * caloriesPerHour * (duration / 60)) / 24;
+//        } else {
+//            return "your 24 hour is complete";
+//        }
+//    }
+public CalculationResult calculateCaloriesBurned(LocalTime startTime, String activityType, double duration, User user) {
+    double caloriesPerHour;
+    double totalDuration = 0.0;
+    double totalNewDuration = 0.0;
+    double totalHour = 0.0;
 
+    LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+    System.out.println("Wakeup Time  ---------" + wakeupTime);
+    LocalDateTime startDateTime = LocalDate.now().atTime(wakeupTime);
+    System.out.println("Start date ----------" + startDateTime);
+    LocalDateTime endDateTime = startDateTime.minusDays(1);
+    System.out.println("End Date ---------" + endDateTime);
+
+    if (startTime.isAfter(wakeupTime)) {
+        System.out.println("duration if condition-------");
+        for (Exercise exercise : user.getExercises()) {
+            if (exercise.getDate().isEqual(LocalDate.now()) && exercise.getStartTime().isAfter(wakeupTime)) {
+                if (exercise.getCaloriesBurned() != null) {
+                    totalDuration += exercise.getDuration();
+                    System.out.println("duration if condition-------duration"+totalDuration);
+                }
+            }
+        }
+    } else {
+        for (Exercise exercise : user.getExercises()) {
+            System.out.println("duration else condition-------");
+            if ((exercise.getDate().isEqual(endDateTime.toLocalDate()) && exercise.getStartTime().isAfter(wakeupTime)) ||
+                    (exercise.getDate().isEqual(startDateTime.toLocalDate()) && exercise.getStartTime().isBefore(wakeupTime))) {
+                if (exercise.getCaloriesBurned() != null) {
+                    totalDuration += exercise.getDuration();
+                    System.out.println("duration else condition-------duration"+totalDuration);
+                }
+            }
+        }
+    }
+
+    totalNewDuration = totalDuration + duration;
+    System.out.println("total new duration -------" + totalNewDuration);
+    totalHour = totalNewDuration / 60;
+    System.out.println("total hour ----------" + totalHour);
+    if (totalHour <= 24) {
         switch (activityType) {
             case "SLEEPING":
                 caloriesPerHour = 1;
                 break;
-
             case "SITTING ONLY":
                 caloriesPerHour = 1.2;
                 break;
-
             case "WATCHING T.V":
                 caloriesPerHour = 1.4;
                 break;
-
             case "WORKING ON COMPUTERS":
                 caloriesPerHour = 1.5;
                 break;
-
             case "PLAYING GAMES WHILE SITTING (INDOOR GAMES)":
                 caloriesPerHour = 1.5;
                 break;
-
             case "READING PAPER, PUBLIC MAGAZINE, DOING HOMEWORK":
                 caloriesPerHour = 1.5;
                 break;
-
             case "EATING (BREAKFAST/LUNCH/DINNER)":
                 caloriesPerHour = 1.5;
                 break;
-
             case "FRESH UP (BATHING/DRESSING)":
                 caloriesPerHour = 2.3;
                 break;
-
             case "DOING PRAYER/POOJA":
                 caloriesPerHour = 2;
                 break;
-
             case "SOCIALIZATION (TIME PASS WITH FRIENDS/ RELATIVES)":
                 caloriesPerHour = 1.4;
                 break;
-
             case "WALKING/STANDING":
                 caloriesPerHour = 2;
                 break;
-
             case "HOUSEHOLD ACTIVITIES (CLEANING, SWEEPING, WASHING CLOTHES, COOKING)":
                 caloriesPerHour = 2.5;
                 break;
-
             case "GARDENING":
                 caloriesPerHour = 3.5;
                 break;
-
             case "FETCHING WATER":
                 caloriesPerHour = 4.4;
                 break;
-
             case "ANIMAL/CHILD/DEPENDANT CARE":
                 caloriesPerHour = 2.5;
                 break;
-
             case "SHOPPING":
                 caloriesPerHour = 4;
                 break;
-
             case "ARTISAN WORK":
                 caloriesPerHour = 3.1;
                 break;
-
             case "LABOUR WORK":
                 caloriesPerHour = 5.1;
                 break;
-
             case "CULTIVATION":
                 caloriesPerHour = 5.7;
                 break;
-
             case "TRAVELLING":
                 caloriesPerHour = 2.3;
                 break;
-
             case "DRIVING":
                 caloriesPerHour = 2.3;
                 break;
-
             case "CYCLING":
                 caloriesPerHour = 4.6;
                 break;
-
             case "BRISK WALKING":
                 caloriesPerHour = 3.2;
                 break;
-
             case "JOGGING":
                 caloriesPerHour = 3.8;
                 break;
-
             case "ANY EXERCISE":
                 caloriesPerHour = 3.6;
                 break;
-
             case "YOGA":
                 caloriesPerHour = 2;
                 break;
-
             case "SWIMMING":
                 caloriesPerHour = 9;
                 break;
-
             case "PLAYING ANY OUTDOOR GAME":
                 caloriesPerHour = 6;
                 break;
-
             case "LIFTING OF LOADS":
                 caloriesPerHour = 5.1;
                 break;
-
             case "RICKSHAW PULLING":
                 caloriesPerHour = 5.3;
                 break;
-
             case "ANY HEAVY DUTY ACTIVITY":
                 caloriesPerHour = 7;
                 break;
-
             case "MOBILE USAGE":
                 caloriesPerHour = 1.5;
                 break;
-
             default:
-                caloriesPerHour = 0; // Default value if activity type not recognized
+                caloriesPerHour = 0;
         }
 
-        // Calculate calories burned based on duration
-        return (user.getUserProfile().getBmr() * caloriesPerHour * (duration / 60)) / 24;
+        double caloriesBurned = (user.getUserProfile().getBmr() * caloriesPerHour * (duration / 60)) / 24;
+        return new CalculationResult(caloriesBurned);
+    } else {
+        return new CalculationResult("Your "+totalHour+" hours is complete");
     }
+}
+
 //            case "Gardening":
 //                caloriesPerHour = 3.5; // Adjust this value based on accurate data
 //                break;
@@ -301,4 +557,326 @@ public class ExerciseService {
     public Exercise saveExercise(Exercise exercise) {
         return exerciseRepository.save(exercise);
     }
+
+    @Autowired
+    private UserRepository userRepository;
+
+//    public double getTotalCaloriesBurned(User user) {
+//        UserProfile userProfile = userProfileRepository.findByUserEmail(user.getEmail());
+////                .orElseThrow(() -> new RuntimeException("User profile not found"));
+//
+//        LocalTime wakeupTime = userProfile.getWakeupTime();
+//        LocalDate currentDate = LocalDate.now();
+//
+//        LocalDate startDate = currentDate.minusDays(1);
+//        LocalDate endDate = currentDate;
+//
+//        List<Exercise> exercises = exerciseRepository.findByUserAndDateBetween(user, startDate, endDate);
+//
+//        return exercises.stream()
+//                .filter(exercise -> {
+//                    LocalTime exerciseStartTime = exercise.getStartTime().toLocalTime();
+//                    LocalTime exerciseEndTime = exercise.getEndTime().toLocalTime();
+//                    return (exerciseStartTime.isAfter(wakeupTime) || exerciseStartTime.equals(wakeupTime)) ||
+//                            (exerciseEndTime.isBefore(wakeupTime) || exerciseEndTime.equals(wakeupTime));
+//                })
+//                .mapToDouble(Exercise::getCaloriesBurned)
+//                .sum();
+//    }
+
+//    public Double calculateCaloriesBurnedFor24HourCycle(Long userId, LocalDate date) {
+//        UserProfile userProfile = userProfileRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+//
+//        LocalTime wakeupTime = userProfile.getWakeupTime();
+//        LocalDateTime startDateTime = LocalDateTime.of(date, wakeupTime);
+//        LocalDateTime endDateTime = startDateTime.plusHours(24);
+//
+//        return exerciseRepository.sumCaloriesBurnedWithin24HourCycle(userId, startDateTime, endDateTime);
+//    }
+
+//    public Double calculateCaloriesBurnedFor24HourCycle(User user, LocalDate currentDate) {
+//        UserProfile userProfile = userProfileRepository.findByUserEmail(user.getEmail());
+////                .orElseThrow(() -> new RuntimeException("User not found"));
+//
+//
+//        LocalTime wakeupTime = userProfile.getWakeupTime();
+//        LocalDateTime startDate = LocalDateTime.of(currentDate.minusDays(1), wakeupTime); // Start from previous day's wakeup time
+//        LocalDateTime endDate = LocalDateTime.of(currentDate, wakeupTime); // End at current day's wakeup time
+//
+//        return exerciseRepository.sumCaloriesBurnedWithin24HourCycle(user.getUserId(), startDate, endDate);
+//    }
+//public Double calculateCaloriesBurnedFor24HourCycle(User user, LocalDate currentDate) {
+//    UserProfile userProfile = user.getUserProfile();
+//
+//    LocalTime wakeupTime = userProfile.getWakeupTime();
+//    System.out.println("wakeup time --------"+wakeupTime);
+//    LocalDateTime startDate = LocalDateTime.of(currentDate.minusDays(1), wakeupTime);
+////    LocalDateTime startDate = LocalDateTime.of(currentDate.minusDays(1), wakeupTime);
+//
+//    System.out.println("start date time ======="+startDate);
+////    LocalDateTime endDate = LocalDateTime.of(currentDate, wakeupTime);
+//    LocalDateTime endDate = LocalDateTime.of(currentDate, wakeupTime); // Adjust end date to be exclusive
+//
+//    System.out.println("end date time ======="+endDate);
+////    return exerciseRepository.sumCaloriesBurnedWithin24HourCycle(user.getUserId(), startDate.toLocalTime(), endDate.toLocalTime());
+//    Double caloriesBurned = exerciseRepository.sumCaloriesBurnedWithin24HourCycle(user.getUserId(), startDate.toLocalTime(), endDate.toLocalTime());
+//
+//    System.out.println("Calories burned within 24-hour cycle: " + caloriesBurned);
+//
+//    return caloriesBurned;
+//}
+public Double calculateCaloriesBurnedFor24HourCycle(User user, LocalDate currentDate) {
+    UserProfile userProfile = user.getUserProfile();
+
+    LocalTime wakeupTime = userProfile.getWakeupTime();
+    System.out.println("wakeup time --------"+wakeupTime);
+    LocalDateTime startDate = LocalDateTime.of(currentDate.minusDays(1), wakeupTime);
+    System.out.println("start date time ======="+startDate);
+    LocalDateTime endDate = LocalDateTime.of(currentDate, wakeupTime); // Adjust end date to be exclusive
+    System.out.println("end date time ======="+endDate);
+    // Fetch all exercises within the 24-hour cycle
+    List<Exercise> exercises = exerciseRepository.findByUserUserIdAndStartTimeBetween(user.getUserId(), startDate.toLocalTime(), endDate.toLocalTime());
+    System.out.println("dsd"+startDate.toLocalTime());
+    System.out.println("date between --------------- "+exercises);
+    // Calculate total calories burned
+    double totalCaloriesBurned = exercises.stream()
+            .mapToDouble(Exercise::getCaloriesBurned)
+            .sum();
+
+    System.out.println("Calories burned within 24-hour cycle: " + totalCaloriesBurned);
+
+    return totalCaloriesBurned;
+}
+//    public double getTotalCaloriesBurned(UserProfile userProfile, List<Exercise> exercises) {
+//        LocalTime wakeupTime = userProfile.getWakeupTime();
+//        LocalDate currentDate = LocalDate.now();
+//        LocalDate yesterdayDate = currentDate.minusDays(1);
+//        double totalCaloriesBurned = 0;
+//
+//        // Log values for debugging
+//        System.out.println("Wakeup Time: " + wakeupTime);
+//        System.out.println("Current Date: " + currentDate);
+//        System.out.println("Yesterday Date: " + yesterdayDate);
+//
+//        for (Exercise exercise : exercises) {
+//            System.out.println("Exercise Date: " + exercise.getDate());
+//            System.out.println("Exercise Start Time: " + exercise.getStartTime());
+//            System.out.println("Exercise Calories Burned: " + exercise.getCaloriesBurned());
+//
+//
+//            if (exercise.getDate().isEqual(currentDate) || exercise.getDate().isEqual(yesterdayDate)) {
+//                if (exercise.getStartTime().isBefore(wakeupTime)) {
+//                    if (exercise.getCaloriesBurned() != null) {
+//                        totalCaloriesBurned += exercise.getCaloriesBurned();
+//                        System.out.println("Added Calories: " + exercise.getCaloriesBurned());
+//                    }
+//                }
+//            }
+//        }
+//
+//        System.out.println("Total Calories Burned: " + totalCaloriesBurned);
+//        return totalCaloriesBurned;
+//    }
+//public double getTotalCaloriesBurned(UserProfile userProfile, List<Exercise> exercises) {
+//    LocalTime wakeupTime = userProfile.getWakeupTime();
+//    LocalDate currentDate = LocalDate.now();
+//    LocalDate yesterdayDate = currentDate.minusDays(1);
+//    double totalCaloriesBurned = 0;
+//
+//    // Log values for debugging
+//    System.out.println("Wakeup Time: " + wakeupTime);
+//    System.out.println("Current Date: " + currentDate);
+//    System.out.println("Yesterday Date: " + yesterdayDate);
+//
+//    for (Exercise exercise : exercises) {
+//        System.out.println("Exercise Date: " + exercise.getDate());
+//        System.out.println("Exercise Start Time: " + exercise.getStartTime());
+//        System.out.println("Exercise Calories Burned: " + exercise.getCaloriesBurned());
+//
+//        if ((exercise.getDate().isEqual(currentDate) || exercise.getDate().isEqual(yesterdayDate)) &&
+//                exercise.getStartTime().isBefore(wakeupTime)) {
+//            if (exercise.getCaloriesBurned() != null) {
+//                totalCaloriesBurned += exercise.getCaloriesBurned();
+//                System.out.println("Added Calories: " + exercise.getCaloriesBurned());
+//            }
+//        }
+//    }
+//
+//    System.out.println("Total Calories Burned: " + totalCaloriesBurned);
+//    return totalCaloriesBurned;
+//}
+//public double getTotalCaloriesBurned(UserProfile userProfile, List<Exercise> exercises, LocalDate localDate) {
+//    LocalTime wakeupTime = userProfile.getWakeupTime();
+////    LocalDate currentDate = LocalDate.now();
+//    LocalDate currentDate = localDate;
+//    LocalDate yesterdayDate = currentDate.minusDays(1);
+//    double totalCaloriesBurned = 0;
+//
+//    // Log values for debugging
+//    System.out.println("Wakeup Time: " + wakeupTime);
+//    System.out.println("Current Date: " + currentDate);
+//    System.out.println("Yesterday Date: " + yesterdayDate);
+//
+//    for (Exercise exercise : exercises) {
+//        System.out.println("Exercise Date: " + exercise.getDate());
+//        System.out.println("Exercise Start Time: " + exercise.getStartTime());
+//        System.out.println("Exercise Calories Burned: " + exercise.getCaloriesBurned());
+//
+//        // Check if exercise date is yesterdayDate or currentDate and if startTime is between wakeupTimes
+//        if ((exercise.getDate().isEqual(yesterdayDate) && exercise.getStartTime().isAfter(wakeupTime)) ||
+//                (exercise.getDate().isEqual(currentDate) && exercise.getStartTime().isBefore(wakeupTime))) {
+//
+//            if (exercise.getCaloriesBurned() != null) {
+//                totalCaloriesBurned += exercise.getCaloriesBurned();
+//                System.out.println("Added Calories: " + exercise.getCaloriesBurned());
+//            }
+//        }
+//    }
+//
+//    System.out.println("Total Calories Burned: " + totalCaloriesBurned);
+//    return totalCaloriesBurned;
+//}
+
+
+//    public Map<String, Double> getTotalCaloriesBurnedAndDuration(UserProfile userProfile, List<Exercise> exercises, LocalDate localDate) {
+//        LocalTime wakeupTime = userProfile.getWakeupTime();
+//        LocalDate currentDate = localDate;
+//        LocalDate yesterdayDate = currentDate.minusDays(1);
+//        double totalCaloriesBurned = 0;
+//        double totalDuration = 0;
+//        Map<String, Double> activityTypeCaloriesAndDuration = new HashMap<>();
+//
+//        // Log values for debugging
+//        System.out.println("Wakeup Time: " + wakeupTime);
+//        System.out.println("Current Date: " + currentDate);
+//        System.out.println("Yesterday Date: " + yesterdayDate);
+//
+//
+//        for (Exercise exercise : exercises) {
+//            if ((exercise.getDate().isEqual(yesterdayDate) && exercise.getStartTime().isAfter(wakeupTime)) ||
+//                    (exercise.getDate().isEqual(currentDate) && exercise.getStartTime().isBefore(wakeupTime))) {
+//
+//                if (exercise.getCaloriesBurned() != null) {
+//                    totalCaloriesBurned += exercise.getCaloriesBurned();
+//                    totalDuration += exercise.getDuration();
+//
+////                    // Accumulate calories and duration by activity type
+//                    String activityType = exercise.getActivityType();
+//                    if (activityTypeCaloriesAndDuration.containsKey(activityType)) {
+//                        double currentCalories = activityTypeCaloriesAndDuration.get(activityType);
+//                        activityTypeCaloriesAndDuration.put(activityType, currentCalories + exercise.getCaloriesBurned());
+//                    } else {
+//                        activityTypeCaloriesAndDuration.put(activityType, exercise.getCaloriesBurned());
+//                    }
+//                }
+//            }
+//        }
+//
+//        System.out.println("Total Calories Burned: " + totalCaloriesBurned);
+//        System.out.println("Total Duration: " + totalDuration);
+//
+//        // Return map containing activity type, calories burned, and duration
+//        return activityTypeCaloriesAndDuration;
+//    }
+
+
+//    public Map<String, Object> getTotalCaloriesBurnedAndDurationRange(UserProfile userProfile, List<Exercise> exercises, LocalDate startDate, LocalDate endDate) {
+//        LocalTime wakeupTime = userProfile.getWakeupTime();
+//        double totalCaloriesBurned = 0;
+//        double totalDuration = 0;
+//        Double totalEnergyExpenditure = 0.0;
+//        Map<String, Object> result = new HashMap<>();
+//
+//        // Log values for debugging
+//        System.out.println("Wakeup Time: " + wakeupTime);
+//        System.out.println("Start Date: " + startDate);
+//        System.out.println("End Date: " + endDate);
+//
+//        for (Exercise exercise : exercises) {
+//            System.out.println("Exercise Date: " + exercise.getDate());
+//            System.out.println("Exercise Start Time: " + exercise.getStartTime());
+//            System.out.println("Exercise Calories Burned: " + exercise.getCaloriesBurned());
+//
+//            // Check if exercise date is within the date range and if startTime is between wakeupTimes
+//            if ((exercise.getDate().isEqual(startDate) || exercise.getDate().isAfter(startDate)) &&
+//                    (exercise.getDate().isEqual(endDate) || exercise.getDate().isBefore(endDate.plusDays(1))) &&
+//                    (exercise.getStartTime().isAfter(wakeupTime) || exercise.getStartTime().isBefore(wakeupTime))) {
+//
+//                if (exercise.getCaloriesBurned() != null) {
+//                    totalCaloriesBurned += exercise.getCaloriesBurned();
+//                    totalDuration += exercise.getDuration();
+//                }
+//            }
+//        }
+//
+//        // Calculate Total Energy Expenditure
+//        double bmr = userProfile.getBmr();
+//        totalEnergyExpenditure = (bmr * (24 - totalDuration) / 24) + totalCaloriesBurned;
+//
+//        // Add total calories burned, total duration, and total energy expenditure to the result map
+//        result.put("totalCaloriesBurned", totalCaloriesBurned);
+//        result.put("totalDuration", totalDuration);
+//        result.put("totalCaloriesExpenditure", totalEnergyExpenditure);
+//
+//        // Log total values
+//        System.out.println("Total Calories Burned: " + totalCaloriesBurned);
+//        System.out.println("Total Duration: " + totalDuration);
+//        System.out.println("Total Energy Expenditure: " + totalEnergyExpenditure);
+//
+//        return result;
+//    }
+
+    public Map<String, Object> getTotalCaloriesBurnedAndDuration(UserProfile userProfile, List<Exercise> exercises, LocalDate localDate) {
+    LocalTime wakeupTime = userProfile.getWakeupTime();
+    LocalDate currentDate = localDate;
+    LocalDate yesterdayDate = currentDate.minusDays(1);
+    double totalCaloriesBurned = 0;
+    double totalDuration = 0;
+    Double totalEnergyExpenditure = 0.0;
+    Map<String, Object> result = new HashMap<>();
+
+    // Log values for debugging
+    System.out.println("Wakeup Time: " + wakeupTime);
+    System.out.println("Current Date: " + currentDate);
+    System.out.println("Yesterday Date: " + yesterdayDate);
+
+    for (Exercise exercise : exercises) {
+        System.out.println("Exercise Date: " + exercise.getDate());
+        System.out.println("Exercise Start Time: " + exercise.getStartTime());
+        System.out.println("Exercise Calories Burned: " + exercise.getCaloriesBurned());
+
+        // Check if exercise date is yesterdayDate or currentDate and if startTime is between wakeupTimes
+        if ((exercise.getDate().isEqual(yesterdayDate) && exercise.getStartTime().isAfter(wakeupTime)) ||
+                (exercise.getDate().isEqual(currentDate) && exercise.getStartTime().isBefore(wakeupTime))) {
+
+            if (exercise.getCaloriesBurned() != null) {
+                totalCaloriesBurned += exercise.getCaloriesBurned();
+                totalDuration += exercise.getDuration();
+            }
+        }
+    }
+
+    // Calculate Total Energy Expenditure
+    double bmr = userProfile.getBmr();
+    totalEnergyExpenditure = (bmr * (24 - totalDuration) / 24) + totalCaloriesBurned;
+
+//    totalEnergyExpenditure=[userProfile.getBmr()*{24-totalDuration}/24]+totalCaloriesBurned;
+
+
+    // Add total calories burned and total duration to the result map
+    result.put("totalCaloriesBurned", totalCaloriesBurned);
+    result.put("totalDuration", totalDuration);
+    result.put("totalCaloriesExpenditure",totalEnergyExpenditure);
+
+    // Log total values
+    System.out.println("Total Calories Burned: " + totalCaloriesBurned);
+    System.out.println("Total Duration: " + totalDuration);
+    System.out.println("Total Energy Expenditure: " + totalEnergyExpenditure);
+
+    return result;
+}
+
+
+
+
 }

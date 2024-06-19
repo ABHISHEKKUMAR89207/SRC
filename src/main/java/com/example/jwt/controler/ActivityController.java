@@ -652,7 +652,7 @@ public UserHealthData getUserHealthData(@RequestHeader("Auth") String tokenHeade
         double totalExerciseCalories = 0.0;
 
         for (Exercise exercise : exercises) {
-            totalCalories += exercise.getCaloriesBurned();
+//            totalCalories += exercise.getCaloriesBurned();
             totalExerciseDuration += exercise.getDuration();
             totalExerciseCalories += exercise.getCaloriesBurned();
 
