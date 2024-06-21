@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Entity
@@ -27,7 +28,7 @@ public class Exercise {
 
 //    private Date date;
 @Column(name = "exercise_date")
-private LocalDate date= LocalDate.now();;
+private LocalDate date;
     private String activityType;
     private double distance;
     private LocalTime startTime;
@@ -55,6 +56,40 @@ private LocalDate date= LocalDate.now();;
 //            this.duration = 0;
 //        }
 //    }
+
+//    // Method to format LocalTime to string "HH:mm:ss"
+//    public String getFormattedStartTime() {
+//        return startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+//    }
+//
+//    public String getFormattedEndTime() {
+//        return endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+//    }
+
+    // Method to set startTime from formatted string "HH:mm:ss"
+    // Method to format LocalTime to string "HH:mm:ss"
+    public String getFormattedStartTime() {
+        if (startTime != null) {
+            return startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        }
+        return null; // Handle null case if needed
+    }
+
+    public String getFormattedEndTime() {
+        if (endTime != null) {
+            return endTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        }
+        return null; // Handle null case if needed
+    }
+
+    // Setters for formatted strings (used for serialization)
+    public void setFormattedStartTime(String formattedStartTime) {
+        this.startTime = LocalTime.parse(formattedStartTime, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    public void setFormattedEndTime(String formattedEndTime) {
+        this.endTime = LocalTime.parse(formattedEndTime, DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")
