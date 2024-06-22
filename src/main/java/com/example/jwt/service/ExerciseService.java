@@ -388,10 +388,29 @@ public CalculationResult calculateCaloriesBurned(LocalTime startTime, String act
     totalNewDuration = totalDuration + duration;
     System.out.println("total new duration -------" + totalNewDuration);
     totalHour = totalNewDuration / 60;
+
+
     durTotalHour = totalDuration/60;
-    String formattedDurTotalHour = String.format("%.2f", durTotalHour); // Format to two decimal places
-    double remainingHours = 24 - durTotalHour;
-    String formattedRemainingHours = String.format("%.2f", remainingHours);
+//    String formattedDurTotalHour = String.format("%.2f", durTotalHour); // Format to two decimal places
+//    double remainingHours = 24 - durTotalHour;
+//    String formattedRemainingHours = String.format("%.2f", remainingHours);
+    // Convert totalDuration to HH:MM format
+    int hours = (int) totalDuration / 60;
+    int minutes = (int) totalDuration % 60;
+    String formattedDurTotalHour = String.format("%02d:%02d", hours, minutes);
+
+
+//    double remainingHours = 24 - durTotalHour;
+    double remainingHours = 1440 - totalDuration;
+//    String formattedRemainingHours = String.format("%.2f", remainingHours);
+//    double remainingHours = 24 - totalHour;
+//    hours = (int) remainingHours;
+//    minutes = (int) ((remainingHours - hours) * 60);
+     hours = (int) remainingHours / 60;
+     minutes = (int) remainingHours % 60;
+    String formattedRemainingHours = String.format("%02d:%02d", hours, minutes);
+
+
 
     System.out.println("Duration Hour--------------"+durTotalHour);
     System.out.println("total hour ----------" + totalHour);

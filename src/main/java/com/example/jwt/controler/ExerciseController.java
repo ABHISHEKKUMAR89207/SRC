@@ -426,57 +426,6 @@ private IngrdientService ingrdientService;
 
 
 
-//    @GetMapping("/calories-burned-and-energy-intake-range")
-//    public Map<LocalDate, Map<String, Object>> getCaloriesBurnedAndEnergyIntakeForRange(
-//            @RequestHeader("Auth") String tokenHeader,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-//
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        User user = userService.findByUsername(username);
-//
-//        Map<LocalDate, Map<String, Object>> responseMap = new TreeMap<>(Comparator.reverseOrder()); // TreeMap to maintain descending order
-//        LocalDate currentDate = startDate;
-//
-//        while (!currentDate.isAfter(endDate)) {
-//            // Calculate total calories burned and duration for the current date
-//            Map<String, Object> totalCaloriesAndDuration = exerciseService.getTotalCaloriesBurnedAndDuration(user.getUserProfile(), user.getExercises(), currentDate);
-//
-//            // Calculate total energy intake for the previous date
-//            LocalDate yesterdayDate = currentDate.minusDays(1);
-//            List<mealResponse> totalEnergyIntake = ingrdientService.getTotalEnergyIntakeByDate(user, yesterdayDate);
-//
-//            // Calculate rest intake calories
-//            double totalCaloriesBurned = (Double) totalCaloriesAndDuration.get("totalCaloriesBurned");
-//            double totalCaloriesExpenditure = (Double) totalCaloriesAndDuration.get("totalCaloriesExpenditure");
-//            double restIntakeCalories = calculateRestIntakeCalories(totalCaloriesBurned, totalEnergyIntake);
-//            List<Map<String, Object>> exerciseDetails = (List<Map<String, Object>>) totalCaloriesAndDuration.get("exerciseDetails");
-//            // Calculate energy balance
-//            double energyBalance = calculateEnergyBalance(totalEnergyIntake, totalCaloriesExpenditure);
-//
-//            // Prepare response for the current date
-//            Map<String, Object> response = new HashMap<>();
-//            response.put("totalCaloriesBurned", totalCaloriesBurned);
-//            response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration"));
-//            response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration")/60); // Include total duration in the response
-//            response.put("restDuration", (24-((Double) totalCaloriesAndDuration.get("totalDuration")/60))); // Include total duration in the response
-//            response.put("totalEnergyIntake", totalEnergyIntake);
-//            response.put("restIntakeCalories", restIntakeCalories);
-//            response.put("totalCaloriesExpenditure", totalCaloriesExpenditure);
-//            response.put("energyBalance", energyBalance);
-//            response.put("exerciseDetails", exerciseDetails); // Include detailed exercise data
-//
-//            // Add response to the map with current date as key
-//            responseMap.put(currentDate, response);
-//
-//            // Move to the next date
-//            currentDate = currentDate.plusDays(1);
-//        }
-//
-//        return responseMap;
-//    }
-
     @GetMapping("/calories-burned-and-energy-intake-range")
     public Map<LocalDate, Map<String, Object>> getCaloriesBurnedAndEnergyIntakeForRange(
             @RequestHeader("Auth") String tokenHeader,
@@ -494,8 +443,9 @@ private IngrdientService ingrdientService;
             // Calculate total calories burned and duration for the current date
             Map<String, Object> totalCaloriesAndDuration = exerciseService.getTotalCaloriesBurnedAndDuration(user.getUserProfile(), user.getExercises(), currentDate);
 
-            // Calculate total energy intake for the current date, not yesterdayDate
-            List<mealResponse> totalEnergyIntake = ingrdientService.getTotalEnergyIntakeByDate(user, currentDate);
+            // Calculate total energy intake for the previous date
+            LocalDate yesterdayDate = currentDate.minusDays(1);
+            List<mealResponse> totalEnergyIntake = ingrdientService.getTotalEnergyIntakeByDate(user, yesterdayDate);
 
             // Calculate rest intake calories
             double totalCaloriesBurned = (Double) totalCaloriesAndDuration.get("totalCaloriesBurned");
@@ -508,8 +458,7 @@ private IngrdientService ingrdientService;
             // Prepare response for the current date
             Map<String, Object> response = new HashMap<>();
             response.put("totalCaloriesBurned", totalCaloriesBurned);
-//            response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration"));
-
+            response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration"));
             response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration")/60); // Include total duration in the response
             response.put("restDuration", (24-((Double) totalCaloriesAndDuration.get("totalDuration")/60))); // Include total duration in the response
             response.put("totalEnergyIntake", totalEnergyIntake);
@@ -527,6 +476,57 @@ private IngrdientService ingrdientService;
 
         return responseMap;
     }
+
+//    @GetMapping("/calories-burned-and-energy-intake-range")
+//    public Map<LocalDate, Map<String, Object>> getCaloriesBurnedAndEnergyIntakeForRange(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        Map<LocalDate, Map<String, Object>> responseMap = new TreeMap<>(Comparator.reverseOrder()); // TreeMap to maintain descending order
+//        LocalDate currentDate = startDate;
+//
+//        while (!currentDate.isAfter(endDate)) {
+//            // Calculate total calories burned and duration for the current date
+//            Map<String, Object> totalCaloriesAndDuration = exerciseService.getTotalCaloriesBurnedAndDuration(user.getUserProfile(), user.getExercises(), currentDate);
+//
+//            // Calculate total energy intake for the current date, not yesterdayDate
+//            List<mealResponse> totalEnergyIntake = ingrdientService.getTotalEnergyIntakeByDate(user, currentDate);
+//
+//            // Calculate rest intake calories
+//            double totalCaloriesBurned = (Double) totalCaloriesAndDuration.get("totalCaloriesBurned");
+//            double totalCaloriesExpenditure = (Double) totalCaloriesAndDuration.get("totalCaloriesExpenditure");
+//            double restIntakeCalories = calculateRestIntakeCalories(totalCaloriesBurned, totalEnergyIntake);
+//            List<Map<String, Object>> exerciseDetails = (List<Map<String, Object>>) totalCaloriesAndDuration.get("exerciseDetails");
+//            // Calculate energy balance
+//            double energyBalance = calculateEnergyBalance(totalEnergyIntake, totalCaloriesExpenditure);
+//
+//            // Prepare response for the current date
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("totalCaloriesBurned", totalCaloriesBurned);
+////            response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration"));
+//
+//            response.put("totalDuration", (Double) totalCaloriesAndDuration.get("totalDuration")/60); // Include total duration in the response
+//            response.put("restDuration", (24-((Double) totalCaloriesAndDuration.get("totalDuration")/60))); // Include total duration in the response
+//            response.put("totalEnergyIntake", totalEnergyIntake);
+//            response.put("restIntakeCalories", restIntakeCalories);
+//            response.put("totalCaloriesExpenditure", totalCaloriesExpenditure);
+//            response.put("energyBalance", energyBalance);
+//            response.put("exerciseDetails", exerciseDetails); // Include detailed exercise data
+//
+//            // Add response to the map with current date as key
+//            responseMap.put(currentDate, response);
+//
+//            // Move to the next date
+//            currentDate = currentDate.plusDays(1);
+//        }
+//
+//        return responseMap;
+//    }
 
     //    @GetMapping("/calories-burned-and-energy-intake")
 //    public Map<String, Object> getCaloriesBurnedAndEnergyIntake(
