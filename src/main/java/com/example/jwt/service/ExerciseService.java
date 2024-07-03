@@ -332,8 +332,11 @@ public CalculationResult calculateCaloriesBurned(LocalTime startTime, String act
 //    LocalDateTime startDateTime = LocalDate.now().atTime(wakeupTime);
     System.out.println("Start date ----------" + startDateTime);
 //    LocalDateTime endDateTime = startDateTime.minusDays(1);
-    LocalDateTime endDateTime = startDateTime.minusDays(1);
+//    LocalDateTime endDateTime = startDateTime.minusDays(1);
+    LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+
     System.out.println("End Date ---------" + endDateTime);
+    System.out.println("Send StartTime1 ---------" + startTime +" Exercise Date -----"+exerciseDate+" Duration Send -----"+duration);
 
 //    if (startTime.isAfter(wakeupTime)) {
 //        System.out.println("duration if condition-------");
@@ -381,6 +384,54 @@ public CalculationResult calculateCaloriesBurned(LocalTime startTime, String act
             }
         }
     }
+    // Iterate through user's exercises to calculate totalDuration
+//    for (Exercise exercise : user.getExercises()) {
+//        LocalDateTime exerciseStartDateTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//
+//        System.out.println("Exercise Start Date Time ----------"+exerciseStartDateTime+" || Duration --------"+exercise.getDuration());
+//        // Check if exercise date and time fall within the desired range
+//        if (exerciseStartDateTime.isEqual(startDateTime) ||
+//                (exerciseStartDateTime.isAfter(startDateTime) && exerciseStartDateTime.isBefore(endDateTime))) {
+//
+//            if (exercise.getCaloriesBurned() != null) {
+//                totalDuration += exercise.getDuration();
+//                System.out.println("total Duration ----------- "+totalDuration);
+//            }
+//        }
+//    }
+//    // Iterate through user's exercises to calculate total duration
+//    for (Exercise exercise : user.getExercises()) {
+//        LocalDateTime exerciseStartDateTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//        System.out.println("Exercise Start Date Time ----------"+exerciseStartDateTime+" || Duration --------"+exercise.getDuration());
+//
+//        // Check if exercise date and time fall within the desired range
+//        if (exerciseStartDateTime.isEqual(startDateTime) ||
+//                (exerciseStartDateTime.isAfter(startDateTime) && exerciseStartDateTime.isBefore(endDateTime))) {
+//
+//            if (exercise.getCaloriesBurned() != null) {
+//                totalDuration += exercise.getDuration();
+//                                System.out.println("total Duration ----------- "+totalDuration);
+//
+//            }
+//        }
+//    }
+    // Iterate through user's exercises to calculate totalDuration
+    // Iterate through user's exercises to calculate totalDuration
+    // Iterate through user's exercises to calculate totalDuration
+//    for (Exercise exercise : user.getExercises()) {
+//        LocalDateTime exerciseStartDateTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//        System.out.println("Exercise Start Date Time ----------"+exerciseStartDateTime+" || Duration --------"+exercise.getDuration());
+//        // Check if exercise date and time fall within the desired range
+//        // Check if exercise date and time fall within the desired range
+//        if ((exerciseStartDateTime.isEqual(startDateTime) || exerciseStartDateTime.isAfter(startDateTime)) &&
+//                (exerciseStartDateTime.isBefore(endDateTime) || exerciseStartDateTime.isEqual(endDateTime))) {
+//
+//            if (exercise.getCaloriesBurned() != null) {
+//                totalDuration += exercise.getDuration();
+//                System.out.println("total Duration ----------- "+totalDuration);
+//            }
+//        }
+//    }
 
 
     System.out.println("total Duration ----------- "+totalDuration);

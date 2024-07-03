@@ -188,8 +188,13 @@ public class UserProfileController {
 //                response.put("wakeupTime", userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")));
 
                 // Handle null wakeupTime
+//                String wakeupTime = userProfile.getWakeupTime() != null ?
+//                        userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")) :
+//                        "00:00";
+//                response.put("wakeupTime", wakeupTime);
+                // Adjust wakeupTime by adding 1 minute
                 String wakeupTime = userProfile.getWakeupTime() != null ?
-                        userProfile.getWakeupTime().format(DateTimeFormatter.ofPattern("HH:mm")) :
+                        userProfile.getWakeupTime().plusMinutes(1).format(DateTimeFormatter.ofPattern("HH:mm")) :
                         "00:00";
                 response.put("wakeupTime", wakeupTime);
 
@@ -308,16 +313,28 @@ public class UserProfileController {
 //                    }
 //                }
 // Assuming updateData.containsKey("wakeupTime") check is already in place
+//                if (updateData.containsKey("wakeupTime")) {
+//                    String wakeupTimeString = updateData.get("wakeupTime").toString();
+//                    // Assuming wakeupTimeString is in HH:mm format
+//                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+//                    LocalTime wakeupTime = LocalTime.parse(wakeupTimeString, formatter);
+//
+//                    // Convert LocalTime to java.sql.Time
+////                    Time sqlTime = Time.valueOf(wakeupTime);
+//
+//                    // Set the java.sql.Time object in userProfile
+//                    userProfile.setWakeupTime(wakeupTime);
+//                }
+                // Update wakeupTime
                 if (updateData.containsKey("wakeupTime")) {
                     String wakeupTimeString = updateData.get("wakeupTime").toString();
                     // Assuming wakeupTimeString is in HH:mm format
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
                     LocalTime wakeupTime = LocalTime.parse(wakeupTimeString, formatter);
 
-                    // Convert LocalTime to java.sql.Time
-//                    Time sqlTime = Time.valueOf(wakeupTime);
+                    // Adjust wakeupTime by subtracting 1 minute
+                    wakeupTime = wakeupTime.minusMinutes(1);
 
-                    // Set the java.sql.Time object in userProfile
                     userProfile.setWakeupTime(wakeupTime);
                 }
 

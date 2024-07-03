@@ -6,6 +6,7 @@ import com.example.jwt.entities.Exercise;
 import com.example.jwt.entities.User;
 import com.example.jwt.entities.UserProfile;
 import com.example.jwt.exception.ExceedsDurationLimitException;
+import com.example.jwt.repository.ExerciseRepository;
 import com.example.jwt.security.JwtHelper;
 import com.example.jwt.service.ExerciseService;
 import com.example.jwt.service.FoodTodayService.IngrdientService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -43,69 +45,6 @@ public class ExerciseController {
         this.userService = userService;
     }
 
-//    @PostMapping("/add")
-//    public Exercise addExercise(
-//            @RequestHeader("Auth") String tokenHeader,
-//            @RequestParam String activityType,
-//            @RequestParam String startTime,
-//            @RequestParam String endTime,
-//            @RequestParam double duration
-//    ) {
-//        try {
-//            String token = tokenHeader.replace("Bearer ", "");
-//            String username = jwtHelper.getUsernameFromToken(token);
-//            User user = userService.findByUsername(username);
-//
-////            LocalTime startTimestamp = Time.valueOf(startTime.replace("T", " ").replace("Z", ""));
-////            LocalTime endTimestamp = Time.valueOf(endTime.replace("T", " ").replace("Z", ""));
-//            LocalTime startTimestamp = LocalTime.parse(startTime); // Parse startTime directly to LocalTime
-//            LocalTime endTimestamp = LocalTime.parse(endTime);     // Parse endTime directly to LocalTime
-//
-//            Exercise exercise = new Exercise();
-//            exercise.setActivityType(activityType);
-//            exercise.setStartTime(startTimestamp);
-//            exercise.setEndTime(endTimestamp);
-//            exercise.setDuration(duration);
-//
-//            System.out.println("Before calculateAndSaveExercise");
-//            Exercise savedExercise = exerciseService.   calculateAndSaveExercise(exercise, user, duration);
-//            System.out.println("After calculateAndSaveExercise");
-//
-//            return savedExercise;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw e;
-//        }
-//    }
-//@PostMapping("/add")
-//public Exercise addExercise(
-//        @RequestHeader("Auth") String tokenHeader,
-//        @RequestParam String activityType,
-//        @RequestParam String startTime,
-//        @RequestParam String endTime,
-//        @RequestParam double duration
-//) {
-//    try {
-//        String token = tokenHeader.replace("Bearer ", "");
-//        String username = jwtHelper.getUsernameFromToken(token);
-//        User user = userService.findByUsername(username);
-//
-//        LocalTime startTimestamp = LocalTime.parse(startTime);
-//        LocalTime endTimestamp = LocalTime.parse(endTime);
-//
-//        Exercise exercise = new Exercise();
-//        exercise.setActivityType(activityType);
-//        exercise.setStartTime(startTimestamp);
-//        exercise.setEndTime(endTimestamp);
-//        exercise.setDuration(duration);
-//
-//        Exercise savedExercise = exerciseService.calculateAndSaveExercise(exercise, user, duration);
-//        return savedExercise;
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        throw e;
-//    }
-//}
 
     @PostMapping("/add")
     public Exercise addExercise(
@@ -144,70 +83,380 @@ public class ExerciseController {
     }
 
 
-//    @GetMapping("/getByDateAndActivityType")
-//            public List<Exercise> getExercisesByDateAndActivityType(
-//                    @RequestHeader("Auth") String tokenHeader,
-//                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-//                    @RequestParam String activityType
-//    ) {
-//                try {
-//                    // Extract the username (email) from the token
-//                    String token = tokenHeader.replace("Bearer ", "");
-//                    String username = jwtHelper.getUsernameFromToken(token);
-//                    User user = userService.findByUsername(username);
+    @Autowired
+    private ExerciseRepository exerciseRepository;
+
+//    @GetMapping("/byDateRange")
+//    public ResponseEntity<List<ExerciseDTO>> getExercisesByDateRange(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 //
-//                    // Retrieve exercises by date and activityType
-//                    List<Exercise> exercises = exerciseService.findByUserAndDateAndActivityType(user, date, activityType);
-//
-//
-//                    // Formatting startTime and endTime to string format "HH:mm:ss" for serialization
-//                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-//                    exercises.forEach(exercise -> {
-//                        exercise.setFormattedStartTime(exercise.getFormattedStartTime());
-//                        exercise.setFormattedEndTime(exercise.getFormattedEndTime());
-//                    });
-//
-//            // Exercises retrieved successfully
-//            return exercises;
-//        } catch (Exception e) {
-//             e.printStackTrace();
-//            throw e;
-//        }
-//    }
-//@GetMapping("/getByDateAndActivityType")
-//public List<ExerciseDTO> getExercisesByDateAndActivityType(
-//        @RequestHeader("Auth") String tokenHeader,
-//        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-//        @RequestParam String activityType
-//) {
-//    try {
-//        // Extract the username (email) from the token
 //        String token = tokenHeader.replace("Bearer ", "");
 //        String username = jwtHelper.getUsernameFromToken(token);
 //        User user = userService.findByUsername(username);
 //
-//        // Retrieve exercises by date and activityType
-//        List<Exercise> exercises = exerciseService.findByUserAndDateAndActivityType(user, date, activityType);
+//        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//        System.out.println("Wakeup Time ---------" + wakeupTime);
 //
-//        // Mapping Exercise entities to ExerciseDTOs
-//        List<ExerciseDTO> exerciseDTOs = exercises.stream().map(exercise ->
-//                new ExerciseDTO(
+//        LocalDateTime startDateTime = date.atTime(wakeupTime);
+//        System.out.println("Start date time ----------" + startDateTime);
+//
+//        LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+//        System.out.println("End Date time ---------" + endDateTime);
+//
+//        // Fetch all exercises for the user
+//        List<Exercise> allExercises = user.getExercises();
+//
+//        // Filter exercises based on date range and time
+//        List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .map(exercise -> new ExerciseDTO(
 //                        exercise.getId(),
-//                        exercise.getDate().toString(), // Convert LocalDate to String
 //                        exercise.getActivityType(),
-//                        exercise.getFormattedStartTime(), // Use formatted start time from entity
-//                        exercise.getFormattedEndTime(), // Use formatted end time from entity
-//                        exercise.getCaloriesBurned()
-//                )).collect(Collectors.toList());
+//                        exercise.getFormattedStartTime(),
+//                        exercise.getFormattedEndTime()))
+//                .collect(Collectors.toList());
 //
-//        // Exercises retrieved successfully
-//        return exerciseDTOs;
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        throw e;
+//        return new ResponseEntity<>(exerciseDTOs, HttpStatus.OK);
 //    }
+//@GetMapping("/byDateRange")
+//public ResponseEntity<List<ExerciseDTO>> getExercisesByDateRange(
+//        @RequestHeader("Auth") String tokenHeader,
+//        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//
+//    String token = tokenHeader.replace("Bearer ", "");
+//    String username = jwtHelper.getUsernameFromToken(token);
+//    User user = userService.findByUsername(username);
+//
+//    LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//    System.out.println("Wakeup Time ---------" + wakeupTime);
+//
+//    LocalDateTime startDateTime = date.atTime(wakeupTime);
+//    System.out.println("Start date time ----------" + startDateTime);
+//
+//    LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+//    System.out.println("End Date time ---------" + endDateTime);
+//
+//    // Fetch all exercises for the user
+//    List<Exercise> allExercises = user.getExercises();
+//
+//    // Filter exercises based on date range and time
+//    List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+//            .filter(exercise -> {
+//                LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//            })
+//            .map(exercise -> new ExerciseDTO(
+//                    exercise.getId(),
+//                    exercise.getActivityType(),
+//                    exercise.getFormattedStartTime(),
+//                    exercise.getFormattedEndTime()))
+//            .collect(Collectors.toList());
+//
+//    // If no exercises match the criteria, add a single DTO with wakeupTime
+//    if (exerciseDTOs.isEmpty()) {
+//        exerciseDTOs.add(new ExerciseDTO(wakeupTime.toString()));
+//    }
+//
+//    return new ResponseEntity<>(exerciseDTOs, HttpStatus.OK);
 //}
-@GetMapping("/getByDateAndActivityType")
+//@GetMapping("/byDateRange")
+//public ResponseEntity<List<Object>> getExercisesByDateRange(
+//        @RequestHeader("Auth") String tokenHeader,
+//        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//
+//    String token = tokenHeader.replace("Bearer ", "");
+//    String username = jwtHelper.getUsernameFromToken(token);
+//    User user = userService.findByUsername(username);
+//
+//    LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//    System.out.println("Wakeup Time ---------" + wakeupTime);
+//
+//    LocalDateTime startDateTime = date.atTime(wakeupTime);
+//    System.out.println("Start date time ----------" + startDateTime);
+//
+//    LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+//    System.out.println("End Date time ---------" + endDateTime);
+//
+//    // Fetch all exercises for the user
+//    List<Exercise> allExercises = user.getExercises();
+//
+//    // Filter exercises based on date range and time
+//    List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+//            .filter(exercise -> {
+//                LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//            })
+//            .map(exercise -> new ExerciseDTO(
+//                    exercise.getId(),
+//                    exercise.getActivityType(),
+//                    exercise.getFormattedStartTime(),
+//                    exercise.getFormattedEndTime()))
+//            .collect(Collectors.toList());
+//
+//    // Find the last exercise
+//    Exercise lastExercise = allExercises.stream()
+//            .max(Comparator.comparing(Exercise::getDate).thenComparing(Exercise::getStartTime))
+//            .orElse(null);
+//
+//    // Prepare the response list
+//    List<Object> response = new ArrayList<>(exerciseDTOs);
+//    if (lastExercise != null) {
+//        response.add(lastExercise);
+//    }
+//
+//    return new ResponseEntity<>(response, HttpStatus.OK);
+//}
+
+//    @GetMapping("/byDateRange")
+//    public ResponseEntity<List<Object>> getExercisesByDateRange(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//        System.out.println("Wakeup Time ---------" + wakeupTime);
+//
+//        LocalDateTime startDateTime = date.atTime(wakeupTime);
+//        System.out.println("Start date time ----------" + startDateTime);
+//
+//        LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+//        System.out.println("End Date time ---------" + endDateTime);
+//
+//        // Fetch all exercises for the user
+//        List<Exercise> allExercises = user.getExercises();
+//
+//        // Filter exercises based on date range and time
+//        List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .map(exercise -> new ExerciseDTO(
+//                        exercise.getId(),
+//                        exercise.getActivityType(),
+//                        exercise.getFormattedStartTime(),
+//                        exercise.getFormattedEndTime()))
+//                .collect(Collectors.toList());
+//
+//        // Find the last exercise
+//        Exercise lastExercise = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .reduce((first, second) -> second) // Get the last exercise
+//                .orElse(null);
+//
+//        // Prepare response
+//        List<Object> response = new ArrayList<>();
+//        response.addAll(exerciseDTOs);
+//        response.add(lastExercise);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
+//    @GetMapping("/byDateRange")
+//    public ResponseEntity<Map<String, Object>> getExercisesByDateRange(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//        System.out.println("Wakeup Time ---------" + wakeupTime);
+//
+//        LocalDateTime startDateTime = date.atTime(wakeupTime);
+//        System.out.println("Start date time ----------" + startDateTime);
+//
+//        LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+//        System.out.println("End Date time ---------" + endDateTime);
+//
+//        // Fetch all exercises for the user
+//        List<Exercise> allExercises = user.getExercises();
+//
+//        // Filter exercises based on date range and time
+//        List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .map(exercise -> new ExerciseDTO(
+//                        exercise.getId(),
+//                        exercise.getActivityType(),
+//                        exercise.getFormattedStartTime(),
+//                        exercise.getFormattedEndTime()))
+//                .collect(Collectors.toList());
+//
+//        // Find the last exercise
+//        Exercise lastExercise = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .reduce((first, second) -> second) // Get the last exercise
+//                .orElse(null);
+//
+//        // Prepare response map
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("exercises", exerciseDTOs);
+//        response.put("lastExercise", new ExerciseDTO(
+//                lastExercise.getId(),
+//                lastExercise.getActivityType(),
+//                lastExercise.getFormattedStartTime(),
+//                lastExercise.getFormattedEndTime()));
+//
+//        // If no exercises match the criteria, add a single DTO with wakeupTime
+//    if (exerciseDTOs.isEmpty()) {
+//        exerciseDTOs.add(new ExerciseDTO(wakeupTime.toString()));
+//    }
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
+//    @GetMapping("/byDateRange")
+//    public ResponseEntity<Map<String, Object>> getExercisesByDateRange(
+//            @RequestHeader("Auth") String tokenHeader,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+//
+//        String token = tokenHeader.replace("Bearer ", "");
+//        String username = jwtHelper.getUsernameFromToken(token);
+//        User user = userService.findByUsername(username);
+//
+//        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+//        System.out.println("Wakeup Time ---------" + wakeupTime);
+//
+//        LocalDateTime startDateTime = date.atTime(wakeupTime);
+//        System.out.println("Start date time ----------" + startDateTime);
+//
+//        LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+//        System.out.println("End Date time ---------" + endDateTime);
+//
+//        // Fetch all exercises for the user
+//        List<Exercise> allExercises = user.getExercises();
+//
+//        // Filter exercises based on date range and time
+//        List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .map(exercise -> new ExerciseDTO(
+//                        exercise.getId(),
+//                        exercise.getActivityType(),
+//                        exercise.getFormattedStartTime(),
+//                        exercise.getFormattedEndTime()))
+//                .collect(Collectors.toList());
+//
+//        // Find the last exercise if any
+//        ExerciseDTO lastExerciseDTO = null;
+//        Exercise lastExercise = allExercises.stream()
+//                .filter(exercise -> {
+//                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+//                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+//                })
+//                .reduce((first, second) -> second) // Get the last exercise
+//                .orElse(null);
+//
+//        // If there's at least one exercise, prepare its DTO
+//        if (lastExercise != null) {
+//            lastExerciseDTO = new ExerciseDTO(
+//                    lastExercise.getId(),
+//                    lastExercise.getActivityType(),
+//                    lastExercise.getFormattedStartTime(),
+//                    lastExercise.getFormattedEndTime());
+//        }
+//
+//        // Prepare response map
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("exercises", exerciseDTOs);
+//
+//        // Add last exercise if found
+//        if (lastExerciseDTO != null) {
+//            response.put("lastExercise", lastExerciseDTO);
+//        } else {
+//            // If no exercises match the criteria, add a single DTO with wakeupTime
+//            response.put("lastExercise", new ExerciseDTO(wakeupTime.toString()));
+//        }
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
+    @GetMapping("/byDateRange")
+    public ResponseEntity<Map<String, Object>> getExercisesByDateRange(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User user = userService.findByUsername(username);
+
+        LocalTime wakeupTime = user.getUserProfile().getWakeupTime();
+        System.out.println("Wakeup Time ---------" + wakeupTime);
+
+        LocalTime newWakeupTime = wakeupTime.plusMinutes(1);
+
+        LocalDateTime startDateTime = date.atTime(wakeupTime);
+        System.out.println("Start date time ----------" + startDateTime);
+
+        LocalDateTime endDateTime = startDateTime.plusDays(1).minusMinutes(1);
+        System.out.println("End Date time ---------" + endDateTime);
+
+        // Fetch all exercises for the user
+        List<Exercise> allExercises = user.getExercises();
+
+        // Filter exercises based on date range and time
+        List<ExerciseDTO> exerciseDTOs = allExercises.stream()
+                .filter(exercise -> {
+                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+                })
+                .map(exercise -> new ExerciseDTO(
+                        exercise.getId(),
+                        exercise.getActivityType(),
+                        exercise.getFormattedStartTime(),
+                        exercise.getFormattedEndTime()))
+                .collect(Collectors.toList());
+
+        // Find the last exercise if any
+        ExerciseDTO lastExerciseDTO = null;
+        Exercise lastExercise = allExercises.stream()
+                .filter(exercise -> {
+                    LocalDateTime exerciseStartTime = LocalDateTime.of(exercise.getDate(), exercise.getStartTime());
+                    return !exerciseStartTime.isBefore(startDateTime) && !exerciseStartTime.isAfter(endDateTime);
+                })
+                .reduce((first, second) -> second) // Get the last exercise
+                .orElse(null);
+
+        if (lastExercise != null) {
+            lastExerciseDTO = new ExerciseDTO(
+                    lastExercise.getId(),
+                    lastExercise.getActivityType(),
+                    lastExercise.getFormattedStartTime(),
+                    lastExercise.getFormattedEndTime());
+        } else {
+            // If no exercises match the criteria, create a DTO with wakeupTime
+            lastExerciseDTO = new ExerciseDTO(newWakeupTime.toString());
+        }
+
+        // Prepare response map
+        Map<String, Object> response = new HashMap<>();
+//        response.put("exercises", exerciseDTOs);
+        response.put("lastExercise", lastExerciseDTO);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/getByDateAndActivityType")
 public List<ExerciseDTO> getExercisesByDateAndActivityType(
         @RequestHeader("Auth") String tokenHeader,
         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
@@ -221,6 +470,7 @@ public List<ExerciseDTO> getExercisesByDateAndActivityType(
 
         // Retrieve exercises by date and activityType
         List<Exercise> exercises = exerciseService.findByUserAndDateAndActivityType(user, date, activityType);
+
 
         // Map Exercise entities to ExerciseDTOs
         List<ExerciseDTO> exerciseDTOs = exercises.stream()

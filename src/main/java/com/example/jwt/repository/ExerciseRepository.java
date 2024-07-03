@@ -21,9 +21,44 @@ List<Exercise> findByUserAndDateAndActivityType(User user, LocalDate date, Strin
 
     List<Exercise> findByUserAndDate(User user, LocalDate date);
 //    List<Exercise> findByUserAndDateBetween(User user, LocalDate startDate, LocalDate endDate);
-
+List<Exercise> findByDateBetweenAndStartTimeAfterAndEndTimeBefore(
+        LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime);
 //    List<Exercise> findByUserAndDate(User user, LocalDate date);
     // You can add custom queries if needed
+
+
+
+//        @Query("SELECT e FROM Exercise e WHERE e.user = :user AND e.date BETWEEN :startDate AND :endDate AND (e.startTime >= :startTime OR e.endTime <= :endTime)")
+//        List<Exercise> findExercisesWithinDateTimeRange(
+//                @Param("user") User user,
+//                @Param("startDate") LocalDate startDate,
+//                @Param("endDate") LocalDate endDate,
+//                @Param("startTime") LocalTime startTime,
+//                @Param("endTime") LocalTime endTime);
+//@Query("SELECT e FROM Exercise e WHERE e.user = :user " +
+//        "AND e.date = :date " +
+//        "AND ((e.startTime >= :startTime AND e.startTime <= :endTime) " +
+//        "OR (e.endTime >= :startTime AND e.endTime <= :endTime))")
+//List<Exercise> findExercisesWithinDateTimeRange(
+//        @Param("user") User user,
+//        @Param("date") LocalDate date,
+//        @Param("startTime") LocalTime startTime,
+//        @Param("endTime") LocalTime endTime);
+
+
+
+
+    @Query("SELECT e FROM Exercise e " +
+            "WHERE e.user = :user " +
+            "AND e.date = :exerciseDate " +
+            "AND e.startTime >= :wakeupTime " +
+            "AND e.startTime <= :endTime")
+    List<Exercise> findExercisesWithinDateTimeRange(
+            @Param("user") User user,
+            @Param("exerciseDate") LocalDate exerciseDate,
+            @Param("wakeupTime") LocalTime wakeupTime,
+            @Param("endTime") LocalTime endTime);
+
 
 
     @Query("SELECT e FROM Exercise e WHERE e.user.userId = :userId AND (e.startTime >= :startDateTime AND e.endTime <= :endDateTime)")

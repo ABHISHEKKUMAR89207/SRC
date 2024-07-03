@@ -20,6 +20,7 @@ import com.example.jwt.service.FoodTodayService.NinDataService;
 
 
 import jakarta.transaction.Transactional;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -75,6 +76,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -268,8 +270,98 @@ public ResponseEntity<List<AverageDTOs>> getAverageStepsByAge() {
 }
 
 
+//    private static final String APK_FILE_PATH = "src/main/resources/static/apk/Nutrify India Now 2.0.apk";
+//
+//    @GetMapping("/apk")
+//    public ResponseEntity<Resource> downloadApk() {
+//        File file = new File(APK_FILE_PATH);
+//        if (file.exists()) {
+//            Resource resource = new FileSystemResource(file);
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=app-release.apk");
+//
+//            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+    private static final String UPLOAD_DIR = "images/";
+    private static final String APK_FILE_NAME = "Nutrify India Now 2.0.apk"; // Replace with your actual APK file name
 
+//    @GetMapping("/apk")
+//    public ResponseEntity<Resource> downloadApk() {
+//        String filePath = UPLOAD_DIR + APK_FILE_NAME;
+//        File file = new File(filePath);
+//
+//        if (file.exists()) {
+//            Resource resource = new FileSystemResource(file);
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + APK_FILE_NAME);
+//
+//            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
+@GetMapping("/apk")
+public ResponseEntity<Resource> downloadApk() {
+    String filePath = UPLOAD_DIR + APK_FILE_NAME;
+    File file = new File(filePath);
 
+    if (file.exists()) {
+        Resource resource = new FileSystemResource(file);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + APK_FILE_NAME);
+        headers.setContentType(MediaType.parseMediaType("application/vnd.android.package-archive")); // Set correct MIME type for APK
+
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+}
+//    private static final String APK_UPLOAD_DIR = "src/main/resources/static/apk/";
+
+//    @PostMapping("/uploadApk")
+//    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+//        if (file.isEmpty()) {
+//            return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        try {
+//            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+//            Path targetPath = Paths.get(APK_UPLOAD_DIR + fileName);
+//            Files.copy(file.getInputStream(), targetPath);
+//
+//            return new ResponseEntity<>("File uploaded successfully: " + fileName, HttpStatus.OK);
+//        } catch (IOException e) {
+//            return new ResponseEntity<>("Failed to upload file.", HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//@Value("${upload.path}")
+//private String uploadPath;
+
+    @PostMapping("/uploadApk")
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return new ResponseEntity<>("Please select a file to upload.", HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            Path targetPath = Paths.get(uploadPath + fileName);
+            Files.copy(file.getInputStream(), targetPath);
+
+            return new ResponseEntity<>("File uploaded successfully: " + fileName, HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Failed to upload file.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+//    @GetMapping("/downloadApk")
+//    public String downloadApkPage() {
+//        return "downloadApk";
+//    }
     @Autowired
     private MissingRowFoodRepository missingRowFoodRepository;
     @GetMapping("/missingRowFoods")

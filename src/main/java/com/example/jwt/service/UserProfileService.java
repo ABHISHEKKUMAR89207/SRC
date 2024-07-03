@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -114,6 +116,9 @@ public class UserProfileService {
         double bmr = calculateBMR(userProfile);
         userProfile.setBmr(bmr);
 
+        // Adjust wakeupTime by subtracting 1 minute
+        LocalTime wakeupTime = userProfile.getWakeupTime().minus(1, ChronoUnit.MINUTES);
+        userProfile.setWakeupTime(wakeupTime);
 
 //        // Find the ActivityType based on the occupation
 //        ActivityType activityType = activityTypeRepository.findByOccupation(userProfile.getOccupation());
@@ -126,21 +131,21 @@ public class UserProfileService {
         // Set the work level based on the ActivityType
 //        userProfile.setWorkLevel(activityType.getTypeOfActivity());
 
-        // Calculate water goal and update AllTarget entity
-        double waterGoal = ((userProfile.getWeight() * 30)/1000); // Calculate water goal based on weight in litter
+//        // Calculate water goal and update AllTarget entity
+//        double waterGoal = ((userProfile.getWeight() * 30)/1000); // Calculate water goal based on weight in litter
 
-        AllTarget existingGoal = allTargetRepository.findByUser(user);
-        if (existingGoal == null) {
-            // If no goal exists, create a new one
-            AllTarget newWaterGoalEntity = new AllTarget();
-            newWaterGoalEntity.setWaterGoal(waterGoal);
-            newWaterGoalEntity.setUser(user);
-            allTargetRepository.save(newWaterGoalEntity);
-        } else {
-            // If a goal already exists, update the existing one
-            existingGoal.setWaterGoal(waterGoal);
-            allTargetRepository.save(existingGoal);
-        }
+//        AllTarget existingGoal = allTargetRepository.findByUser(user);
+//        if (existingGoal == null) {
+//            // If no goal exists, create a new one
+//            AllTarget newWaterGoalEntity = new AllTarget();
+//            newWaterGoalEntity.setWaterGoal(waterGoal);
+//            newWaterGoalEntity.setUser(user);
+//            allTargetRepository.save(newWaterGoalEntity);
+//        } else {
+//            // If a goal already exists, update the existing one
+//            existingGoal.setWaterGoal(waterGoal);
+//            allTargetRepository.save(existingGoal);
+//        }
 
         // Save the userProfile
         UserProfile newProfile = this.userProfileRepository.save(userProfile);

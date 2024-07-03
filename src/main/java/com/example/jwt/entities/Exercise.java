@@ -27,8 +27,8 @@ public class Exercise {
     private Long id;
 
 //    private Date date;
-@Column(name = "exercise_date")
-private LocalDate date;
+    @Column(name = "exercise_date")
+    private LocalDate date;
     private String activityType;
     private double distance;
     private LocalTime startTime;
@@ -36,7 +36,7 @@ private LocalDate date;
     private double duration; // in minutes
     private Double caloriesBurned;
 
-//  getters and setters
+
 
 //    public void setStartTime(Time startTime) {
 //        this.startTime = startTime;
