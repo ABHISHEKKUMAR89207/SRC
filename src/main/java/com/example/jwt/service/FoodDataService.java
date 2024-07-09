@@ -29,124 +29,225 @@ public class FoodDataService {
 
 
 
-    public List<NinDataDTOO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood) {
-        List<NinData> top10Results;
+//    public List<NinDataDTOO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood) {
+//        List<NinData> top10Results;
+//
+//        if ("all".equalsIgnoreCase(typesOfFood)) {
+//            top10Results = ninDataRepository.findTop10ByOrderByColumnDesc(column);
+//        } else {
+//            top10Results = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
+//        }
+//
+//        List<NinDataDTOO> dtos = new ArrayList<>();
+//
+//        if (top10Results.size() > 10) {
+//            top10Results = top10Results.subList(0, 10);
+//        }
+//
+//        for (NinData entity : top10Results) {
+//            NinDataDTOO dto = new NinDataDTOO();
+//            dto.setId(entity.getNinDataId());
+//            dto.setName(entity.getFood());
+//            dto.setCategory(entity.getCategory());
+//            dto.setFoodCode(entity.getFoodCode());
+//
+//            // Set DTO properties based on the selected column
+//            switch (column.toLowerCase()) {
+//                case "energy"://
+//                    dto.setEnergy(entity.getEnergy());
+////                    dto.setEnergyUnit("g");
+//                    dto.setUnit("kcal");
+//                    break;
+//                case "carbohydrate"://
+//                    dto.setCarbohydrate(entity.getCarbohydrate());
+////                    dto.setCarbohydrateUnit("g");
+//                    dto.setUnit("g");
+//                    break;
+//                case "total_fat"://
+//                    dto.setTotal_fat(entity.getTotal_Fat());
+////                    dto.setTotalFatUnit("g");
+//                    dto.setUnit("g");
+//                    break;
+//                case "sodium"://
+//                    dto.setSodium(entity.getSodium());
+////                    dto.setSodiumUnit("mg");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "total_dietary_fibre"://
+//                    dto.setTotal_dietary_fibre(entity.getTotal_Dietary_Fibre());
+////                    dto.setTotalDietaryFibreUnit("g");
+//                    dto.setUnit("g");
+//                    break;
+//                case "calcium"://
+//                    dto.setCalcium(entity.getCalcium());
+////                    dto.setCalciumUnit("mg");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "iron"://
+//                    dto.setIron(entity.getIron());
+////                    dto.setIronUnit("mg");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "magnesium"://
+//                    dto.setMagnesium(entity.getMagnesium());
+////                    dto.setMagnesiumUnit("mg");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "zinc"://
+//                    dto.setZinc(entity.getZinc());
+////                    dto.setZincUnit("mg");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "protein"://
+//                    dto.setProtein(entity.getProtein());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("g");
+//                    break;
+//                case "thiamine"://
+//                    dto.setThiamine(entity.getThiamine_B1());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "riboflavin"://
+//                    dto.setRiboflavin(entity.getRiboflavin_B2());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "niacin"://
+//                    dto.setNiacin(entity.getNiacin_B3());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "vitb"://
+//                    dto.setVitb(entity.getVit_B6());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("mg");
+//                    break;
+//
+//                case "totalfloate"://
+//                    dto.setTotalfloate(entity.getTotalFolates_B9());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("µg");
+//                    break;
+//                case "vitc"://
+//                    dto.setVitc(entity.getVit_C());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("mg");
+//                    break;
+//                case "vita"://
+//                    dto.setVita(entity.getRetinolVit_A());
+////                    dto.setProteinUnit("g");
+//                    dto.setUnit("µg");
+//                    break;
+//                // add other nutrients as needed
+//            }
+//
+//            dtos.add(dto);
+//        }
+//
+//        return dtos;
+//    }
+public List<NinDataDTOO> getTop10ByColumnAndTypesOfFood(String column, String typesOfFood) {
+    List<NinData> top10Results;
 
-        if ("all".equalsIgnoreCase(typesOfFood)) {
-            top10Results = ninDataRepository.findTop10ByOrderByColumnDesc(column);
-        } else {
-            top10Results = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
-        }
-
-        List<NinDataDTOO> dtos = new ArrayList<>();
-
-        if (top10Results.size() > 10) {
-            top10Results = top10Results.subList(0, 10);
-        }
-
-        for (NinData entity : top10Results) {
-            NinDataDTOO dto = new NinDataDTOO();
-            dto.setId(entity.getNinDataId());
-            dto.setName(entity.getFood());
-            dto.setCategory(entity.getCategory());
-            dto.setFoodCode(entity.getFoodCode());
-
-            // Set DTO properties based on the selected column
-            switch (column.toLowerCase()) {
-                case "energy"://
-                    dto.setEnergy(entity.getEnergy());
-//                    dto.setEnergyUnit("g");
-                    dto.setUnit("kcal");
-                    break;
-                case "carbohydrate"://
-                    dto.setCarbohydrate(entity.getCarbohydrate());
-//                    dto.setCarbohydrateUnit("g");
-                    dto.setUnit("g");
-                    break;
-                case "total_fat"://
-                    dto.setTotal_fat(entity.getTotal_Fat());
-//                    dto.setTotalFatUnit("g");
-                    dto.setUnit("g");
-                    break;
-                case "sodium"://
-                    dto.setSodium(entity.getSodium());
-//                    dto.setSodiumUnit("mg");
-                    dto.setUnit("mg");
-                    break;
-                case "total_dietary_fibre"://
-                    dto.setTotal_dietary_fibre(entity.getTotal_Dietary_Fibre());
-//                    dto.setTotalDietaryFibreUnit("g");
-                    dto.setUnit("g");
-                    break;
-                case "calcium"://
-                    dto.setCalcium(entity.getCalcium());
-//                    dto.setCalciumUnit("mg");
-                    dto.setUnit("mg");
-                    break;
-                case "iron"://
-                    dto.setIron(entity.getIron());
-//                    dto.setIronUnit("mg");
-                    dto.setUnit("mg");
-                    break;
-                case "magnesium"://
-                    dto.setMagnesium(entity.getMagnesium());
-//                    dto.setMagnesiumUnit("mg");
-                    dto.setUnit("mg");
-                    break;
-                case "zinc"://
-                    dto.setZinc(entity.getZinc());
-//                    dto.setZincUnit("mg");
-                    dto.setUnit("mg");
-                    break;
-                case "protein"://
-                    dto.setProtein(entity.getProtein());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("g");
-                    break;
-                case "thiamine"://
-                    dto.setThiamine(entity.getThiamine_B1());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("mg");
-                    break;
-                case "riboflavin"://
-                    dto.setRiboflavin(entity.getRiboflavin_B2());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("mg");
-                    break;
-                case "niacin"://
-                    dto.setNiacin(entity.getNiacin_B3());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("mg");
-                    break;
-                case "vitb"://
-                    dto.setVitb(entity.getVit_B6());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("mg");
-                    break;
-
-                case "totalfloate"://
-                    dto.setTotalfloate(entity.getTotalFolates_B9());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("µg");
-                    break;
-                case "vitc"://
-                    dto.setVitc(entity.getVit_C());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("mg");
-                    break;
-                case "vita"://
-                    dto.setVita(entity.getRetinolVit_A());
-//                    dto.setProteinUnit("g");
-                    dto.setUnit("µg");
-                    break;
-                // add other nutrients as needed
-            }
-
-            dtos.add(dto);
-        }
-
-        return dtos;
+    if ("all".equalsIgnoreCase(typesOfFood)) {
+        top10Results = ninDataRepository.findTop10ByOrderByColumnDesc(column);
+    } else {
+        top10Results = ninDataRepository.findTop10ByTypesoffoodAndOrderByColumnDesc(typesOfFood, column);
     }
+
+    List<NinDataDTOO> dtos = new ArrayList<>();
+
+    if (top10Results.size() > 10) {
+        top10Results = top10Results.subList(0, 10);
+    }
+
+    for (NinData entity : top10Results) {
+        NinDataDTOO dto = new NinDataDTOO();
+        dto.setId(entity.getNinDataId());
+        dto.setName(entity.getFood());
+        dto.setCategory(entity.getCategory());
+        dto.setFoodCode(entity.getFoodCode());
+
+        // Set DTO properties based on the selected column
+        switch (column.toLowerCase()) {
+            case "energy":
+                dto.setEnergy(entity.getEnergy());
+                dto.setUnit("kcal");
+                break;
+            case "carbohydrate":
+                dto.setCarbohydrate(entity.getCarbohydrate());
+                dto.setUnit("g");
+                break;
+            case "total_fat":
+                dto.setTotal_fat(entity.getTotal_Fat());
+                dto.setUnit("g");
+                break;
+            case "sodium":
+                dto.setSodium(entity.getSodium());
+                dto.setUnit("mg");
+                break;
+            case "total_dietary_fibre":
+                dto.setTotal_dietary_fibre(entity.getTotal_Dietary_Fibre());
+                dto.setUnit("g");
+                break;
+            case "calcium":
+                dto.setCalcium(entity.getCalcium());
+                dto.setUnit("mg");
+                break;
+            case "iron":
+                dto.setIron(entity.getIron());
+                dto.setUnit("mg");
+                break;
+            case "magnesium":
+                dto.setMagnesium(entity.getMagnesium());
+                dto.setUnit("mg");
+                break;
+            case "zinc":
+                dto.setZinc(entity.getZinc());
+                dto.setUnit("mg");
+                break;
+            case "protein":
+                dto.setProtein(entity.getProtein());
+                dto.setUnit("g");
+                break;
+            case "thiamine":
+                dto.setThiamine(entity.getThiamine_B1());
+                dto.setUnit("mg");
+                break;
+            case "riboflavin":
+                dto.setRiboflavin(entity.getRiboflavin_B2());
+                dto.setUnit("mg");
+                break;
+            case "niacin":
+                dto.setNiacin(entity.getNiacin_B3());
+                dto.setUnit("mg");
+                break;
+            case "vitb":
+                dto.setVitb(entity.getVit_B6());
+                dto.setUnit("mg");
+                break;
+            case "totalfloate":
+                dto.setTotalfloate(entity.getTotalFolates_B9());
+                dto.setUnit("µg");
+                break;
+            case "vitc":
+                dto.setVitc(entity.getVit_C());
+                dto.setUnit("mg");
+                break;
+            case "vita":
+                dto.setVita(entity.getRetinolVit_A());
+                dto.setUnit("µg");
+                break;
+            // add other nutrients as needed
+        }
+
+        dtos.add(dto);
+    }
+
+    return dtos;
+}
+
 
     public List<NinDataDTOO> getTop10ByColumnAndTypesOfFoodNolimit(String column, String typesOfFood, String username) {
         List<NinData> top10Results;

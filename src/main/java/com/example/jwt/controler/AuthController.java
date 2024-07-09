@@ -93,10 +93,15 @@ public class AuthController {
         }
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public String exceptionHandler(){
-        return "Credentials Invalid !!";
-    }
+//    @ExceptionHandler(BadCredentialsException.class)
+//    public String exceptionHandler(){
+//        return "Credentials Invalid !!";
+//    }
+// Exception handler for BadCredentialsException
+@ExceptionHandler(BadCredentialsException.class)
+public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credentials Invalid !!");
+}
 
     // to change the password of the specific user
     @PostMapping("/change-password")

@@ -56,31 +56,55 @@ List<NinData> findByFoodCodeAndType(String foodCode, String foodType);
 //            @Param("typesOfFood") String typesOfFood,
 //            @Param("column") String column);
 
-    @Query("SELECT n FROM NinData n WHERE n.Typesoffood = :typesOfFood ORDER BY " +
-            "CASE " +
-            "WHEN :column = 'energy' THEN n.Energy " +
-            "WHEN :column = 'carbohydrate' THEN n.carbohydrate " +
-            "WHEN :column = 'totalFat' THEN n.Total_Fat " +
-            "WHEN :column = 'sodium' THEN n.sodium " +
-            "WHEN :column = 'totalDietaryFibre' THEN n.Total_Dietary_Fibre " +
-            "WHEN :column = 'calcium' THEN n.calcium " +
-            "WHEN :column = 'iron' THEN n.iron " +
-            "WHEN :column = 'magnesium' THEN n.magnesium " +
-            "WHEN :column = 'zinc' THEN n.zinc " +
-            "WHEN :column = 'protein' THEN n.Protein " +
-            "WHEN :column = 'thiamine' THEN n.thiamine_B1 " +
-            "WHEN :column = 'riboflavin' THEN n.riboflavin_B2 " +
-            "WHEN :column = 'niacin' THEN n.niacin_B3 " +
-            "WHEN :column = 'vitB6' THEN n.vit_B6 " +
-            "WHEN :column = 'totalFloate' THEN n.totalFolates_B9 " +
-            "WHEN :column = 'vitC' THEN n.vit_C " +
-            "WHEN :column = 'vitA' THEN n.retinolVit_A " +
-            "ELSE 0 " + // This is added to handle default case
-            "END DESC"
-    )
-    List<NinData> findTop10ByTypesoffoodAndOrderByColumnDesc(
-            @Param("typesOfFood") String typesOfFood,
-            @Param("column") String column);
+//    @Query("SELECT n FROM NinData n WHERE n.Typesoffood = :typesOfFood ORDER BY " +
+//            "CASE " +
+//            "WHEN :column = 'energy' THEN n.Energy " +
+//            "WHEN :column = 'carbohydrate' THEN n.carbohydrate " +
+//            "WHEN :column = 'totalFat' THEN n.Total_Fat " +
+//            "WHEN :column = 'sodium' THEN n.sodium " +
+//            "WHEN :column = 'totalDietaryFibre' THEN n.Total_Dietary_Fibre " +
+//            "WHEN :column = 'calcium' THEN n.calcium " +
+//            "WHEN :column = 'iron' THEN n.iron " +
+//            "WHEN :column = 'magnesium' THEN n.magnesium " +
+//            "WHEN :column = 'zinc' THEN n.zinc " +
+//            "WHEN :column = 'protein' THEN n.Protein " +
+//            "WHEN :column = 'thiamine' THEN n.thiamine_B1 " +
+//            "WHEN :column = 'riboflavin' THEN n.riboflavin_B2 " +
+//            "WHEN :column = 'niacin' THEN n.niacin_B3 " +
+//            "WHEN :column = 'vitB6' THEN n.vit_B6 " +
+//            "WHEN :column = 'totalFloate' THEN n.totalFolates_B9 " +
+//            "WHEN :column = 'vitC' THEN n.vit_C " +
+//            "WHEN :column = 'vitA' THEN n.retinolVit_A " +
+//            "ELSE 0 " + // This is added to handle default case
+//            "END DESC"
+//    )
+//    List<NinData> findTop10ByTypesoffoodAndOrderByColumnDesc(
+//            @Param("typesOfFood") String typesOfFood,
+//            @Param("column") String column);
+@Query("SELECT n FROM NinData n WHERE n.Typesoffood = :typesOfFood ORDER BY " +
+        "CASE " +
+        "WHEN :column = 'energy' THEN n.Energy " +
+        "WHEN :column = 'carbohydrate' THEN n.carbohydrate " +
+        "WHEN :column = 'total_fat' THEN n.Total_Fat " +
+        "WHEN :column = 'sodium' THEN n.sodium " +
+        "WHEN :column = 'total_dietary_fibre' THEN n.Total_Dietary_Fibre " +
+        "WHEN :column = 'calcium' THEN n.calcium " +
+        "WHEN :column = 'iron' THEN n.iron " +
+        "WHEN :column = 'magnesium' THEN n.magnesium " +
+        "WHEN :column = 'zinc' THEN n.zinc " +
+        "WHEN :column = 'protein' THEN n.Protein " +
+        "WHEN :column = 'thiamine' THEN n.thiamine_B1 " +
+        "WHEN :column = 'riboflavin' THEN n.riboflavin_B2 " +
+        "WHEN :column = 'niacin' THEN n.niacin_B3 " +
+        "WHEN :column = 'vitb' THEN n.vit_B6 " +
+        "WHEN :column = 'totalfloate' THEN n.totalFolates_B9 " +
+        "WHEN :column = 'vitc' THEN n.vit_C " +
+        "WHEN :column = 'vita' THEN n.retinolVit_A " +
+        "ELSE 0 " +
+        "END DESC")
+List<NinData> findTop10ByTypesoffoodAndOrderByColumnDesc(
+        @Param("typesOfFood") String typesOfFood,
+        @Param("column") String column);
 //    @Query("SELECT n FROM NinData n ORDER BY "
 //            + "CASE WHEN :column = 'carbohydrate' THEN n.carbohydrate END DESC, "
 //            + "CASE WHEN :column = 'total_fat' THEN n.Total_Fat END DESC, "
@@ -99,13 +123,38 @@ List<NinData> findByFoodCodeAndType(String foodCode, String foodType);
 //    )
 //    List<NinData> findTop10ByOrderByColumnDesc(@Param("column") String column);
 
+//    @Query("SELECT n FROM NinData n ORDER BY " +
+//            "CASE " +
+//            "WHEN :column = 'energy' THEN n.Energy " +
+//            "WHEN :column = 'carbohydrate' THEN n.carbohydrate " +
+//            "WHEN :column = 'totalFat' THEN n.Total_Fat " +
+//            "WHEN :column = 'sodium' THEN n.sodium " +
+//            "WHEN :column = 'totalDietaryFibre' THEN n.Total_Dietary_Fibre " +
+//            "WHEN :column = 'calcium' THEN n.calcium " +
+//            "WHEN :column = 'iron' THEN n.iron " +
+//            "WHEN :column = 'magnesium' THEN n.magnesium " +
+//            "WHEN :column = 'zinc' THEN n.zinc " +
+//            "WHEN :column = 'protein' THEN n.Protein " +
+//            "WHEN :column = 'thiamine' THEN n.thiamine_B1 " +
+//            "WHEN :column = 'riboflavin' THEN n.riboflavin_B2 " +
+//            "WHEN :column = 'niacin' THEN n.niacin_B3 " +
+//            "WHEN :column = 'vitB6' THEN n.vit_B6 " +
+//            "WHEN :column = 'totalFloate' THEN n.totalFolates_B9 " +
+//            "WHEN :column = 'vitC' THEN n.vit_C " +
+//            "WHEN :column = 'vitA' THEN n.retinolVit_A " +
+//            "ELSE 0 " + // This is added to handle default case
+//            "END DESC"
+//    )
+//    List<NinData> findTop10ByOrderByColumnDesc(@Param("column") String column);
+
+
     @Query("SELECT n FROM NinData n ORDER BY " +
             "CASE " +
             "WHEN :column = 'energy' THEN n.Energy " +
             "WHEN :column = 'carbohydrate' THEN n.carbohydrate " +
-            "WHEN :column = 'totalFat' THEN n.Total_Fat " +
+            "WHEN :column = 'total_fat' THEN n.Total_Fat " +
             "WHEN :column = 'sodium' THEN n.sodium " +
-            "WHEN :column = 'totalDietaryFibre' THEN n.Total_Dietary_Fibre " +
+            "WHEN :column = 'total_dietary_fibre' THEN n.Total_Dietary_Fibre " +
             "WHEN :column = 'calcium' THEN n.calcium " +
             "WHEN :column = 'iron' THEN n.iron " +
             "WHEN :column = 'magnesium' THEN n.magnesium " +
@@ -114,15 +163,13 @@ List<NinData> findByFoodCodeAndType(String foodCode, String foodType);
             "WHEN :column = 'thiamine' THEN n.thiamine_B1 " +
             "WHEN :column = 'riboflavin' THEN n.riboflavin_B2 " +
             "WHEN :column = 'niacin' THEN n.niacin_B3 " +
-            "WHEN :column = 'vitB6' THEN n.vit_B6 " +
-            "WHEN :column = 'totalFloate' THEN n.totalFolates_B9 " +
-            "WHEN :column = 'vitC' THEN n.vit_C " +
-            "WHEN :column = 'vitA' THEN n.retinolVit_A " +
-            "ELSE 0 " + // This is added to handle default case
-            "END DESC"
-    )
+            "WHEN :column = 'vitb' THEN n.vit_B6 " +
+            "WHEN :column = 'totalfloate' THEN n.totalFolates_B9 " +
+            "WHEN :column = 'vitc' THEN n.vit_C " +
+            "WHEN :column = 'vita' THEN n.retinolVit_A " +
+            "ELSE 0 " +
+            "END DESC")
     List<NinData> findTop10ByOrderByColumnDesc(@Param("column") String column);
-
 
 
     List<NinData> findTop10ByOrderByCarbohydrateDesc();
