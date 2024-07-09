@@ -40,6 +40,7 @@ public class NIN_2023 implements CommandLineRunner {
     }
 
 
+    
 //    @Override
 //    public void run(String... args) throws Exception {
 //        printLog();
