@@ -13,6 +13,7 @@ public class IngredientResponse {
     private String ingredientName;
     private double ingredientQuantity;
     private String foodCode;
+    private String category;
 
     // Constructors, getters, and setters
 }

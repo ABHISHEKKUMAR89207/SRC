@@ -248,6 +248,7 @@ private PersonalRecipeRepository personalRepository;
             ingredientResponse.setIngredientName(ingredient.getIngredientName());
             ingredientResponse.setIngredientQuantity(ingredient.getIngredientQuantity());
             ingredientResponse.setFoodCode(ingredient.getFoodCode());
+            ingredientResponse.setCategory(ingredient.getCategory());
             ingredientResponses.add(ingredientResponse);
         }
         response.setIngredients(ingredientResponses);

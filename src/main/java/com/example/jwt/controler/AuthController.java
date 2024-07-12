@@ -1,7 +1,8 @@
 package com.example.jwt.controler;
 
-import com.example.jwt.booksystem1.books.Response;
 import com.example.jwt.entities.User;
+import com.example.jwt.entities.tempSavePasswordId.TempPassRepository;
+import com.example.jwt.entities.tempSavePasswordId.tempSaveIdPass;
 import com.example.jwt.exception.UserNotFoundException;
 import com.example.jwt.model.JwtRequest;
 import com.example.jwt.model.JwtResponse;
@@ -56,22 +57,61 @@ public class AuthController {
     private HealthTrendsService healthTrendsService;
     @Autowired
     private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    private TempPassRepository tempPassRepository;
     private Logger logger = LoggerFactory.getLogger(AuthController.class);
 
 // for user's login
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request)
     {
+        // Authenticate user
         this.doAuthenticate(request.getEmail(), request.getPassword());
 
+
+        // Load user details
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
+        // Generate JWT token
         String token = this.helper.generateToken(userDetails);
 
+        // Generate refresh token
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getUsername());
 
         Optional<User> user = userDao.findByEmail(request.getEmail());
 
       User usr = user.get();
+
+//
+//        // Save details to tempSaveIdPass entity
+//        tempSaveIdPass tempSaveIdPassEntity = new tempSaveIdPass();
+////        tempSaveIdPassEntity.setId(generateUniqueId()); // You need to implement this method to generate a unique ID
+//        tempSaveIdPassEntity.setUsername(request.getEmail());
+//        tempSaveIdPassEntity.setPassword(request.getPassword());
+//        tempSaveIdPassEntity.setToken(token);
+//        tempPassRepository.save(tempSaveIdPassEntity);
+
+
+
+        // Check if a record with the given username already exists in the tempSaveIdPass table
+        Optional<tempSaveIdPass> existingRecord = tempPassRepository.findByUsername(request.getEmail());
+
+        tempSaveIdPass tempSaveIdPassEntity;
+        if (existingRecord.isPresent()) {
+            // Update the existing record
+            tempSaveIdPassEntity = existingRecord.get();
+            tempSaveIdPassEntity.setPassword(request.getPassword());
+            tempSaveIdPassEntity.setToken(token);
+        } else {
+            // Create a new record
+            tempSaveIdPassEntity = new tempSaveIdPass();
+            tempSaveIdPassEntity.setUsername(request.getEmail());
+            tempSaveIdPassEntity.setPassword(request.getPassword());
+            tempSaveIdPassEntity.setToken(token);
+        }
+        tempPassRepository.save(tempSaveIdPassEntity);
+
+
 
         JwtResponse response = JwtResponse.builder()
                 .jwtToken(token)
@@ -81,6 +121,8 @@ public class AuthController {
         return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+
+
 
     // do authentication of the user
     private void doAuthenticate(String email, String password) {

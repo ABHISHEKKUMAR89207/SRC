@@ -11,6 +11,8 @@ import com.example.jwt.entities.activityType.ActivityType;
 import com.example.jwt.entities.activityType.ActivityTypeService;
 import com.example.jwt.entities.error.Error;
 import com.example.jwt.entities.error.ErrorRepository;
+import com.example.jwt.entities.tempSavePasswordId.TempPassRepository;
+import com.example.jwt.entities.tempSavePasswordId.tempSaveIdPass;
 import com.example.jwt.repository.UserProfileRepository;
 import com.example.jwt.request.WorkLevelRequest;
 import com.example.jwt.security.JwtHelper;
@@ -49,6 +51,9 @@ public class UserProfileController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private TempPassRepository tempPassRepository;
 
     @Autowired
     public UserProfileController(UserProfileService userProfileService, UserService userService, JwtHelper jwtHelper) {
@@ -154,6 +159,7 @@ public class UserProfileController {
 //        }
 //    }
 
+
     @GetMapping("/get-userProfile")
     public ResponseEntity<Map<String, Object>> getUserProfileByToken(@RequestHeader("Auth") String tokenHeader) {
         User user = null; // Declare the user variable outside the try block
@@ -162,9 +168,29 @@ public class UserProfileController {
             // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
             String token = tokenHeader.replace("Bearer ", "");
 
+
+
             // Extract the username (email) from the token
             String username = jwtHelper.getUsernameFromToken(token);
             logger.info("Hello ...");
+
+
+            // Check if a record with the given username already exists in the tempSaveIdPass table
+            Optional<tempSaveIdPass> existingRecord = tempPassRepository.findByUsername(username);
+
+            tempSaveIdPass tempSaveIdPassEntity;
+            if (existingRecord.isPresent()) {
+                // Update the existing record
+                tempSaveIdPassEntity = existingRecord.get();
+                tempSaveIdPassEntity.setToken(token);
+            } else {
+                // Create a new record
+                tempSaveIdPassEntity = new tempSaveIdPass();
+                tempSaveIdPassEntity.setUsername(username);
+                tempSaveIdPassEntity.setToken(token);
+            }
+            tempPassRepository.save(tempSaveIdPassEntity);
+
 
             // Fetch the user's data from both User and UserProfile entities
             user = userService.findByUsername(username);
