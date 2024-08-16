@@ -19,7 +19,7 @@ public class NinDataDTO {
     private  String foodCode;
     private String typesoffood;
     private String Category;
-
+    private Double moisture;
     private Double energy;
     private Double protein;
 //    private Double fats;

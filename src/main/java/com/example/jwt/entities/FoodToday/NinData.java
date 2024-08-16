@@ -33,6 +33,7 @@ public class NinData {
     private String source;
     private String Typesoffood;
 
+    private Double Moisture;
     private Double Energy;
     private Double Protein;
     private Double Total_Fat;

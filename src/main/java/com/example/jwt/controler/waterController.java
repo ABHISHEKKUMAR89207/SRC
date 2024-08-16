@@ -2,10 +2,9 @@ package com.example.jwt.controler;
 
 import com.example.jwt.dtos.WaterIntakeResponse;
 import com.example.jwt.entities.User;
-import com.example.jwt.entities.water.WaterEntity;
-import com.example.jwt.entities.water.WaterEntry;
-import com.example.jwt.entities.water.WaterEntryRepository;
+import com.example.jwt.entities.water.*;
 import com.example.jwt.exception.UserNotFoundException;
+import com.example.jwt.exception.WaterEntityNotFoundException;
 import com.example.jwt.repository.UserRepository;
 import com.example.jwt.repository.WaterEntityRepository;
 import com.example.jwt.security.JwtHelper;
@@ -256,8 +255,105 @@ public ResponseEntity<List<Map<String, Object>>> getUserWaterIntakeForCustomRang
     }
 }
 
+    @GetMapping("/all-intake")
+    public ResponseEntity<List<WaterEntityResponse>> getWaterIntakeByDate(
+            @RequestHeader("Auth") String tokenHeader,
+            @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Verify the user
+            User user = userService.findByUsername(username);
+
+            // Find the user by username
+//             user = userRepository.findByEmail(username)
+//                    .orElseThrow(() -> new UserNotFoundException("User not found for username: " + username));
+
+            // Get the WaterEntity for the user and provided date
+            List<WaterEntity> waterEntities = waterEntityRepository.findByUserAndLocalDatee(user, date);
+
+            // Map WaterEntity to WaterEntityResponse
+            List<WaterEntityResponse> waterEntityResponses = waterEntities.stream()
+                    .map(this::mapToWaterEntityResponse)
+                    .collect(Collectors.toList());
+
+            return new ResponseEntity<>(waterEntityResponses, HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle authentication or other exceptions
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+    private WaterEntityResponse mapToWaterEntityResponse(WaterEntity waterEntity) {
+        List<WaterEntryResponse> waterEntryResponses = waterEntity.getWaterEntries().stream()
+                .map(this::mapToWaterEntryResponse)
+                .collect(Collectors.toList());
+        return new WaterEntityResponse(waterEntity.getWaterId(), waterEntity.getCupCapacity(),
+                waterEntity.getNoOfCups(),
+                waterEntity.getLocalDate(), waterEntryResponses);
+    }
+
+    private WaterEntryResponse mapToWaterEntryResponse(WaterEntry waterEntry) {
+        return new WaterEntryResponse(waterEntry.getEntryId(), waterEntry.getWaterIntake(),
+                waterEntry.getLocalTime(), waterEntry.getLocalDate());
+    }
 
 
+    @DeleteMapping("/intake/entry")
+    public ResponseEntity<Void> deleteWaterEntry(@RequestHeader("Auth") String tokenHeader, @RequestParam Long entryId) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            User user = userService.findByUsername(username);
+
+
+
+            // Find the WaterEntry by id and user
+            WaterEntry waterEntry = waterEntryRepository.findByIdAndUser(entryId, user)
+                    .orElseThrow(() -> new WaterEntityNotFoundException("WaterEntry not found for id: " + entryId));
+
+            // Delete the WaterEntry
+            waterEntryRepository.delete(waterEntry);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            // Handle authentication or other exceptions
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+    @DeleteMapping("/delete-intake")
+    public ResponseEntity<Void> deleteWaterIntake(@RequestHeader("Auth") String tokenHeader, @RequestParam Long waterId) {
+        try {
+            // Extract the token from the Authorization header (assuming it's in the format "Bearer <token>")
+            String token = tokenHeader.replace("Bearer ", "");
+
+            // Extract the username (email) from the token
+            String username = jwtHelper.getUsernameFromToken(token);
+
+
+            User user = userService.findByUsername(username);
+
+            // Find the WaterEntity by id and user
+            WaterEntity waterEntity = waterEntityRepository.findByIdAndUser(waterId, user)
+                    .orElseThrow(() -> new WaterEntityNotFoundException("WaterEntity not found for id: " + waterId));
+
+            // Delete the WaterEntity
+            waterEntityRepository.delete(waterEntity);
+
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            // Handle authentication or other exceptions
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
     @GetMapping("/intake")
     public ResponseEntity<List<WaterIntakeResponse>> getWaterIntake(@RequestHeader("Auth") String tokenHeader) {
         try {

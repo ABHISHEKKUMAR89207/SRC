@@ -53,6 +53,7 @@ public class FoodDataController {
         ninDataDTO.setTypesoffood(ninData.getTypesoffood());
         ninDataDTO.setCategory(ninData.getCategory());
 
+        ninDataDTO.setMoisture(ninData.getMoisture());
         ninDataDTO.setEnergy(ninData.getEnergy());
         ninDataDTO.setProtein(ninData.getProtein());
         ninDataDTO.setTotal_Fat(ninData.getTotal_Fat());

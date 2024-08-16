@@ -1371,7 +1371,7 @@ public class IngrdientService {
                     Double totalProteins = 0.0;
                     Double totalCarbs = 0.0;
                     Double totalFats = 0.0;
-                    Double totalFibers = 0.0;
+                    Double totalFibers = 0.0; 
                     Double totalMagnesium = 0.0;
                     Double totalIron = 0.0;
                     Double totalZinc = 0.0;
