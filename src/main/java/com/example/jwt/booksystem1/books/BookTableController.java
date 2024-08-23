@@ -73,7 +73,7 @@ public boolean deleteBook(Long bookId) {
         // Construct the full URL for the image
         // You need to adjust the base URL as per your server configuration
 //        String baseUrl = "http://localhost:7073/images/";
-        String baseUrl = "http://68.183.89.215:7073/images/";
+        String baseUrl = "https://apis.nutrifyindianow.in/images/";
         return baseUrl + filename;
     }
     @GetMapping("/{id}")

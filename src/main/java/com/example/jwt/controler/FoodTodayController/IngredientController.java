@@ -99,8 +99,39 @@ public class IngredientController {
                 return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+//@PostMapping("/uploadImages")
+//public ResponseEntity<String> uploadImages(@RequestParam("images") MultipartFile[] images) {
+//    try {
+//        // Create "images" directory if it doesn't exist
+//        File imagesDir = new File(basePath);
+//        if (!imagesDir.exists()) {
+//            imagesDir.mkdirs();
+//        }
+//
+//        StringBuilder responseMessage = new StringBuilder();
+//        for (MultipartFile image : images) {
+//            String fileName = image.getOriginalFilename();
+//            File dest = new File(imagesDir.getAbsolutePath(), fileName);
+//
+//            // Check if the file already exists
+//            if (dest.exists()) {
+//                responseMessage.append("Image already exists: ").append(fileName).append("\n");
+//            } else {
+//                // Save the image to the "images" folder
+//                image.transferTo(dest);
+//                responseMessage.append("Image uploaded: ").append(fileName).append("\n");
+//            }
+//        }
+//        return new ResponseEntity<>(responseMessage.toString(), HttpStatus.OK);
+//    } catch (IOException e) {
+//        e.printStackTrace();
+//        return new ResponseEntity<>("Failed to upload images", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
+//}
 
-        @PostMapping("/save")
+
+
+    @PostMapping("/save")
         public ResponseEntity<String> saveNutrient(@RequestBody NutrientRequest nutrientRequest) {
             NinData nutrient = ingrdientService.saveNutrient(nutrientRequest);
             if (nutrient != null) {
