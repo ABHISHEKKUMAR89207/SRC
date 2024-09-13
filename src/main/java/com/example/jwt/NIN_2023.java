@@ -6,6 +6,7 @@ import com.example.jwt.repository.RoleRepo;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.slf4j.Logger;
@@ -30,6 +31,11 @@ public class NIN_2023 implements CommandLineRunner {
 
     @Autowired
     private RoleRepo roleRepo;
+
+    @Bean
+    public FirebaseAuth firebaseAuth() throws IOException {
+        return FirebaseAuth.getInstance(firebaseApp());
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(NIN_2023.class);
 //Logger logger = LoggerFactory.getLogger(Jwt3Application.class);

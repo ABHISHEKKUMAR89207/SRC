@@ -45,8 +45,8 @@ public class OrderControllerFromRazorPay {
     /**
      * add your secretId and secretValue you got from your RazorPay account.
      */
-    private static final String SECRET_ID = "rzp_test_ThfqICRiicaM5G";
-    private static final String SECRET_KEY = "6v7UTKPjlwOIASl1VSbsRFDl";
+    private static final String SECRET_ID = "rzp_live_egKDLIkba3bUv7";
+    private static final String SECRET_KEY = "LbEghJTN8cWjfbtEM6MH6xYp";
 
     public OrderControllerFromRazorPay() throws RazorpayException {
         this.client =  new RazorpayClient(SECRET_ID, SECRET_KEY);

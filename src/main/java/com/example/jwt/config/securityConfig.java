@@ -52,6 +52,7 @@ public class securityConfig {
                                 .requestMatchers("/auth/health-trends/**").authenticated()
                                 .requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()
+                                .requestMatchers("/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/sleep-logs").permitAll()
                                 .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()
                                 .requestMatchers("/logs").permitAll()
@@ -77,7 +78,7 @@ public class securityConfig {
                                 .requestMatchers("/dashboard/all").permitAll()
                                 .requestMatchers("/api/booktables/{id}").permitAll()
                                 .requestMatchers("/api/food/all-row-food").permitAll()
-
+                                .requestMatchers("/api/otp/send/**").permitAll()
                                 .requestMatchers("/api/booktables/**").permitAll()
                                 .requestMatchers("/api/contact-us/**").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()
