@@ -1,5 +1,5 @@
-09:13:13.096 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 10764 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:13:13.101 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:13:13.096 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 10764 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:13:13.101 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:13:15.902 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:13:16.046 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 134 ms. Found 24 JPA repository interfaces.
 09:13:17.038 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -21,18 +21,18 @@
 09:13:21.806 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:13:23.527 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:13:24.465 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:13:24.923 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1cbb6037, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2cfd91b9, org.springframework.security.web.context.SecurityContextHolderFilter@2680474c, org.springframework.security.web.header.HeaderWriterFilter@6258ea84, org.springframework.security.web.authentication.logout.LogoutFilter@57e0bfd6, com.example.jwt.security.JwtAuthenticationFilter@5e1d3188, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@329cdafa, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4b0a6c53, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@491cceb4, org.springframework.security.web.session.SessionManagementFilter@23591a2c, org.springframework.security.web.access.ExceptionTranslationFilter@6ddd71cc, org.springframework.security.web.access.intercept.AuthorizationFilter@3167c0d]
+09:13:24.923 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1cbb6037, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2cfd91b9, org.springframework.security.web.context.SecurityContextHolderFilter@2680474c, org.springframework.security.web.header.HeaderWriterFilter@6258ea84, org.springframework.security.web.authentication.logout.LogoutFilter@57e0bfd6, security.com.vtt.JwtAuthenticationFilter@5e1d3188, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@329cdafa, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4b0a6c53, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@491cceb4, org.springframework.security.web.session.SessionManagementFilter@23591a2c, org.springframework.security.web.access.ExceptionTranslationFilter@6ddd71cc, org.springframework.security.web.access.intercept.AuthorizationFilter@3167c0d]
 09:13:25.490 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:13:25.511 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:13:25.525 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 13.061 seconds (process running for 14.941)
-09:13:25.618 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:13:25.619 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:13:25.619 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:13:25.525 [main] INFO  com.vtt.vtt - Started Jwt3Application in 13.061 seconds (process running for 14.941)
+09:13:25.618 [main] WARN  com.vtt.vtt - Warn Message
+09:13:25.619 [main] ERROR com.vtt.vtt - Error Message
+09:13:25.619 [main] INFO  com.vtt.vtt - Info Message
 09:14:03.624 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:14:03.626 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:14:03.678 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:14:13.203 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 13632 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:14:13.205 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:14:13.203 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 13632 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:14:13.205 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:14:14.349 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:14:14.518 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 153 ms. Found 24 JPA repository interfaces.
 09:14:15.232 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -54,25 +54,25 @@
 09:14:18.697 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:14:20.011 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:14:20.566 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:14:20.794 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@12e1413c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@41b6ae51, org.springframework.security.web.context.SecurityContextHolderFilter@48c8c722, org.springframework.security.web.header.HeaderWriterFilter@71390c8, org.springframework.security.web.authentication.logout.LogoutFilter@6557d4c6, com.example.jwt.security.JwtAuthenticationFilter@628af295, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@14eaab92, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@746fda68, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@686a08f4, org.springframework.security.web.session.SessionManagementFilter@377fca35, org.springframework.security.web.access.ExceptionTranslationFilter@ae449e7, org.springframework.security.web.access.intercept.AuthorizationFilter@24a29d8]
+09:14:20.794 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@12e1413c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@41b6ae51, org.springframework.security.web.context.SecurityContextHolderFilter@48c8c722, org.springframework.security.web.header.HeaderWriterFilter@71390c8, org.springframework.security.web.authentication.logout.LogoutFilter@6557d4c6, security.com.vtt.JwtAuthenticationFilter@628af295, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@14eaab92, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@746fda68, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@686a08f4, org.springframework.security.web.session.SessionManagementFilter@377fca35, org.springframework.security.web.access.ExceptionTranslationFilter@ae449e7, org.springframework.security.web.access.intercept.AuthorizationFilter@24a29d8]
 09:14:21.214 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:14:21.234 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:14:21.246 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 8.453 seconds (process running for 9.409)
-09:14:21.320 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:14:21.320 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:14:21.320 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:14:21.246 [main] INFO  com.vtt.vtt - Started Jwt3Application in 8.453 seconds (process running for 9.409)
+09:14:21.320 [main] WARN  com.vtt.vtt - Warn Message
+09:14:21.320 [main] ERROR com.vtt.vtt - Error Message
+09:14:21.320 [main] INFO  com.vtt.vtt - Info Message
 09:15:24.583 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:15:24.584 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:15:24.587 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
 09:15:24.604 [http-nio-7073-exec-2] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  null
 09:15:24.604 [http-nio-7073-exec-2] INFO  o.s.web.filter.OncePerRequestFilter - Invalid Header Value !! 
 09:16:09.335 [http-nio-7073-exec-3] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:16:09.481 [http-nio-7073-exec-3] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@266349f7
+09:16:09.481 [http-nio-7073-exec-3] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@266349f7
 09:21:31.229 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:21:31.253 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:21:31.287 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:24:57.621 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 18224 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:24:57.623 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:24:57.621 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 18224 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:24:57.623 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:24:58.764 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:24:58.924 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 151 ms. Found 24 JPA repository interfaces.
 09:24:59.629 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -94,23 +94,23 @@
 09:25:04.620 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:25:05.991 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:25:06.661 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:25:06.937 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@385ff04e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42ff5c92, org.springframework.security.web.context.SecurityContextHolderFilter@7aadb5e8, org.springframework.security.web.header.HeaderWriterFilter@2680474c, org.springframework.security.web.authentication.logout.LogoutFilter@17b3b021, com.example.jwt.security.JwtAuthenticationFilter@71dac63f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@308a2eb0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@71390c8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c9cd06e, org.springframework.security.web.session.SessionManagementFilter@6eef7af3, org.springframework.security.web.access.ExceptionTranslationFilter@431782fe, org.springframework.security.web.access.intercept.AuthorizationFilter@6453c126]
+09:25:06.937 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@385ff04e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42ff5c92, org.springframework.security.web.context.SecurityContextHolderFilter@7aadb5e8, org.springframework.security.web.header.HeaderWriterFilter@2680474c, org.springframework.security.web.authentication.logout.LogoutFilter@17b3b021, security.com.vtt.JwtAuthenticationFilter@71dac63f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@308a2eb0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@71390c8, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c9cd06e, org.springframework.security.web.session.SessionManagementFilter@6eef7af3, org.springframework.security.web.access.ExceptionTranslationFilter@431782fe, org.springframework.security.web.access.intercept.AuthorizationFilter@6453c126]
 09:25:07.394 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:25:07.412 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:25:07.424 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 10.185 seconds (process running for 12.055)
-09:25:07.499 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:25:07.499 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:25:07.499 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:25:07.424 [main] INFO  com.vtt.vtt - Started Jwt3Application in 10.185 seconds (process running for 12.055)
+09:25:07.499 [main] WARN  com.vtt.vtt - Warn Message
+09:25:07.499 [main] ERROR com.vtt.vtt - Error Message
+09:25:07.499 [main] INFO  com.vtt.vtt - Info Message
 09:25:19.815 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:25:19.816 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:25:19.817 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
 09:25:19.831 [http-nio-7073-exec-1] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:25:20.379 [http-nio-7073-exec-1] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@f573245
+09:25:20.379 [http-nio-7073-exec-1] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@f573245
 09:27:35.684 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:27:35.686 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:27:35.695 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:27:42.221 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 2572 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:27:42.223 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:27:42.221 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 2572 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:27:42.223 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:27:43.107 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:27:43.218 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 104 ms. Found 24 JPA repository interfaces.
 09:27:43.871 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -132,18 +132,18 @@
 09:27:47.188 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:27:48.288 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:27:48.858 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:27:49.061 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@de4bee9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62509b77, org.springframework.security.web.context.SecurityContextHolderFilter@2cf88ae1, org.springframework.security.web.header.HeaderWriterFilter@35e55afa, org.springframework.security.web.authentication.logout.LogoutFilter@6565691a, com.example.jwt.security.JwtAuthenticationFilter@628af295, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a8e209b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6619692e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@400c0d26, org.springframework.security.web.session.SessionManagementFilter@179806f3, org.springframework.security.web.access.ExceptionTranslationFilter@1bc41170, org.springframework.security.web.access.intercept.AuthorizationFilter@43e587cd]
+09:27:49.061 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@de4bee9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62509b77, org.springframework.security.web.context.SecurityContextHolderFilter@2cf88ae1, org.springframework.security.web.header.HeaderWriterFilter@35e55afa, org.springframework.security.web.authentication.logout.LogoutFilter@6565691a, security.com.vtt.JwtAuthenticationFilter@628af295, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a8e209b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6619692e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@400c0d26, org.springframework.security.web.session.SessionManagementFilter@179806f3, org.springframework.security.web.access.ExceptionTranslationFilter@1bc41170, org.springframework.security.web.access.intercept.AuthorizationFilter@43e587cd]
 09:27:49.432 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:27:49.448 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:27:49.459 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.605 seconds (process running for 8.502)
-09:27:49.529 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:27:49.529 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:27:49.529 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:27:49.459 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.605 seconds (process running for 8.502)
+09:27:49.529 [main] WARN  com.vtt.vtt - Warn Message
+09:27:49.529 [main] ERROR com.vtt.vtt - Error Message
+09:27:49.529 [main] INFO  com.vtt.vtt - Info Message
 09:28:24.912 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:28:24.914 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:28:24.921 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:28:31.014 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 1296 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:28:31.016 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:28:31.014 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 1296 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:28:31.016 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:28:31.875 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:28:31.989 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 107 ms. Found 24 JPA repository interfaces.
 09:28:32.614 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -165,13 +165,13 @@
 09:28:35.573 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:28:36.659 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:28:37.202 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:28:37.411 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@74f23ecc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7ec416a0, org.springframework.security.web.context.SecurityContextHolderFilter@431782fe, org.springframework.security.web.header.HeaderWriterFilter@4374c051, org.springframework.security.web.authentication.logout.LogoutFilter@377fca35, com.example.jwt.security.JwtAuthenticationFilter@1418a1bd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2680474c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4f283b8f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1cbb6037, org.springframework.security.web.session.SessionManagementFilter@513f8279, org.springframework.security.web.access.ExceptionTranslationFilter@1a6864f0, org.springframework.security.web.access.intercept.AuthorizationFilter@746fda68]
+09:28:37.411 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@74f23ecc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7ec416a0, org.springframework.security.web.context.SecurityContextHolderFilter@431782fe, org.springframework.security.web.header.HeaderWriterFilter@4374c051, org.springframework.security.web.authentication.logout.LogoutFilter@377fca35, security.com.vtt.JwtAuthenticationFilter@1418a1bd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2680474c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4f283b8f, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1cbb6037, org.springframework.security.web.session.SessionManagementFilter@513f8279, org.springframework.security.web.access.ExceptionTranslationFilter@1a6864f0, org.springframework.security.web.access.intercept.AuthorizationFilter@746fda68]
 09:28:37.778 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:28:37.794 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:28:37.804 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.153 seconds (process running for 8.003)
-09:28:37.874 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:28:37.874 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:28:37.874 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:28:37.804 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.153 seconds (process running for 8.003)
+09:28:37.874 [main] WARN  com.vtt.vtt - Warn Message
+09:28:37.874 [main] ERROR com.vtt.vtt - Error Message
+09:28:37.874 [main] INFO  com.vtt.vtt - Info Message
 09:28:51.575 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:28:51.575 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:28:51.577 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -184,12 +184,12 @@
 09:28:51.682 [http-nio-7073-exec-2] INFO  o.s.web.filter.OncePerRequestFilter - Invalid Header Value !! 
 09:28:51.687 [http-nio-7073-exec-2] WARN  o.s.web.servlet.PageNotFound - No mapping for GET /favicon.ico
 09:29:24.953 [http-nio-7073-exec-4] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:29:25.116 [http-nio-7073-exec-4] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@1423cd33
+09:29:25.116 [http-nio-7073-exec-4] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@1423cd33
 09:44:16.113 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:44:16.117 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:44:16.127 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:44:22.108 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 10660 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:44:22.110 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:44:22.108 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 10660 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:44:22.110 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:44:23.018 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:44:23.132 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 106 ms. Found 24 JPA repository interfaces.
 09:44:23.728 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -211,24 +211,24 @@
 09:44:27.347 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:44:28.547 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:44:29.112 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:44:29.327 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@60b90fd3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78494a59, org.springframework.security.web.context.SecurityContextHolderFilter@46a6b8d6, org.springframework.security.web.header.HeaderWriterFilter@3776c917, org.springframework.security.web.authentication.logout.LogoutFilter@400c0d26, com.example.jwt.security.JwtAuthenticationFilter@7594d189, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@35984172, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@74f23ecc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c79a727, org.springframework.security.web.session.SessionManagementFilter@48c8c722, org.springframework.security.web.access.ExceptionTranslationFilter@179806f3, org.springframework.security.web.access.intercept.AuthorizationFilter@12e1413c]
+09:44:29.327 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@60b90fd3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78494a59, org.springframework.security.web.context.SecurityContextHolderFilter@46a6b8d6, org.springframework.security.web.header.HeaderWriterFilter@3776c917, org.springframework.security.web.authentication.logout.LogoutFilter@400c0d26, security.com.vtt.JwtAuthenticationFilter@7594d189, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@35984172, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@74f23ecc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c79a727, org.springframework.security.web.session.SessionManagementFilter@48c8c722, org.springframework.security.web.access.ExceptionTranslationFilter@179806f3, org.springframework.security.web.access.intercept.AuthorizationFilter@12e1413c]
 09:44:29.694 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:44:29.712 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:44:29.723 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.978 seconds (process running for 9.016)
-09:44:29.794 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:44:29.794 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:44:29.794 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:44:29.723 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.978 seconds (process running for 9.016)
+09:44:29.794 [main] WARN  com.vtt.vtt - Warn Message
+09:44:29.794 [main] ERROR com.vtt.vtt - Error Message
+09:44:29.794 [main] INFO  com.vtt.vtt - Info Message
 09:44:37.567 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:44:37.567 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:44:37.568 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
 09:44:37.579 [http-nio-7073-exec-2] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:44:37.760 [http-nio-7073-exec-2] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@646bf969
+09:44:37.760 [http-nio-7073-exec-2] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@646bf969
 09:45:29.912 [scheduling-1] WARN  c.e.j.c.NotificationController - No matching notifications found for user: 1
 09:47:17.567 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:47:17.570 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:47:17.574 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:47:22.652 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 16272 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:47:22.654 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:47:22.652 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 16272 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:47:22.654 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:47:23.462 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:47:23.576 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 100 ms. Found 24 JPA repository interfaces.
 09:47:24.117 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -250,23 +250,23 @@
 09:47:26.987 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:47:28.147 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:47:28.711 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:47:28.944 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@34ec33f4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1c83652d, org.springframework.security.web.context.SecurityContextHolderFilter@746fda68, org.springframework.security.web.header.HeaderWriterFilter@1a8e209b, org.springframework.security.web.authentication.logout.LogoutFilter@55704859, com.example.jwt.security.JwtAuthenticationFilter@5f67ff3e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3167c0d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2cfd91b9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2eaaef66, org.springframework.security.web.session.SessionManagementFilter@46a6b8d6, org.springframework.security.web.access.ExceptionTranslationFilter@2cf88ae1, org.springframework.security.web.access.intercept.AuthorizationFilter@60b90fd3]
+09:47:28.944 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@34ec33f4, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1c83652d, org.springframework.security.web.context.SecurityContextHolderFilter@746fda68, org.springframework.security.web.header.HeaderWriterFilter@1a8e209b, org.springframework.security.web.authentication.logout.LogoutFilter@55704859, security.com.vtt.JwtAuthenticationFilter@5f67ff3e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3167c0d, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2cfd91b9, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2eaaef66, org.springframework.security.web.session.SessionManagementFilter@46a6b8d6, org.springframework.security.web.access.ExceptionTranslationFilter@2cf88ae1, org.springframework.security.web.access.intercept.AuthorizationFilter@60b90fd3]
 09:47:29.348 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:47:29.365 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:47:29.377 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.074 seconds (process running for 7.83)
-09:47:29.449 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:47:29.449 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:47:29.449 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:47:29.377 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.074 seconds (process running for 7.83)
+09:47:29.449 [main] WARN  com.vtt.vtt - Warn Message
+09:47:29.449 [main] ERROR com.vtt.vtt - Error Message
+09:47:29.449 [main] INFO  com.vtt.vtt - Info Message
 09:47:36.457 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:47:36.457 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:47:36.459 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
 09:47:36.469 [http-nio-7073-exec-1] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:47:36.664 [http-nio-7073-exec-1] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@5a0543f8
+09:47:36.664 [http-nio-7073-exec-1] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@5a0543f8
 09:51:25.142 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:51:25.144 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:51:25.149 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:51:31.109 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 14068 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:51:31.110 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:51:31.109 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 14068 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:51:31.110 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:51:32.005 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:51:32.133 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 119 ms. Found 24 JPA repository interfaces.
 09:51:32.686 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -288,24 +288,24 @@
 09:51:35.960 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:51:37.145 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:51:37.682 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:51:37.897 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5e388a77, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24a29d8, org.springframework.security.web.context.SecurityContextHolderFilter@765d2d4d, org.springframework.security.web.header.HeaderWriterFilter@308a2eb0, org.springframework.security.web.authentication.logout.LogoutFilter@35c344ce, com.example.jwt.security.JwtAuthenticationFilter@31c17fd4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7a9df9b2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@14eaab92, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@55af9b48, org.springframework.security.web.session.SessionManagementFilter@737652a9, org.springframework.security.web.access.ExceptionTranslationFilter@7aadb5e8, org.springframework.security.web.access.intercept.AuthorizationFilter@339de67e]
+09:51:37.897 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5e388a77, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@24a29d8, org.springframework.security.web.context.SecurityContextHolderFilter@765d2d4d, org.springframework.security.web.header.HeaderWriterFilter@308a2eb0, org.springframework.security.web.authentication.logout.LogoutFilter@35c344ce, security.com.vtt.JwtAuthenticationFilter@31c17fd4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7a9df9b2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@14eaab92, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@55af9b48, org.springframework.security.web.session.SessionManagementFilter@737652a9, org.springframework.security.web.access.ExceptionTranslationFilter@7aadb5e8, org.springframework.security.web.access.intercept.AuthorizationFilter@339de67e]
 09:51:38.348 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:51:38.369 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:51:38.383 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.744 seconds (process running for 8.539)
-09:51:38.482 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:51:38.482 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:51:38.482 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:51:38.383 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.744 seconds (process running for 8.539)
+09:51:38.482 [main] WARN  com.vtt.vtt - Warn Message
+09:51:38.482 [main] ERROR com.vtt.vtt - Error Message
+09:51:38.482 [main] INFO  com.vtt.vtt - Info Message
 09:51:50.286 [http-nio-7073-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:51:50.286 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:51:50.288 [http-nio-7073-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
 09:51:50.298 [http-nio-7073-exec-1] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:51:50.509 [http-nio-7073-exec-1] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@645c1931
+09:51:50.509 [http-nio-7073-exec-1] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@645c1931
 09:52:38.621 [scheduling-1] WARN  c.e.j.c.NotificationController - No matching notifications found for user: 1
 09:54:16.416 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:54:16.419 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:54:16.425 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:54:21.588 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 16776 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:54:21.589 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:54:21.588 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 16776 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:54:21.589 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:54:22.405 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:54:22.514 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 102 ms. Found 24 JPA repository interfaces.
 09:54:23.076 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -327,20 +327,20 @@
 09:54:26.361 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:54:27.460 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:54:28.051 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:54:28.303 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@60b90fd3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78494a59, org.springframework.security.web.context.SecurityContextHolderFilter@46a6b8d6, org.springframework.security.web.header.HeaderWriterFilter@3776c917, org.springframework.security.web.authentication.logout.LogoutFilter@400c0d26, com.example.jwt.security.JwtAuthenticationFilter@49e54217, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@35984172, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@74f23ecc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c79a727, org.springframework.security.web.session.SessionManagementFilter@48c8c722, org.springframework.security.web.access.ExceptionTranslationFilter@179806f3, org.springframework.security.web.access.intercept.AuthorizationFilter@12e1413c]
+09:54:28.303 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@60b90fd3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78494a59, org.springframework.security.web.context.SecurityContextHolderFilter@46a6b8d6, org.springframework.security.web.header.HeaderWriterFilter@3776c917, org.springframework.security.web.authentication.logout.LogoutFilter@400c0d26, security.com.vtt.JwtAuthenticationFilter@49e54217, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@35984172, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@74f23ecc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c79a727, org.springframework.security.web.session.SessionManagementFilter@48c8c722, org.springframework.security.web.access.ExceptionTranslationFilter@179806f3, org.springframework.security.web.access.intercept.AuthorizationFilter@12e1413c]
 09:54:28.959 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:54:28.989 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:54:29.003 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.771 seconds (process running for 8.559)
-09:54:29.150 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:54:29.150 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:54:29.150 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:54:29.003 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.771 seconds (process running for 8.559)
+09:54:29.150 [main] WARN  com.vtt.vtt - Warn Message
+09:54:29.150 [main] ERROR com.vtt.vtt - Error Message
+09:54:29.150 [main] INFO  com.vtt.vtt - Info Message
 09:54:29.235 [scheduling-1] WARN  c.e.j.c.NotificationController - No matching notifications found for user: 1
 09:55:30.017 [scheduling-1] WARN  c.e.j.c.NotificationController - No matching notifications found for user: 1
 09:56:20.634 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 09:56:20.636 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 09:56:20.640 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-09:56:26.475 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 9096 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-09:56:26.477 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+09:56:26.475 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 9096 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+09:56:26.477 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 09:56:27.565 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 09:56:27.779 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 199 ms. Found 24 JPA repository interfaces.
 09:56:28.393 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -362,18 +362,18 @@
 09:56:31.456 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 09:56:32.558 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 09:56:33.108 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-09:56:33.331 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@21e441d1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@711329fe, org.springframework.security.web.context.SecurityContextHolderFilter@35007b7a, org.springframework.security.web.header.HeaderWriterFilter@46a6b8d6, org.springframework.security.web.authentication.logout.LogoutFilter@34ec33f4, com.example.jwt.security.JwtAuthenticationFilter@68312b85, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74eebb25, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6565691a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2088e339, org.springframework.security.web.session.SessionManagementFilter@504ed038, org.springframework.security.web.access.ExceptionTranslationFilter@12f826c, org.springframework.security.web.access.intercept.AuthorizationFilter@18f90bd8]
+09:56:33.331 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@21e441d1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@711329fe, org.springframework.security.web.context.SecurityContextHolderFilter@35007b7a, org.springframework.security.web.header.HeaderWriterFilter@46a6b8d6, org.springframework.security.web.authentication.logout.LogoutFilter@34ec33f4, security.com.vtt.JwtAuthenticationFilter@68312b85, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74eebb25, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6565691a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2088e339, org.springframework.security.web.session.SessionManagementFilter@504ed038, org.springframework.security.web.access.ExceptionTranslationFilter@12f826c, org.springframework.security.web.access.intercept.AuthorizationFilter@18f90bd8]
 09:56:33.743 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 09:56:33.760 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-09:56:33.771 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.647 seconds (process running for 8.416)
-09:56:33.843 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-09:56:33.843 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-09:56:33.843 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+09:56:33.771 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.647 seconds (process running for 8.416)
+09:56:33.843 [main] WARN  com.vtt.vtt - Warn Message
+09:56:33.843 [main] ERROR com.vtt.vtt - Error Message
+09:56:33.843 [main] INFO  com.vtt.vtt - Info Message
 09:56:45.360 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 09:56:45.360 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 09:56:45.362 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
 09:56:45.372 [http-nio-7073-exec-2] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-09:56:45.697 [http-nio-7073-exec-2] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@232732c9
+09:56:45.697 [http-nio-7073-exec-2] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@232732c9
 09:59:41.922 [http-nio-7073-exec-6] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  null
 09:59:41.924 [http-nio-7073-exec-6] INFO  o.s.web.filter.OncePerRequestFilter - Invalid Header Value !! 
 09:59:47.587 [http-nio-7073-exec-6] INFO  c.e.j.e.l.RegistrationCompleteEventListener - Click the link to verify your registration :  http://localhost:7073/register/verifyEmail?token=89ed14ae-e728-446b-9611-50ece786267d
@@ -390,27 +390,27 @@
 10:01:17.062 [http-nio-7073-exec-3] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlkc2RnY2lAZ21haWwuY29tIiwiaWF0IjoxNzAxNzUwNjEwLCJleHAiOjE3MDE3Njg2MTB9.pkPR0cb9ZZEy2A7VCtdYT9IGh38OE1ylBMBhUgPkqwZr-Bfs9kQlFDAUu7_DuoOp7w0ySoeFdLehG2wJxRk1wg
 10:01:31.251 [http-nio-7073-exec-4] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlkc2RnY2lAZ21haWwuY29tIiwiaWF0IjoxNzAxNzUwNjEwLCJleHAiOjE3MDE3Njg2MTB9.pkPR0cb9ZZEy2A7VCtdYT9IGh38OE1ylBMBhUgPkqwZr-Bfs9kQlFDAUu7_DuoOp7w0ySoeFdLehG2wJxRk1wg
 10:01:52.790 [http-nio-7073-exec-6] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NDc5MjUsImV4cCI6MTcwMTc2NTkyNX0.3U9lhRXJm4qMmvz65fwfZwrLTXEQEqkRRoJp0Iyb6-_vHi8fYiGImPtgcstuFRCfyesMGDhj2ut99sBrBpYrEw
-10:01:52.806 [http-nio-7073-exec-6] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@6e67959f
+10:01:52.806 [http-nio-7073-exec-6] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@6e67959f
 10:02:42.817 [http-nio-7073-exec-5] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  null
 10:02:42.817 [http-nio-7073-exec-5] INFO  o.s.web.filter.OncePerRequestFilter - Invalid Header Value !! 
 10:03:05.054 [http-nio-7073-exec-7] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NTA3NjIsImV4cCI6MTcwMTc2ODc2Mn0.4jmd2OYYQH3df4VxoZVY7LA426zxeXSX2JgYoa8y25MAa3yuzEmBljPT6BzSFLR6bZW03pRvc1_KUhorsSmIWg
-10:03:05.070 [http-nio-7073-exec-7] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@30d68f74
+10:03:05.070 [http-nio-7073-exec-7] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@30d68f74
 10:11:16.873 [http-nio-7073-exec-9] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  null
 10:11:16.874 [http-nio-7073-exec-9] INFO  o.s.web.filter.OncePerRequestFilter - Invalid Header Value !! 
 10:12:06.637 [http-nio-7073-exec-1] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlkc2RnY2lAZ21haWwuY29tIiwiaWF0IjoxNzAxNzUxMjc2LCJleHAiOjE3MDE3NjkyNzZ9.V7K5-qctHDxXYzqW8GP56zwsPftgDhCRsgSp6SOWYU-dhmGgzH2A18PSxt7FX0w_9RqfaKZ_4q9m0DE4p7We6Q
 10:12:45.974 [http-nio-7073-exec-2] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlkc2RnY2lAZ21haWwuY29tIiwiaWF0IjoxNzAxNzUxMjc2LCJleHAiOjE3MDE3NjkyNzZ9.V7K5-qctHDxXYzqW8GP56zwsPftgDhCRsgSp6SOWYU-dhmGgzH2A18PSxt7FX0w_9RqfaKZ_4q9m0DE4p7We6Q
-10:12:45.990 [http-nio-7073-exec-2] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@249112f
+10:12:45.990 [http-nio-7073-exec-2] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@249112f
 10:13:20.775 [http-nio-7073-exec-3] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  null
 10:13:20.775 [http-nio-7073-exec-3] INFO  o.s.web.filter.OncePerRequestFilter - Invalid Header Value !! 
 10:13:51.728 [http-nio-7073-exec-4] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NTE0MDAsImV4cCI6MTcwMTc2OTQwMH0.e7c5BTee9xwhmV7k0mQX8-FPJCxiG1LNcd250wN-ZsTllNnyAtXMoFM8LGyfYftFHYpmwdvqR9otauv28nAsPQ
-10:13:51.745 [http-nio-7073-exec-4] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@568236f8
+10:13:51.745 [http-nio-7073-exec-4] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@568236f8
 10:14:11.296 [http-nio-7073-exec-6] INFO  o.s.web.filter.OncePerRequestFilter -  Header :  Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3YXJpc2FmbGlzZGdjaUBnbWFpbC5jb20iLCJpYXQiOjE3MDE3NTE0MDAsImV4cCI6MTcwMTc2OTQwMH0.e7c5BTee9xwhmV7k0mQX8-FPJCxiG1LNcd250wN-ZsTllNnyAtXMoFM8LGyfYftFHYpmwdvqR9otauv28nAsPQ
-10:14:11.316 [http-nio-7073-exec-6] INFO  c.e.j.c.NotificationController - Received request: com.example.jwt.entities.NotificationEntity@5633b1d1
+10:14:11.316 [http-nio-7073-exec-6] INFO  c.e.j.c.NotificationController - Received request: entities.com.vtt.NotificationEntity@5633b1d1
 12:12:26.823 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 12:12:26.875 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 12:12:26.883 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-12:12:38.639 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 15748 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-12:12:38.640 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+12:12:38.639 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 15748 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+12:12:38.640 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 12:12:40.610 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 12:12:41.006 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 385 ms. Found 24 JPA repository interfaces.
 12:12:43.494 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -432,18 +432,18 @@
 12:12:48.057 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 12:12:49.290 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 12:12:50.025 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-12:12:50.324 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@380ea757, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@721e5f57, org.springframework.security.web.context.SecurityContextHolderFilter@c21c296, org.springframework.security.web.header.HeaderWriterFilter@2c1c3c13, org.springframework.security.web.authentication.logout.LogoutFilter@56c72fff, com.example.jwt.security.JwtAuthenticationFilter@77a35b2f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@435d74ba, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7b3b0896, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2e43fc06, org.springframework.security.web.session.SessionManagementFilter@ab2ac08, org.springframework.security.web.access.ExceptionTranslationFilter@6eb8fd79, org.springframework.security.web.access.intercept.AuthorizationFilter@767785a4]
+12:12:50.324 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@380ea757, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@721e5f57, org.springframework.security.web.context.SecurityContextHolderFilter@c21c296, org.springframework.security.web.header.HeaderWriterFilter@2c1c3c13, org.springframework.security.web.authentication.logout.LogoutFilter@56c72fff, security.com.vtt.JwtAuthenticationFilter@77a35b2f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@435d74ba, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7b3b0896, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2e43fc06, org.springframework.security.web.session.SessionManagementFilter@ab2ac08, org.springframework.security.web.access.ExceptionTranslationFilter@6eb8fd79, org.springframework.security.web.access.intercept.AuthorizationFilter@767785a4]
 12:12:50.819 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 12:12:50.838 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-12:12:50.851 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 12.632 seconds (process running for 21.293)
-12:12:50.927 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-12:12:50.927 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-12:12:50.927 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+12:12:50.851 [main] INFO  com.vtt.vtt - Started Jwt3Application in 12.632 seconds (process running for 21.293)
+12:12:50.927 [main] WARN  com.vtt.vtt - Warn Message
+12:12:50.927 [main] ERROR com.vtt.vtt - Error Message
+12:12:50.927 [main] INFO  com.vtt.vtt - Info Message
 12:13:40.763 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 12:13:40.765 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 12:13:40.773 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-12:13:43.666 [main] INFO  com.example.jwt.NIN_2023 - Starting Jwt3Application using Java 19.0.2 with PID 17868 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
-12:13:43.668 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "prod"
+12:13:43.666 [main] INFO  com.vtt.vtt - Starting Jwt3Application using Java 19.0.2 with PID 17868 (C:\Users\raj\Desktop\main jar\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\main jar\NIN_App_By_O2I)
+12:13:43.668 [main] INFO  com.vtt.vtt - The following 1 profile is active: "prod"
 12:13:44.466 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 12:13:44.593 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 120 ms. Found 24 JPA repository interfaces.
 12:13:45.141 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -587,7 +587,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(Jwt3Application.java:38)
+	at com.vtt.vtt.main(Jwt3Application.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there can be only one auto column and it must be defined as a key
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -600,15 +600,15 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 12:13:48.282 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 12:13:49.357 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 12:13:49.890 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-12:13:50.104 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7c057419, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78d3578e, org.springframework.security.web.context.SecurityContextHolderFilter@78494a59, org.springframework.security.web.header.HeaderWriterFilter@de4bee9, org.springframework.security.web.authentication.logout.LogoutFilter@283eb984, com.example.jwt.security.JwtAuthenticationFilter@2b8a11d7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@34ec33f4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3a8dd899, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4e4d6172, org.springframework.security.web.session.SessionManagementFilter@41b6ae51, org.springframework.security.web.access.ExceptionTranslationFilter@4a9d0c6f, org.springframework.security.web.access.intercept.AuthorizationFilter@2de526f9]
+12:13:50.104 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7c057419, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78d3578e, org.springframework.security.web.context.SecurityContextHolderFilter@78494a59, org.springframework.security.web.header.HeaderWriterFilter@de4bee9, org.springframework.security.web.authentication.logout.LogoutFilter@283eb984, security.com.vtt.JwtAuthenticationFilter@2b8a11d7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@34ec33f4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3a8dd899, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4e4d6172, org.springframework.security.web.session.SessionManagementFilter@41b6ae51, org.springframework.security.web.access.ExceptionTranslationFilter@4a9d0c6f, org.springframework.security.web.access.intercept.AuthorizationFilter@2de526f9]
 12:13:50.448 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 12:13:50.464 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-12:13:50.475 [main] INFO  com.example.jwt.NIN_2023 - Started Jwt3Application in 7.161 seconds (process running for 7.939)
-12:13:50.547 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-12:13:50.547 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-12:13:50.547 [main] INFO  com.example.jwt.NIN_2023 - Info Message
-13:08:55.738 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 2708 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:08:55.740 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+12:13:50.475 [main] INFO  com.vtt.vtt - Started Jwt3Application in 7.161 seconds (process running for 7.939)
+12:13:50.547 [main] WARN  com.vtt.vtt - Warn Message
+12:13:50.547 [main] ERROR com.vtt.vtt - Error Message
+12:13:50.547 [main] INFO  com.vtt.vtt - Info Message
+13:08:55.738 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 2708 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:08:55.740 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:08:57.898 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:08:58.057 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 149 ms. Found 26 JPA repository interfaces.
 13:08:58.749 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -630,13 +630,13 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 13:09:03.888 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:09:05.618 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:09:06.271 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:09:06.525 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6f3a8d5e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@680f7a5e, org.springframework.security.web.context.SecurityContextHolderFilter@4567dcbc, org.springframework.security.web.header.HeaderWriterFilter@69c70b62, org.springframework.security.web.authentication.logout.LogoutFilter@407bfc49, com.example.jwt.security.JwtAuthenticationFilter@58e46572, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6e11d059, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@69cf9acb, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3005133e, org.springframework.security.web.session.SessionManagementFilter@6aca85da, org.springframework.security.web.access.ExceptionTranslationFilter@36f329e7, org.springframework.security.web.access.intercept.AuthorizationFilter@1e33203f]
+13:09:06.525 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6f3a8d5e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@680f7a5e, org.springframework.security.web.context.SecurityContextHolderFilter@4567dcbc, org.springframework.security.web.header.HeaderWriterFilter@69c70b62, org.springframework.security.web.authentication.logout.LogoutFilter@407bfc49, security.com.vtt.JwtAuthenticationFilter@58e46572, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6e11d059, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@69cf9acb, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3005133e, org.springframework.security.web.session.SessionManagementFilter@6aca85da, org.springframework.security.web.access.ExceptionTranslationFilter@36f329e7, org.springframework.security.web.access.intercept.AuthorizationFilter@1e33203f]
 13:09:06.880 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:09:06.898 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:09:06.908 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 11.664 seconds (process running for 12.911)
-13:09:07.013 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:09:07.013 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:09:07.013 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:09:06.908 [main] INFO  com.vtt.vtt - Started NIN_2023 in 11.664 seconds (process running for 12.911)
+13:09:07.013 [main] WARN  com.vtt.vtt - Warn Message
+13:09:07.013 [main] ERROR com.vtt.vtt - Error Message
+13:09:07.013 [main] INFO  com.vtt.vtt - Info Message
 13:10:00.481 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 13:10:00.481 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 13:10:00.483 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -665,8 +665,8 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 13:13:27.344 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:13:27.346 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:13:27.352 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:13:32.592 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 15984 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:13:32.593 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+13:13:32.592 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 15984 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:13:32.593 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:13:33.521 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:13:33.636 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 107 ms. Found 26 JPA repository interfaces.
 13:13:34.224 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -688,13 +688,13 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 13:13:37.564 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:13:38.914 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:13:39.468 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:13:39.686 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@136cd71b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@631f188a, org.springframework.security.web.context.SecurityContextHolderFilter@543d242e, org.springframework.security.web.header.HeaderWriterFilter@dcaa0e8, org.springframework.security.web.authentication.logout.LogoutFilter@c9f1951, com.example.jwt.security.JwtAuthenticationFilter@2b01be54, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5c1348c6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@58a01e47, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@285bee4e, org.springframework.security.web.session.SessionManagementFilter@2f84848e, org.springframework.security.web.access.ExceptionTranslationFilter@276961df, org.springframework.security.web.access.intercept.AuthorizationFilter@62f25e32]
+13:13:39.686 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@136cd71b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@631f188a, org.springframework.security.web.context.SecurityContextHolderFilter@543d242e, org.springframework.security.web.header.HeaderWriterFilter@dcaa0e8, org.springframework.security.web.authentication.logout.LogoutFilter@c9f1951, security.com.vtt.JwtAuthenticationFilter@2b01be54, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5c1348c6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@58a01e47, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@285bee4e, org.springframework.security.web.session.SessionManagementFilter@2f84848e, org.springframework.security.web.access.ExceptionTranslationFilter@276961df, org.springframework.security.web.access.intercept.AuthorizationFilter@62f25e32]
 13:13:40.026 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:13:40.044 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:13:40.057 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 7.831 seconds (process running for 8.696)
-13:13:40.128 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:13:40.128 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:13:40.128 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:13:40.057 [main] INFO  com.vtt.vtt - Started NIN_2023 in 7.831 seconds (process running for 8.696)
+13:13:40.128 [main] WARN  com.vtt.vtt - Warn Message
+13:13:40.128 [main] ERROR com.vtt.vtt - Error Message
+13:13:40.128 [main] INFO  com.vtt.vtt - Info Message
 13:13:43.049 [http-nio-7073-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 13:13:43.049 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 13:13:43.051 [http-nio-7073-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
@@ -706,8 +706,8 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 13:17:29.695 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:17:29.697 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:17:29.704 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:17:35.024 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 9040 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:17:35.025 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+13:17:35.024 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 9040 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:17:35.025 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:17:35.884 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:17:36.002 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 111 ms. Found 26 JPA repository interfaces.
 13:17:36.560 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -729,13 +729,13 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 13:17:39.656 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:17:41.007 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:17:41.579 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:17:41.802 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ab780ce, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@17d90f81, org.springframework.security.web.context.SecurityContextHolderFilter@dcaa0e8, org.springframework.security.web.header.HeaderWriterFilter@36c6d53b, org.springframework.security.web.authentication.logout.LogoutFilter@712ce4f1, com.example.jwt.security.JwtAuthenticationFilter@5d04adc1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@206d4413, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3341ba8e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7b1466e3, org.springframework.security.web.session.SessionManagementFilter@53d257e7, org.springframework.security.web.access.ExceptionTranslationFilter@2e26841f, org.springframework.security.web.access.intercept.AuthorizationFilter@1f9a472e]
+13:17:41.802 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@5ab780ce, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@17d90f81, org.springframework.security.web.context.SecurityContextHolderFilter@dcaa0e8, org.springframework.security.web.header.HeaderWriterFilter@36c6d53b, org.springframework.security.web.authentication.logout.LogoutFilter@712ce4f1, security.com.vtt.JwtAuthenticationFilter@5d04adc1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@206d4413, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3341ba8e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7b1466e3, org.springframework.security.web.session.SessionManagementFilter@53d257e7, org.springframework.security.web.access.ExceptionTranslationFilter@2e26841f, org.springframework.security.web.access.intercept.AuthorizationFilter@1f9a472e]
 13:17:42.157 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:17:42.174 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:17:42.186 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 7.529 seconds (process running for 8.317)
-13:17:42.255 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:17:42.255 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:17:42.255 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:17:42.186 [main] INFO  com.vtt.vtt - Started NIN_2023 in 7.529 seconds (process running for 8.317)
+13:17:42.255 [main] WARN  com.vtt.vtt - Warn Message
+13:17:42.255 [main] ERROR com.vtt.vtt - Error Message
+13:17:42.255 [main] INFO  com.vtt.vtt - Info Message
 13:18:20.524 [http-nio-7073-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
 13:18:20.525 [http-nio-7073-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
 13:18:20.526 [http-nio-7073-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
@@ -743,8 +743,8 @@ Caused by: java.sql.SQLSyntaxErrorException: Incorrect table definition; there c
 13:22:56.253 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:22:56.260 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:22:56.281 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:23:02.336 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 15716 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:23:02.338 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "prod"
+13:23:02.336 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 15716 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:23:02.338 [main] INFO  com.vtt.vtt - The following 1 profile is active: "prod"
 13:23:03.528 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:23:03.656 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 115 ms. Found 26 JPA repository interfaces.
 13:23:04.287 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -890,7 +890,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'nindata.all_target' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1027,7 +1027,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "d
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLException: Cannot drop table 'health_trends' referenced by a foreign key constraint 'FKddy0yekoqovtevc7mt8pg6anx' on table 'sleep_duration'.
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1164,7 +1164,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "d
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLException: Cannot drop table 'user' referenced by a foreign key constraint 'FK4rs0yo5oy1hjx6lcuu2qy6e6k' on table 'calories data'.
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1301,7 +1301,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "d
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLException: Cannot drop table 'user_profile' referenced by a foreign key constraint 'FKcdpur9wgq8gyawd48i1sva18d' on table 'calories data'.
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:129)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1438,7 +1438,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "c
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'health_trends' already exists
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1575,7 +1575,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "c
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'user' already exists
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1712,7 +1712,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "c
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'user_profile' already exists
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1849,7 +1849,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_t8tbwelrnviudxdaggwr1kd9b'
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -1986,7 +1986,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_lqjrcobrh9jc8wpcar64q1bfh'
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -2123,7 +2123,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7scdvcjt0jy6xxrv'
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -2136,20 +2136,20 @@ Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7sc
 13:23:10.341 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:23:11.716 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:23:12.265 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:23:12.469 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4567dcbc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b3d759f, org.springframework.security.web.context.SecurityContextHolderFilter@52c0c594, org.springframework.security.web.header.HeaderWriterFilter@53a52b3f, org.springframework.security.web.authentication.logout.LogoutFilter@392da875, com.example.jwt.security.JwtAuthenticationFilter@41dbf02b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@581cd446, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@63fa7643, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6e11d059, org.springframework.security.web.session.SessionManagementFilter@81da6a3, org.springframework.security.web.access.ExceptionTranslationFilter@55feda3f, org.springframework.security.web.access.intercept.AuthorizationFilter@6aca85da]
+13:23:12.469 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4567dcbc, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b3d759f, org.springframework.security.web.context.SecurityContextHolderFilter@52c0c594, org.springframework.security.web.header.HeaderWriterFilter@53a52b3f, org.springframework.security.web.authentication.logout.LogoutFilter@392da875, security.com.vtt.JwtAuthenticationFilter@41dbf02b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@581cd446, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@63fa7643, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6e11d059, org.springframework.security.web.session.SessionManagementFilter@81da6a3, org.springframework.security.web.access.ExceptionTranslationFilter@55feda3f, org.springframework.security.web.access.intercept.AuthorizationFilter@6aca85da]
 13:23:12.814 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:23:12.831 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:23:12.842 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 10.941 seconds (process running for 12.042)
-13:23:12.938 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:23:12.938 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:23:12.938 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:23:12.842 [main] INFO  com.vtt.vtt - Started NIN_2023 in 10.941 seconds (process running for 12.042)
+13:23:12.938 [main] WARN  com.vtt.vtt - Warn Message
+13:23:12.938 [main] ERROR com.vtt.vtt - Error Message
+13:23:12.938 [main] INFO  com.vtt.vtt - Info Message
 13:23:23.828 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:23:24.323 [SpringApplicationShutdownHook] ERROR o.h.t.s.i.SchemaDropperImpl$DelayedDropActionImpl - HHH000478: Unsuccessful: drop table if exists user
 13:23:24.329 [SpringApplicationShutdownHook] ERROR o.h.t.s.i.SchemaDropperImpl$DelayedDropActionImpl - HHH000478: Unsuccessful: drop table if exists user_profile
 13:23:24.349 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:23:24.354 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:23:26.903 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 18228 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:23:26.904 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+13:23:26.903 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 18228 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:23:26.904 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:23:27.735 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:23:27.850 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 108 ms. Found 26 JPA repository interfaces.
 13:23:28.424 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -2171,15 +2171,15 @@ Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7sc
 13:23:32.645 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:23:33.964 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:23:34.482 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:23:34.698 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1396ee3b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@301af154, org.springframework.security.web.context.SecurityContextHolderFilter@60e06e7e, org.springframework.security.web.header.HeaderWriterFilter@5078c8f6, org.springframework.security.web.authentication.logout.LogoutFilter@7ff89dc0, com.example.jwt.security.JwtAuthenticationFilter@3c4940d2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74c0da40, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21d08148, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4b8cf10f, org.springframework.security.web.session.SessionManagementFilter@306cb0a0, org.springframework.security.web.access.ExceptionTranslationFilter@5b60accd, org.springframework.security.web.access.intercept.AuthorizationFilter@55feda3f]
+13:23:34.698 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1396ee3b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@301af154, org.springframework.security.web.context.SecurityContextHolderFilter@60e06e7e, org.springframework.security.web.header.HeaderWriterFilter@5078c8f6, org.springframework.security.web.authentication.logout.LogoutFilter@7ff89dc0, security.com.vtt.JwtAuthenticationFilter@3c4940d2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@74c0da40, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@21d08148, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4b8cf10f, org.springframework.security.web.session.SessionManagementFilter@306cb0a0, org.springframework.security.web.access.ExceptionTranslationFilter@5b60accd, org.springframework.security.web.access.intercept.AuthorizationFilter@55feda3f]
 13:23:35.025 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:23:35.041 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:23:35.051 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 8.519 seconds (process running for 9.319)
-13:23:35.152 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:23:35.152 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:23:35.152 [main] INFO  com.example.jwt.NIN_2023 - Info Message
-13:24:34.344 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.jwt.Jwt3ApplicationTests]: Jwt3ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-13:24:34.484 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.jwt.NIN_2023 for test class com.example.jwt.Jwt3ApplicationTests
+13:23:35.051 [main] INFO  com.vtt.vtt - Started NIN_2023 in 8.519 seconds (process running for 9.319)
+13:23:35.152 [main] WARN  com.vtt.vtt - Warn Message
+13:23:35.152 [main] ERROR com.vtt.vtt - Error Message
+13:23:35.152 [main] INFO  com.vtt.vtt - Info Message
+13:24:34.344 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.vtt.Jwt3ApplicationTests]: Jwt3ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:24:34.484 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.vtt.vtt for test class com.vtt.Jwt3ApplicationTests
 13:24:34.928 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
@@ -7276,11 +7276,11 @@ Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7sc
 13:24:43.355 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:24:44.919 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:24:45.568 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:24:45.949 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@523d6b45, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6e8e1a98, org.springframework.security.web.context.SecurityContextHolderFilter@6d49bd08, org.springframework.security.web.header.HeaderWriterFilter@5f6b6f2, org.springframework.security.web.authentication.logout.LogoutFilter@22ef1086, com.example.jwt.security.JwtAuthenticationFilter@16576a6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@31475919, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62f25e32, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@23f6a18d, org.springframework.security.web.session.SessionManagementFilter@c9f1951, org.springframework.security.web.access.ExceptionTranslationFilter@3edd135d, org.springframework.security.web.access.intercept.AuthorizationFilter@78a894fe]
+13:24:45.949 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@523d6b45, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6e8e1a98, org.springframework.security.web.context.SecurityContextHolderFilter@6d49bd08, org.springframework.security.web.header.HeaderWriterFilter@5f6b6f2, org.springframework.security.web.authentication.logout.LogoutFilter@22ef1086, security.com.vtt.JwtAuthenticationFilter@16576a6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@31475919, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@62f25e32, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@23f6a18d, org.springframework.security.web.session.SessionManagementFilter@c9f1951, org.springframework.security.web.access.ExceptionTranslationFilter@3edd135d, org.springframework.security.web.access.intercept.AuthorizationFilter@78a894fe]
 13:24:46.419 [main] INFO  c.example.jwt.Jwt3ApplicationTests - Started Jwt3ApplicationTests in 11.748 seconds (process running for 13.301)
-13:24:46.550 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:24:46.550 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:24:46.551 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:24:46.550 [main] WARN  com.vtt.vtt - Warn Message
+13:24:46.550 [main] ERROR com.vtt.vtt - Error Message
+13:24:46.551 [main] INFO  com.vtt.vtt - Info Message
 13:24:47.476 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:24:48.018 [SpringApplicationShutdownHook] ERROR o.h.t.s.i.SchemaDropperImpl$DelayedDropActionImpl - HHH000478: Unsuccessful: drop table if exists user
 13:24:48.029 [SpringApplicationShutdownHook] ERROR o.h.t.s.i.SchemaDropperImpl$DelayedDropActionImpl - HHH000478: Unsuccessful: drop table if exists user_profile
@@ -7289,8 +7289,8 @@ Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7sc
 13:29:02.156 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:29:02.615 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:29:02.622 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:29:07.570 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 8308 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:29:07.572 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "prod"
+13:29:07.570 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 8308 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:29:07.572 [main] INFO  com.vtt.vtt - The following 1 profile is active: "prod"
 13:29:08.915 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:29:09.036 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 110 ms. Found 26 JPA repository interfaces.
 13:29:09.619 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -7312,18 +7312,18 @@ Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7sc
 13:29:13.657 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:29:14.995 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:29:15.533 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:29:15.766 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@221b9c2b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42017162, org.springframework.security.web.context.SecurityContextHolderFilter@700f356b, org.springframework.security.web.header.HeaderWriterFilter@4f3eddc0, org.springframework.security.web.authentication.logout.LogoutFilter@14a7e16e, com.example.jwt.security.JwtAuthenticationFilter@6e98fd10, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@712ce4f1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@136bd1d1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@66049424, org.springframework.security.web.session.SessionManagementFilter@fb74661, org.springframework.security.web.access.ExceptionTranslationFilter@5f967ad3, org.springframework.security.web.access.intercept.AuthorizationFilter@5626cb89]
+13:29:15.766 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@221b9c2b, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@42017162, org.springframework.security.web.context.SecurityContextHolderFilter@700f356b, org.springframework.security.web.header.HeaderWriterFilter@4f3eddc0, org.springframework.security.web.authentication.logout.LogoutFilter@14a7e16e, security.com.vtt.JwtAuthenticationFilter@6e98fd10, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@712ce4f1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@136bd1d1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@66049424, org.springframework.security.web.session.SessionManagementFilter@fb74661, org.springframework.security.web.access.ExceptionTranslationFilter@5f967ad3, org.springframework.security.web.access.intercept.AuthorizationFilter@5626cb89]
 13:29:16.095 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:29:16.110 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:29:16.121 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 8.91 seconds (process running for 9.823)
-13:29:16.225 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:29:16.225 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:29:16.225 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:29:16.121 [main] INFO  com.vtt.vtt - Started NIN_2023 in 8.91 seconds (process running for 9.823)
+13:29:16.225 [main] WARN  com.vtt.vtt - Warn Message
+13:29:16.225 [main] ERROR com.vtt.vtt - Error Message
+13:29:16.225 [main] INFO  com.vtt.vtt - Info Message
 13:31:36.375 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:31:36.377 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:31:36.382 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:31:38.833 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 15552 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:31:38.835 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "prod"
+13:31:38.833 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 15552 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:31:38.835 [main] INFO  com.vtt.vtt - The following 1 profile is active: "prod"
 13:31:39.659 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:31:39.777 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 110 ms. Found 26 JPA repository interfaces.
 13:31:40.341 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -7345,15 +7345,15 @@ Caused by: java.sql.SQLSyntaxErrorException: Duplicate key name 'UK_ebc21hy5j7sc
 13:31:43.280 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:31:44.578 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:31:45.086 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:31:45.318 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@146b3bc7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@200cdb37, org.springframework.security.web.context.SecurityContextHolderFilter@6a4859fc, org.springframework.security.web.header.HeaderWriterFilter@3edd135d, org.springframework.security.web.authentication.logout.LogoutFilter@7dcbcede, com.example.jwt.security.JwtAuthenticationFilter@17f5b53a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d49bd08, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@33e7ece5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@523d6b45, org.springframework.security.web.session.SessionManagementFilter@17d90f81, org.springframework.security.web.access.ExceptionTranslationFilter@453ef145, org.springframework.security.web.access.intercept.AuthorizationFilter@5e5d41dc]
+13:31:45.318 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@146b3bc7, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@200cdb37, org.springframework.security.web.context.SecurityContextHolderFilter@6a4859fc, org.springframework.security.web.header.HeaderWriterFilter@3edd135d, org.springframework.security.web.authentication.logout.LogoutFilter@7dcbcede, security.com.vtt.JwtAuthenticationFilter@17f5b53a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d49bd08, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@33e7ece5, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@523d6b45, org.springframework.security.web.session.SessionManagementFilter@17d90f81, org.springframework.security.web.access.ExceptionTranslationFilter@453ef145, org.springframework.security.web.access.intercept.AuthorizationFilter@5e5d41dc]
 13:31:45.662 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:31:45.679 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:31:45.690 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 7.202 seconds (process running for 7.994)
-13:31:45.768 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:31:45.768 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:31:45.768 [main] INFO  com.example.jwt.NIN_2023 - Info Message
-13:32:21.765 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.example.jwt.Jwt3ApplicationTests]: Jwt3ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-13:32:21.906 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.example.jwt.NIN_2023 for test class com.example.jwt.Jwt3ApplicationTests
+13:31:45.690 [main] INFO  com.vtt.vtt - Started NIN_2023 in 7.202 seconds (process running for 7.994)
+13:31:45.768 [main] WARN  com.vtt.vtt - Warn Message
+13:31:45.768 [main] ERROR com.vtt.vtt - Error Message
+13:31:45.768 [main] INFO  com.vtt.vtt - Info Message
+13:32:21.765 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.vtt.Jwt3ApplicationTests]: Jwt3ApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:32:21.906 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.vtt.vtt for test class com.vtt.Jwt3ApplicationTests
 13:32:22.412 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
@@ -7380,19 +7380,19 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 13:32:28.085 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:32:29.680 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:32:30.363 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:32:30.737 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@78cb1a92, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7e9e73, org.springframework.security.web.context.SecurityContextHolderFilter@6f286e1d, org.springframework.security.web.header.HeaderWriterFilter@31475919, org.springframework.security.web.authentication.logout.LogoutFilter@42ffa0c8, com.example.jwt.security.JwtAuthenticationFilter@2da7ef3e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d293b41, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@32c503d3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@39c78cf9, org.springframework.security.web.session.SessionManagementFilter@63f95ac1, org.springframework.security.web.access.ExceptionTranslationFilter@6d49bd08, org.springframework.security.web.access.intercept.AuthorizationFilter@39f826ae]
+13:32:30.737 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@78cb1a92, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7e9e73, org.springframework.security.web.context.SecurityContextHolderFilter@6f286e1d, org.springframework.security.web.header.HeaderWriterFilter@31475919, org.springframework.security.web.authentication.logout.LogoutFilter@42ffa0c8, security.com.vtt.JwtAuthenticationFilter@2da7ef3e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6d293b41, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@32c503d3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@39c78cf9, org.springframework.security.web.session.SessionManagementFilter@63f95ac1, org.springframework.security.web.access.ExceptionTranslationFilter@6d49bd08, org.springframework.security.web.access.intercept.AuthorizationFilter@39f826ae]
 13:32:31.208 [main] INFO  c.example.jwt.Jwt3ApplicationTests - Started Jwt3ApplicationTests in 9.089 seconds (process running for 10.602)
-13:32:31.305 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:32:31.305 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:32:31.305 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:32:31.305 [main] WARN  com.vtt.vtt - Warn Message
+13:32:31.305 [main] ERROR com.vtt.vtt - Error Message
+13:32:31.305 [main] INFO  com.vtt.vtt - Info Message
 13:32:32.133 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:32:32.136 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:32:32.144 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
 13:51:12.927 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:51:12.937 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:51:12.949 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:51:19.439 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 16496 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:51:19.441 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+13:51:19.439 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 16496 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:51:19.441 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:51:20.790 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:51:20.907 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 109 ms. Found 26 JPA repository interfaces.
 13:51:21.505 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -7538,7 +7538,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.activities' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -7675,7 +7675,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.activities' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -7812,7 +7812,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.all_target' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -7949,7 +7949,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.all_toggle' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8086,7 +8086,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.blood_glucose' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8223,7 +8223,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.blood_glucose' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8360,7 +8360,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.blood_pressure' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8497,7 +8497,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.blood_pressure' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8634,7 +8634,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.book_table' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8771,7 +8771,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.dishes' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -8908,7 +8908,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.fitness_activities' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9045,7 +9045,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.health_trends' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9182,7 +9182,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.health_trends' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9319,7 +9319,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.heart_rate' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9456,7 +9456,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.heart_rate' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9593,7 +9593,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.ingredients' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9730,7 +9730,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.ingredients_nin_data_list' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -9867,7 +9867,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.ingredients_nin_data_list' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10004,7 +10004,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.menstrual_cycle' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10141,7 +10141,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.menstrual_cycle' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10278,7 +10278,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.notification_entity' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10415,7 +10415,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.order_book_id_list' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10552,7 +10552,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.oxygen_saturated_level' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10689,7 +10689,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.oxygen_saturated_level' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10826,7 +10826,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.sleep_duration' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -10963,7 +10963,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.target_data' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11100,7 +11100,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.user_feedback' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11237,7 +11237,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.user_profile' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11374,7 +11374,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.user_roles' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11511,7 +11511,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.user_roles' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11648,7 +11648,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.verification_token' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11785,7 +11785,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.watch_data' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11922,7 +11922,7 @@ org.hibernate.tool.schema.spi.CommandAcceptanceException: Error executing DDL "a
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:312)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1306)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1295)
-	at com.example.jwt.NIN_2023.main(NIN_2023.java:38)
+	at com.vtt.vtt.main(NIN_2023.java:38)
 Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.water_entity' doesn't exist
 	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:120)
 	at com.mysql.cj.jdbc.exceptions.SQLExceptionsMapping.translateException(SQLExceptionsMapping.java:122)
@@ -11935,18 +11935,18 @@ Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.water_entity' doesn't 
 13:51:27.745 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:51:29.115 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:51:30.519 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:51:30.748 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@47523643, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d9dd8cc, org.springframework.security.web.context.SecurityContextHolderFilter@39caf68a, org.springframework.security.web.header.HeaderWriterFilter@ae094e8, org.springframework.security.web.authentication.logout.LogoutFilter@37e57a20, com.example.jwt.security.JwtAuthenticationFilter@21a1554, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@ce4a8a2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@606cb314, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@10d1f6da, org.springframework.security.web.session.SessionManagementFilter@37930f48, org.springframework.security.web.access.ExceptionTranslationFilter@78d816e6, org.springframework.security.web.access.intercept.AuthorizationFilter@725f1346]
+13:51:30.748 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@47523643, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4d9dd8cc, org.springframework.security.web.context.SecurityContextHolderFilter@39caf68a, org.springframework.security.web.header.HeaderWriterFilter@ae094e8, org.springframework.security.web.authentication.logout.LogoutFilter@37e57a20, security.com.vtt.JwtAuthenticationFilter@21a1554, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@ce4a8a2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@606cb314, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@10d1f6da, org.springframework.security.web.session.SessionManagementFilter@37930f48, org.springframework.security.web.access.ExceptionTranslationFilter@78d816e6, org.springframework.security.web.access.intercept.AuthorizationFilter@725f1346]
 13:51:31.144 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:51:31.160 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:51:31.172 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 12.141 seconds (process running for 12.996)
-13:51:31.458 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:51:31.459 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:51:31.459 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:51:31.172 [main] INFO  com.vtt.vtt - Started NIN_2023 in 12.141 seconds (process running for 12.996)
+13:51:31.458 [main] WARN  com.vtt.vtt - Warn Message
+13:51:31.459 [main] ERROR com.vtt.vtt - Error Message
+13:51:31.459 [main] INFO  com.vtt.vtt - Info Message
 13:53:06.239 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:53:07.087 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:53:07.093 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:53:11.738 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 11768 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:53:11.740 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+13:53:11.738 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 11768 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:53:11.740 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:53:12.601 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:53:12.723 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 114 ms. Found 26 JPA repository interfaces.
 13:53:13.296 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -11968,18 +11968,18 @@ Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.water_entity' doesn't 
 13:53:18.027 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:53:19.316 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:53:19.830 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:53:20.047 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2079ce51, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1692d173, org.springframework.security.web.context.SecurityContextHolderFilter@22ccd80f, org.springframework.security.web.header.HeaderWriterFilter@2f84848e, org.springframework.security.web.authentication.logout.LogoutFilter@136cd71b, com.example.jwt.security.JwtAuthenticationFilter@89017e5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2986e26f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@700f356b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@32c503d3, org.springframework.security.web.session.SessionManagementFilter@680f7a5e, org.springframework.security.web.access.ExceptionTranslationFilter@3413effc, org.springframework.security.web.access.intercept.AuthorizationFilter@46ae1e6b]
+13:53:20.047 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@2079ce51, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1692d173, org.springframework.security.web.context.SecurityContextHolderFilter@22ccd80f, org.springframework.security.web.header.HeaderWriterFilter@2f84848e, org.springframework.security.web.authentication.logout.LogoutFilter@136cd71b, security.com.vtt.JwtAuthenticationFilter@89017e5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2986e26f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@700f356b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@32c503d3, org.springframework.security.web.session.SessionManagementFilter@680f7a5e, org.springframework.security.web.access.ExceptionTranslationFilter@3413effc, org.springframework.security.web.access.intercept.AuthorizationFilter@46ae1e6b]
 13:53:20.371 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:53:20.387 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:53:20.399 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 9.034 seconds (process running for 9.813)
-13:53:20.497 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:53:20.498 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:53:20.498 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:53:20.399 [main] INFO  com.vtt.vtt - Started NIN_2023 in 9.034 seconds (process running for 9.813)
+13:53:20.497 [main] WARN  com.vtt.vtt - Warn Message
+13:53:20.498 [main] ERROR com.vtt.vtt - Error Message
+13:53:20.498 [main] INFO  com.vtt.vtt - Info Message
 13:54:34.681 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:54:34.683 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:54:34.689 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-13:54:40.138 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 2592 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
-13:54:40.140 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+13:54:40.138 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 2592 (C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I\target\classes started by raj in C:\Users\raj\Desktop\5 Dec\NIN_App_By_O2I)
+13:54:40.140 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 13:54:41.055 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 13:54:41.175 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 109 ms. Found 26 JPA repository interfaces.
 13:54:41.735 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -12001,18 +12001,18 @@ Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.water_entity' doesn't 
 13:54:45.018 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 13:54:46.356 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 13:54:46.871 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-13:54:47.087 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@66121af9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62a153d3, org.springframework.security.web.context.SecurityContextHolderFilter@8862881, org.springframework.security.web.header.HeaderWriterFilter@bafb3bd, org.springframework.security.web.authentication.logout.LogoutFilter@7dc155b3, com.example.jwt.security.JwtAuthenticationFilter@2ee949d4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@61668c05, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@562fa8f2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3b21f625, org.springframework.security.web.session.SessionManagementFilter@49e4b332, org.springframework.security.web.access.ExceptionTranslationFilter@49f8b57d, org.springframework.security.web.access.intercept.AuthorizationFilter@1923a29a]
+13:54:47.087 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@66121af9, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@62a153d3, org.springframework.security.web.context.SecurityContextHolderFilter@8862881, org.springframework.security.web.header.HeaderWriterFilter@bafb3bd, org.springframework.security.web.authentication.logout.LogoutFilter@7dc155b3, security.com.vtt.JwtAuthenticationFilter@2ee949d4, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@61668c05, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@562fa8f2, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3b21f625, org.springframework.security.web.session.SessionManagementFilter@49e4b332, org.springframework.security.web.access.ExceptionTranslationFilter@49f8b57d, org.springframework.security.web.access.intercept.AuthorizationFilter@1923a29a]
 13:54:47.427 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 13:54:47.445 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-13:54:47.455 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 7.674 seconds (process running for 8.448)
-13:54:47.525 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-13:54:47.526 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-13:54:47.526 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+13:54:47.455 [main] INFO  com.vtt.vtt - Started NIN_2023 in 7.674 seconds (process running for 8.448)
+13:54:47.525 [main] WARN  com.vtt.vtt - Warn Message
+13:54:47.526 [main] ERROR com.vtt.vtt - Error Message
+13:54:47.526 [main] INFO  com.vtt.vtt - Info Message
 13:55:31.802 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 13:55:31.805 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 13:55:31.811 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
-16:20:39.299 [main] INFO  com.example.jwt.NIN_2023 - Starting NIN_2023 using Java 19.0.2 with PID 21288 (C:\Users\anuj\Desktop\clone\NIN_App_By_O2I\target\classes started by anuj in C:\Users\anuj\Desktop\clone\NIN_App_By_O2I)
-16:20:39.299 [main] INFO  com.example.jwt.NIN_2023 - The following 1 profile is active: "dev"
+16:20:39.299 [main] INFO  com.vtt.vtt - Starting NIN_2023 using Java 19.0.2 with PID 21288 (C:\Users\anuj\Desktop\clone\NIN_App_By_O2I\target\classes started by anuj in C:\Users\anuj\Desktop\clone\NIN_App_By_O2I)
+16:20:39.299 [main] INFO  com.vtt.vtt - The following 1 profile is active: "dev"
 16:20:39.921 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
 16:20:39.998 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 65 ms. Found 26 JPA repository interfaces.
 16:20:40.376 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 7073 (http)
@@ -12034,10 +12034,10 @@ Caused by: java.sql.SQLSyntaxErrorException: Table 'marks.water_entity' doesn't 
 16:20:43.563 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
 16:20:44.403 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
 16:20:44.747 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-16:20:44.887 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6149184e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6f3a8d5e, org.springframework.security.web.context.SecurityContextHolderFilter@1d123972, org.springframework.security.web.header.HeaderWriterFilter@7a11426a, org.springframework.security.web.authentication.logout.LogoutFilter@3413effc, com.example.jwt.security.JwtAuthenticationFilter@4708acc6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b3d759f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@9bc10bd, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@680f7a5e, org.springframework.security.web.session.SessionManagementFilter@5b3063b7, org.springframework.security.web.access.ExceptionTranslationFilter@3bd69a51, org.springframework.security.web.access.intercept.AuthorizationFilter@729f8c5d]
+16:20:44.887 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@6149184e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6f3a8d5e, org.springframework.security.web.context.SecurityContextHolderFilter@1d123972, org.springframework.security.web.header.HeaderWriterFilter@7a11426a, org.springframework.security.web.authentication.logout.LogoutFilter@3413effc, security.com.vtt.JwtAuthenticationFilter@4708acc6, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7b3d759f, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@9bc10bd, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@680f7a5e, org.springframework.security.web.session.SessionManagementFilter@5b3063b7, org.springframework.security.web.access.ExceptionTranslationFilter@3bd69a51, org.springframework.security.web.access.intercept.AuthorizationFilter@729f8c5d]
 16:20:45.106 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-7073"]
 16:20:45.121 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 7073 (http) with context path ''
-16:20:45.136 [main] INFO  com.example.jwt.NIN_2023 - Started NIN_2023 in 6.071 seconds (process running for 7.549)
-16:20:45.199 [main] WARN  com.example.jwt.NIN_2023 - Warn Message
-16:20:45.199 [main] ERROR com.example.jwt.NIN_2023 - Error Message
-16:20:45.199 [main] INFO  com.example.jwt.NIN_2023 - Info Message
+16:20:45.136 [main] INFO  com.vtt.vtt - Started NIN_2023 in 6.071 seconds (process running for 7.549)
+16:20:45.199 [main] WARN  com.vtt.vtt - Warn Message
+16:20:45.199 [main] ERROR com.vtt.vtt - Error Message
+16:20:45.199 [main] INFO  com.vtt.vtt - Info Message
