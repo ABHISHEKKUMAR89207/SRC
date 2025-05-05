@@ -63,7 +63,27 @@ public class DisplayNamesCatController {
         }
     }
 
-    // Get all display name categories
+//    // Get all display name categories
+//    @GetMapping
+//    public ResponseEntity<?> getAllDisplayNamesCats(
+//            @RequestHeader("Authorization") String tokenHeader) {
+//        try {
+//            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+//            if (requestingUser.getMainRole() != MainRole.ADMIN &&
+//                    requestingUser.getMainRole() != MainRole.ADMIN) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Only ADMIN or VIEWER can access this endpoint");
+//            }
+//
+//            List<DisplayNamesCat> categories = mongoTemplate.findAll(DisplayNamesCat.class);
+//            return ResponseEntity.ok(categories);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body("Invalid or expired token");
+//        }
+//    }
+
+    // Get all display name categories where user is null
     @GetMapping
     public ResponseEntity<?> getAllDisplayNamesCats(
             @RequestHeader("Authorization") String tokenHeader) {
@@ -75,7 +95,10 @@ public class DisplayNamesCatController {
                         .body("Only ADMIN or VIEWER can access this endpoint");
             }
 
-            List<DisplayNamesCat> categories = mongoTemplate.findAll(DisplayNamesCat.class);
+            Query query = new Query();
+            query.addCriteria(Criteria.where("user").is(null));
+            List<DisplayNamesCat> categories = mongoTemplate.find(query, DisplayNamesCat.class);
+
             return ResponseEntity.ok(categories);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

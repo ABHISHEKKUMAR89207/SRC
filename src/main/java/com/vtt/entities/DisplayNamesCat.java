@@ -27,6 +27,8 @@ public class DisplayNamesCat {
     private String websiteName;
     private String imageUrl;
 
+    @DBRef
+    private User user;
 
 
 
