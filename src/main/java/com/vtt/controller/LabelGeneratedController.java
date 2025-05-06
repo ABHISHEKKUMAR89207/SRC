@@ -25,22 +25,111 @@ public class LabelGeneratedController {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     @Autowired
+    private  MaterNumberRepository materNumberRepo;
+    @Autowired
     private SerialNoProductRepository serialNoProductRepository;
     @Autowired
     private DisplayNamesCatRepository displayNamesCatRepository;
     @Autowired
     private TokenUtils tokenUtils;
 
+    // Add these methods to your LabelGeneratedController class
+
+    /**
+     * Checks if all fabrics in the label have sufficient quantity available
+     */
+    private boolean checkFabricAvailability(LabelGenerated label) {
+        if (label.getFabrics() == null || label.getFabrics().isEmpty()) {
+            return true; // No fabrics to check
+        }
+
+        for (LabelGenerated.LabelFabric labelFabric : label.getFabrics()) {
+            Fabric fabric = labelFabric.getFabric();
+            if (fabric == null) {
+                throw new IllegalArgumentException("Fabric reference is null");
+            }
+
+            // Refresh fabric data from DB to ensure we have latest quantity
+            Fabric currentFabric = fabricRepository.findById(fabric.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Fabric not found with id: " + fabric.getId()));
+
+            if (currentFabric.getQuantityinMeter() < labelFabric.getUsedQuantity()) {
+                return false; // Insufficient quantity
+            }
+        }
+
+        return true; // All fabrics have sufficient quantity
+    }
+
+    /**
+     * Updates fabric quantities by subtracting used amounts
+     */
+    private void updateFabricQuantities(LabelGenerated label) {
+        if (label.getFabrics() == null || label.getFabrics().isEmpty()) {
+            return; // No fabrics to update
+        }
+
+        for (LabelGenerated.LabelFabric labelFabric : label.getFabrics()) {
+            Fabric fabric = labelFabric.getFabric();
+            if (fabric == null) {
+                continue; // Skip if fabric reference is null
+            }
+
+            // Refresh fabric data from DB
+            Fabric currentFabric = fabricRepository.findById(fabric.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Fabric not found with id: " + fabric.getId()));
+
+            // Calculate new quantity
+            double newQuantity = currentFabric.getQuantityinMeter() - labelFabric.getUsedQuantity();
+            if (newQuantity < 0) {
+                throw new IllegalStateException("Negative fabric quantity would result for fabric: " + currentFabric.getId());
+            }
+
+            // Update and save
+            currentFabric.setQuantityinMeter(newQuantity);
+            currentFabric.setUpdatedAt(Instant.now());
+            fabricRepository.save(currentFabric);
+        }
+    }
+
+    /**
+     * Restores fabric quantities by adding back used amounts (for delete operations)
+     */
+    private void restoreFabricQuantities(LabelGenerated label) {
+        if (label.getFabrics() == null || label.getFabrics().isEmpty()) {
+            return; // No fabrics to restore
+        }
+
+        for (LabelGenerated.LabelFabric labelFabric : label.getFabrics()) {
+            Fabric fabric = labelFabric.getFabric();
+            if (fabric == null) {
+                continue; // Skip if fabric reference is null
+            }
+
+            // Refresh fabric data from DB
+            Fabric currentFabric = fabricRepository.findById(fabric.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Fabric not found with id: " + fabric.getId()));
+
+            // Calculate new quantity by adding back
+            double newQuantity = currentFabric.getQuantityinMeter() + labelFabric.getUsedQuantity();
+
+            // Update and save
+            currentFabric.setQuantityinMeter(newQuantity);
+            currentFabric.setUpdatedAt(Instant.now());
+            fabricRepository.save(currentFabric);
+        }
+    }
     // CREATE Label
+    // Modified createLabel method
     @PostMapping("/create")
     public ResponseEntity<?> createLabel(
             @RequestHeader("Authorization") String tokenHeader,
             @RequestBody LabelGeneratedDTO labelDto) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN can access this endpoint");
+                        .body("Only ADMIN or WORKER can access this endpoint");
             }
 
             // Get the order reference
@@ -53,22 +142,30 @@ public class LabelGeneratedController {
             LabelGenerated label = mapDtoToEntity(labelDto);
             label.setOrderReference(optionalOrder.get());
 
+            // Check fabric availability before proceeding
+            if (!checkFabricAvailability(label)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Insufficient fabric quantity available");
+            }
+
             // Generate Label Number
             String labelNumber = generateUniqueLabelNumber(labelDto.getMasterNumber());
             label.setLabelNumber(labelNumber);
 
             label.setCreatedAt(Instant.now());
             label.setUpdatedAt(Instant.now());
+
+            // First save the label to get its ID
             LabelGenerated savedLabel = labelGeneratedRepository.save(label);
 
+            // Then update fabric quantities
+            updateFabricQuantities(savedLabel);
+
             // Update completed quantities in the order
-            updateOrderCompletedQuantities(optionalOrder.get(), label);
+            updateOrderCompletedQuantities(optionalOrder.get(), savedLabel);
 
-            // Separated method call
+            // Create serial number product
             createSerialNoProduct(savedLabel);
-
-
-
 
             return ResponseEntity.ok(savedLabel);
 
@@ -77,6 +174,179 @@ public class LabelGeneratedController {
                     .body("Error creating label: " + e.getMessage());
         }
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteLabel(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String id) {
+        try {
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or WORKER can access this endpoint");
+            }
+
+            Optional<LabelGenerated> optionalLabel = labelGeneratedRepository.findById(id);
+            if (optionalLabel.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Label not found with id: " + id);
+            }
+
+            LabelGenerated label = optionalLabel.get();
+            Order order = label.getOrderReference();
+
+            // First restore fabric quantities
+            restoreFabricQuantities(label);
+
+            // Then delete the label
+            labelGeneratedRepository.deleteById(id);
+
+            // Finally, update the order's completed quantities by removing this label's quantities
+            revertOrderCompletedQuantities(order, label);
+
+            return ResponseEntity.ok("Label deleted successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting label: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/next-label-number")
+    public ResponseEntity<?> getNextLabelNumber(
+            @RequestHeader("Authorization") String tokenHeader) {
+        try {
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or WORKER can access this endpoint");
+            }
+
+            MaterNumber materNumber = materNumberRepo.findByUser(requestingUser);
+            if (materNumber == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No master number associated with this user");
+            }
+
+            String masterNumber = String.valueOf(materNumber.getMaterNumber());
+            String nextLabelNumber = generateUniqueLabelNumber(masterNumber);
+            return ResponseEntity.ok(Collections.singletonMap("nextLabelNumber", nextLabelNumber));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error generating next label number: " + e.getMessage());
+        }
+    }
+    @GetMapping("/getlable-by-date/{date}")
+    public ResponseEntity<?> getLabelsByMasterDate(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String date) {
+        try {
+            // Fetch the user from the token
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+
+            // Check if the user has the required role
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or WORKER can access this endpoint");
+            }
+
+            // Parse the input date
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            java.time.LocalDate localDate = java.time.LocalDate.parse(date, formatter);
+
+            // Convert to Instant range (start and end of the day)
+            Instant startOfDay = localDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+            Instant endOfDay = localDate.plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+
+            // Find labels created on that date
+            List<LabelGenerated> labels = labelGeneratedRepository.findByCreatedAtBetween(startOfDay, endOfDay);
+
+            // If no labels found, return a not found response
+            if (labels.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No labels found for the date: " + date);
+            }
+
+            // Return the labels found
+            return ResponseEntity.ok(labels);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching labels: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Reverts the completed quantities in the order by subtracting the quantities from the deleted label
+     */
+    private void revertOrderCompletedQuantities(Order order, LabelGenerated deletedLabel) {
+        // Create a map to track the quantities from the deleted label
+        Map<String, Integer> deletedQuantities = new HashMap<>();
+
+        // Sum quantities from the deleted label's sizes
+        if (deletedLabel.getSizes() != null) {
+            for (LabelGenerated.SizeCompleted size : deletedLabel.getSizes()) {
+                deletedQuantities.merge(size.getSizeName(), size.getQuantity(), Integer::sum);
+            }
+        }
+
+        // Subtract only the sizes that exist in the deleted label
+        for (Order.SizeQuantity orderSize : order.getSizes()) {
+            if (deletedQuantities.containsKey(orderSize.getLabel())) {
+                // Only update if this size exists in the deleted label
+                int newQuantity = orderSize.getCompletedQuantity() - deletedQuantities.get(orderSize.getLabel());
+                orderSize.setCompletedQuantity(Math.max(newQuantity, 0)); // Prevent negative quantities
+            }
+        }
+
+        orderRepository.save(order);
+    }
+//    @PostMapping("/create")
+//    public ResponseEntity<?> createLabel(
+//            @RequestHeader("Authorization") String tokenHeader,
+//            @RequestBody LabelGeneratedDTO labelDto) {
+//        try {
+//            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+//            if (requestingUser.getMainRole() != MainRole.ADMIN&& requestingUser.getMainRole() != MainRole.WORKER) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Only ADMIN can access this endpoint");
+//            }
+//
+//            // Get the order reference
+//            Optional<Order> optionalOrder = orderRepository.findById(labelDto.getOrderReference());
+//            if (optionalOrder.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                        .body("Order not found with id: " + labelDto.getOrderReference());
+//            }
+//
+//            LabelGenerated label = mapDtoToEntity(labelDto);
+//            label.setOrderReference(optionalOrder.get());
+//
+//            // Generate Label Number
+//            String labelNumber = generateUniqueLabelNumber(labelDto.getMasterNumber());
+//            label.setLabelNumber(labelNumber);
+//
+//            label.setCreatedAt(Instant.now());
+//            label.setUpdatedAt(Instant.now());
+//            LabelGenerated savedLabel = labelGeneratedRepository.save(label);
+//
+//            // Update completed quantities in the order
+//            updateOrderCompletedQuantities(optionalOrder.get(), label);
+//
+//            // Separated method call
+//            createSerialNoProduct(savedLabel);
+//
+//
+//
+//
+//            return ResponseEntity.ok(savedLabel);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Error creating label: " + e.getMessage());
+//        }
+//    }
 
     private void createSerialNoProduct(LabelGenerated savedLabel) {
         Optional<DisplayNamesCat> defaultDisplayOpt = displayNamesCatRepository.findById(savedLabel.getDisplayId());
@@ -90,34 +360,29 @@ public class LabelGeneratedController {
         serialNoProduct.setLabelGenerated(savedLabel);
         serialNoProductRepository.save(serialNoProduct);
     }
-
     private void updateOrderCompletedQuantities(Order order, LabelGenerated label) {
-        // Get all labels for this order
-        List<LabelGenerated> orderLabels = labelGeneratedRepository.findByOrderReference(order);
+        // Create a map to track the quantities from this specific label
+        Map<String, Integer> labelQuantities = new HashMap<>();
 
-        // Create a map to track completed quantities by size
-        Map<String, Integer> completedQuantities = new HashMap<>();
-
-        // Initialize with existing sizes from order
-        for (Order.SizeQuantity size : order.getSizes()) {
-            completedQuantities.put(size.getLabel(), size.getCompletedQuantity());
-        }
-
-        // Sum up quantities from all labels
-        for (LabelGenerated orderLabel : orderLabels) {
-            for (LabelGenerated.SizeCompleted size : orderLabel.getSizes()) {
-                completedQuantities.merge(size.getSizeName(), size.getQuantity(), Integer::sum);
+        // Sum quantities from this label's sizes
+        if (label.getSizes() != null) {
+            for (LabelGenerated.SizeCompleted size : label.getSizes()) {
+                labelQuantities.merge(size.getSizeName(), size.getQuantity(), Integer::sum);
             }
         }
 
-        // Update the order's completed quantities
-        for (Order.SizeQuantity size : order.getSizes()) {
-            size.setCompletedQuantity(completedQuantities.getOrDefault(size.getLabel(), 0));
+        // Update only the sizes that exist in this label
+        for (Order.SizeQuantity orderSize : order.getSizes()) {
+            if (labelQuantities.containsKey(orderSize.getLabel())) {
+                // Only update if this size exists in the label
+                orderSize.setCompletedQuantity(
+                        orderSize.getCompletedQuantity() + labelQuantities.get(orderSize.getLabel())
+                );
+            }
         }
 
         orderRepository.save(order);
     }
-
     // ... [keep all other existing methods] ...
 
     @GetMapping("/get-by-label-number/{labelNumber}")
@@ -126,9 +391,9 @@ public class LabelGeneratedController {
             @PathVariable String labelNumber) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-//            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+//            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
 //                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-//                        .body("Only ADMIN can access this endpoint");
+//                        .body("Only ADMIN or WORKER can access this endpoint");
 //            }
 
             Optional<LabelGenerated> optionalLabel = labelGeneratedRepository.findByLabelNumber(labelNumber);
@@ -271,40 +536,40 @@ public class LabelGeneratedController {
     }
 
     // DELETE Label
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteLabel(
-            @RequestHeader("Authorization") String tokenHeader,
-            @PathVariable String id) {
-        try {
-            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN can access this endpoint");
-            }
-
-            Optional<LabelGenerated> optionalLabel = labelGeneratedRepository.findById(id);
-            if (optionalLabel.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Label not found with id: " + id);
-            }
-
-            labelGeneratedRepository.deleteById(id);
-            return ResponseEntity.ok("Label deleted successfully");
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error deleting label: " + e.getMessage());
-        }
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<?> deleteLabel(
+//            @RequestHeader("Authorization") String tokenHeader,
+//            @PathVariable String id) {
+//        try {
+//            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+//            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Only ADMIN can access this endpoint");
+//            }
+//
+//            Optional<LabelGenerated> optionalLabel = labelGeneratedRepository.findById(id);
+//            if (optionalLabel.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body("Label not found with id: " + id);
+//            }
+//
+//            labelGeneratedRepository.deleteById(id);
+//            return ResponseEntity.ok("Label deleted successfully");
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("Error deleting label: " + e.getMessage());
+//        }
+//    }
     // GET All Labels
     @GetMapping("/all")
     public ResponseEntity<?> getAllLabels(
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN can access this endpoint");
+                        .body("Only ADMIN or WORKER can access this endpoint");
             }
 
             // Fetch all labels from the repository
@@ -324,9 +589,9 @@ public class LabelGeneratedController {
             @PathVariable String date) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN can access this endpoint");
+                        .body("Only ADMIN or WORKER can access this endpoint");
             }
 
             // Parse input date

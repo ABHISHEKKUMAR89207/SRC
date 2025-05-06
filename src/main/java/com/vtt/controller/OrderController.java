@@ -3,11 +3,14 @@ package com.vtt.controller;
 
 import com.vtt.dtoforSrc.OrderRequestDTO;
 import com.vtt.entities.Fabric;
+import com.vtt.entities.MaterNumber;
 import com.vtt.entities.Order;
 import com.vtt.entities.Order.SizeQuantity;
 import com.vtt.commonfunc.TokenUtils;
 import com.vtt.entities.User;
 import com.vtt.otherclass.MainRole;
+import com.vtt.repository.MaterNumberRepository;
+import com.vtt.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -28,7 +31,10 @@ public class OrderController {
 
     @Autowired
     private MongoTemplate mongoTemplate;
-
+    @Autowired
+    private  MaterNumberRepository materNumberRepo;
+    @Autowired
+    private OrderRepository orderRepository;
     @Autowired
     private TokenUtils tokenUtils;
 
@@ -169,7 +175,7 @@ public class OrderController {
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (!hasAccess(requestingUser, MainRole.ADMIN, MainRole.ADMIN)) {
+            if (!hasAccess(requestingUser, MainRole.ADMIN, MainRole.WORKER)) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
                         .body("Access denied");
             }
@@ -209,6 +215,70 @@ public class OrderController {
                     .body("Error deleting order: " + e.getMessage());
         }
     }
+    @GetMapping("/my-orders")
+    public ResponseEntity<?> getOrdersForMasterUser(
+            @RequestHeader("Authorization") String tokenHeader) {
+        try {
+            User user = tokenUtils.getUserFromToken(tokenHeader);
+
+            // Allow only ADMIN or MASTER
+            if (!hasAccess(user, MainRole.ADMIN, MainRole.WORKER)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or MASTER can access this resource");
+            }
+
+            // Get master number using user
+            MaterNumber materNumber = materNumberRepo.findByUser(user);
+            if (materNumber == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No master number associated with this user");
+            }
+
+            String masterNumber = String.valueOf(materNumber.getMaterNumber());
+
+            // Use repository method instead of mongoTemplate
+            List<Order> orders = orderRepository.findByMasterNumber(masterNumber);
+
+            return ResponseEntity.ok(orders);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching orders: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateOrderStatus(
+            @PathVariable String id,
+            @RequestParam String status,
+            @RequestHeader("Authorization") String tokenHeader) {
+        try {
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+
+            // Allow only ADMIN and MASTER
+            if (!hasAccess(requestingUser, MainRole.ADMIN, MainRole.WORKER)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or MASTER can update order status");
+            }
+
+            Order existingOrder = mongoTemplate.findById(id, Order.class);
+            if (existingOrder == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Order not found");
+            }
+
+            existingOrder.setStatus(status);
+            existingOrder.setUpdatedAt(Instant.now());
+
+            Order updatedOrder = mongoTemplate.save(existingOrder);
+            return ResponseEntity.ok(updatedOrder);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating status: " + e.getMessage());
+        }
+    }
+
 
     // Other methods remain the same as in your original controller...
     // (getOrdersByStatus, updateOrderStatus, updateSizeQuantities, deleteOrder, searchOrders)

@@ -17,4 +17,6 @@ public interface LabelGeneratedRepository extends MongoRepository<LabelGenerated
     Optional<LabelGenerated> findByLabelNumber(String labelNumber);
 
     List<LabelGenerated> findByCreatedAtBetween(Instant startOfDay, Instant endOfDay);
+
+    LabelGenerated findByMasterNumber(String masterNumber);
 }
