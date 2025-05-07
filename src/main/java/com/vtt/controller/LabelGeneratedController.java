@@ -612,6 +612,35 @@ public class LabelGeneratedController {
                     .body("Error fetching labels by date: " + e.getMessage());
         }
     }
+    @GetMapping("/noauth/get-by-date/{date}")
+    public ResponseEntity<?> getLabelsByDateNoAUth(
+
+            @PathVariable String date) {
+        try {
+//            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+//            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Only ADMIN or WORKER can access this endpoint");
+//            }
+
+            // Parse input date
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            java.time.LocalDate localDate = java.time.LocalDate.parse(date, formatter);
+
+            // Convert to Instant range (start and end of day)
+            Instant startOfDay = localDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+            Instant endOfDay = localDate.plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+
+            // Find labels created on that date
+            List<LabelGenerated> labels = labelGeneratedRepository.findByCreatedAtBetween(startOfDay, endOfDay);
+
+            return ResponseEntity.ok(labels);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching labels by date: " + e.getMessage());
+        }
+    }
 
     // Helper method: DTO -> Entity
     private LabelGenerated mapDtoToEntity(LabelGeneratedDTO dto) {
