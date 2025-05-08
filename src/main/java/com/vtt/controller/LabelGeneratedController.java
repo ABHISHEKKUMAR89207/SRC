@@ -196,12 +196,13 @@ public class LabelGeneratedController {
 
             // First restore fabric quantities
             restoreFabricQuantities(label);
-
+            serialNoProductRepository.deleteByLabelGenerated(label);
             // Then delete the label
             labelGeneratedRepository.deleteById(id);
 
             // Finally, update the order's completed quantities by removing this label's quantities
             revertOrderCompletedQuantities(order, label);
+// Delete the SerialNoProduct linked to this label
 
             return ResponseEntity.ok("Label deleted successfully");
 
@@ -354,12 +355,29 @@ public class LabelGeneratedController {
             throw new IllegalArgumentException("Invalid Default DisplayNamesCat ID");
         }
 
+        if (savedLabel.getFabrics() == null || savedLabel.getFabrics().isEmpty()) {
+            throw new IllegalArgumentException("No fabric data found in LabelGenerated");
+        }
+
+        LabelGenerated.LabelFabric firstFabric = savedLabel.getFabrics().get(0);
+        Fabric fabric = firstFabric.getFabric();
+
+        if (fabric == null) {
+            throw new IllegalArgumentException("Fabric reference is null in first LabelFabric");
+        }
+
         SerialNoProduct serialNoProduct = new SerialNoProduct();
         serialNoProduct.setReferredLabelNumber(savedLabel.getLabelNumber());
         serialNoProduct.setDefaultDisplayNameCat(defaultDisplayOpt.get());
+        serialNoProduct.setCommonArticle(fabric.getDisplayName());   // Assuming article = displayName
+        serialNoProduct.setCommonMRP(fabric.getRetailPrice());
+        serialNoProduct.setCommonFabricName(fabric.getFabricName());
+        serialNoProduct.setCommonColor(firstFabric.getColor());      // Color comes from LabelFabric
+
         serialNoProduct.setLabelGenerated(savedLabel);
         serialNoProductRepository.save(serialNoProduct);
     }
+
     private void updateOrderCompletedQuantities(Order order, LabelGenerated label) {
         // Create a map to track the quantities from this specific label
         Map<String, Integer> labelQuantities = new HashMap<>();
@@ -651,6 +669,7 @@ public class LabelGeneratedController {
         label.setSubCategory(dto.getSubCategory());
         label.setDisplayId(dto.getDisplayId());
         label.setDisplayName(dto.getDisplayName());
+        label.setLayers(dto.getLayers());
         label.setStatus(dto.getStatus());
         label.setTotalQuantity(dto.getTotalQuantity());
 

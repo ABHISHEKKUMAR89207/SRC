@@ -17,12 +17,16 @@ public class SerialNoProduct {
 
     private String referredLabelNumber;
 
+
     @DBRef
     private LabelGenerated labelGenerated;
 
     @DBRef
     private DisplayNamesCat defaultDisplayNameCat;
-
+    private double commonMRP;
+    private String commonColor;
+    private String commonFabricName;
+    private String commonArticle;
     private List<DisplayWithSizes> displayNamesList;
 
     private Instant createdAt;
@@ -32,6 +36,7 @@ public class SerialNoProduct {
     public static class DisplayWithSizes {
         @DBRef
         private DisplayNamesCat displayNameCat;
+        private double price;
         private List<SizeCompleted> sizes;
     }
 

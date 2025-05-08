@@ -67,6 +67,10 @@ public class SerialNoProductController {
             SerialNoProduct product = existingProductOpt.orElse(new SerialNoProduct());
             product.setReferredLabelNumber(dto.getReferredLabelNumber());
             product.setLabelGenerated(labelOpt.get());
+            product.setCommonMRP(dto.getCommonMRP());
+            product.setCommonArticle(dto.getCommonArticle());
+            product.setCommonFabricName(dto.getCommonFabricName());
+            product.setCommonColor(dto.getCommonColor());
             product.setDefaultDisplayNameCat(defaultDisplayOpt.get());
 
             product.setUpdatedAt(Instant.now());
@@ -81,6 +85,19 @@ public class SerialNoProductController {
                 if (dispCat.isPresent()) {
                     SerialNoProduct.DisplayWithSizes displayWithSizes = new SerialNoProduct.DisplayWithSizes();
                     displayWithSizes.setDisplayNameCat(dispCat.get());
+                   //get price
+                    String priceStr = entry.getPrice();
+                    double price;
+                    if (priceStr == null || priceStr.isEmpty()) {
+                        price = dto.getCommonMRP();
+                    } else {
+                        try {
+                            price = Double.parseDouble(priceStr);
+                        } catch (NumberFormatException e) {
+                            price = dto.getCommonMRP(); // fallback if parsing fails
+                        }
+                    }
+                    displayWithSizes.setPrice(price);
 
                     List<SerialNoProduct.SizeCompleted> sizes = new ArrayList<>();
                     for (SerialNoProductDTO.SizeCompletedDTO sizeDto : entry.getSizes()) {
