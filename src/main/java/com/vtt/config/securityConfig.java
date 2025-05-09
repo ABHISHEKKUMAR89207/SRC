@@ -62,6 +62,7 @@ public class securityConfig {
                                 .requestMatchers("/logs").permitAll()
                                 .requestMatchers("/ingredient/uploadImages").permitAll()
                                 .requestMatchers("/api").permitAll()
+                                .requestMatchers("/api/src-roles/**").permitAll()
                                 .requestMatchers("/api/admin/users/**").permitAll()
                                 .requestMatchers("/api/common/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()
