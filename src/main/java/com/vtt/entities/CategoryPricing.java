@@ -20,7 +20,7 @@ public class CategoryPricing {
     private String category;
     private String subCategory;
 
-    @DBRef
+
     private List<RoleWithPrice> rolePrices;
 
     @Getter
