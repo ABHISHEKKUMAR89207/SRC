@@ -32,7 +32,10 @@ public class LabelGeneratedController {
     private DisplayNamesCatRepository displayNamesCatRepository;
     @Autowired
     private TokenUtils tokenUtils;
-
+    @Autowired
+    private SRCRoleRepository srcRoleRepository;
+    @Autowired
+    private GroupedRoleRepository groupedRoleRepository;
     // Add these methods to your LabelGeneratedController class
 
     /**
@@ -468,14 +471,83 @@ public class LabelGeneratedController {
 
             if (!existingAssignmentFound) {
                 // Check if the same work is already assigned to someone else
-                boolean workAlreadyAssigned = label.getUsers() != null &&
-                        label.getUsers().stream()
-                                .anyMatch(ua -> ua.getWorkAssigned().equals(assignDto.getWorkAssigned()) &&
-                                        ua.isStatus());
+//                boolean workAlreadyAssigned = label.getUsers() != null &&
+//                        label.getUsers().stream()
+//                                .anyMatch(ua -> ua.getWorkAssigned().equals(assignDto.getWorkAssigned()) &&
+//                                        ua.isStatus());
+//
+//                if (workAlreadyAssigned) {
+//                    return ResponseEntity.status(HttpStatus.CONFLICT)
+//                            .body("This work is already assigned to someone else");
+//                }
 
-                if (workAlreadyAssigned) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body("This work is already assigned to someone else");
+
+                Optional<SRCRole> optionalRole = srcRoleRepository.findByName(assignDto.getWorkAssigned());
+
+                if (optionalRole.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Invalid role name provided");
+                }
+
+
+                SRCRole inputRole = optionalRole.get();
+
+                List<GroupedRole> allGroups = groupedRoleRepository.findAll();
+
+                Set<String> matchedRoleNames = new HashSet<>();
+
+                for (GroupedRole group : allGroups) {
+                    if (group.getRole() != null && group.getRole().getId().equals(inputRole.getId())) {
+                        matchedRoleNames.add(group.getRole().getName());
+                        if (group.getDownlinkedRoles() != null) {
+                            for (SRCRole downlinked : group.getDownlinkedRoles()) {
+                                matchedRoleNames.add(downlinked.getName());
+                            }
+                        }
+                    } else if (group.getDownlinkedRoles() != null) {
+                        for (SRCRole downlinked : group.getDownlinkedRoles()) {
+                            if (downlinked.getId().equals(inputRole.getId())) {
+                                matchedRoleNames.add(downlinked.getName());
+                                if (group.getRole() != null) {
+                                    matchedRoleNames.add(group.getRole().getName());
+                                }
+                                matchedRoleNames.addAll(group.getDownlinkedRoles().stream()
+                                        .map(SRCRole::getName)
+                                        .collect(Collectors.toSet()));
+                            }
+                        }
+                    }
+                }
+
+//                if (matchedRoleNames.isEmpty()) {
+//                    return ResponseEntity.ok("No groups found with this role");
+//                }
+//                System.out.println("dfsgfdgfdhfdjfgj"+matchedRoleNames);
+
+                for (String roleNameInGroup : matchedRoleNames) {
+                    boolean workAlreadyAssignedingroup = label.getUsers() != null &&
+                            label.getUsers().stream()
+                                    .anyMatch(ua -> ua.getWorkAssigned().equals(roleNameInGroup) &&
+                                            ua.isStatus());
+
+                    if (workAlreadyAssignedingroup) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("This work is already assigned to someone else");
+                    }
+
+                }
+
+                if (matchedRoleNames.isEmpty()) {
+                    boolean workAlreadyAssigned = label.getUsers() != null &&
+                            label.getUsers().stream()
+                                    .anyMatch(ua -> ua.getWorkAssigned().equals(assignDto.getWorkAssigned()) &&
+                                            ua.isStatus());
+
+                    if (workAlreadyAssigned) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("This work is already assigned to someone else");
+                    }
+
                 }
 
                 // Create new assignment if not found
