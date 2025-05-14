@@ -74,7 +74,45 @@ public class AuthController {
     private final ApplicationEventPublisher publisher;
 
 
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> request) {
+        try {
+            // Input validation
+            String refreshToken = request.get("refreshToken");
+            if (refreshToken == null || refreshToken.isEmpty()) {
+                return ResponseEntity.badRequest().body("Refresh token is required");
+            }
 
+            // Verify the refresh token
+            RefreshToken verifiedRefreshToken = refreshTokenService.verifyRefreshToken(refreshToken);
+            User user = verifiedRefreshToken.getUser();
+
+            // Generate new JWT token
+            UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+            String newJwtToken = helper.generateToken(userDetails);
+
+            // Create new refresh token (optional - you can keep the same one if you want)
+            RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getEmail());
+
+            // Build response
+            JwtResponse response = JwtResponse.builder()
+                    .jwtToken(newJwtToken)
+                    .refreshToken(newRefreshToken.getRefreshToken())
+                    .userId(user.getUserId().toString())
+                    .username(user.getName())
+                    .mainRole(user.getMainRole().toString())
+                    .activeStatus(user.isActiveStatus())
+                    .BankDetailsStatus(user.isBankDetailsStatus())
+                    .mobileNumber(user.getMobileNo())
+                    .build();
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid refresh token: " + e.getMessage());
+        }
+    }
     @PostMapping("/login")
     public ResponseEntity<?> verifyOtpAndLogin(@RequestBody OtpVerificationRequest verificationRequest) {
         // Input validation
@@ -356,27 +394,27 @@ public ResponseEntity<String> handleBadCredentialsException(BadCredentialsExcept
     }
 
 
-
-    @PostMapping("/refresh-token")
-    public ResponseEntity<JwtResponse> refreshJwtToken(@RequestBody RefreshTokenRequest request){
-
-        RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(request.getRefreshToken());
-
-        User user = refreshToken.getUser();
-
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail()); // Assuming email is the username
-
-        String token = this.helper.generateToken(userDetails);
-
-        JwtResponse response = JwtResponse.builder()
-                .jwtToken(token)
-                .refreshToken(refreshToken.getRefreshToken())
-                .userId(user.getUserId().toString())
-                .username(userDetails.getUsername())
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//
+//    @PostMapping("/refresh-token")
+//    public ResponseEntity<JwtResponse> refreshJwtToken(@RequestBody RefreshTokenRequest request){
+//
+//        RefreshToken refreshToken = refreshTokenService.verifyRefreshToken(request.getRefreshToken());
+//
+//        User user = refreshToken.getUser();
+//
+//        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail()); // Assuming email is the username
+//
+//        String token = this.helper.generateToken(userDetails);
+//
+//        JwtResponse response = JwtResponse.builder()
+//                .jwtToken(token)
+//                .refreshToken(refreshToken.getRefreshToken())
+//                .userId(user.getUserId().toString())
+//                .username(userDetails.getUsername())
+//                .build();
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }

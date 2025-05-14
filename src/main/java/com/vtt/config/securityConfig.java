@@ -55,6 +55,7 @@ public class securityConfig {
                                 .requestMatchers("/auth/health-trends/**").authenticated()
                                 .requestMatchers("/api/products/**").permitAll()
                                 .requestMatchers("/register/**").permitAll()
+                                .requestMatchers("/salary/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()
                                 .requestMatchers("/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/sleep-logs").permitAll()

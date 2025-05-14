@@ -3,6 +3,7 @@ package com.vtt.repository;
 
 import com.vtt.entities.LabelGenerated;
 import com.vtt.entities.Order;
+import com.vtt.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.Instant;
@@ -19,4 +20,7 @@ public interface LabelGeneratedRepository extends MongoRepository<LabelGenerated
     List<LabelGenerated> findByCreatedAtBetween(Instant startOfDay, Instant endOfDay);
 
     LabelGenerated findByMasterNumber(String masterNumber);
+
+    List<LabelGenerated> findByUsersUserAndCreatedAtBetween(User user, Instant start, Instant end);
+
 }
