@@ -5,7 +5,7 @@ package com.vtt.otherclass;
 
 public enum MainRole {
     ADMIN,
-    PACKING,
+//    PACKING,
     MANAGER,
     WORKER,
     CLIENT;

@@ -16,6 +16,7 @@ public class JwtResponse {
     private String username;
     private String userId;
     private String mainRole;
+    private String subRole;
     private String mobileNumber;
     private boolean activeStatus;
     private boolean BankDetailsStatus;

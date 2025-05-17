@@ -178,6 +178,7 @@ public class AuthController {
                     .activeStatus(usr.isActiveStatus())
                     .BankDetailsStatus(usr.isBankDetailsStatus())
                     .mobileNumber(usr.getMobileNo().toString())
+                    .subRole(usr.getSubRole() != null ? usr.getSubRole().toString() : "")
                     .build();
 
             return ResponseEntity.ok(response);

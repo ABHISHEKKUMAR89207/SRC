@@ -15,9 +15,10 @@ public class CorsConfig implements WebMvcConfigurer {
                         "http://vastratreasuretrove.shop",
                         "https://vastratreasuretrove.shop",
                         "http://localhost:3000",
-                        "http://142.93.221.34:2026",
-                        "http://142.93.221.34:1552",
-                        "http://142.93.221.34:1555/api/serial-products"
+                        "http://143.244.133.16:3000"
+//                        "http://142.93.221.34:2026",
+//                        "http://142.93.221.34:1552",
+//                        "http://142.93.221.34:1555/api/serial-products"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
