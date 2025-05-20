@@ -57,5 +57,6 @@ public class LabelGenerated {
         private User user;
         private String workAssigned;
         private boolean status;
+        private boolean paid;
     }
 }

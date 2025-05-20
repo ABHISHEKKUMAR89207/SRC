@@ -4,8 +4,10 @@ import com.vtt.entities.*;
 import com.vtt.repository.CategoryPricingRepository;
 import com.vtt.repository.LabelGeneratedRepository;
 import com.vtt.repository.UserRepository;
+import com.vtt.repository.WorkerKhataBookRepository;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,10 @@ public class UserWorkController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private WorkerKhataBookRepository workerKhataBookRepository;
+
 
     @Autowired
     private LabelGeneratedRepository labelGeneratedRepository;
@@ -107,6 +113,12 @@ public class UserWorkController {
                             .findFirst()
                             .orElse(0.0);
                 }
+                boolean isUserPaid = label.getUsers().stream()
+                        .anyMatch(assign -> assign.getUser() != null &&
+                                assign.getUser().getUserId().equals(userId) &&
+                                assign.isPaid());
+
+
 
                 // Calculate total amount for this label
                 double totalAmount = totalQuantityForLabel * pricePerUnit;
@@ -115,6 +127,7 @@ public class UserWorkController {
                 UserWorkSummary summary = new UserWorkSummary();
                 summary.setLabelNumber(label.getLabelNumber());
                 summary.setCategory(label.getCategory());
+                summary.setPaid(isUserPaid);
                 summary.setSubCategory(label.getSubCategory());
                 summary.setSizes(label.getSizes());
                 summary.setTotalQuantity(totalQuantityForLabel);
@@ -150,6 +163,47 @@ public class UserWorkController {
         }
     }
 
+
+
+//    @PostMapping("/update-paid-status/{userId}")
+//    public ResponseEntity<?> updatePaidStatusForUser(
+//            @PathVariable String userId,
+//            @RequestBody List<LabelPaymentStatus> labelStatusList) {
+//
+//        try {
+//            User user = userRepository.findByUserId(userId);
+//            if (user == null) {
+//                return ResponseEntity.badRequest().body("User not found for ID: " + userId);
+//            }
+//
+//            for (LabelPaymentStatus status : labelStatusList) {
+//                Optional<LabelGenerated> labelOpt = labelGeneratedRepository.findByLabelNumber(status.getLabelNumber());
+//
+//                if (labelOpt.isPresent()) {
+//                    LabelGenerated label = labelOpt.get();
+//
+//                    boolean updated = false;
+//                    for (LabelGenerated.UserWorkAssign assign : label.getUsers()) {
+//                        if (assign.getUser() != null && assign.getUser().getUserId().equals(userId)) {
+//                            assign.setPaid(status.isPaid());
+//                            updated = true;
+//                        }
+//                    }
+//
+//                    if (updated) {
+//                        label.setUpdatedAt(Instant.now());
+//                        labelGeneratedRepository.save(label);
+//                    }
+//                }
+//            }
+//
+//            return ResponseEntity.ok("Paid statuses updated successfully for user: " + userId);
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+//        }
+//    }
+
     // Response DTOs
     @Data
     public static class UserWorkSummary {
@@ -159,6 +213,7 @@ public class UserWorkController {
         private List<LabelGenerated.SizeCompleted> sizes;
         private int totalQuantity;
         private double pricePerUnit;
+        private boolean paid;
         private double totalAmount;
     }
 
@@ -173,4 +228,12 @@ public class UserWorkController {
         private int overallQuantity;
         private double overallAmount;
     }
+
+//    @Data
+//    public static class LabelPaymentStatus {
+//        private String labelNumber;
+//        private boolean paid;
+//    }
+
+
 }

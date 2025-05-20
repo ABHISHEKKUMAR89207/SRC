@@ -37,6 +37,7 @@ public class SerialNoProduct {
         @DBRef
         private DisplayNamesCat displayNameCat;
         private double price;
+        private String seprateColor;
         private List<SizeCompleted> sizes;
     }
 

@@ -23,4 +23,5 @@ public interface LabelGeneratedRepository extends MongoRepository<LabelGenerated
 
     List<LabelGenerated> findByUsersUserAndCreatedAtBetween(User user, Instant start, Instant end);
 
+    List<LabelGenerated> findByLabelNumberIn(List<String> labelNumbers);
 }
