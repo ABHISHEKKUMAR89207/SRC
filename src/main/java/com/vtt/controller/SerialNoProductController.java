@@ -98,6 +98,7 @@ public class SerialNoProductController {
                         }
                     }
                     displayWithSizes.setPrice(price);
+                    displayWithSizes.setSeprateColor(entry.getSeprateColor());
 
                     List<SerialNoProduct.SizeCompleted> sizes = new ArrayList<>();
                     for (SerialNoProductDTO.SizeCompletedDTO sizeDto : entry.getSizes()) {

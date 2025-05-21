@@ -24,6 +24,7 @@ public class SerialNoProductDTO {
     public static class DisplayWithSizesDTO {
         private String displayNameCatId;
         private String price;
+        private String seprateColor;
         private List<SizeCompletedDTO> sizes;
     }
 

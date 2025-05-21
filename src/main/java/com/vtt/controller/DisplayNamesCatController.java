@@ -52,7 +52,8 @@ public class DisplayNamesCatController {
                         .set("productDescription", displayNamesCat.getProductDescription())
                         .set("manufacturerName", displayNamesCat.getManufacturerName())
                         .set("websiteName", displayNamesCat.getWebsiteName())
-                        .set("imageUrl", displayNamesCat.getImageUrl());
+                        .set("imageUrl", displayNamesCat.getImageUrl())
+                     .set("selectdTheme", displayNamesCat.getSelectdTheme());
 
                 mongoTemplate.updateFirst(query, update, DisplayNamesCat.class);
                 return ResponseEntity.ok(displayNamesCat);

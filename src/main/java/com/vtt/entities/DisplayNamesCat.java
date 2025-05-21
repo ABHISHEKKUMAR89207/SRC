@@ -26,7 +26,7 @@ public class DisplayNamesCat {
     private String manufacturerName;
     private String websiteName;
     private String imageUrl;
-
+    private int selectdTheme;
     @DBRef
     private User user;
 

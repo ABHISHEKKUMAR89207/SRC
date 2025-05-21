@@ -491,10 +491,13 @@ public class LabelGeneratedController {
 
 
                 SRCRole inputRole = optionalRole.get();
-
-                List<GroupedRole> allGroups = groupedRoleRepository.findAll();
-
                 Set<String> matchedRoleNames = new HashSet<>();
+//                List<GroupedRole> allGroups = groupedRoleRepository.findAll();
+
+                List<GroupedRole> allGroups = groupedRoleRepository.findByRole(inputRole);
+
+
+
 
                 for (GroupedRole group : allGroups) {
                     if (group.getRole() != null && group.getRole().getId().equals(inputRole.getId())) {
@@ -523,6 +526,10 @@ public class LabelGeneratedController {
 //                    return ResponseEntity.ok("No groups found with this role");
 //                }
 //                System.out.println("dfsgfdgfdhfdjfgj"+matchedRoleNames);
+                if (matchedRoleNames.stream().anyMatch(role -> role.equalsIgnoreCase("PACKING"))) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body("This label is completed");
+                }
 
                 for (String roleNameInGroup : matchedRoleNames) {
                     boolean workAlreadyAssignedingroup = label.getUsers() != null &&
@@ -729,6 +736,44 @@ public class LabelGeneratedController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error fetching labels by date: " + e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/get-by-user/{userId}")
+    public ResponseEntity<?> getLabelsByAssignedUser(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String userId) {
+        try {
+            // Verify requesting user has proper permissions
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+            if (requestingUser.getMainRole() != MainRole.ADMIN &&
+                    requestingUser.getMainRole() != MainRole.WORKER &&
+                    !requestingUser.getUserId().equals(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("You don't have permission to access this data");
+            }
+
+            // Verify the target user exists
+            User targetUser = userRepository.findByUserId(userId);
+            if (targetUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with id: " + userId);
+            }
+
+            // Find all labels where this user has work assignments
+            List<LabelGenerated> labels = labelGeneratedRepository.findByUsersUser(targetUser);
+
+            if (labels.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No labels found with work assigned to user: " + userId);
+            }
+
+            return ResponseEntity.ok(labels);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching labels: " + e.getMessage());
         }
     }
 

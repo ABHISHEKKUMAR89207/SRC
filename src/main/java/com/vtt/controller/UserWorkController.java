@@ -163,6 +163,52 @@ public class UserWorkController {
         }
     }
 
+    @GetMapping("/get-by-date/")
+    public ResponseEntity<?> getUserLabelsByDateRange(
+            @RequestParam String userId,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+
+        try {
+            // 1. Parse dates from dd-MM-yyyy format
+            LocalDate parsedStartDate = LocalDate.parse(startDate, DATE_FORMATTER);
+            LocalDate parsedEndDate = LocalDate.parse(endDate, DATE_FORMATTER);
+
+            // 2. Find the user and validate
+            User user = userRepository.findByUserId(userId);
+            if (user == null) {
+                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
+            }
+
+            String userRole = user.getSubRole();
+            if (userRole == null || userRole.isEmpty()) {
+                return ResponseEntity.badRequest().body("User does not have a valid role assigned");
+            }
+
+            // 3. Convert LocalDate to Instant for query (using UTC timezone)
+            Instant startInstant = parsedStartDate.atStartOfDay(ZoneId.of("UTC")).toInstant();
+            Instant endInstant = parsedEndDate.plusDays(1).atStartOfDay(ZoneId.of("UTC")).toInstant();
+
+            // Debug output
+            System.out.println("Query parameters:");
+            System.out.println("User ID: " + userId);
+            System.out.println("Start Date: " + startDate + " -> " + startInstant);
+            System.out.println("End Date: " + endDate + " -> " + endInstant);
+
+            // 4. Find all labels where this user is assigned within the given date range
+            // First try with direct user reference
+            List<LabelGenerated> labels = labelGeneratedRepository.findByUsersUserAndCreatedAtBetween(
+                    user, startInstant, endInstant);
+
+
+            return ResponseEntity.ok(labels);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
+    }
+
 
 
 //    @PostMapping("/update-paid-status/{userId}")
