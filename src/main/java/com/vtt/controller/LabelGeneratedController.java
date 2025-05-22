@@ -373,7 +373,7 @@ public class LabelGeneratedController {
         serialNoProduct.setReferredLabelNumber(savedLabel.getLabelNumber());
         serialNoProduct.setDefaultDisplayNameCat(defaultDisplayOpt.get());
         serialNoProduct.setCommonArticle(fabric.getDisplayName());   // Assuming article = displayName
-        serialNoProduct.setCommonMRP(fabric.getRetailPrice());
+        serialNoProduct.setCommonMRP(fabric.getMaximumPrice());
         serialNoProduct.setCommonFabricName(fabric.getFabricName());
         serialNoProduct.setCommonColor(firstFabric.getColor());      // Color comes from LabelFabric
 

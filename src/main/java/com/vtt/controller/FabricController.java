@@ -57,9 +57,10 @@ public class FabricController {
                         .set("buyingPrice", fabric.getBuyingPrice())
                         .set("wholesalePrice", fabric.getWholesalePrice())
                         .set("retailPrice", fabric.getRetailPrice())
-                        .set("totalAmount", fabric.getTotalAmount())
+//                        .set("totalAmount", fabric.getTotalAmount())
+                        .set("maximumPrice", fabric.getMaximumPrice())
                         .set("updatedAt", fabric.getUpdatedAt());
-
+                System.out.println("fdreyhgfhfjh======"+fabric.getMaximumPrice());
                 mongoTemplate.updateFirst(query, update, Fabric.class);
                 return ResponseEntity.ok(fabric);
             }

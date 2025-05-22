@@ -16,6 +16,7 @@ public class Fabric {
     private double quantityinMeter;
     private double buyingPrice;
     private double wholesalePrice;  // WSP
+    private double maximumPrice;
     private double retailPrice;     // RSP
     private double totalAmount;     // INVOICE Total AMOUNT
     private double paymentDone;

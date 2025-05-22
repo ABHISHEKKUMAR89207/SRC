@@ -38,9 +38,9 @@ public class ProductInventoryController {
 
     @GetMapping
     public ResponseEntity<List<ProductInventory>> getAllProductInventories(@RequestHeader("Authorization") String tokenHeader) {
-        if (!checkAdminRole(tokenHeader)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Respond with a forbidden status
-        }
+//        if (!checkAdminRole(tokenHeader)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Respond with a forbidden status
+//        }
         List<ProductInventory> productInventories = productInventoryRepository.findAll(); // Fetch product inventories
         return ResponseEntity.ok(productInventories); // Return the list wrapped in ResponseEntity
     }
