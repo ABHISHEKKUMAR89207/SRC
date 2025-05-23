@@ -76,9 +76,9 @@ public class UserCompleteProfileController {
             }
 
             User requestingUser = requestingUserOpt.get();
-            if (requestingUser.getMainRole() != MainRole.ADMIN) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint.");
-            }
+//            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint.");
+//            }
 
             return ResponseEntity.ok(userRepository.findAll());
 

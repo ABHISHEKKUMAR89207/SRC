@@ -488,7 +488,25 @@ public class LabelGeneratedController {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                             .body("Invalid role name provided");
                 }
+                if (true) {
+                    System.out.println("vghfhjghjg=============================");
+//                    label.getUsers().forEach(ua -> {
+//                        System.out.println("User WorkAssigned: " + ua.getWorkAssigned());
+//                        System.out.println("User Status: " + ua.isStatus());
+//                    });
 
+                    boolean workAlreadyAssigned = label.getUsers() != null &&
+                            label.getUsers().stream()
+                                    .filter(ua -> ua.getWorkAssigned() != null)
+                                    .anyMatch(ua -> "PACKING".equalsIgnoreCase(ua.getWorkAssigned().trim()));
+
+                    System.out.println("vghfhjghjg=============================2");
+                    if (workAlreadyAssigned) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("This label is completed");
+                    }
+
+                }
 
                 SRCRole inputRole = optionalRole.get();
                 Set<String> matchedRoleNames = new HashSet<>();
@@ -521,21 +539,23 @@ public class LabelGeneratedController {
                         }
                     }
                 }
-
+                System.out.println("gfdghfdhfgjfgjgj========"+matchedRoleNames);
 //                if (matchedRoleNames.isEmpty()) {
 //                    return ResponseEntity.ok("No groups found with this role");
 //                }
 //                System.out.println("dfsgfdgfdhfdjfgj"+matchedRoleNames);
-                if (matchedRoleNames.stream().anyMatch(role -> role.equalsIgnoreCase("PACKING"))) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body("This label is completed");
-                }
+
+
+
+//                if (matchedRoleNames.stream().anyMatch(role -> role.equalsIgnoreCase("PACKING"))) {
+//                    return ResponseEntity.status(HttpStatus.CONFLICT)
+//                            .body("This label is completed");
+//                }
 
                 for (String roleNameInGroup : matchedRoleNames) {
                     boolean workAlreadyAssignedingroup = label.getUsers() != null &&
                             label.getUsers().stream()
-                                    .anyMatch(ua -> ua.getWorkAssigned().equals(roleNameInGroup) &&
-                                            ua.isStatus());
+                                    .anyMatch(ua -> ua.getWorkAssigned().equals(roleNameInGroup) );
 
                     if (workAlreadyAssignedingroup) {
                         return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -547,8 +567,7 @@ public class LabelGeneratedController {
                 if (matchedRoleNames.isEmpty()) {
                     boolean workAlreadyAssigned = label.getUsers() != null &&
                             label.getUsers().stream()
-                                    .anyMatch(ua -> ua.getWorkAssigned().equals(assignDto.getWorkAssigned()) &&
-                                            ua.isStatus());
+                                    .anyMatch(ua -> ua.getWorkAssigned().equals(assignDto.getWorkAssigned()));
 
                     if (workAlreadyAssigned) {
                         return ResponseEntity.status(HttpStatus.CONFLICT)
