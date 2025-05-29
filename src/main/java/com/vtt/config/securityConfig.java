@@ -69,6 +69,8 @@ public class securityConfig {
                                 .requestMatchers("/api/khata/**").permitAll()
                                 .requestMatchers("/api/user-work/**").permitAll()
                                 .requestMatchers("/api/common/**").permitAll()
+                                .requestMatchers("/api/serial-products/**").permitAll()
+                                .requestMatchers("/api/inventory/**").permitAll()
 
                                 .requestMatchers("/api/productOrders/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()

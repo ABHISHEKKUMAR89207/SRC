@@ -25,6 +25,7 @@ public class ProductOrder {
     private User user;
 
     private boolean payment;
+    private String approved;
     private LocalDateTime orderDate = LocalDateTime.now();
 
     // Inner class for each product in the order

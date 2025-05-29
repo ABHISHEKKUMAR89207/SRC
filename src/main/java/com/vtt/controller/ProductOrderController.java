@@ -145,4 +145,45 @@ public class ProductOrderController {
 
         return ResponseEntity.ok("Order deleted and inventory reverted.");
     }
+    // Get All Orders (Admin use)
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllOrders(@RequestHeader("Authorization") String tokenHeader) {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // You can add a role check here if needed
+
+
+        List<ProductOrder> allOrders = orderRepository.findAll();
+        return ResponseEntity.ok(allOrders);
+    }
+
+
+    @PatchMapping("/{orderId}/approve")
+    public ResponseEntity<?> updateApprovalStatus(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String orderId,
+            @RequestParam String approved) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Optional: Add role check for admin only
+        // if (!user.getRole().equals("ADMIN")) return ResponseEntity.status(403).body("Unauthorized access");
+
+        ProductOrder order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        order.setApproved(approved);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok("Order approval status updated to: " + approved);
+    }
+
 }
