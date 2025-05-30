@@ -46,10 +46,11 @@ public class User implements UserDetails {
     private String passwordTemp;
 //    private String LoginOtp;
     private String deviceType;
+    private String profilePictureUrl;
     private Double latitude;
     private Double longitude;
     private String address;
-    private MainRole mainRole = MainRole.CLIENT;
+    private MainRole mainRole ;
     private String SubRole;
 
     private String otp;

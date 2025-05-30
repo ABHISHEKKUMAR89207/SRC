@@ -115,7 +115,7 @@ public class UserCompleteProfileController {
             }
 
             User userToUpdate = userToUpdateOpt;
-
+            System.out.println("sdgdfgdfhfghjgjh===="+updatedDetails.getMainRole());
             // Update only allowed fields
             if (updatedDetails.getUserName() != null) userToUpdate.setUserName(updatedDetails.getUserName());
             if (updatedDetails.getAddress() != null) userToUpdate.setAddress(updatedDetails.getAddress());

@@ -60,6 +60,7 @@ public class UserDetailsController {
                     String fileName = fileStorageService.storeFile(userDetailsDto.getProfilePicture());
                     String fileUrl = fileBaseUrl + fileName;
                     userDetails.setProfilePictureUrl(fileUrl);
+                    user.setProfilePictureUrl(fileUrl);
                 }
 
                 // Map other fields
@@ -83,6 +84,7 @@ public class UserDetailsController {
 
                 UserDetails savedDetails = userDetailsRepository.save(userDetails);
                 user.setBankDetailsStatus(true);
+
                 User user1 = userRepository.save(user);
                 return ResponseEntity.ok(UserDetailsResponse.fromEntity(savedDetails));
             } else {

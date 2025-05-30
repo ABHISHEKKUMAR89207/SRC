@@ -11,7 +11,9 @@ import com.vtt.repository.WorkerKhataBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -27,6 +29,24 @@ public class WorkerKhataBookController {
     @Autowired
     private LabelGeneratedRepository labelGeneratedRepository;
 
+
+    @GetMapping("/last-balances")
+    public List<Map<String, Object>> getLastBalancesForAllUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> khataBookRepository.findTopByUserOrderByCreatedAtDesc(user))
+                .filter(tx -> tx != null)
+                .map(tx -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("userId", tx.getUser().getUserId());
+
+                    map.put("balance", tx.getBalance());
+                    return map;
+                })
+                .toList();
+    }
+
     // POST API to add transaction
     @PostMapping("/transaction")
     public String addTransaction(@RequestBody KhataBookRequestDTO request) {
@@ -36,16 +56,35 @@ public class WorkerKhataBookController {
             throw new RuntimeException("User not found");
         }
 
+        // Get last transaction to fetch old balance
+        WorkerKhataBook lastTransaction = khataBookRepository.findTopByUserOrderByCreatedAtDesc(user);
+        double oldBalance = (lastTransaction != null) ? lastTransaction.getBalance() : 0.0;
+        double newBalance;
+
+        // Calculate new balance based on type (credit/debit)
+        if ("credit".equalsIgnoreCase(request.getType())) {
+            newBalance = oldBalance + request.getAmount();
+        } else if ("debit".equalsIgnoreCase(request.getType())) {
+            newBalance = oldBalance - request.getAmount();
+        } else {
+            throw new RuntimeException("Invalid transaction type: " + request.getType());
+        }
+
+        // Create new transaction with updated balance
         WorkerKhataBook khata = new WorkerKhataBook();
         khata.setUser(user);
         khata.setAmount(request.getAmount());
         khata.setType(request.getType());
         khata.setNote(request.getNote());
         khata.setDate(request.getDate());
+        khata.setBalance(newBalance);
 
         khataBookRepository.save(khata);
+
         return "Transaction saved successfully.";
     }
+
+
 
     // GET API to fetch all transactions for a user
     @GetMapping("/{userId}")

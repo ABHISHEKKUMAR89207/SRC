@@ -185,5 +185,29 @@ public class ProductOrderController {
 
         return ResponseEntity.ok("Order approval status updated to: " + approved);
     }
+    // Get All Orders of a Specific User by userId (Admin or Internal use)
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getOrdersByUserId(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String userId) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+
+        User requestingUser = userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Optional: Add role check to restrict to admin access
+        // if (!requestingUser.getRole().equals("ADMIN")) {
+        //     return ResponseEntity.status(403).body("Unauthorized access");
+        // }
+
+        User targetUser = userRepository.findByUserId(userId);
+
+
+        List<ProductOrder> userOrders = orderRepository.findByUser(targetUser);
+        return ResponseEntity.ok(userOrders);
+    }
+
 
 }

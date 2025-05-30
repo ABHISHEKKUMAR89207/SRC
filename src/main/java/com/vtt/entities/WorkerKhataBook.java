@@ -20,6 +20,7 @@ public class WorkerKhataBook {
     private User user; // Reference to the User document
 
     private double amount;
+    private double Balance;
 
     private String type; // "credit" or "debit"
 
