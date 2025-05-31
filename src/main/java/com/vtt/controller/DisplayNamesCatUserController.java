@@ -61,6 +61,7 @@ public class DisplayNamesCatUserController {
             newEntry.setProductDescription(request.getProductDescription());
             newEntry.setManufacturerName(request.getManufacturerName());
             newEntry.setWebsiteName(request.getWebsiteName());
+            newEntry.setSelectdTheme(request.getSelectdTheme());
             newEntry.setImageUrl(request.getImageUrl());
             newEntry.setUser(user);
 
@@ -163,6 +164,7 @@ public class DisplayNamesCatUserController {
             existingEntry.setProductDescription(request.getProductDescription());
             existingEntry.setManufacturerName(request.getManufacturerName());
             existingEntry.setWebsiteName(request.getWebsiteName());
+            existingEntry.setSelectdTheme(request.getSelectdTheme());
             existingEntry.setImageUrl(request.getImageUrl());
 
             DisplayNamesCat savedEntry = displayNamesCatRepository.save(existingEntry);

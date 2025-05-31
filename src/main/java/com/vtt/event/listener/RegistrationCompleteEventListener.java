@@ -117,7 +117,7 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
     }
 
     private void sendVerificationSms(String otp) {
-        String apiKey = "75b451ae-0876-11f0-8b17-0200cd936042"; // Replace with your 2Factor API key
+        String apiKey = "16645aab-3477-11f0-8b17-0200cd936042"; // Replace with your 2Factor API key
 
 
         //real

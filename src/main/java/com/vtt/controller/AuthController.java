@@ -227,7 +227,7 @@ public class AuthController {
 
         try {
             // Call 2Factor.in API to generate OTP
-            String apiUrl = "https://2factor.in/API/V1/75b451ae-0876-11f0-8b17-0200cd936042/SMS/" +
+            String apiUrl = "https://2factor.in/API/V1/16645aab-3477-11f0-8b17-0200cd936042/SMS/" +
                     mobileNo + "/AUTOGEN2/";
 
 

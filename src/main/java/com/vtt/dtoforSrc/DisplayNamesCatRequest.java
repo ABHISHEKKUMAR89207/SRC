@@ -14,5 +14,7 @@ public class DisplayNamesCatRequest {
     private String productDescription;
     private String manufacturerName;
     private String websiteName;
+    private int selectdTheme;
     private String imageUrl;
+
 }

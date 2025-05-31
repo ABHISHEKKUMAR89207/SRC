@@ -94,6 +94,75 @@ public class ProductOrderController {
         return ResponseEntity.ok(order);
     }
 
+
+    // Create Order
+    @PostMapping("/user/{userId}")
+    public ResponseEntity<?> createOrderWithUserId(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String userId,
+            @RequestBody ProductOrderDTO orderDTO) {
+
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
+        User admin = userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        User user = userRepository.findByUserId(userId);
+
+        List<ProductEntry> productEntries = new ArrayList<>();
+        double totalAmount = 0.0;
+
+        for (ProductOrderDTO.ProductEntryDTO entryDTO : orderDTO.getProductEntries()) {
+            ProductInventory inventory = inventoryRepository.findById(entryDTO.getProductInventoryId())
+                    .orElseThrow(() -> new RuntimeException("Product inventory not found: " + entryDTO.getProductInventoryId()));
+
+            // Get the fabric reference to access retail price
+            Fabric fabric = inventory.getFabric();
+            if (fabric == null) {
+                return ResponseEntity.badRequest().body("Fabric reference not found for product: " + entryDTO.getProductInventoryId());
+            }
+            double retailPrice = fabric.getRetailPrice();
+
+            List<OrderedSizeQuantity> orderedSizes = new ArrayList<>();
+
+            for (ProductOrderDTO.OrderedSizeQuantityDTO osqDTO : entryDTO.getOrderedSizes()) {
+                boolean updated = false;
+
+                for (SizeQuantity sq : inventory.getSizes()) {
+                    if (sq.getLabel().equalsIgnoreCase(osqDTO.getLabel())) {
+                        if (sq.getQuantity() < osqDTO.getQuantity()) {
+                            return ResponseEntity.badRequest().body("Not enough stock for size: " + osqDTO.getLabel());
+                        }
+                        sq.setQuantity(sq.getQuantity() - osqDTO.getQuantity());
+                        updated = true;
+
+                        // Calculate amount for this size quantity
+                        totalAmount += retailPrice * osqDTO.getQuantity();
+                        break;
+                    }
+                }
+
+                if (!updated) {
+                    return ResponseEntity.badRequest().body("Size not found: " + osqDTO.getLabel());
+                }
+
+                orderedSizes.add(new OrderedSizeQuantity(osqDTO.getLabel(), osqDTO.getQuantity()));
+            }
+
+            inventoryRepository.save(inventory); // save after update
+            productEntries.add(new ProductEntry(inventory, orderedSizes));
+        }
+
+        // Save the order with calculated total amount
+        ProductOrder order = new ProductOrder();
+        order.setUser(user);
+        order.setProductEntries(productEntries);
+        order.setPayment(false); // Assume payment is done
+        order.setTotalAmount(totalAmount);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok(order);
+    }
     // Get All Orders for Logged-in User
     @GetMapping
     public ResponseEntity<?> getUserOrders(@RequestHeader("Authorization") String tokenHeader) {

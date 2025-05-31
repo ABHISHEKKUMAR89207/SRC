@@ -25,6 +25,7 @@ public class SerialNoProduct {
     private DisplayNamesCat defaultDisplayNameCat;
     private double commonMRP;
     private String commonColor;
+    private String commonFabricId;
     private String commonFabricName;
     private String commonArticle;
     private List<DisplayWithSizes> displayNamesList;
