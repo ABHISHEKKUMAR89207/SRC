@@ -14,7 +14,8 @@ import java.util.function.Function;
 @Component
 public class JwtHelper {
 //    public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
-public static final long JWT_TOKEN_VALIDITY =  7 * 24 * 60 * 60;;
+//public static final long JWT_TOKEN_VALIDITY =  7 * 24 * 60 * 60;;
+public static final long JWT_TOKEN_VALIDITY = 365 * 24 * 60 * 60;  // seconds in 1 year
 
 //    public static final long JWT_TOKEN_VALIDITY = 20;
 //    public static final long JWT_TOKEN_VALIDITY = Long.MAX_VALUE;

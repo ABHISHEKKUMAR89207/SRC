@@ -11,11 +11,11 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://68.183.89.215:5000",
+//                        "http://68.183.89.215:5000",
                         "http://vastratreasuretrove.shop",
                         "https://vastratreasuretrove.shop",
                         "http://localhost:3000",
-                        "http://143.244.133.16:3000"
+                        "http://195.35.20.130:3000"
 //                        "http://142.93.221.34:2026",
 //                        "http://142.93.221.34:1552",
 //                        "http://142.93.221.34:1555/api/serial-products"
