@@ -10,7 +10,8 @@ public class ProductInventoryDTO {
     private String color;
     private List<SizeQuantityDTO> sizes;
     private String displayNamesCatId;  // For DBRef link to DisplayNamesCat
-    private String fabricId;  // For DBRef link to Fabric
+    private String fabricId;
+    private String productLocation;// For DBRef link to Fabric
 
     @Data
     public static class SizeQuantityDTO {

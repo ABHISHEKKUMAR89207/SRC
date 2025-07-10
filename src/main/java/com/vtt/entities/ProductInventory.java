@@ -17,6 +17,9 @@ public class ProductInventory {
     private String id;
 
     private String color;
+    private String productImage;
+    private String productLocation;
+
 
     // List of sizes and their quantities
     private List<SizeQuantity> sizes;

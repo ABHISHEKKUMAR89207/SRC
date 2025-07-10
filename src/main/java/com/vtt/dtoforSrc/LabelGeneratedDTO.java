@@ -16,7 +16,7 @@ public class LabelGeneratedDTO {
     private String subCategory;
     private String displayId;
     private String displayName;
-    private int Layers;
+    private double Layers;
 
     private List<LabelFabricDTO> fabrics;
     private List<SizeCompletedDTO> sizes;

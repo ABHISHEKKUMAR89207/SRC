@@ -2,6 +2,7 @@ package com.vtt.controller;
 
 
 
+import com.vtt.FileStorage.FileStorageService;
 import com.vtt.commonfunc.TokenUtils;
 import com.vtt.dtoforSrc.ProductInventoryDTO;
 import com.vtt.entities.ProductInventory;
@@ -13,10 +14,13 @@ import com.vtt.repository.ProductInventoryRepository;
 import com.vtt.repository.DisplayNamesCatRepository;
 import com.vtt.repository.FabricRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +39,14 @@ public class ProductInventoryController {
 
     @Autowired
     private TokenUtils tokenUtils;
+    @Value("${file.base-url}")
+    private String fileBaseUrl;
+
+    private final FileStorageService fileStorageService;
+
+    public ProductInventoryController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
 
     @GetMapping
     public ResponseEntity<List<ProductInventory>> getAllProductInventories(@RequestHeader("Authorization") String tokenHeader) {
@@ -96,10 +108,16 @@ public class ProductInventoryController {
         }
     }
 
+
+
     // PUT update an existing ProductInventory
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductInventory> updateProductInventory(@PathVariable String id, @RequestBody ProductInventoryDTO productInventoryDTO,
-                                                                   @RequestHeader("Authorization") String tokenHeader) {
+    @PutMapping(value = "/{id}", consumes = {"multipart/form-data"})
+    public ResponseEntity<ProductInventory> updateProductInventory(
+            @PathVariable String id,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart("productInventoryDTO") ProductInventoryDTO productInventoryDTO,
+            @RequestHeader("Authorization") String tokenHeader) throws IOException {
+
         if (!checkAdminRole(tokenHeader)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -111,10 +129,24 @@ public class ProductInventoryController {
 
             if (displayNamesCat.isPresent() && fabric.isPresent()) {
                 ProductInventory productInventory = existingProductInventory.get();
+
+                // Handle image upload if present
+                if (image != null && !image.isEmpty()) {
+                    // Delete old image if exists
+                    if (productInventory.getProductImage() != null) {
+                        String oldFileName = productInventory.getProductImage().replace(fileBaseUrl, "");
+                        fileStorageService.deleteFile(oldFileName);
+                    }
+
+                    // Store new image
+                    String fileName = fileStorageService.storeFile(image);
+                    String fileUrl = fileBaseUrl + fileName;
+                    productInventory.setProductImage(fileUrl);
+                }
+
                 productInventory.setColor(productInventoryDTO.getColor());
                 productInventory.setSizes(mapSizeQuantityDTOs(productInventoryDTO.getSizes()));
-                productInventory.setDisplayNamesCat(displayNamesCat.get());
-                productInventory.setFabric(fabric.get());
+                productInventory.setProductLocation(productInventoryDTO.getProductLocation());
 
                 ProductInventory updatedProductInventory = productInventoryRepository.save(productInventory);
                 return ResponseEntity.ok(updatedProductInventory);
@@ -125,6 +157,34 @@ public class ProductInventoryController {
             return ResponseEntity.notFound().build();
         }
     }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<ProductInventory> updateProductInventory(@PathVariable String id, @RequestBody ProductInventoryDTO productInventoryDTO,
+//                                                                   @RequestHeader("Authorization") String tokenHeader) {
+//        if (!checkAdminRole(tokenHeader)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
+//
+//        Optional<ProductInventory> existingProductInventory = productInventoryRepository.findById(id);
+//        if (existingProductInventory.isPresent()) {
+//            Optional<DisplayNamesCat> displayNamesCat = displayNamesCatRepository.findById(productInventoryDTO.getDisplayNamesCatId());
+//            Optional<Fabric> fabric = fabricRepository.findById(productInventoryDTO.getFabricId());
+//
+//            if (displayNamesCat.isPresent() && fabric.isPresent()) {
+//                ProductInventory productInventory = existingProductInventory.get();
+//                productInventory.setColor(productInventoryDTO.getColor());
+//                productInventory.setSizes(mapSizeQuantityDTOs(productInventoryDTO.getSizes()));
+//                productInventory.setDisplayNamesCat(displayNamesCat.get());
+//                productInventory.setFabric(fabric.get());
+//
+//                ProductInventory updatedProductInventory = productInventoryRepository.save(productInventory);
+//                return ResponseEntity.ok(updatedProductInventory);
+//            } else {
+//                return ResponseEntity.badRequest().build();
+//            }
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     // DELETE a ProductInventory by ID
     @DeleteMapping("/{id}")

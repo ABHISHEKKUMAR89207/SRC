@@ -20,7 +20,7 @@ public class LabelGenerated {
     private String subCategory;
     private String displayId;
     private String displayName;  // Corrected "DisplayName" to "displayName" for consistency
-    private int Layers;
+    private double Layers;
 
     @DBRef
     private Order orderReference;  // Reference to the original Order (optional but helpful)

@@ -84,6 +84,7 @@ public class securityConfig {
                                 .requestMatchers("/offers/**").permitAll()
                                 .requestMatchers("/api/payment/**").permitAll()
                                 .requestMatchers("/api/orders/**").permitAll()
+                                .requestMatchers("/api/productinventory/**").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
