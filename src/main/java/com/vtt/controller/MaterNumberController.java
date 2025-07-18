@@ -96,7 +96,7 @@ public class MaterNumberController {
 
     @GetMapping
     public ResponseEntity<?> getAllMaterNumbers(@RequestHeader("Authorization") String token) {
-        if (!isAdmin(token)) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint");
+//        if (!isAdmin(token)) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint");
 
         return ResponseEntity.ok(materNumberRepo.findAll());
     }

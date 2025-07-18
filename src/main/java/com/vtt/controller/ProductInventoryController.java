@@ -117,7 +117,7 @@ public class ProductInventoryController {
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart("productInventoryDTO") ProductInventoryDTO productInventoryDTO,
             @RequestHeader("Authorization") String tokenHeader) throws IOException {
-
+        System.out.println("dsjkhcfdfjsdfbdshjfndsv-----------------------");
         if (!checkAdminRole(tokenHeader)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -189,6 +189,9 @@ public class ProductInventoryController {
     // DELETE a ProductInventory by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductInventory(@PathVariable String id, @RequestHeader("Authorization") String tokenHeader) {
+
+
+
         if (!checkAdminRole(tokenHeader)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
