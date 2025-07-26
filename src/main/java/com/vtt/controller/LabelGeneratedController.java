@@ -834,4 +834,147 @@ public class LabelGeneratedController {
 
         return label;
     }
+    @DeleteMapping("/remove-assignment/{labelId}/{userId}")
+    public ResponseEntity<?> removeUserAssignment(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String labelId,
+            @PathVariable String userId) {
+        try {
+            // Verify requesting user has proper permissions
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or WORKER can access this endpoint");
+            }
+
+            // Find the label
+            Optional<LabelGenerated> optionalLabel = labelGeneratedRepository.findById(labelId);
+            if (optionalLabel.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Label not found with id: " + labelId);
+            }
+
+            // Find the user
+            User userToRemove = userRepository.findByUserId(userId);
+            if (userToRemove == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with id: " + userId);
+            }
+
+            LabelGenerated label = optionalLabel.get();
+
+            // Check if label has any user assignments
+            if (label.getUsers() == null || label.getUsers().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No user assignments found for this label");
+            }
+
+            // Remove all assignments for this user from the label
+            boolean removed = label.getUsers().removeIf(assignment ->
+                    assignment.getUser().getUserId().equals(userId)
+            );
+
+            if (!removed) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No assignments found for user " + userId + " in label " + labelId);
+            }
+
+            // Save the updated label
+            label.setUpdatedAt(Instant.now());
+            labelGeneratedRepository.save(label);
+
+            return ResponseEntity.ok("User assignment removed successfully");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error removing user assignment: " + e.getMessage());
+        }
+    }
+    @GetMapping("/get-labels-by-last-worker/{userId}")
+    public ResponseEntity<?> getLabelsByLastWorker(
+            @RequestHeader("Authorization") String tokenHeader,
+            @PathVariable String userId) {
+        try {
+            // Verify requesting user has proper permissions
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+            if (requestingUser.getMainRole() != MainRole.ADMIN &&
+                    requestingUser.getMainRole() != MainRole.WORKER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or WORKER can access this endpoint");
+            }
+
+            // Verify the target user exists
+            User targetUser = userRepository.findByUserId(userId);
+            if (targetUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with id: " + userId);
+            }
+
+            // Find all labels where this user has work assignments
+            List<LabelGenerated> allLabels = labelGeneratedRepository.findByUsersUser(targetUser);
+
+            // Filter labels where this user was the last worker
+            List<LabelGenerated> filteredLabels = new ArrayList<>();
+
+            for (LabelGenerated label : allLabels) {
+                if (label.getUsers() != null && !label.getUsers().isEmpty()) {
+                    // Get the last assignment (assuming assignments are in chronological order)
+                    LabelGenerated.UserWorkAssign lastAssignment =
+                            label.getUsers().get(label.getUsers().size() - 1);
+
+                    // Check if the last assignment is for our target user
+                    if (lastAssignment.getUser().getUserId().equals(userId)) {
+                        filteredLabels.add(label);
+                    }
+                }
+            }
+
+            if (filteredLabels.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No labels found where user was the last worker: " + userId);
+            }
+
+            return ResponseEntity.ok(filteredLabels);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching labels: " + e.getMessage());
+        }
+    }
+    @GetMapping("/get-by-date-range")
+    public ResponseEntity<?> getLabelsByDateRange(
+            @RequestHeader("Authorization") String tokenHeader,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        try {
+            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+            if (requestingUser.getMainRole() != MainRole.ADMIN && requestingUser.getMainRole() != MainRole.WORKER) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body("Only ADMIN or WORKER can access this endpoint");
+            }
+
+            // Parse input dates
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            java.time.LocalDate startLocalDate = java.time.LocalDate.parse(startDate, formatter);
+            java.time.LocalDate endLocalDate = java.time.LocalDate.parse(endDate, formatter);
+
+            // Convert to Instant range (start of start date to end of end date)
+            Instant startInstant = startLocalDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+            Instant endInstant = endLocalDate.plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant();
+
+            // Find labels created in this date range
+            List<LabelGenerated> labels = labelGeneratedRepository.findByCreatedAtBetween(startInstant, endInstant);
+
+            if (labels.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No labels found between " + startDate + " and " + endDate);
+            }
+
+            return ResponseEntity.ok(labels);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching labels by date range: " + e.getMessage());
+        }
+    }
 }

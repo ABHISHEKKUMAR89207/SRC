@@ -45,6 +45,7 @@ public class FabricController {
             if (fabric.getId() == null) {
                 fabric.setCreatedAt(Instant.now());
                 fabric.setPaymentDone(0);
+                fabric.setAllTimeTotaluantityinMeter(fabric.getQuantityinMeter());
                 Fabric savedFabric = mongoTemplate.save(fabric);
                 return ResponseEntity.ok(savedFabric);
             } else {
@@ -99,6 +100,7 @@ public class FabricController {
             if (transaction.getQuantityinMeter() != 0) {
                 double newQuantity = fabric.getQuantityinMeter() + transaction.getQuantityinMeter();
                 fabricUpdate.set("quantityinMeter", newQuantity);
+                fabricUpdate.set("allTimeTotaluantityinMeter", fabric.getAllTimeTotaluantityinMeter()+transaction.getQuantityinMeter());
             }
 
             if (transaction.getCredit() != null) {

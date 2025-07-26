@@ -57,13 +57,13 @@ public class WorkerKhataBookController {
         }
 
         // Get last transaction to fetch old balance
-        WorkerKhataBook lastTransaction = khataBookRepository.findTopByUserOrderByCreatedAtDesc(user);
-        double oldBalance = (lastTransaction != null) ? lastTransaction.getBalance() : 0.0;
+//        WorkerKhataBook lastTransaction = khataBookRepository.findTopByUserOrderByCreatedAtDesc(user);
+        double oldBalance = (user.getBalance() != null) ? user.getBalance() : 0.0;
         double newBalance;
 
         // Calculate new balance based on type (credit/debit)
         if ("credit".equalsIgnoreCase(request.getType())) {
-            newBalance = oldBalance + request.getAmount();
+            newBalance =oldBalance  + request.getAmount();
         } else if ("debit".equalsIgnoreCase(request.getType())) {
             newBalance = oldBalance - request.getAmount();
         } else {
@@ -78,7 +78,8 @@ public class WorkerKhataBookController {
         khata.setNote(request.getNote());
         khata.setDate(request.getDate());
         khata.setBalance(newBalance);
-
+        user.setBalance(newBalance);
+        userRepository.save(user);
         khataBookRepository.save(khata);
 
         return "Transaction saved successfully.";

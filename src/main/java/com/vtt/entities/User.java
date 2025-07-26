@@ -49,6 +49,7 @@ public class User implements UserDetails {
     private String profilePictureUrl;
     private Double latitude;
     private Double longitude;
+    private Double Balance;
     private String address;
     private MainRole mainRole ;
     private String SubRole;

@@ -14,6 +14,7 @@ public class Fabric {
     private String millFactory;
     private String displayName;
     private double quantityinMeter;
+    private double allTimeTotaluantityinMeter;
     private double buyingPrice;
     private double wholesalePrice;  // WSP
     private double maximumPrice;
