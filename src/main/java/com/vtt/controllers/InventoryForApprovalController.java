@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.dtoforSrc.InventoryForApprovalDTO;
 import com.vtt.entities.*;

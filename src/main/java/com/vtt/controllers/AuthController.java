@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.commonfunc.TokenUtils;
 import com.vtt.dtoforSrc.AdminRegistrationRequest;
@@ -14,7 +14,6 @@ import com.vtt.otherclass.MainRole;
 import com.vtt.registration.RegistrationRequest;
 import com.vtt.repository.UserRepository;
 import com.vtt.request.ChangePasswordRequest;
-import com.vtt.request.RefreshTokenRequest;
 import com.vtt.security.JwtHelper;
 import com.vtt.security.Refresh.RefreshToken;
 import com.vtt.security.Refresh.RefreshTokenService;

@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 
 
@@ -13,8 +13,6 @@ import com.vtt.security.JwtHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

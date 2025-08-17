@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

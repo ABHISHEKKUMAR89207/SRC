@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 
 
@@ -21,10 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/productinventory")
@@ -312,4 +309,6 @@ public class ProductInventoryController {
             return false;
         }
     }
+
+
 }

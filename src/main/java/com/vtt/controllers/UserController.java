@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.security.JwtHelper;
 import com.vtt.service.UserService;

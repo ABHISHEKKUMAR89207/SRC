@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 
 import com.vtt.commonfunc.TokenUtils;
@@ -90,12 +90,12 @@ public class DisplayNamesCatController {
     public ResponseEntity<?> getAllDisplayNamesCats(
             @RequestHeader("Authorization") String tokenHeader) {
         try {
-            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN &&
-                    requestingUser.getMainRole() != MainRole.ADMIN) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN or VIEWER can access this endpoint");
-            }
+//            User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
+//            if (requestingUser.getMainRole() != MainRole.ADMIN &&
+//                    requestingUser.getMainRole() != MainRole.ADMIN) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Only ADMIN or VIEWER can access this endpoint");
+//            }
 
             Query query = new Query();
             query.addCriteria(Criteria.where("user").is(null));

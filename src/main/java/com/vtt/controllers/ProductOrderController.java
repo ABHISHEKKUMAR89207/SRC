@@ -1,5 +1,6 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
+import com.vtt.dtoforSrc.KhataBookRequestDTO;
 import com.vtt.dtoforSrc.ProductOrderDTO;
 import com.vtt.entities.Fabric;
 import com.vtt.entities.ProductInventory;
@@ -13,9 +14,12 @@ import com.vtt.repository.ProductOrderRepository;
 import com.vtt.repository.UserRepository;
 import com.vtt.security.JwtHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -28,6 +32,8 @@ public class ProductOrderController {
     private final UserRepository userRepository;
     private final JwtHelper jwtHelper;
 
+    @Autowired
+    WorkerKhataBookController workerKhataBookController;
     // Create Order
     @PostMapping
     public ResponseEntity<?> createOrder(
@@ -41,6 +47,7 @@ public class ProductOrderController {
 
         List<ProductEntry> productEntries = new ArrayList<>();
         double totalAmount = 0.0;
+        List<ProductInventory> updatedInventories = new ArrayList<>();
 
         for (ProductOrderDTO.ProductEntryDTO entryDTO : orderDTO.getProductEntries()) {
             ProductInventory inventory = inventoryRepository.findById(entryDTO.getProductInventoryId())
@@ -78,8 +85,9 @@ public class ProductOrderController {
 
                 orderedSizes.add(new OrderedSizeQuantity(osqDTO.getLabel(), osqDTO.getQuantity()));
             }
+            updatedInventories.add(inventory);
 
-            inventoryRepository.save(inventory); // save after update
+       //     inventoryRepository.save(inventory); // save after update
             productEntries.add(new ProductEntry(inventory, orderedSizes));
         }
 
@@ -89,6 +97,7 @@ public class ProductOrderController {
         order.setProductEntries(productEntries);
         order.setPayment(false); // Assume payment is done
         order.setTotalAmount(totalAmount);
+        inventoryRepository.saveAll(updatedInventories);
         orderRepository.save(order);
 
         return ResponseEntity.ok(order);
@@ -251,6 +260,22 @@ public class ProductOrderController {
 
         order.setApproved(approved);
         orderRepository.save(order);
+
+        if (approved.equalsIgnoreCase("approved")){
+        // Prepare request DTO for transaction
+        KhataBookRequestDTO dto = new KhataBookRequestDTO();
+        dto.setUserId(order.getUser().getUserId());
+        dto.setAmount(order.getTotalAmount());  // assuming ProductOrder has amount
+        dto.setType("credit"); // or "debit" depending on logic
+        dto.setNote("Order approved transaction");
+        dto.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+        // Call the transaction logic directly
+        workerKhataBookController.addTransaction(dto);}
+        else{
+
+            //revert back order quantity to their respective
+        }
 
         return ResponseEntity.ok("Order approval status updated to: " + approved);
     }

@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.entities.*;
 import com.vtt.repository.CategoryPricingRepository;
@@ -117,6 +117,10 @@ public class UserWorkController {
                         .anyMatch(assign -> assign.getUser() != null &&
                                 assign.getUser().getUserId().equals(userId) &&
                                 assign.isPaid());
+                boolean userStatus = label.getUsers().stream()
+                        .anyMatch(assign -> assign.getUser() != null &&
+                                assign.getUser().getUserId().equals(userId) &&
+                                assign.isStatus());
 
 
 
@@ -128,6 +132,7 @@ public class UserWorkController {
                 summary.setLabelNumber(label.getLabelNumber());
                 summary.setCategory(label.getCategory());
                 summary.setPaid(isUserPaid);
+                summary.setStatus(userStatus);
                 summary.setSubCategory(label.getSubCategory());
                 summary.setSizes(label.getSizes());
                 summary.setTotalQuantity(totalQuantityForLabel);
@@ -260,6 +265,7 @@ public class UserWorkController {
         private int totalQuantity;
         private double pricePerUnit;
         private boolean paid;
+        private boolean status;
         private double totalAmount;
     }
 

@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.dtoforSrc.KhataBookRequestDTO;
 import com.vtt.dtoforSrc.LabelPaymentRequestDTO;
@@ -130,6 +130,13 @@ public class WorkerKhataBookController {
             labelGeneratedRepository.save(label);
         }
 
+
+        //
+        double oldBalance = (user.getBalance() != null) ? user.getBalance() : 0.0;
+        double newBalance;
+        newBalance = oldBalance + request.getTotalAmount();
+
+
         // Create a new khata book entry
         WorkerKhataBook khataEntry = new WorkerKhataBook();
         khataEntry.setUser(user);
@@ -138,7 +145,9 @@ public class WorkerKhataBookController {
         khataEntry.setNote(request.getNotes());
         khataEntry.setDate(request.getDate());
         khataEntry.setType("credit");
-
+        khataEntry.setBalance(newBalance);
+        user.setBalance(newBalance);
+        userRepository.save(user);
         khataBookRepository.save(khataEntry);
 
         return "Label payments processed and khata entry created successfully";

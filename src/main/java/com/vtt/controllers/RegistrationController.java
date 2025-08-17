@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.dtos.OtpRequest;
 import com.vtt.entities.User;

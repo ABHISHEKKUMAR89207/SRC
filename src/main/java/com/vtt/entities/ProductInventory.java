@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -39,4 +40,5 @@ public class ProductInventory {
         private String label; // Size label (e.g., "M", "L", "XL")
         private int quantity; // Available quantity for that size
     }
+
 }

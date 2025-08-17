@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.commonfunc.TokenUtils;
 import com.vtt.dtoforSrc.MaterNumberDTO;

@@ -1,4 +1,4 @@
-package com.vtt.controller;
+package com.vtt.controllers;
 
 import com.vtt.dtoforSrc.CategoryPricingDTO;
 import com.vtt.entities.CategoryPricing;
