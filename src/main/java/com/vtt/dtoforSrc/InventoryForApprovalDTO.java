@@ -18,7 +18,7 @@ public class InventoryForApprovalDTO {
     private String fabricId;
     private String userId;
     private boolean approved;
-
+    private List<ApplySetWithQuantityDTO> applySets;
     @Getter
     @Setter
     @NoArgsConstructor
@@ -26,5 +26,13 @@ public class InventoryForApprovalDTO {
     public static class SizeQuantityDTO {
         private String label;
         private int quantity;
+    }
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ApplySetWithQuantityDTO {
+        private String applySetId;   // store only reference ID
+        private int totalQuantity;   // total quantity of that ApplySet
     }
 }

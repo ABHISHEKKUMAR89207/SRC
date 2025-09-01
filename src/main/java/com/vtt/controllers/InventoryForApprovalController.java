@@ -2,11 +2,11 @@ package com.vtt.controllers;
 
 import com.vtt.dtoforSrc.InventoryForApprovalDTO;
 import com.vtt.entities.*;
-
 import com.vtt.repository.DisplayNamesCatRepository;
 import com.vtt.repository.FabricRepository;
 import com.vtt.repository.InventoryForApprovalRepository;
 import com.vtt.repository.UserRepository;
+import com.vtt.repository.ApplySetRepository;   // ✅ added
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,9 @@ public class InventoryForApprovalController {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private ApplySetRepository applySetRepo;   // ✅ added
 
     // GET all
     @GetMapping
@@ -85,6 +88,16 @@ public class InventoryForApprovalController {
                 .map(s -> new InventoryForApproval.SizeQuantity(s.getLabel(), s.getQuantity()))
                 .collect(Collectors.toList());
 
+        // ✅ Map ApplySet DTOs -> Entity references
+        List<InventoryForApproval.ApplySetWithQuantity> applySetList = dto.getApplySets() != null
+                ? dto.getApplySets().stream()
+                .map(asqDto -> new InventoryForApproval.ApplySetWithQuantity(
+                        applySetRepo.findById(asqDto.getApplySetId()).orElse(null),
+                        asqDto.getTotalQuantity()
+                ))
+                .collect(Collectors.toList())
+                : List.of();
+
         return new InventoryForApproval(
                 null,
                 dto.getColor(),
@@ -92,10 +105,10 @@ public class InventoryForApprovalController {
                 displayNamesCat,
                 fabric,
                 dto.isApproved(),
-                user
+                user,
+                applySetList   // ✅ added
         );
     }
-
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<InventoryForApproval>> getByUserId(@PathVariable String userId) {
@@ -106,6 +119,7 @@ public class InventoryForApprovalController {
         List<InventoryForApproval> inventories = inventoryRepo.findByUser(user);
         return ResponseEntity.ok(inventories);
     }
+
     @PatchMapping("/{id}/approval")
     public ResponseEntity<InventoryForApproval> updateApprovalStatus(@PathVariable String id, @RequestBody boolean approved) {
         Optional<InventoryForApproval> existing = inventoryRepo.findById(id);
@@ -117,5 +131,4 @@ public class InventoryForApprovalController {
         inventory.setApproved(approved);
         return ResponseEntity.ok(inventoryRepo.save(inventory));
     }
-
 }

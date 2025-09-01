@@ -18,6 +18,7 @@ public class SerialNoProductDTO {
     private String commonFabricName;
     private String commonArticle;
     private List<DisplayWithSizesDTO> displayNamesList;
+    private List<SizeSetDTO> setAvailable;   // ✅ new field
 
     @Getter
     @Setter
@@ -26,6 +27,8 @@ public class SerialNoProductDTO {
         private String price;
         private String seprateColor;
         private List<SizeCompletedDTO> sizes;
+        private List<SizeSetDTO> seprateSetAvailable;   // ✅ new field for each display
+
     }
 
     @Getter
@@ -33,5 +36,25 @@ public class SerialNoProductDTO {
     public static class SizeCompletedDTO {
         private String sizeName;
         private int quantity;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SizeSetDTO {
+        private String setId;
+        private String setName;
+        private int setQuantity;
+        private List<SizeQuantityDTO> sizes;
+
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class SizeQuantityDTO {
+            private String label;
+            private int quantity;
+        }
     }
 }

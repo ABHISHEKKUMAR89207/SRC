@@ -1,7 +1,9 @@
 package com.vtt.entities;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -58,5 +60,10 @@ public class LabelGenerated {
         private String workAssigned;
         private boolean status;
         private boolean paid;
+        @CreatedDate
+        private Instant createdAt;   // Auto record creation
+
+        @LastModifiedDate
+        private Instant updatedAt;
     }
 }

@@ -1,22 +1,29 @@
+
 package com.vtt.entities;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
+        import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.UUID;
 
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "inventoryForApproval")
-public class InventoryForApproval {
+@Document(collection = "productSets")
+public class ProductSets {
 
     @Id
     private String id;
 
     private String color;
+    private int totalQuantity;
+    private String setName;
+    private String applySet;
+
 
     // List of sizes and their quantities
     private List<SizeQuantity> sizes;
@@ -24,25 +31,10 @@ public class InventoryForApproval {
     @DBRef
     private DisplayNamesCat displayNamesCat;
 
+    // Add a reference to the Fabric entity
     @DBRef
     private Fabric fabric;
 
-    // Field to indicate if the inventory is approved or not
-    private boolean approved;
-
-    // Reference to the user who submitted this inventory
-    @DBRef
-    private User user;
-    private List<ApplySetWithQuantity> applySets;
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ApplySetWithQuantity {
-        @DBRef
-        private ApplySet applySet;
-        private int totalQuantity;
-    }
     // Inner class to hold size and quantity
     @Getter @Setter
     @NoArgsConstructor
@@ -51,4 +43,5 @@ public class InventoryForApproval {
         private String label; // Size label (e.g., "M", "L", "XL")
         private int quantity; // Available quantity for that size
     }
+
 }

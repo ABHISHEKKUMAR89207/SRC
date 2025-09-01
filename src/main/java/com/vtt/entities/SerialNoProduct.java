@@ -1,6 +1,6 @@
 package com.vtt.entities;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -32,7 +32,7 @@ public class SerialNoProduct {
 
     private Instant createdAt;
     private Instant updatedAt;
-
+    private List<SizeSet> setAvailable;
     @Data
     public static class DisplayWithSizes {
         @DBRef
@@ -40,11 +40,34 @@ public class SerialNoProduct {
         private double price;
         private String seprateColor;
         private List<SizeCompleted> sizes;
+        private List<SizeSet> seprateSetAvailable;
     }
 
     @Data
     public static class SizeCompleted {
         private String sizeName;
         private int quantity;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SizeSet {
+        private String setId;
+        private String setName;
+        private int setQuantity;
+        // List of sizes and their quantities
+        private List<SizeQuantity> sizes;
+
+        // Inner class to hold size and quantity
+        @Getter
+        @Setter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class SizeQuantity {
+            private String label;   // Size label (e.g., "M", "L", "XL")
+            private int quantity;   // Available quantity for that size
+        }
     }
 }
