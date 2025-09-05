@@ -43,7 +43,8 @@ public class securityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+              //  .cors(AbstractHttpConfigurer::disable)
+                .cors(withDefaults -> {})
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/home/**")
                                 .authenticated()
@@ -57,6 +58,7 @@ public class securityConfig {
                                 .requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/salary/**").permitAll()
                                 .requestMatchers("/v3/api-docs").permitAll()
+                                .requestMatchers("/api/backup").permitAll()
                                 .requestMatchers("/swagger-ui.html").permitAll()
                                 .requestMatchers("/api/sleep-logs").permitAll()
                                 .requestMatchers("/v3/api-docs/creatSleepLog").permitAll()

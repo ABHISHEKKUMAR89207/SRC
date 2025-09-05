@@ -977,4 +977,47 @@ public class LabelGeneratedController {
                     .body("Error fetching labels by date range: " + e.getMessage());
         }
     }
+    @PutMapping("/labels/{id}/sizes")
+    public ResponseEntity<?> updateSizesAndQuantity(
+            @PathVariable String id,
+            @RequestBody Map<String, Object> request) {
+        try {
+            Optional<LabelGenerated> optionalLabel = labelGeneratedRepository.findById(id);
+            if (optionalLabel.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Label not found with id: " + id);
+            }
+
+            LabelGenerated label = optionalLabel.get();
+
+            // Extract sizes from request
+            if (request.containsKey("sizes")) {
+                List<Map<String, Object>> sizeList = (List<Map<String, Object>>) request.get("sizes");
+
+                List<LabelGenerated.SizeCompleted> updatedSizes = sizeList.stream().map(sizeMap -> {
+                    LabelGenerated.SizeCompleted size = new LabelGenerated.SizeCompleted();
+                    size.setSizeName((String) sizeMap.get("sizeName"));
+                    size.setQuantity((Integer) sizeMap.get("quantity"));
+                    return size;
+                }).toList();
+
+                label.setSizes(updatedSizes);
+            }
+
+//            // Extract totalQuantity
+//            if (request.containsKey("totalQuantity")) {
+//                label.setTotalQuantity((Integer) request.get("totalQuantity"));
+//            }
+
+            label.setUpdatedAt(Instant.now());
+            labelGeneratedRepository.save(label);
+
+            return ResponseEntity.ok(label);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error updating sizes and quantity: " + e.getMessage());
+        }
+    }
+
 }
