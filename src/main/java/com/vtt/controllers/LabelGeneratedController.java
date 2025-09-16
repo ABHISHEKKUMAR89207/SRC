@@ -582,7 +582,10 @@ public class LabelGeneratedController {
                 userAssign.setUser(user);
                 userAssign.setWorkAssigned(assignDto.getWorkAssigned());
                 userAssign.setStatus(assignDto.isStatus());
-
+// Set timestamps
+                Instant now = Instant.now();
+                userAssign.setCreatedAt(now);
+                userAssign.setUpdatedAt(now);
                 if (label.getUsers() == null) {
                     label.setUsers(new ArrayList<>());
                 }

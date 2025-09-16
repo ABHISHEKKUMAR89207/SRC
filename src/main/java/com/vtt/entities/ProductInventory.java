@@ -19,6 +19,8 @@ public class ProductInventory {
 
     private String color;
     private String productImage;
+    private String productImag2;
+    private String productImag3;
     private String productLocation;
 
 

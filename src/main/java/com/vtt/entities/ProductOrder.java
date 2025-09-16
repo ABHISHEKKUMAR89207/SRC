@@ -19,7 +19,7 @@ public class ProductOrder {
     private double totalAmount;
     // List of product entries (each with inventory + sizes)
     private List<ProductEntry> productEntries;
-
+    private List<OrderedSets> sets;
     // Reference to the User who placed the order
     @DBRef
     private User user;
@@ -47,5 +47,16 @@ public class ProductOrder {
     public static class OrderedSizeQuantity {
         private String label; // Size label (e.g., "M", "L", "XL")
         private int quantity; // Quantity ordered for that size
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OrderedSets {
+        @DBRef
+        private ProductSets productSet; // Reference to the set
+
+        private int quantity; // Quantity of this set in the cart
     }
 }

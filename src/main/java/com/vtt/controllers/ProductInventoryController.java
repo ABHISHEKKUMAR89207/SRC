@@ -106,12 +106,12 @@ public class ProductInventoryController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-
-    @PutMapping(value = "/{id}/image", consumes = {"multipart/form-data"})
-    public ResponseEntity<ProductInventory> updateProductInventoryImage(
+    @PutMapping(value = "/{id}/images", consumes = {"multipart/form-data"})
+    public ResponseEntity<ProductInventory> updateProductInventoryImages(
             @PathVariable String id,
-            @RequestPart("image") MultipartFile image,
+            @RequestPart(value = "image1", required = false) MultipartFile image1,
+            @RequestPart(value = "image2", required = false) MultipartFile image2,
+            @RequestPart(value = "image3", required = false) MultipartFile image3,
             @RequestHeader("Authorization") String tokenHeader) throws IOException {
 
         if (!checkAdminRole(tokenHeader)) {
@@ -125,20 +125,72 @@ public class ProductInventoryController {
 
         ProductInventory productInventory = existingProductInventory.get();
 
-        // Delete old image if exists
-        if (productInventory.getProductImage() != null) {
-            String oldFileName = productInventory.getProductImage().replace(fileBaseUrl, "");
-            fileStorageService.deleteFile(oldFileName);
+        // Update image1
+        if (image1 != null && !image1.isEmpty()) {
+            if (productInventory.getProductImage() != null) {
+                String oldFileName = productInventory.getProductImage().replace(fileBaseUrl, "");
+                fileStorageService.deleteFile(oldFileName);
+            }
+            String fileName = fileStorageService.storeFile(image1);
+            productInventory.setProductImage(fileBaseUrl + fileName);
         }
 
-        // Store new image
-        String fileName = fileStorageService.storeFile(image);
-        String fileUrl = fileBaseUrl + fileName;
-        productInventory.setProductImage(fileUrl);
+        // Update image2
+        if (image2 != null && !image2.isEmpty()) {
+            if (productInventory.getProductImag2() != null) {
+                String oldFileName = productInventory.getProductImag2().replace(fileBaseUrl, "");
+                fileStorageService.deleteFile(oldFileName);
+            }
+            String fileName = fileStorageService.storeFile(image2);
+            productInventory.setProductImag2(fileBaseUrl + fileName);
+        }
+
+        // Update image3
+        if (image3 != null && !image3.isEmpty()) {
+            if (productInventory.getProductImag3() != null) {
+                String oldFileName = productInventory.getProductImag3().replace(fileBaseUrl, "");
+                fileStorageService.deleteFile(oldFileName);
+            }
+            String fileName = fileStorageService.storeFile(image3);
+            productInventory.setProductImag3(fileBaseUrl + fileName);
+        }
 
         ProductInventory updatedProductInventory = productInventoryRepository.save(productInventory);
         return ResponseEntity.ok(updatedProductInventory);
     }
+
+
+//    @PutMapping(value = "/{id}/image", consumes = {"multipart/form-data"})
+//    public ResponseEntity<ProductInventory> updateProductInventoryImage(
+//            @PathVariable String id,
+//            @RequestPart("image") MultipartFile image,
+//            @RequestHeader("Authorization") String tokenHeader) throws IOException {
+//
+//        if (!checkAdminRole(tokenHeader)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+//        }
+//
+//        Optional<ProductInventory> existingProductInventory = productInventoryRepository.findById(id);
+//        if (existingProductInventory.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        ProductInventory productInventory = existingProductInventory.get();
+//
+//        // Delete old image if exists
+//        if (productInventory.getProductImage() != null) {
+//            String oldFileName = productInventory.getProductImage().replace(fileBaseUrl, "");
+//            fileStorageService.deleteFile(oldFileName);
+//        }
+//
+//        // Store new image
+//        String fileName = fileStorageService.storeFile(image);
+//        String fileUrl = fileBaseUrl + fileName;
+//        productInventory.setProductImage(fileUrl);
+//
+//        ProductInventory updatedProductInventory = productInventoryRepository.save(productInventory);
+//        return ResponseEntity.ok(updatedProductInventory);
+//    }
 
 
     @PutMapping("/{id}/details")

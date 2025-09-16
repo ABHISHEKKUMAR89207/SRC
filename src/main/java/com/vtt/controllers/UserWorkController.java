@@ -123,7 +123,11 @@ public class UserWorkController {
                                 assign.isStatus());
 
 
-
+                String fabricDisplay = "";
+                if (label.getFabrics() != null && !label.getFabrics().isEmpty() &&
+                        label.getFabrics().get(0).getFabric() != null) {
+                    fabricDisplay = label.getFabrics().get(0).getFabric().getDisplayName();
+                }
                 // Calculate total amount for this label
                 double totalAmount = totalQuantityForLabel * pricePerUnit;
 
@@ -138,6 +142,7 @@ public class UserWorkController {
                 summary.setTotalQuantity(totalQuantityForLabel);
                 summary.setPricePerUnit(pricePerUnit);
                 summary.setTotalAmount(totalAmount);
+                summary.setFabricDisplay(fabricDisplay);  // Set the fabric display name
 
                 workSummaries.add(summary);
             }
@@ -261,6 +266,7 @@ public class UserWorkController {
         private String labelNumber;
         private String category;
         private String subCategory;
+        private String fabricDisplay;
         private List<LabelGenerated.SizeCompleted> sizes;
         private int totalQuantity;
         private double pricePerUnit;
