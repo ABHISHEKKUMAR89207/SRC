@@ -23,6 +23,7 @@ public class UserAllProductDTO {
     private List<SizeQuantity> sizes;
 
     // DisplayNamesCat info
+    private String displaynamecatid;
     private String categoryName;
     private String subCategoryName;
     private String productName;

@@ -14,6 +14,7 @@ public class Order {
     private String id;
     private String masterNumber;
     private String clientUserId;
+    private String defaultProduct;
     private String category;
     private String subCategory;
     private String displayId;

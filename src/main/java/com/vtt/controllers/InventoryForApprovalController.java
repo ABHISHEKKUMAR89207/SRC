@@ -107,6 +107,7 @@ public class InventoryForApprovalController {
                 dto.isApproved(),
                 user,
                 applySetList   // ✅ added
+                , null
         );
     }
 
@@ -131,4 +132,40 @@ public class InventoryForApprovalController {
         inventory.setApproved(approved);
         return ResponseEntity.ok(inventoryRepo.save(inventory));
     }
+    @PatchMapping("/{id}/set-pre-sale-client/{userId}")
+    public ResponseEntity<InventoryForApproval> setPreSaleClient(
+            @PathVariable String id,
+            @PathVariable String userId) {
+
+        Optional<InventoryForApproval> inventoryOpt = inventoryRepo.findById(id);
+        if (inventoryOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        InventoryForApproval inventory = inventoryOpt.get();
+        User preSaleClient = userRepo.findByUserId(userId);
+        if (preSaleClient == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        inventory.setPreSaleClient(preSaleClient);
+        InventoryForApproval updated = inventoryRepo.save(inventory);
+        return ResponseEntity.ok(updated);
+    }
+    @GetMapping("/presale-client/{userId}")
+    public ResponseEntity<List<InventoryForApproval>> getByPreSaleClient(@PathVariable String userId) {
+        User preSaleClient = userRepo.findByUserId(userId);
+        if (preSaleClient == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<InventoryForApproval> inventories = inventoryRepo.findByPreSaleClient(preSaleClient);
+        return ResponseEntity.ok(inventories);
+    }
+    @GetMapping("/presale-client/assigned")
+    public ResponseEntity<List<InventoryForApproval>> getAllWithPreSaleClient() {
+        List<InventoryForApproval> inventories = inventoryRepo.findByPreSaleClientNotNull();
+        return ResponseEntity.ok(inventories);
+    }
+
 }

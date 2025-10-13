@@ -8,6 +8,7 @@ import java.util.List;
 public class OrderRequestDTO {
     private String masterNumber;
     private String clientUserId;
+    private String defaultProduct;
     private String category;
     private String subCategory;
     private String displayId;

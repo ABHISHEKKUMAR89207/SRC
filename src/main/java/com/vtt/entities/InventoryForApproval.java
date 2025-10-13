@@ -34,6 +34,8 @@ public class InventoryForApproval {
     @DBRef
     private User user;
     private List<ApplySetWithQuantity> applySets;
+    @DBRef
+    private User preSaleClient;
     @Getter
     @Setter
     @NoArgsConstructor

@@ -99,6 +99,7 @@ public class OrderController {
     private void updateEntityFromDto(Order order, OrderRequestDTO orderDTO) {
         order.setMasterNumber(orderDTO.getMasterNumber());
         order.setClientUserId(orderDTO.getClientUserId());
+        order.setDefaultProduct(orderDTO.getDefaultProduct());
         order.setCategory(orderDTO.getCategory());
         order.setSubCategory(orderDTO.getSubCategory());
         order.setDisplayName(orderDTO.getDisplayName());

@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Objects;
 @RestController
 @RequestMapping("/api/user-work")
 public class UserWorkController {
@@ -123,6 +123,20 @@ public class UserWorkController {
                                 assign.isStatus());
 
 
+                String dateOfAssigned = label.getUsers().stream()
+                        .filter(assign -> assign.getUser() != null &&
+                                assign.getUser().getUserId().equals(userId))
+                        .map(LabelGenerated.UserWorkAssign::getCreatedAt)
+                        .filter(Objects::nonNull) // ✅ prevents NPE
+                        .findFirst()
+                        .map(instant -> {
+                            LocalDate date = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+                            return DATE_FORMATTER.format(date);
+                        })
+                        .orElse("");
+
+
+
                 String fabricDisplay = "";
                 if (label.getFabrics() != null && !label.getFabrics().isEmpty() &&
                         label.getFabrics().get(0).getFabric() != null) {
@@ -143,6 +157,7 @@ public class UserWorkController {
                 summary.setPricePerUnit(pricePerUnit);
                 summary.setTotalAmount(totalAmount);
                 summary.setFabricDisplay(fabricDisplay);  // Set the fabric display name
+                summary.setDate(dateOfAssigned);
 
                 workSummaries.add(summary);
             }
@@ -273,6 +288,7 @@ public class UserWorkController {
         private boolean paid;
         private boolean status;
         private double totalAmount;
+        private String date;
     }
 
     @Data

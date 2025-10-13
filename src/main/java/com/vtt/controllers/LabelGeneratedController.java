@@ -372,10 +372,16 @@ public class LabelGeneratedController {
         SerialNoProduct serialNoProduct = new SerialNoProduct();
         serialNoProduct.setReferredLabelNumber(savedLabel.getLabelNumber());
         serialNoProduct.setDefaultDisplayNameCat(defaultDisplayOpt.get());
-        serialNoProduct.setCommonArticle(fabric.getDisplayName());   // Assuming article = displayName
+        // ✅ Use orderReference.defaultProduct instead of fabric.getDisplayName()
+        if (savedLabel.getOrderReference() != null) {
+            serialNoProduct.setCommonArticle(savedLabel.getOrderReference().getDefaultProduct());
+        } else {
+            throw new IllegalArgumentException("Order reference is missing in LabelGenerated");
+        }
+//        serialNoProduct.setCommonArticle(fabric.getDisplayName());   // Assuming article = displayName
         serialNoProduct.setCommonMRP(fabric.getMaximumPrice());
         serialNoProduct.setCommonFabricId(fabric.getId());
-        serialNoProduct.setCommonFabricName(fabric.getFabricName());
+        serialNoProduct.setCommonFabricName(fabric.getDisplayName());
         serialNoProduct.setCommonColor(firstFabric.getColor());      // Color comes from LabelFabric
 
         serialNoProduct.setLabelGenerated(savedLabel);

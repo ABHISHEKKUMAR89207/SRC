@@ -267,7 +267,7 @@ public class ProductOrderController {
         dto.setUserId(order.getUser().getUserId());
         dto.setAmount(order.getTotalAmount());  // assuming ProductOrder has amount
         dto.setType("credit"); // or "debit" depending on logic
-        dto.setNote("Order approved transaction");
+        dto.setNote("Order approved transaction"+order.getId());
         dto.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
         // Call the transaction logic directly

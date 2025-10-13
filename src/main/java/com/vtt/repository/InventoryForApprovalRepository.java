@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface InventoryForApprovalRepository extends MongoRepository<InventoryForApproval, String> {
     List<InventoryForApproval> findByUser(User user);
+    List<InventoryForApproval> findByPreSaleClient(User preSaleClient);  // ✅ add this
+    List<InventoryForApproval> findByPreSaleClientNotNull();
 }

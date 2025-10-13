@@ -83,6 +83,7 @@ public class UserAllProductController {
             dto.setSizes(inventory.getSizes());
 
             if (display != null) {
+                dto.setDisplaynamecatid(display.getId());
                 dto.setCategoryName(display.getCategoryName());
                 dto.setSubCategoryName(display.getSubCategoryName());
                 dto.setProductName(display.getProductName());

@@ -1,5 +1,6 @@
 package com.vtt.controllers;
 
+import com.vtt.dtoforSrc.KhataBookRequestDTO;
 import com.vtt.entities.*;
 import com.vtt.repository.*;
 import com.vtt.security.JwtHelper;
@@ -7,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +26,8 @@ public class FinalOrderController {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    WorkerKhataBookController workerKhataBookController;
     @Autowired
     private ProductInventoryRepository productInventoryRepository;
 
@@ -40,24 +44,30 @@ public class FinalOrderController {
     public ResponseEntity<String> placeOrder(
             @RequestHeader("Authorization") String tokenHeader,
             @RequestParam String cartId,
-            @RequestParam(required = false) String admin) {
+            @RequestParam(required = false) String admin,
+            @RequestParam(required = false) String userid) {
 
         try {
             // Extract username from token
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
+            User user;
             if (admin != null && admin.equalsIgnoreCase("admin")) {
                 System.out.println("Admin entered");
-            }
-            User user = userRepository.findByEmail(username)
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                if (userid != null && userid.isEmpty())
+                    return ResponseEntity.badRequest().body("Error: user id not found");
+                user = userRepository.findByUserId(userid);
 
+            }else {
+                user = userRepository.findByEmail(username)
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+            }
             Cart cart = cartRepository.findById(cartId)
                     .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-            if (!cart.getUser().getUserId().equals(user.getUserId())) {
-                return ResponseEntity.badRequest().body("Error: Unauthorized access to this cart");
-            }
+//            if (!cart.getUser().getUserId().equals(user.getUserId())) {
+//                return ResponseEntity.badRequest().body("Error: Unauthorized access to this cart");
+//            }
 
             // Validate product inventory quantities
             // Validate product inventory quantities
@@ -132,10 +142,13 @@ public class FinalOrderController {
             order.setProductEntries(productEntries);
             order.setSets(orderedSets);
             order.setPayment(false); // Initial payment false
-            order.setApproved("Pending");
+            if (admin != null && admin.equalsIgnoreCase("admin"))
+            order.setApproved("approved");
+            else
+                order.setApproved("Pending");
             order.setOrderDate(LocalDateTime.now());
 
-            productOrderRepository.save(order);
+             order= productOrderRepository.save(order);
 
 // After saving the order, update inventory quantities
 // Update product inventory sizes
@@ -172,7 +185,18 @@ public class FinalOrderController {
             }
             cartRepository.delete(cart);
 
+            if (admin != null && admin.equalsIgnoreCase("admin")){
+                // Prepare request DTO for transaction
+                KhataBookRequestDTO dto = new KhataBookRequestDTO();
+                dto.setUserId(order.getUser().getUserId());
+                dto.setAmount(order.getTotalAmount());  // assuming ProductOrder has amount
+                dto.setType("credit"); // or "debit" depending on logic
+                dto.setNote("Order approved transaction"+order.getId());
+                dto.setDate(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
+                // Call the transaction logic directly
+                workerKhataBookController.addTransaction(dto);
+            }
             return ResponseEntity.ok("Order placed successfully with ID: " + order.getId());
 
         } catch (RuntimeException e) {
