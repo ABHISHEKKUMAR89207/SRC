@@ -18,6 +18,8 @@ public interface ProductSetsRepository extends MongoRepository<ProductSets, Stri
     List<ProductSets> findByFabricAndDisplayNamesCatAndColor(Fabric fabric, DisplayNamesCat displayNamesCat, String color);
 
     List<ProductSets> findByColorAndFabricIdAndDisplayNamesCatId(String color, String s, String s1);
+
+    ProductSets findFirstByApplySetAndColorAndFabricAndDisplayNamesCat(String applySet, String color, Fabric fabric, DisplayNamesCat displayNamesCat);
     // You can add custom queries here if needed
 }
 

@@ -127,6 +127,7 @@ public class UserDetailsController {
                         String fileName = fileStorageService.storeFile(updatedDetailsDto.getProfilePicture());
                         String fileUrl = fileBaseUrl + fileName;
                         existingDetails.setProfilePictureUrl(fileUrl);
+                        user.setProfilePictureUrl(fileUrl);
                     }
 
                     // Update other fields
@@ -167,6 +168,7 @@ public class UserDetailsController {
                     existingDetails.setUpdatedAt(Instant.now());
 
                     UserDetails savedDetails = userDetailsRepository.save(existingDetails);
+                    User user1 = userRepository.save(user);
                     return ResponseEntity.ok(UserDetailsResponse.fromEntity(savedDetails));
                 } else {
                     return ResponseEntity.status(404).body("User details not found");

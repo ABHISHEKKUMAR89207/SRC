@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface ProductInventoryRepository extends MongoRepository<ProductInventory, String> {
     Optional<ProductInventory> findByColorAndDisplayNamesCatAndFabric(String color, DisplayNamesCat displayNamesCat, Fabric fabric);
+
+    ProductInventory findFirstByFabricAndDisplayNamesCatAndColor(Fabric fabric, DisplayNamesCat displayNamesCat, String color);
 }

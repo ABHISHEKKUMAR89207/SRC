@@ -15,6 +15,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -63,30 +64,65 @@ public class UserCompleteProfileController {
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllUsers(@RequestHeader("Authorization") String tokenHeader) {
-        try {
-            String token = tokenHeader.replace("Bearer ", "");
-            String username = jwtHelper.getUsernameFromToken(token);
-
-            Optional<User> requestingUserOpt = userRepository.findByEmail(username);
-            if (requestingUserOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token or user not found.");
-            }
-
-            User requestingUser = requestingUserOpt.get();
-//            if (requestingUser.getMainRole() != MainRole.ADMIN) {
-//                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint.");
+//    @GetMapping("/all")
+//    public ResponseEntity<?> getAllUsers(@RequestHeader("Authorization") String tokenHeader) {
+//        try {
+//            String token = tokenHeader.replace("Bearer ", "");
+//            String username = jwtHelper.getUsernameFromToken(token);
+//
+//            Optional<User> requestingUserOpt = userRepository.findByEmail(username);
+//            if (requestingUserOpt.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token or user not found.");
 //            }
+//
+//            User requestingUser = requestingUserOpt.get();
+////            if (requestingUser.getMainRole() != MainRole.ADMIN) {
+////                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint.");
+////            }
+//
+//            return ResponseEntity.ok(userRepository.findAll());
+//
+//        } catch (Exception e) {
+//            logger.error("Error fetching all users", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body("An error occurred while fetching users.");
+//        }
+//    }
+@GetMapping("/all")
+public ResponseEntity<?> getAllUsers(@RequestHeader("Authorization") String tokenHeader) {
+    try {
+        String token = tokenHeader.replace("Bearer ", "");
+        String username = jwtHelper.getUsernameFromToken(token);
 
-            return ResponseEntity.ok(userRepository.findAll());
-
-        } catch (Exception e) {
-            logger.error("Error fetching all users", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("An error occurred while fetching users.");
+        Optional<User> requestingUserOpt = userRepository.findByEmail(username);
+        if (requestingUserOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token or user not found.");
         }
+
+        User requestingUser = requestingUserOpt.get();
+
+        // Uncomment if you want admin-only access
+        // if (requestingUser.getMainRole() != MainRole.ADMIN) {
+        //     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Only ADMIN can access this endpoint.");
+        // }
+
+        List<User> users = userRepository.findAll();
+
+        // For each user, override profilePictureUrl from UserDetails (if available)
+        for (User user : users) {
+            Optional<UserDetails> detailsOpt = userDetailsRepository.findByUser(user);
+            detailsOpt.ifPresent(details -> user.setProfilePictureUrl(details.getProfilePictureUrl()));
+        }
+
+        return ResponseEntity.ok(users);
+
+    } catch (Exception e) {
+        logger.error("Error fetching all users", e);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("An error occurred while fetching users.");
     }
+}
+
 
     @PutMapping("/update-user/{userId}")
     public ResponseEntity<?> updateAnyUserByAdmin(

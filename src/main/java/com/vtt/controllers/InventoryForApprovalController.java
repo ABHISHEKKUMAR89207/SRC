@@ -2,16 +2,14 @@ package com.vtt.controllers;
 
 import com.vtt.dtoforSrc.InventoryForApprovalDTO;
 import com.vtt.entities.*;
-import com.vtt.repository.DisplayNamesCatRepository;
-import com.vtt.repository.FabricRepository;
-import com.vtt.repository.InventoryForApprovalRepository;
-import com.vtt.repository.UserRepository;
-import com.vtt.repository.ApplySetRepository;   // ✅ added
+import com.vtt.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,6 +32,8 @@ public class InventoryForApprovalController {
     @Autowired
     private ApplySetRepository applySetRepo;   // ✅ added
 
+    @Autowired
+    private LabelGeneratedRepository labelGeneratedRepo;
     // GET all
     @GetMapping
     public List<InventoryForApproval> getAll() {
@@ -99,7 +99,9 @@ public class InventoryForApprovalController {
                 : List.of();
 
         return new InventoryForApproval(
+
                 null,
+                dto.getLabelNumber(),
                 dto.getColor(),
                 sizeList,
                 displayNamesCat,
@@ -165,6 +167,55 @@ public class InventoryForApprovalController {
     @GetMapping("/presale-client/assigned")
     public ResponseEntity<List<InventoryForApproval>> getAllWithPreSaleClient() {
         List<InventoryForApproval> inventories = inventoryRepo.findByPreSaleClientNotNull();
+        return ResponseEntity.ok(inventories);
+    }
+    @GetMapping("/label-mapping-check")
+    public ResponseEntity<List<Map<String, Object>>> checkLabelMappings() {
+        List<LabelGenerated> allLabels = labelGeneratedRepo.findAll();
+        List<InventoryForApproval> allInventories = inventoryRepo.findAll();
+
+        List<Map<String, Object>> mappingResults = allLabels.stream()
+                .map(label -> {
+                    // Find inventories with matching label number
+                    List<InventoryForApproval> matchingInventories = allInventories.stream()
+                            .filter(inv -> label.getLabelNumber() != null &&
+                                    label.getLabelNumber().equals(inv.getLabelNumber()))
+                            .collect(Collectors.toList());
+
+                    String mappingStatus = matchingInventories.isEmpty() ? "No" : "Yes";
+                    int mappingCount = matchingInventories.size();
+
+                    // Get inventory IDs for reference
+                    List<String> inventoryIds = matchingInventories.stream()
+                            .map(InventoryForApproval::getId)
+                            .collect(Collectors.toList());
+
+                    // Build a response map instead of DTO
+                    Map<String, Object> result = new LinkedHashMap<>();
+                    result.put("labelNumber", label.getLabelNumber());
+                    result.put("mappingStatus", mappingStatus);
+                    result.put("mappingCount", mappingCount);
+                    result.put("inventoryIds", inventoryIds);
+                    result.put("labelId", label.getId());
+
+                    return result;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(mappingResults);
+    }
+    @GetMapping("/by-label/{labelNumber}")
+    public ResponseEntity<List<InventoryForApproval>> getByLabelNumber(@PathVariable String labelNumber) {
+        // Find inventories that have the given label number
+        List<InventoryForApproval> inventories = inventoryRepo.findAll().stream()
+                .filter(inv -> inv.getLabelNumber() != null &&
+                        inv.getLabelNumber().equalsIgnoreCase(labelNumber.trim()))
+                .collect(Collectors.toList());
+
+        if (inventories.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
         return ResponseEntity.ok(inventories);
     }
 

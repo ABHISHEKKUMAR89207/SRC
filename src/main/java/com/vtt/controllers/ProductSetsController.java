@@ -44,7 +44,13 @@ public class ProductSetsController {
                             .orElseThrow(() -> new RuntimeException("ApplySet not found"));
 
                     // Check if product set already exists with same applySet id
-                    ProductSets productSet = (ProductSets) productSetsRepo.findByApplySet(dto.getApplySet()).orElse(null);
+//                    ProductSets productSet = (ProductSets) productSetsRepo.findByApplySet(dto.getApplySet()).orElse(null);
+                    ProductSets productSet = productSetsRepo.findFirstByApplySetAndColorAndFabricAndDisplayNamesCat(
+                            dto.getApplySet(),
+                            dto.getColor(),
+                            fabric,
+                            displayNamesCat
+                    );
 
                     if (productSet != null) {
                         // ✅ Update existing

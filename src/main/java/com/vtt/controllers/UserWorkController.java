@@ -45,148 +45,276 @@ public class UserWorkController {
             @RequestParam String endDate) {
 
         try {
-            // 1. Parse dates from dd-MM-yyyy format
+            // 1. Parse dates
             LocalDate parsedStartDate = LocalDate.parse(startDate, DATE_FORMATTER);
             LocalDate parsedEndDate = LocalDate.parse(endDate, DATE_FORMATTER);
 
-            // 2. Find the user and validate
-            User user = userRepository.findByUserId(userId);
-            if (user == null) {
-                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
-            }
-
-            String userRole = user.getSubRole();
-            if (userRole == null || userRole.isEmpty()) {
-                return ResponseEntity.badRequest().body("User does not have a valid role assigned");
-            }
-
-            // 3. Convert LocalDate to Instant for query (using UTC timezone)
+            // Convert to Instant
             Instant startInstant = parsedStartDate.atStartOfDay(ZoneId.of("UTC")).toInstant();
             Instant endInstant = parsedEndDate.plusDays(1).atStartOfDay(ZoneId.of("UTC")).toInstant();
 
-            // Debug output
-            System.out.println("Query parameters:");
-            System.out.println("User ID: " + userId);
-            System.out.println("Start Date: " + startDate + " -> " + startInstant);
-            System.out.println("End Date: " + endDate + " -> " + endInstant);
+            // 2. Validate user
+            User user = userRepository.findByUserId(userId);
+            if (user == null) return ResponseEntity.badRequest().body("User not found: " + userId);
 
-            // 4. Find all labels where this user is assigned within the given date range
-            // First try with direct user reference
-            List<LabelGenerated> labels = labelGeneratedRepository.findByUsersUserAndCreatedAtBetween(
-                    user, startInstant, endInstant);
+            String userRole = user.getSubRole();
+            if (userRole == null || userRole.isEmpty())
+                return ResponseEntity.badRequest().body("User does not have a role");
 
-            // If no results, try alternative approach with user ID
-            if (labels.isEmpty()) {
-                System.out.println("No results with direct user reference, trying alternative approach");
-                labels = labelGeneratedRepository.findByCreatedAtBetween(startInstant, endInstant).stream()
-                        .filter(label -> label.getUsers().stream()
-                                .anyMatch(u -> u.getUser().equals(userId)))
-                        .toList();
-            }
+            // 3. Fetch all labels where user assignment exists
+            List<LabelGenerated> allLabels = labelGeneratedRepository.findAll()
+                    .stream()
+                    .filter(label -> label.getUsers() != null &&
+                            label.getUsers().stream().anyMatch(u -> u.getUser() != null &&
+                                    u.getUser().getUserId().equals(userId)))
+                    .toList();
 
-            System.out.println("Found labels count: " + labels.size());
-            labels.forEach(label -> System.out.println(
-                    "Label: " + label.getLabelNumber() +
-                            ", Created: " + label.getCreatedAt() +
-                            ", Users: " + label.getUsers().stream()
-                            .map(u -> u.getUser())
-                            .toList()));
+            // 4. Filter by USER assignment createdAt (NOT label createdAt)
+            List<LabelGenerated> filteredLabels = allLabels.stream()
+                    .filter(label -> label.getUsers().stream()
+                            .anyMatch(assign ->
+                                    assign.getUser().getUserId().equals(userId) &&
+                                            assign.getCreatedAt() != null &&
+                                            assign.getCreatedAt().isAfter(startInstant) &&
+                                            assign.getCreatedAt().isBefore(endInstant)))
+                    .toList();
 
-            // 5. Process each label to calculate quantities and pricing
+            // 5. Prepare work summary
             List<UserWorkSummary> workSummaries = new ArrayList<>();
 
-            for (LabelGenerated label : labels) {
-                // Find all size quantities for this label
+            for (LabelGenerated label : filteredLabels) {
+
+                // Total size quantity
                 int totalQuantityForLabel = label.getSizes().stream()
                         .mapToInt(LabelGenerated.SizeCompleted::getQuantity)
                         .sum();
 
-                // Find pricing information based on category and user's role
-                double pricePerUnit = 0.0;
-                Optional<CategoryPricing> pricingOptional = categoryPricingRepository
-                        .findByCategoryAndSubCategory(label.getCategory(), label.getSubCategory());
+                // Pricing
+                double pricePerUnit = categoryPricingRepository
+                        .findByCategoryAndSubCategory(label.getCategory(), label.getSubCategory())
+                        .map(cat -> cat.getRolePrices().stream()
+                                .filter(rp -> rp.getRole().getName().equals(userRole))
+                                .mapToDouble(CategoryPricing.RoleWithPrice::getPrice)
+                                .findFirst().orElse(0.0))
+                        .orElse(0.0);
 
-                if (pricingOptional.isPresent()) {
-                    pricePerUnit = pricingOptional.get().getRolePrices().stream()
-                            .filter(rp -> rp.getRole().getName().equals(userRole))
-                            .mapToDouble(CategoryPricing.RoleWithPrice::getPrice)
-                            .findFirst()
-                            .orElse(0.0);
-                }
+                // Paid status
                 boolean isUserPaid = label.getUsers().stream()
-                        .anyMatch(assign -> assign.getUser() != null &&
-                                assign.getUser().getUserId().equals(userId) &&
-                                assign.isPaid());
+                        .anyMatch(u -> u.getUser().getUserId().equals(userId) && u.isPaid());
+
+                // Work status
                 boolean userStatus = label.getUsers().stream()
-                        .anyMatch(assign -> assign.getUser() != null &&
-                                assign.getUser().getUserId().equals(userId) &&
-                                assign.isStatus());
+                        .anyMatch(u -> u.getUser().getUserId().equals(userId) && u.isStatus());
 
-
+                // Assignment date (formatted)
                 String dateOfAssigned = label.getUsers().stream()
-                        .filter(assign -> assign.getUser() != null &&
-                                assign.getUser().getUserId().equals(userId))
+                        .filter(u -> u.getUser().getUserId().equals(userId))
                         .map(LabelGenerated.UserWorkAssign::getCreatedAt)
-                        .filter(Objects::nonNull) // ✅ prevents NPE
+                        .filter(Objects::nonNull)
                         .findFirst()
-                        .map(instant -> {
-                            LocalDate date = instant.atZone(ZoneId.systemDefault()).toLocalDate();
-                            return DATE_FORMATTER.format(date);
-                        })
+                        .map(instant -> DATE_FORMATTER.format(
+                                instant.atZone(ZoneId.systemDefault()).toLocalDate()))
                         .orElse("");
 
-
-
+                // Fabric display
                 String fabricDisplay = "";
                 if (label.getFabrics() != null && !label.getFabrics().isEmpty() &&
                         label.getFabrics().get(0).getFabric() != null) {
                     fabricDisplay = label.getFabrics().get(0).getFabric().getDisplayName();
                 }
-                // Calculate total amount for this label
+
+                // Total amount
                 double totalAmount = totalQuantityForLabel * pricePerUnit;
 
-                // Create summary for this label
+                // Build summary object
                 UserWorkSummary summary = new UserWorkSummary();
                 summary.setLabelNumber(label.getLabelNumber());
                 summary.setCategory(label.getCategory());
-                summary.setPaid(isUserPaid);
-                summary.setStatus(userStatus);
                 summary.setSubCategory(label.getSubCategory());
                 summary.setSizes(label.getSizes());
                 summary.setTotalQuantity(totalQuantityForLabel);
                 summary.setPricePerUnit(pricePerUnit);
                 summary.setTotalAmount(totalAmount);
-                summary.setFabricDisplay(fabricDisplay);  // Set the fabric display name
+                summary.setFabricDisplay(fabricDisplay);
+                summary.setPaid(isUserPaid);
+                summary.setStatus(userStatus);
                 summary.setDate(dateOfAssigned);
 
                 workSummaries.add(summary);
             }
 
-            // 6. Calculate overall totals
-            int overallQuantity = workSummaries.stream()
-                    .mapToInt(UserWorkSummary::getTotalQuantity)
-                    .sum();
+            // 6. Total
+            int overallQuantity = workSummaries.stream().mapToInt(UserWorkSummary::getTotalQuantity).sum();
+            double overallAmount = workSummaries.stream().mapToDouble(UserWorkSummary::getTotalAmount).sum();
 
-            double overallAmount = workSummaries.stream()
-                    .mapToDouble(UserWorkSummary::getTotalAmount)
-                    .sum();
-
+            // 7. Response
             UserWorkResponse response = new UserWorkResponse();
             response.setUserId(userId);
             response.setUserName(user.getUserName());
             response.setUserRole(userRole);
-            response.setStartDate(startDate); // Return in same format as input
-            response.setEndDate(endDate); // Return in same format as input
+            response.setStartDate(startDate);
+            response.setEndDate(endDate);
             response.setWorkSummaries(workSummaries);
             response.setOverallQuantity(overallQuantity);
             response.setOverallAmount(overallAmount);
 
             return ResponseEntity.ok(response);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error processing request: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
+//    @GetMapping("/calculate-work/{userId}")
+//    public ResponseEntity<?> calculateUserWork(
+//            @PathVariable String userId,
+//            @RequestParam String startDate,
+//            @RequestParam String endDate) {
+//
+//        try {
+//            // 1. Parse dates from dd-MM-yyyy format
+//            LocalDate parsedStartDate = LocalDate.parse(startDate, DATE_FORMATTER);
+//            LocalDate parsedEndDate = LocalDate.parse(endDate, DATE_FORMATTER);
+//
+//            // 2. Find the user and validate
+//            User user = userRepository.findByUserId(userId);
+//            if (user == null) {
+//                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
+//            }
+//
+//            String userRole = user.getSubRole();
+//            if (userRole == null || userRole.isEmpty()) {
+//                return ResponseEntity.badRequest().body("User does not have a valid role assigned");
+//            }
+//
+//            // 3. Convert LocalDate to Instant for query (using UTC timezone)
+//            Instant startInstant = parsedStartDate.atStartOfDay(ZoneId.of("UTC")).toInstant();
+//            Instant endInstant = parsedEndDate.plusDays(1).atStartOfDay(ZoneId.of("UTC")).toInstant();
+//
+//            // Debug output
+//            System.out.println("Query parameters:");
+//            System.out.println("User ID: " + userId);
+//            System.out.println("Start Date: " + startDate + " -> " + startInstant);
+//            System.out.println("End Date: " + endDate + " -> " + endInstant);
+//
+//            // 4. Find all labels where this user is assigned within the given date range
+//            // First try with direct user reference
+//            List<LabelGenerated> labels = labelGeneratedRepository.findByUsersUserAndCreatedAtBetween(
+//                    user, startInstant, endInstant);
+//
+//            // If no results, try alternative approach with user ID
+//            if (labels.isEmpty()) {
+//                System.out.println("No results with direct user reference, trying alternative approach");
+//                labels = labelGeneratedRepository.findByCreatedAtBetween(startInstant, endInstant).stream()
+//                        .filter(label -> label.getUsers().stream()
+//                                .anyMatch(u -> u.getUser().equals(userId)))
+//                        .toList();
+//            }
+//
+//            System.out.println("Found labels count: " + labels.size());
+//            labels.forEach(label -> System.out.println(
+//                    "Label: " + label.getLabelNumber() +
+//                            ", Created: " + label.getCreatedAt() +
+//                            ", Users: " + label.getUsers().stream()
+//                            .map(u -> u.getUser())
+//                            .toList()));
+//
+//            // 5. Process each label to calculate quantities and pricing
+//            List<UserWorkSummary> workSummaries = new ArrayList<>();
+//
+//            for (LabelGenerated label : labels) {
+//                // Find all size quantities for this label
+//                int totalQuantityForLabel = label.getSizes().stream()
+//                        .mapToInt(LabelGenerated.SizeCompleted::getQuantity)
+//                        .sum();
+//
+//                // Find pricing information based on category and user's role
+//                double pricePerUnit = 0.0;
+//                Optional<CategoryPricing> pricingOptional = categoryPricingRepository
+//                        .findByCategoryAndSubCategory(label.getCategory(), label.getSubCategory());
+//
+//                if (pricingOptional.isPresent()) {
+//                    pricePerUnit = pricingOptional.get().getRolePrices().stream()
+//                            .filter(rp -> rp.getRole().getName().equals(userRole))
+//                            .mapToDouble(CategoryPricing.RoleWithPrice::getPrice)
+//                            .findFirst()
+//                            .orElse(0.0);
+//                }
+//                boolean isUserPaid = label.getUsers().stream()
+//                        .anyMatch(assign -> assign.getUser() != null &&
+//                                assign.getUser().getUserId().equals(userId) &&
+//                                assign.isPaid());
+//                boolean userStatus = label.getUsers().stream()
+//                        .anyMatch(assign -> assign.getUser() != null &&
+//                                assign.getUser().getUserId().equals(userId) &&
+//                                assign.isStatus());
+//
+//
+//                String dateOfAssigned = label.getUsers().stream()
+//                        .filter(assign -> assign.getUser() != null &&
+//                                assign.getUser().getUserId().equals(userId))
+//                        .map(LabelGenerated.UserWorkAssign::getCreatedAt)
+//                        .filter(Objects::nonNull) // ✅ prevents NPE
+//                        .findFirst()
+//                        .map(instant -> {
+//                            LocalDate date = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+//                            return DATE_FORMATTER.format(date);
+//                        })
+//                        .orElse("");
+//
+//
+//
+//                String fabricDisplay = "";
+//                if (label.getFabrics() != null && !label.getFabrics().isEmpty() &&
+//                        label.getFabrics().get(0).getFabric() != null) {
+//                    fabricDisplay = label.getFabrics().get(0).getFabric().getDisplayName();
+//                }
+//                // Calculate total amount for this label
+//                double totalAmount = totalQuantityForLabel * pricePerUnit;
+//
+//                // Create summary for this label
+//                UserWorkSummary summary = new UserWorkSummary();
+//                summary.setLabelNumber(label.getLabelNumber());
+//                summary.setCategory(label.getCategory());
+//                summary.setPaid(isUserPaid);
+//                summary.setStatus(userStatus);
+//                summary.setSubCategory(label.getSubCategory());
+//                summary.setSizes(label.getSizes());
+//                summary.setTotalQuantity(totalQuantityForLabel);
+//                summary.setPricePerUnit(pricePerUnit);
+//                summary.setTotalAmount(totalAmount);
+//                summary.setFabricDisplay(fabricDisplay);  // Set the fabric display name
+//                summary.setDate(dateOfAssigned);
+//
+//                workSummaries.add(summary);
+//            }
+//
+//            // 6. Calculate overall totals
+//            int overallQuantity = workSummaries.stream()
+//                    .mapToInt(UserWorkSummary::getTotalQuantity)
+//                    .sum();
+//
+//            double overallAmount = workSummaries.stream()
+//                    .mapToDouble(UserWorkSummary::getTotalAmount)
+//                    .sum();
+//
+//            UserWorkResponse response = new UserWorkResponse();
+//            response.setUserId(userId);
+//            response.setUserName(user.getUserName());
+//            response.setUserRole(userRole);
+//            response.setStartDate(startDate); // Return in same format as input
+//            response.setEndDate(endDate); // Return in same format as input
+//            response.setWorkSummaries(workSummaries);
+//            response.setOverallQuantity(overallQuantity);
+//            response.setOverallAmount(overallAmount);
+//
+//            return ResponseEntity.ok(response);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().body("Error processing request: " + e.getMessage());
+//        }
+//    }
 
     @GetMapping("/get-by-date/")
     public ResponseEntity<?> getUserLabelsByDateRange(

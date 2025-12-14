@@ -47,6 +47,7 @@ public class ProductOrder {
     public static class OrderedSizeQuantity {
         private String label; // Size label (e.g., "M", "L", "XL")
         private int quantity; // Quantity ordered for that size
+        private double singlePiecePrice;
     }
 
     @Getter
@@ -58,5 +59,6 @@ public class ProductOrder {
         private ProductSets productSet; // Reference to the set
 
         private int quantity; // Quantity of this set in the cart
+        private double singlePiecePrice;
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InventoryForApprovalDTO {
-
+    private String labelNumber;
     private String color;
     private List<SizeQuantityDTO> sizes;
     private String displayNamesCatId;

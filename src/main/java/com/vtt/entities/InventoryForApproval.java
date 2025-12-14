@@ -15,7 +15,7 @@ public class InventoryForApproval {
 
     @Id
     private String id;
-
+    private String labelNumber;
     private String color;
 
     // List of sizes and their quantities

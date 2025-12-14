@@ -58,7 +58,7 @@ public class ProductOrderController {
             if (fabric == null) {
                 return ResponseEntity.badRequest().body("Fabric reference not found for product: " + entryDTO.getProductInventoryId());
             }
-            double retailPrice = fabric.getRetailPrice();
+            double retailPrice = fabric.getWholesalePrice();
 
             List<OrderedSizeQuantity> orderedSizes = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class ProductOrderController {
                     return ResponseEntity.badRequest().body("Size not found: " + osqDTO.getLabel());
                 }
 
-                orderedSizes.add(new OrderedSizeQuantity(osqDTO.getLabel(), osqDTO.getQuantity()));
+                orderedSizes.add(new OrderedSizeQuantity(osqDTO.getLabel(), osqDTO.getQuantity(),retailPrice));
             }
             updatedInventories.add(inventory);
 
@@ -130,7 +130,7 @@ public class ProductOrderController {
             if (fabric == null) {
                 return ResponseEntity.badRequest().body("Fabric reference not found for product: " + entryDTO.getProductInventoryId());
             }
-            double retailPrice = fabric.getRetailPrice();
+            double retailPrice = fabric.getWholesalePrice();
 
             List<OrderedSizeQuantity> orderedSizes = new ArrayList<>();
 
@@ -155,7 +155,7 @@ public class ProductOrderController {
                     return ResponseEntity.badRequest().body("Size not found: " + osqDTO.getLabel());
                 }
 
-                orderedSizes.add(new OrderedSizeQuantity(osqDTO.getLabel(), osqDTO.getQuantity()));
+                orderedSizes.add(new OrderedSizeQuantity(osqDTO.getLabel(), osqDTO.getQuantity(),retailPrice));
             }
 
             inventoryRepository.save(inventory); // save after update

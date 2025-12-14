@@ -39,6 +39,8 @@ public class FinalOrderController {
 
     @Autowired
     private JwtHelper jwtHelper;
+    @Autowired
+    private DiscountRepository discountRepository;
 
     @PostMapping("/final-order")
     public ResponseEntity<String> placeOrder(
@@ -52,11 +54,16 @@ public class FinalOrderController {
             String token = tokenHeader.replace("Bearer ", "");
             String username = jwtHelper.getUsernameFromToken(token);
             User user;
+            List<Discount> userDiscounts = null;
             if (admin != null && admin.equalsIgnoreCase("admin")) {
                 System.out.println("Admin entered");
                 if (userid != null && userid.isEmpty())
                     return ResponseEntity.badRequest().body("Error: user id not found");
                 user = userRepository.findByUserId(userid);
+                userDiscounts = discountRepository.findAll()
+                        .stream()
+                        .filter(d -> d.getUser() != null && d.getUser().getUserId().equals(userid))
+                        .toList();
 
             }else {
                 user = userRepository.findByEmail(username)
@@ -110,13 +117,23 @@ public class FinalOrderController {
 
             for (Cart.CartProductItem item : cart.getProducts()) {
                 ProductInventory inventory = item.getProductInventory();
+                Double discountedPrice = null;
+                if ( userDiscounts != null && !userDiscounts.isEmpty()) {
+                    discountedPrice = findDiscountedPriceForProduct(inventory.getId(), userDiscounts);
+                    if (discountedPrice != null) {
+                        System.out.println("Using discounted price " + discountedPrice + " for set: " + inventory.getId());
+                    }
+                }
                 double itemTotal = 0.0;
                 List<ProductOrder.OrderedSizeQuantity> orderedSizes = new ArrayList<>();
                 for (Cart.CartProductItem.SizeQuantity size : item.getSelectedSizes()) {
                     double qty = size.getQuantity();
                     Fabric fabric = inventory.getFabric();
-                    itemTotal += fabric.getWholesalePrice() * qty;
-                    orderedSizes.add(new ProductOrder.OrderedSizeQuantity(size.getLabel(), (int) qty));
+                    if(discountedPrice==null||discountedPrice==0){
+                        discountedPrice=fabric.getWholesalePrice();
+                    }
+                    itemTotal += discountedPrice * qty;
+                    orderedSizes.add(new ProductOrder.OrderedSizeQuantity(size.getLabel(), (int) qty,discountedPrice));
                 }
                 totalAmount += itemTotal;
                 productEntries.add(new ProductOrder.ProductEntry(inventory, orderedSizes));
@@ -129,10 +146,31 @@ public class FinalOrderController {
                 for (ProductSets.SizeQuantity size : productSet.getSizes()) {
                      qty += size.getQuantity() ;
                 }
+
+                Double discountedPrice = null;
+                if ( userDiscounts != null && !userDiscounts.isEmpty()) {
+
+//              ProductInventory inventory =  productInventoryRepository.findFirstByFabricAndDisplayNamesCatAndColor(
+//                            productSet.getFabric(),
+//                            productSet.getDisplayNamesCat(),
+//                            productSet.getColor()
+//                    );
+//                    System.out.println("inventory found --------------- " + inventory );
+
+                    discountedPrice = findDiscountedPriceForProduct(productSet.getId(), userDiscounts);
+                    if (discountedPrice != null) {
+                        System.out.println("Using discounted price " + discountedPrice + " for set: " );
+                    }
+                }
+
+
                 Fabric fabric = productSet.getFabric();
-               double setTotal = fabric.getWholesalePrice()*qty*setItem.getQuantity();
+                if(discountedPrice==null||discountedPrice==0){
+                    discountedPrice=fabric.getWholesalePrice();
+                }
+               double setTotal = discountedPrice*qty*setItem.getQuantity();
                 totalAmount += setTotal;
-                orderedSets.add(new ProductOrder.OrderedSets(productSet, setItem.getQuantity()));
+                orderedSets.add(new ProductOrder.OrderedSets(productSet, setItem.getQuantity(),discountedPrice));
             }
 
             // Create and save the order
@@ -202,6 +240,19 @@ public class FinalOrderController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
+    }
+    private Double findDiscountedPriceForProduct(String productId, List<Discount> userDiscounts) {
+        // Iterate through all discount entries and return the first matching product discount
+        for (Discount discount : userDiscounts) {
+            if (discount.getDiscountWithProducts() != null) {
+                for (Discount.DiscountWithProduct discountProduct : discount.getDiscountWithProducts()) {
+                    if (productId.equals(discountProduct.getProductId())) {
+                        return discountProduct.getPrice();
+                    }
+                }
+            }
+        }
+        return null; // No discount found for this product
     }
     @PostMapping("/disapprove-order")
     public ResponseEntity<String> disapproveOrder(
