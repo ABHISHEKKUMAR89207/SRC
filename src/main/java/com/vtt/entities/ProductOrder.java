@@ -28,6 +28,29 @@ public class ProductOrder {
     private String approved;
     private LocalDateTime orderDate = LocalDateTime.now();
 
+
+    @DBRef
+    private User assignedForSalesman;
+
+    // Date when order assigned to salesman
+    private LocalDateTime assignedToSalesmanDate;
+
+    // Current status updated by salesman
+    // e.g. ASSIGNED, PICKED, OUT_FOR_DELIVERY, DELIVERED, FAILED
+    private String currentBySalesmanStatus;
+
+    // Current location updated by salesman
+    private String currentBySalesmanLocation;
+
+    // Final delivery date by salesman
+    private LocalDateTime deliveredBySalesmanDate;
+
+    // Salesman name (for quick access / report)
+    private String salesmanName;
+
+    // Any problem reported by salesman during delivery
+    private String problemReportedBySalesman;
+
     // Inner class for each product in the order
     @Getter @Setter
     @NoArgsConstructor

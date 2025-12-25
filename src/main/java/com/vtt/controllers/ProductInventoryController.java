@@ -214,6 +214,12 @@ public class ProductInventoryController {
         if (requestData.containsKey("productLocation")) {
             productInventory.setProductLocation((String) requestData.get("productLocation"));
         }
+        if (requestData.containsKey("nameOfProduct")) {
+            productInventory.setNameOfProduct((String) requestData.get("nameOfProduct"));
+        }
+        if (requestData.containsKey("active")) {
+            productInventory.setActive((String) requestData.get("active"));
+        }
 
         // Update sizes if present in request
         if (requestData.containsKey("sizes")) {

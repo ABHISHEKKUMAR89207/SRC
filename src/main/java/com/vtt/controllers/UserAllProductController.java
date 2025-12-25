@@ -75,6 +75,8 @@ public class UserAllProductController {
             // Build UserAllProductDTO
             UserAllProductDTO dto = new UserAllProductDTO();
             dto.setId(inventory.getId());
+            dto.setNameOfProduct(inventory.getNameOfProduct());
+            dto.setActive(inventory.getActive());
             dto.setColor(inventory.getColor());
             dto.setProductImage(inventory.getProductImage());
             dto.setProductImag2(inventory.getProductImag2());

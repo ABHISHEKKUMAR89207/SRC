@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface ProductOrderRepository extends MongoRepository<ProductOrder, String> {
     List<ProductOrder> findByUser(User user);
+
+    List<ProductOrder> findByAssignedForSalesman(User salesman);
 }

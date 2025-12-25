@@ -87,6 +87,7 @@ public class securityConfig {
                                 .requestMatchers("/offers/**").permitAll()
                                 .requestMatchers("/api/payment/**").permitAll()
                                 .requestMatchers("/api/discount/**").permitAll()
+                                .requestMatchers("/api/order-deliver/**").permitAll()
                                 .requestMatchers("/api/orders/**").permitAll()
                                 .requestMatchers("/api/productinventory/**").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()

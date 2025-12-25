@@ -41,6 +41,140 @@ public class FinalOrderController {
     private JwtHelper jwtHelper;
     @Autowired
     private DiscountRepository discountRepository;
+    @PostMapping("/recalculate-order-prices")
+    public ResponseEntity<String> recalculateOrderPrices(
+            @RequestHeader("Authorization") String tokenHeader,
+            @RequestParam String orderId) {
+
+        try {
+            // Extract username from token
+            String token = tokenHeader.replace("Bearer ", "");
+            String username = jwtHelper.getUsernameFromToken(token);
+
+            // Fetch user
+            User user = userRepository.findByEmail(username)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Fetch order
+            ProductOrder order = productOrderRepository.findById(orderId)
+                    .orElseThrow(() -> new RuntimeException("Order not found"));
+
+            // Check if order is already approved or rejected
+            if (order.getApproved().equalsIgnoreCase("approved")) {
+                return ResponseEntity.badRequest().body("Error: Cannot recalculate prices for approved orders");
+            }
+            if (order.getApproved().equalsIgnoreCase("rejected")) {
+                return ResponseEntity.badRequest().body("Error: Cannot recalculate prices for rejected orders");
+            }
+
+            // Get user discounts
+            List<Discount> userDiscounts = discountRepository.findAll()
+                    .stream()
+                    .filter(d -> d.getUser() != null &&
+                            d.getUser().getUserId().equals(order.getUser().getUserId()))
+                    .toList();
+
+            double recalculatedTotalAmount = 0.0;
+
+            // Recalculate product entries
+            List<ProductOrder.ProductEntry> recalculatedProductEntries = new ArrayList<>();
+
+            for (ProductOrder.ProductEntry productEntry : order.getProductEntries()) {
+                ProductInventory inventory = productEntry.getProductInventory();
+
+                // Find discounted price for this product
+                Double discountedPrice = null;
+                if (!userDiscounts.isEmpty()) {
+                    discountedPrice = findDiscountedPriceForProduct(inventory.getId(), userDiscounts);
+                }
+
+                // If no discount found, use wholesale price
+                if (discountedPrice == null || discountedPrice == 0) {
+                    Fabric fabric = inventory.getFabric();
+                    discountedPrice = fabric.getWholesalePrice();
+                }
+
+                // Recalculate ordered sizes with new price
+                List<ProductOrder.OrderedSizeQuantity> recalculatedSizes = new ArrayList<>();
+                double productEntryTotal = 0.0;
+
+                for (ProductOrder.OrderedSizeQuantity orderedSize : productEntry.getOrderedSizes()) {
+                    double quantity = orderedSize.getQuantity();
+                    double sizeTotal = discountedPrice * quantity;
+                    productEntryTotal += sizeTotal;
+
+                    // Create new size quantity with updated price
+                    ProductOrder.OrderedSizeQuantity recalculatedSize =
+                            new ProductOrder.OrderedSizeQuantity(
+                                    orderedSize.getLabel(),
+                                    orderedSize.getQuantity(),
+                                    discountedPrice
+                            );
+                    recalculatedSizes.add(recalculatedSize);
+                }
+
+                recalculatedTotalAmount += productEntryTotal;
+
+                // Create new product entry with recalculated sizes
+                ProductOrder.ProductEntry recalculatedEntry =
+                        new ProductOrder.ProductEntry(inventory, recalculatedSizes);
+                recalculatedProductEntries.add(recalculatedEntry);
+            }
+
+            // Recalculate sets
+            List<ProductOrder.OrderedSets> recalculatedSets = new ArrayList<>();
+
+            for (ProductOrder.OrderedSets orderedSet : order.getSets()) {
+                ProductSets productSet = orderedSet.getProductSet();
+
+                // Find discounted price for this set
+                Double discountedPrice = null;
+                if (!userDiscounts.isEmpty()) {
+                    discountedPrice = findDiscountedPriceForProduct(productSet.getId(), userDiscounts);
+                }
+
+                // If no discount found, use wholesale price
+                if (discountedPrice == null || discountedPrice == 0) {
+                    Fabric fabric = productSet.getFabric();
+                    discountedPrice = fabric.getWholesalePrice();
+                }
+
+                // Calculate total quantity in the set
+                int totalSetQuantity = 0;
+                if (productSet.getSizes() != null) {
+                    for (ProductSets.SizeQuantity size : productSet.getSizes()) {
+                        totalSetQuantity += size.getQuantity();
+                    }
+                }
+
+                // Calculate set total
+                double setTotal = discountedPrice * totalSetQuantity * orderedSet.getQuantity();
+                recalculatedTotalAmount += setTotal;
+
+                // Create new ordered set with updated price
+                ProductOrder.OrderedSets recalculatedOrderedSet =
+                        new ProductOrder.OrderedSets(
+                                productSet,
+                                orderedSet.getQuantity(),
+                                discountedPrice
+                        );
+                recalculatedSets.add(recalculatedOrderedSet);
+            }
+
+            // Update the order with recalculated values
+            order.setProductEntries(recalculatedProductEntries);
+            order.setSets(recalculatedSets);
+            order.setTotalAmount(recalculatedTotalAmount);
+
+            // Save the updated order
+            productOrderRepository.save(order);
+
+            return ResponseEntity.ok("Order prices recalculated successfully. New total: " + recalculatedTotalAmount);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        }
+    }
 
     @PostMapping("/final-order")
     public ResponseEntity<String> placeOrder(

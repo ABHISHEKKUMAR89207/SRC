@@ -15,6 +15,8 @@ import java.util.List;
 public class UserAllProductDTO {
 
     private String id;
+    private String nameOfProduct;
+    private String active;
     private String color;
     private String productImage;
     private String productImag2;
