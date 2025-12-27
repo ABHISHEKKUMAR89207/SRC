@@ -88,7 +88,13 @@ public class UserAllProductController {
                 dto.setDisplaynamecatid(display.getId());
                 dto.setCategoryName(display.getCategoryName());
                 dto.setSubCategoryName(display.getSubCategoryName());
-                dto.setProductName(display.getProductName());
+//                dto.setProductName(inventory.getNameOfProduct());
+                dto.setProductName(
+                        (inventory.getNameOfProduct() != null && !inventory.getNameOfProduct().trim().isEmpty())
+                                ? inventory.getNameOfProduct()
+                                : display.getProductName()
+                );
+
                 dto.setProductDescription(display.getProductDescription());
                 dto.setManufacturerName(display.getManufacturerName());
                 dto.setWebsiteName(display.getWebsiteName());
