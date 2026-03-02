@@ -139,11 +139,11 @@ public class ApplySetController {
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN &&
-                    requestingUser.getMainRole() != MainRole.ADMIN) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN or VIEWER can access this endpoint");
-            }
+//            if (requestingUser.getMainRole() != MainRole.ADMIN &&
+//                    requestingUser.getMainRole() != MainRole.ADMIN) {
+//                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+//                        .body("Only ADMIN or VIEWER can access this endpoint");
+//            }
 
             List<ApplySet> sets = mongoTemplate.findAll(ApplySet.class);
             return ResponseEntity.ok(sets);
