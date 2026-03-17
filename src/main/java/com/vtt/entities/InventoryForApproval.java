@@ -17,6 +17,7 @@ public class InventoryForApproval {
     private String id;
     private String labelNumber;
     private String color;
+    private String articleName;
 
     // List of sizes and their quantities
     private List<SizeQuantity> sizes;

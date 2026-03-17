@@ -103,6 +103,7 @@ public class InventoryForApprovalController {
                 null,
                 dto.getLabelNumber(),
                 dto.getColor(),
+                dto.getArticleName(),
                 sizeList,
                 displayNamesCat,
                 fabric,

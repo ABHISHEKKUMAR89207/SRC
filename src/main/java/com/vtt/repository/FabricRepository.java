@@ -12,4 +12,5 @@ public interface FabricRepository extends MongoRepository<Fabric, String> {
     // Custom query methods can be added here
     Fabric findByFabricName(String fabricName);
     List<Fabric> findByMillFactory(String millFactory);
+    List<Fabric> findByDisplayNameContainingIgnoreCase(String displayName);
 }

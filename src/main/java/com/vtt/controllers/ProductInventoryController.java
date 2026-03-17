@@ -79,12 +79,50 @@ public class ProductInventoryController {
         // Get the associated DisplayNamesCat and Fabric entities
         Optional<DisplayNamesCat> displayNamesCat = displayNamesCatRepository.findById(productInventoryDTO.getDisplayNamesCatId());
         Optional<Fabric> fabric = fabricRepository.findById(productInventoryDTO.getFabricId());
-
         if (displayNamesCat.isPresent() && fabric.isPresent()) {
+            List<Fabric> fabrics = fabricRepository.findByDisplayNameContainingIgnoreCase(fabric.get().getDisplayName());
+
             // Check if a ProductInventory with the same color, displayNamesCat, and fabric already exists
-            Optional<ProductInventory> existingProductInventory = productInventoryRepository
-                    .findByColorAndDisplayNamesCatAndFabric(productInventoryDTO.getColor(),
-                            displayNamesCat.get(), fabric.get());
+//            Optional<ProductInventory> existingProductInventory = productInventoryRepository
+//                    .findByColorAndDisplayNamesCatAndFabric(productInventoryDTO.getColor(),
+//                            displayNamesCat.get(), fabrics.get(0));
+            Optional<ProductInventory> existingProductInventory = Optional.empty();
+            if (productInventoryDTO.getColor() == null || productInventoryDTO.getColor().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .header("error", "Color is required")
+                        .build();
+            }
+
+            if (productInventoryDTO.getArticleName() == null || productInventoryDTO.getArticleName().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .header("error", "Article name is required")
+                        .build();
+            }
+
+            if (productInventoryDTO.getDisplayNamesCatId() == null || productInventoryDTO.getDisplayNamesCatId().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .header("error", "DisplayNamesCatId is required")
+                        .build();
+            }
+
+            if (productInventoryDTO.getFabricId() == null || productInventoryDTO.getFabricId().trim().isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .header("error", "FabricId is required")
+                        .build();
+            }
+            for (Fabric fab : fabrics) {
+                existingProductInventory = productInventoryRepository
+                        .findByColorAndArticleNameAndDisplayNamesCatAndFabric(
+                                productInventoryDTO.getColor(),
+                                productInventoryDTO.getArticleName(), // article name added
+                                displayNamesCat.get(),
+                                fab
+                        );
+
+                if (existingProductInventory.isPresent()) {
+                    break; // jahan mil gaya wahan loop stop
+                }
+            }
 
             ProductInventory productInventory;
             if (existingProductInventory.isPresent()) {
@@ -97,6 +135,7 @@ public class ProductInventoryController {
                 productInventory.setColor(productInventoryDTO.getColor());
                 productInventory.setSizes(mapSizeQuantityDTOs(productInventoryDTO.getSizes()));
                 productInventory.setDisplayNamesCat(displayNamesCat.get());
+                productInventory.setArticleName(productInventoryDTO.getArticleName());
                 productInventory.setFabric(fabric.get());
             }
 

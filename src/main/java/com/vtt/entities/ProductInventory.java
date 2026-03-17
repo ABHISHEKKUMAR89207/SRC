@@ -23,6 +23,7 @@ public class ProductInventory {
     private String productImag2;
     private String productImag3;
     private String productLocation;
+    private String articleName;
 
 
     // List of sizes and their quantities
@@ -34,6 +35,7 @@ public class ProductInventory {
     // Add a reference to the Fabric entity
     @DBRef
     private Fabric fabric;
+//    private String displayName;
 
     // Inner class to hold size and quantity
     @Getter @Setter

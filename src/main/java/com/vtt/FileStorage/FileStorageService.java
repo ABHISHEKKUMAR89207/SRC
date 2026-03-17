@@ -15,8 +15,10 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+//    @Value("${file.upload-dir}")
+//    private String uploadDir;
+@Value("${file.upload-dir:uploads}")
+private String uploadDir;
 
     public String storeFile(MultipartFile file) throws IOException {
         // Create upload directory if it doesn't exist

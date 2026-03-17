@@ -8,6 +8,7 @@ import java.util.List;
 public class ProductInventoryDTO {
 
     private String color;
+    private String articleName;
     private List<SizeQuantityDTO> sizes;
     private String displayNamesCatId;  // For DBRef link to DisplayNamesCat
     private String fabricId;

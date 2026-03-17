@@ -10,4 +10,10 @@ public interface ProductInventoryRepository extends MongoRepository<ProductInven
     Optional<ProductInventory> findByColorAndDisplayNamesCatAndFabric(String color, DisplayNamesCat displayNamesCat, Fabric fabric);
 
     ProductInventory findFirstByFabricAndDisplayNamesCatAndColor(Fabric fabric, DisplayNamesCat displayNamesCat, String color);
+    Optional<ProductInventory> findByColorAndArticleNameAndDisplayNamesCatAndFabric(
+            String color,
+            String articleName,
+            DisplayNamesCat displayNamesCat,
+            Fabric fabric
+    );
 }

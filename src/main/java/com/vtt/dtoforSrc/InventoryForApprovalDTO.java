@@ -13,6 +13,7 @@ import java.util.List;
 public class InventoryForApprovalDTO {
     private String labelNumber;
     private String color;
+    private String articleName;
     private List<SizeQuantityDTO> sizes;
     private String displayNamesCatId;
     private String fabricId;
