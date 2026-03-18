@@ -374,7 +374,7 @@ public class ProductInventoryController {
     // Utility method to convert SizeQuantityDTO list to ProductInventory.SizeQuantity list
     private List<ProductInventory.SizeQuantity> mapSizeQuantityDTOs(List<ProductInventoryDTO.SizeQuantityDTO> sizeQuantityDTOs) {
         return sizeQuantityDTOs.stream()
-                .map(dto -> new ProductInventory.SizeQuantity(dto.getLabel(), dto.getQuantity()))
+                .map(dto -> new ProductInventory.SizeQuantity(dto.getLabel(), dto.getQuantity(),0))
                 .toList();
     }
 
@@ -392,7 +392,7 @@ public class ProductInventoryController {
             }
             // If size doesn't exist, add a new size
             if (!sizeUpdated) {
-                productInventory.getSizes().add(new ProductInventory.SizeQuantity(newSize.getLabel(), newSize.getQuantity()));
+                productInventory.getSizes().add(new ProductInventory.SizeQuantity(newSize.getLabel(), newSize.getQuantity(),0));
             }
         }
     }

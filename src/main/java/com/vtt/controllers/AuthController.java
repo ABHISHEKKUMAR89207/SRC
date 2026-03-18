@@ -210,8 +210,8 @@ public class AuthController {
                         email,            // email
                         password,         // password
                         "",               // deviceType
-                       0.0,               // notificationToken
-                    0.0,               // address
+                        0.0,               // notificationToken
+                        0.0,               // address
                         true              // emailVerified
                 );
 
@@ -261,18 +261,18 @@ public class AuthController {
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
-                manager.authenticate(authentication);
+            manager.authenticate(authentication);
         }catch (BadCredentialsException e){
-                throw new BadCredentialsException("Invalid Username or Password !!");
+            throw new BadCredentialsException("Invalid Username or Password !!");
         }
     }
 
 
-// Exception handler for BadCredentialsException
-@ExceptionHandler(BadCredentialsException.class)
-public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credentials Invalid !!");
-}
+    // Exception handler for BadCredentialsException
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credentials Invalid !!");
+    }
 
 
     @PostMapping("/admin/register")
@@ -395,7 +395,7 @@ public ResponseEntity<String> handleBadCredentialsException(BadCredentialsExcept
     }
 
 
-//
+    //
 //    @PostMapping("/refresh-token")
 //    public ResponseEntity<JwtResponse> refreshJwtToken(@RequestBody RefreshTokenRequest request){
 //

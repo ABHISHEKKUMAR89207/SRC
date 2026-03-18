@@ -58,7 +58,7 @@ public class UserAllProductController {
             List<UserAllProductDTO.ProductSetDTO> setDTOs = matchingSets.stream().map(set -> {
                 // Map sizes from ProductSets.SizeQuantity to ProductInventory.SizeQuantity
                 List<ProductInventory.SizeQuantity> sizes = set.getSizes().stream()
-                        .map(s -> new ProductInventory.SizeQuantity(s.getLabel(), s.getQuantity()))
+                        .map(s -> new ProductInventory.SizeQuantity(s.getLabel(), s.getQuantity(),fabric.getRetailPrice()))
                         .collect(Collectors.toList());
 
                 return new UserAllProductDTO.ProductSetDTO(
