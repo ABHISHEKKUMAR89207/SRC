@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,4 +40,8 @@ public interface RetailOrderRepository extends MongoRepository<RetailOrder, Stri
 
     // Find cancelled orders
     List<RetailOrder> findByOrderStatusAndUserId(String orderStatus, String userId);
+
+    List<RetailOrder> findByPlacedAtBetween(LocalDateTime start, LocalDateTime end);
+
+    List<RetailOrder> findByPlacedAtBetweenAndOrderStatus(LocalDateTime start, LocalDateTime end, String status);
 }

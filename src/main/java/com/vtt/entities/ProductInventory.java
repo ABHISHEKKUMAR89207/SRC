@@ -20,11 +20,16 @@ public class ProductInventory {
     private String nameOfProduct;
     private String active;
     private String color;
+    private String colorCode;
     private String productImage;
     private String productImag2;
     private String productImag3;
+    private String productDescription1;
+    private String productDescription2;
+    private String productDescription3;
     private String productLocation;
     private String articleName;
+    private Boolean isNotOurBrand;
 
 
     // List of sizes and their quantities
@@ -59,6 +64,7 @@ public class ProductInventory {
         private String label; // Size label (e.g., "M", "L", "XL")
         private int quantity; // Available quantity for that size
         private double price;
+        private double wholesalePrice;
     }
 
 }

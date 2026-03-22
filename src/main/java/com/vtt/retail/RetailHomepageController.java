@@ -28,6 +28,7 @@ public class RetailHomepageController {
 
     private final RetailProductRepository retailProductRepository;
     private final RetailCouponRepository retailCouponRepository;
+    private final RetailProductController retailProductController;
 
     /**
      * Get complete homepage data
@@ -186,7 +187,6 @@ public class RetailHomepageController {
 
             // Get all trending products (considered as popular/sale items)
             List<ProductInventory>saleProducts = retailProductRepository.findTop10ByOrderByTotalSalesDesc();
-
             for (ProductInventory product : saleProducts) {
                 ProductSummary summary = new ProductSummary();
                 summary.setProductId(product.getId());

@@ -37,7 +37,7 @@ public class UserAllProductController {
 
     @GetMapping
     public ResponseEntity<List<UserAllProductDTO>> getAllProducts() {
-        List<ProductInventory> inventories = productInventoryRepo.findAll();
+        List<ProductInventory> inventories = productInventoryRepo.findAllWhereIsOurBrandNotTrue();
 
         List<UserAllProductDTO> dtos = inventories.stream().map(inventory -> {
 
@@ -58,7 +58,7 @@ public class UserAllProductController {
             List<UserAllProductDTO.ProductSetDTO> setDTOs = matchingSets.stream().map(set -> {
                 // Map sizes from ProductSets.SizeQuantity to ProductInventory.SizeQuantity
                 List<ProductInventory.SizeQuantity> sizes = set.getSizes().stream()
-                        .map(s -> new ProductInventory.SizeQuantity(s.getLabel(), s.getQuantity(),fabric.getRetailPrice()))
+                        .map(s -> new ProductInventory.SizeQuantity(s.getLabel(), s.getQuantity(),fabric.getRetailPrice(),fabric.getWholesalePrice()))
                         .collect(Collectors.toList());
 
                 return new UserAllProductDTO.ProductSetDTO(

@@ -22,6 +22,7 @@ public class RetailCart {
     private List<CartItem> items;
     
     private Double totalPrice = 0.0;
+    private Double shipmentCharge = 0.0;
     private Integer totalItems = 0;
     private Integer totalQuantity = 0;
     

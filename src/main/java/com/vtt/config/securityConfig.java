@@ -91,6 +91,8 @@ public class securityConfig {
                                 .requestMatchers("/api/orders/**").permitAll()
                                 .requestMatchers("/api/retail/payment/**").permitAll()
                                 .requestMatchers("/api/productinventory/**").permitAll()
+                                .requestMatchers("/api/retail/delivery/**").permitAll()
+                                .requestMatchers("/api/admin/retail/products/**").permitAll()
                                 // ==================== RETAIL PRODUCT ENDPOINTS ====================
                                 .requestMatchers(HttpMethod.GET, "/api/retail/products").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/retail/products/**").permitAll()

@@ -52,7 +52,7 @@ public class ProductInventoryController {
 //        if (!checkAdminRole(tokenHeader)) {
 //            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Respond with a forbidden status
 //        }
-        List<ProductInventory> productInventories = productInventoryRepository.findAll(); // Fetch product inventories
+        List<ProductInventory> productInventories = productInventoryRepository.findAllWhereIsOurBrandNotTrue(); // Fetch product inventories
         return ResponseEntity.ok(productInventories); // Return the list wrapped in ResponseEntity
     }
 
@@ -128,12 +128,14 @@ public class ProductInventoryController {
             if (existingProductInventory.isPresent()) {
                 // If it exists, update the quantities for the existing sizes or add new size
                 productInventory = existingProductInventory.get();
-                updateSizeQuantities(productInventory, productInventoryDTO.getSizes());
+                updateSizeQuantities(productInventory, productInventoryDTO.getSizes(), fabric.get().getRetailPrice(),
+                        fabric.get().getWholesalePrice());
             } else {
                 // If it doesn't exist, create a new ProductInventory
                 productInventory = new ProductInventory();
                 productInventory.setColor(productInventoryDTO.getColor());
-                productInventory.setSizes(mapSizeQuantityDTOs(productInventoryDTO.getSizes()));
+                productInventory.setSizes(mapSizeQuantityDTOs(productInventoryDTO.getSizes(), fabric.get().getRetailPrice(),
+                        fabric.get().getWholesalePrice()));
                 productInventory.setDisplayNamesCat(displayNamesCat.get());
                 productInventory.setArticleName(productInventoryDTO.getArticleName());
                 productInventory.setFabric(fabric.get());
@@ -144,6 +146,27 @@ public class ProductInventoryController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+    private ProductInventory fillMissingPrices(ProductInventory product,
+                                               Double retailPrice,
+                                               Double wholesalePrice) {
+
+        if (product == null || product.getSizes() == null) return product;
+
+        for (ProductInventory.SizeQuantity size : product.getSizes()) {
+
+            // 👉 set retail price if null or 0
+            if (size.getPrice() == 0.0) {
+                size.setPrice(retailPrice != null ? retailPrice : 0.0);
+            }
+
+            // 👉 set wholesale price if null or 0
+            if (size.getWholesalePrice() == 0.0) {
+                size.setWholesalePrice(wholesalePrice != null ? wholesalePrice : 0.0);
+            }
+        }
+
+        return product;
     }
     @PutMapping(value = "/{id}/images", consumes = {"multipart/form-data"})
     public ResponseEntity<ProductInventory> updateProductInventoryImages(
@@ -372,27 +395,36 @@ public class ProductInventoryController {
     }
 
     // Utility method to convert SizeQuantityDTO list to ProductInventory.SizeQuantity list
-    private List<ProductInventory.SizeQuantity> mapSizeQuantityDTOs(List<ProductInventoryDTO.SizeQuantityDTO> sizeQuantityDTOs) {
+    private List<ProductInventory.SizeQuantity> mapSizeQuantityDTOs(List<ProductInventoryDTO.SizeQuantityDTO> sizeQuantityDTOs,Double retailPrice,
+                                                                    Double wholesalePrice) {
         return sizeQuantityDTOs.stream()
-                .map(dto -> new ProductInventory.SizeQuantity(dto.getLabel(), dto.getQuantity(),0))
+                .map(dto -> new ProductInventory.SizeQuantity(dto.getLabel(), dto.getQuantity(),retailPrice,wholesalePrice))
                 .toList();
     }
 
     // Utility method to update size quantities or add new size
-    private void updateSizeQuantities(ProductInventory productInventory, List<ProductInventoryDTO.SizeQuantityDTO> newSizes) {
+    private void updateSizeQuantities(ProductInventory productInventory, List<ProductInventoryDTO.SizeQuantityDTO> newSizes,Double retailPrice,
+                                      Double wholesalePrice) {
         for (ProductInventoryDTO.SizeQuantityDTO newSize : newSizes) {
             boolean sizeUpdated = false;
             for (ProductInventory.SizeQuantity existingSize : productInventory.getSizes()) {
                 if (existingSize.getLabel().equals(newSize.getLabel())) {
                     // If size exists, update the quantity
                     existingSize.setQuantity(existingSize.getQuantity() + newSize.getQuantity());
+                    if (existingSize.getPrice() > 0) {
+                        retailPrice = existingSize.getPrice();
+                    }
+
+                    if (existingSize.getWholesalePrice() > 0) {
+                        wholesalePrice = existingSize.getWholesalePrice();
+                    }
                     sizeUpdated = true;
                     break;
                 }
             }
             // If size doesn't exist, add a new size
             if (!sizeUpdated) {
-                productInventory.getSizes().add(new ProductInventory.SizeQuantity(newSize.getLabel(), newSize.getQuantity(),0));
+                productInventory.getSizes().add(new ProductInventory.SizeQuantity(newSize.getLabel(), newSize.getQuantity(),retailPrice,wholesalePrice));
             }
         }
     }

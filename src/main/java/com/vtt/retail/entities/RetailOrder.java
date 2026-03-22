@@ -15,7 +15,7 @@ public class RetailOrder {
 
     @Id
     private String id;
-    
+    private String deliveryDetailsId;
     private String orderId;  // Unique order number
     private String userId;   // Reference to User from auth system
     
@@ -61,6 +61,7 @@ public class RetailOrder {
     
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String deliveryDatesIfNotUsedAutoDelivery;
 
     // Inner class for order items
     @Getter @Setter

@@ -1,4 +1,5 @@
 package com.vtt.retail;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.vtt.retail.entities.RetailCart;
 import com.vtt.entities.ProductInventory;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,10 +26,14 @@ import java.util.Optional;
 @RequestMapping("/api/retail/cart")
 @Tag(name = "Retail Cart Controller", description = "API for shopping cart management")
 public class RetailCartController {
+    @Value("${cart.shipping.charge}")
+    private double shippingCharge;
 
+    @Value("${cart.min.order.value}")
+    private double minOrderValue;
     private final RetailCartRepository retailCartRepository;
     private final RetailProductRepository retailProductRepository;
-
+    private final RetailProductController retailProductController;
     /**
      * Add item to cart
      */
@@ -44,7 +50,16 @@ public class RetailCartController {
             }
 
             ProductInventory product = productOptional.get();
+            // Convert to List, call method, get result
+            List<ProductInventory> updatedList =
+                    retailProductController.mergeSetQuantities(
+                            java.util.Collections.singletonList(product)
+                    );
 
+// Get first element
+            if (updatedList != null && !updatedList.isEmpty()) {
+                product = updatedList.get(0);
+            }
             // Validate size exists and get price
             ProductInventory.SizeQuantity selectedSize = null;
             for (ProductInventory.SizeQuantity size : product.getSizes()) {
@@ -264,7 +279,12 @@ public class RetailCartController {
                 totalQuantity += item.getQuantity();
             }
         }
-
+        if (totalPrice < minOrderValue) {
+            cart.setShipmentCharge(shippingCharge);
+            totalPrice=totalPrice+shippingCharge;
+        } else {
+            cart.setShipmentCharge(0.0); // Free shipping
+        }
         cart.setTotalPrice(totalPrice);
         cart.setTotalItems(totalItems);
         cart.setTotalQuantity(totalQuantity);

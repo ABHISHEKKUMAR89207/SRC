@@ -1,13 +1,13 @@
 package com.vtt.retail;
 
 import com.vtt.entities.ProductInventory;
+import com.vtt.entities.ProductSets;
+import com.vtt.repository.ProductSetsRepository;
 import com.vtt.retail.repository.RetailProductRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
 public class RetailProductController {
 
     private final RetailProductRepository retailProductRepository;
-
+    @Autowired
+    private ProductSetsRepository productSetsRepository;
     @GetMapping
     public ResponseEntity<?> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
@@ -34,6 +35,7 @@ public class RetailProductController {
             Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
             
             Page<ProductInventory>products = retailProductRepository.findAll(pageable);
+            products = mergeSetQuantities(products);
             
             return ResponseEntity.ok(new ApiResponse<>("Success", products, true));
         } catch (Exception e) {
@@ -46,6 +48,7 @@ public class RetailProductController {
     public ResponseEntity<?> getProductById(@PathVariable String productId) {
         try {
             Optional<ProductInventory>product = retailProductRepository.findById(productId);
+            product = mergeSetQuantities(product);
             if (product.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ApiResponse<>("Product not found", null, false));
@@ -65,7 +68,7 @@ public class RetailProductController {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
             Page<ProductInventory>products = retailProductRepository.findByCategory(category, pageable);
-            
+            products = mergeSetQuantities(products);
             return ResponseEntity.ok(new ApiResponse<>("Success", products, true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -81,7 +84,7 @@ public class RetailProductController {
         try {
             Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
             Page<ProductInventory>products = retailProductRepository.findBySubcategory(subcategory, pageable);
-            
+            products = mergeSetQuantities(products);
             return ResponseEntity.ok(new ApiResponse<>("Success", products, true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -134,7 +137,7 @@ public class RetailProductController {
             } else {
                 products = retailProductRepository.findAll(pageable);
             }
-            
+            products = mergeSetQuantities(products);
             return ResponseEntity.ok(new ApiResponse<>("Success", products, true));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -146,7 +149,7 @@ public class RetailProductController {
     public ResponseEntity<?> getTrendingProducts() {
         try {
             List<ProductInventory>trendingProducts = retailProductRepository.findTop10ByOrderByTotalSalesDesc();
-            
+            trendingProducts = mergeSetQuantities(trendingProducts);
             if (trendingProducts.isEmpty()) {
                 return ResponseEntity.ok(new ApiResponse<>("No trending products found", new ArrayList<>(), true));
             }
@@ -262,7 +265,196 @@ public class RetailProductController {
                     .body(new ApiResponse<>("Error: " + e.getMessage(), null, false));
         }
     }
+    /**
+     * 👉 Overloaded method for List<ProductInventory>
+     */
+    public List<ProductInventory> mergeSetQuantities(List<ProductInventory> products) {
 
+        return products.stream().map(product -> {
+
+            List<ProductSets> sets = productSetsRepository
+                    .findByColorAndDisplayNamesCatAndFabric(
+                            product.getColor(),
+                            product.getDisplayNamesCat(),
+                            product.getFabric()
+                    );
+
+            if (sets != null && !sets.isEmpty()) {
+
+                for (ProductSets set : sets) {
+
+                    if (set.getSizes() == null) continue;
+
+                    for (ProductSets.SizeQuantity setSize : set.getSizes()) {
+
+                        boolean found = false;
+
+                        if (product.getSizes() != null) {
+                            for (ProductInventory.SizeQuantity prodSize : product.getSizes()) {
+
+                                if (prodSize.getLabel().equalsIgnoreCase(setSize.getLabel())) {
+
+                                    // ✅ add quantities (e.g. 10 + 5 = 15)
+                                    prodSize.setQuantity(
+                                            prodSize.getQuantity() + (set.getTotalQuantity()*setSize.getQuantity())
+                                    );
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // 👉 if size not exists, add new
+                        if (!found) {
+                            if (product.getSizes() == null) {
+                                product.setSizes(new ArrayList<>());
+                            }
+
+                            product.getSizes().add(
+                                    new ProductInventory.SizeQuantity(
+                                            setSize.getLabel(),
+                                            (set.getTotalQuantity()*setSize.getQuantity()),
+                                            set.getFabric().getRetailPrice(),
+                                            set.getFabric().getWholesalePrice()
+                                    )
+                            );
+                        }
+                    }
+                }
+            }
+
+            return product;
+
+        }).toList();
+    }
+    /**
+     * 👉 Overloaded method for Optional<ProductInventory>
+     */
+    public Optional<ProductInventory> mergeSetQuantities(Optional<ProductInventory> productOptional) {
+
+        if (productOptional.isEmpty()) return Optional.empty();
+
+        ProductInventory product = productOptional.get();
+
+        List<ProductSets> sets = productSetsRepository
+                .findByColorAndDisplayNamesCatAndFabric(
+                        product.getColor(),
+                        product.getDisplayNamesCat(),
+                        product.getFabric()
+                );
+
+        if (sets != null && !sets.isEmpty()) {
+
+            for (ProductSets set : sets) {
+
+                if (set.getSizes() == null) continue;
+
+                for (ProductSets.SizeQuantity setSize : set.getSizes()) {
+
+                    boolean found = false;
+
+                    if (product.getSizes() != null) {
+                        for (ProductInventory.SizeQuantity prodSize : product.getSizes()) {
+
+                            if (prodSize.getLabel().equalsIgnoreCase(setSize.getLabel())) {
+
+                                // ✅ add quantities
+                                prodSize.setQuantity(
+                                        prodSize.getQuantity() + (set.getTotalQuantity()*setSize.getQuantity())
+                                );
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // 👉 if size not present, add new
+                    if (!found) {
+                        if (product.getSizes() == null) {
+                            product.setSizes(new ArrayList<>());
+                        }
+
+                        product.getSizes().add(
+                                new ProductInventory.SizeQuantity(
+                                        setSize.getLabel(),
+                                        (set.getTotalQuantity()*setSize.getQuantity()),
+                                        set.getFabric().getRetailPrice(),
+                                        set.getFabric().getWholesalePrice()
+                                )
+                        );
+                    }
+                }
+            }
+        }
+
+        return Optional.of(product);
+    }
+    /**
+     * 👉 Separate reusable function
+     * Pass Page<ProductInventory> and it will merge ProductSets quantities
+     */
+    public Page<ProductInventory> mergeSetQuantities(Page<ProductInventory> products) {
+
+        List<ProductInventory> updatedList = products.getContent().stream().map(product -> {
+
+            // 🔹 Filter sets based on color + category + fabric
+            List<ProductSets> sets = productSetsRepository
+                    .findByColorAndDisplayNamesCatAndFabric(
+                            product.getColor(),
+                            product.getDisplayNamesCat(),
+                            product.getFabric()
+                    );
+
+            if (sets != null && !sets.isEmpty()) {
+
+                for (ProductSets set : sets) {
+
+                    if (set.getSizes() == null) continue;
+
+                    for (ProductSets.SizeQuantity setSize : set.getSizes()) {
+
+                        boolean found = false;
+
+                        if (product.getSizes() != null) {
+                            for (ProductInventory.SizeQuantity prodSize : product.getSizes()) {
+
+                                if (prodSize.getLabel().equalsIgnoreCase(setSize.getLabel())) {
+
+                                    // ✅ Example: 10 (inventory) + 5 (set) = 15
+                                    prodSize.setQuantity(
+                                            prodSize.getQuantity() + (set.getTotalQuantity()*setSize.getQuantity())
+                                    );
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // 👉 If size not present in product, add it
+                        if (!found) {
+                            if (product.getSizes() == null) {
+                                product.setSizes(new ArrayList<>());
+                            }
+
+                            product.getSizes().add(
+                                    new ProductInventory.SizeQuantity(
+                                            setSize.getLabel(),
+                                            (set.getTotalQuantity()*setSize.getQuantity()),
+                                            set.getFabric().getRetailPrice(),
+                                            set.getFabric().getWholesalePrice()
+                                    )
+                            );
+                        }
+                    }
+                }
+            }
+
+            return product;
+
+        }).toList();
+
+        return new PageImpl<>(updatedList, products.getPageable(), products.getTotalElements());
+    }
     @lombok.Getter
     @lombok.Setter
     @lombok.NoArgsConstructor
