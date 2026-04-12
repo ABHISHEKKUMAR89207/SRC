@@ -52,9 +52,11 @@ public class ProductInventory {
     private LocalDateTime updatedAt;
     private LocalDateTime lastedArrivedAt;
 
-    private String subcategory;  // From DisplayNamesCat.subCategoryName
-    private String category;     // From DisplayNamesCat.categoryName
-    private String fabricName;   // From Fabric.displayName
+    private String subcategory;  // shirt,pant,saree
+    private String category;     // men,women,kids
+    private String fabricName;   // cotton,lycra etc
+
+//    private String productCode;
 
     // Inner class to hold size and quantity
     @Getter @Setter

@@ -1,5 +1,7 @@
 package com.vtt.retail.repository;
 
+import com.vtt.entities.DisplayNamesCat;
+import com.vtt.entities.Fabric;
 import com.vtt.entities.ProductInventory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,4 +66,6 @@ public interface RetailProductRepository extends MongoRepository<ProductInventor
     // Complex query for all filters
     @Query("{ 'category': ?0, 'subcategory': ?1, 'color': ?2, 'sizes.label': ?3, 'sizes.price': { $gte: ?4, $lte: ?5 } }")
     Page<ProductInventory>findWithAllFilters(String category, String subcategory, String color, String size, Double minPrice, Double maxPrice, Pageable pageable);
+    Page<ProductInventory> findByDisplayNamesCatAndFabric(DisplayNamesCat displayNamesCat, Fabric fabric, Pageable pageable);
+    Page<ProductInventory> findByCategoryAndSubcategoryAndFabricName(String category, String subcategory, String fabricName, Pageable pageable);
 }

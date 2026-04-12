@@ -63,20 +63,20 @@ public class AdminRetailProductController {
             }
 
             // OPTIONAL FETCH - displayNamesCat and Fabric can be optional
-            DisplayNamesCat displayNamesCat = null;
-            Fabric fabric = null;
+//            DisplayNamesCat displayNamesCat = null;
+//            Fabric fabric = null;
 
-            if (request.getDisplayNamesCatId() != null && !request.getDisplayNamesCatId().isEmpty()) {
-                displayNamesCat = displayNamesCatRepository
-                        .findById(request.getDisplayNamesCatId())
-                        .orElse(null);
-            }
-
-            if (request.getFabricId() != null && !request.getFabricId().isEmpty()) {
-                fabric = fabricRepository
-                        .findById(request.getFabricId())
-                        .orElse(null);
-            }
+//            if (request.getDisplayNamesCatId() != null && !request.getDisplayNamesCatId().isEmpty()) {
+//                displayNamesCat = displayNamesCatRepository
+//                        .findById(request.getDisplayNamesCatId())
+//                        .orElse(null);
+//            }
+//
+//            if (request.getFabricId() != null && !request.getFabricId().isEmpty()) {
+//                fabric = fabricRepository
+//                        .findById(request.getFabricId())
+//                        .orElse(null);
+//            }
 
             // CREATE PRODUCT
             ProductInventory product = new ProductInventory();
@@ -98,18 +98,21 @@ public class AdminRetailProductController {
             product.setProductDescription3(request.getProductDescription3());
 
             // SET OPTIONAL REFERENCES
-            product.setDisplayNamesCat(displayNamesCat);
-            product.setFabric(fabric);
-
-            // SAFE DENORMALIZED FIELDS
-            if (displayNamesCat != null) {
-                product.setCategory(displayNamesCat.getCategoryName());
-                product.setSubcategory(displayNamesCat.getSubCategoryName());
-            }
-
-            if (fabric != null) {
-                product.setFabricName(fabric.getDisplayName());
-            }
+//            product.setDisplayNamesCat(displayNamesCat);
+//            product.setFabric(fabric);
+//
+//            // SAFE DENORMALIZED FIELDS
+//            if (displayNamesCat != null) {
+//                product.setCategory(displayNamesCat.getCategoryName());
+//                product.setSubcategory(displayNamesCat.getSubCategoryName());
+//            }
+//
+//            if (fabric != null) {
+//                product.setFabricName(fabric.getDisplayName());
+//            }
+            product.setFabricName(request.getFabricName());
+            product.setCategory(request.getCategory());
+            product.setSubcategory(request.getSubcategory());
 
             // SIZES
             List<ProductInventory.SizeQuantity> sizes = new ArrayList<>();
@@ -536,6 +539,9 @@ public class AdminRetailProductController {
         private Double rating;
         private Integer totalRatings;
         private Double totalSales;
+        private String subcategory;  // shirt,pant,saree
+        private String category;     // men,women,kids
+        private String fabricName;
 
         private List<SizeQuantityRequest> sizes;
 

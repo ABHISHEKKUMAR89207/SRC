@@ -179,7 +179,7 @@ public class securityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/retail/analytics/payment-distribution").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/retail/analytics/inventory-status").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/retail/analytics/recent-orders").authenticated()
-
+                                .requestMatchers(HttpMethod.GET, "/api/download/apk").permitAll()
                                 .requestMatchers(HttpMethod.GET).permitAll()
                                 .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
