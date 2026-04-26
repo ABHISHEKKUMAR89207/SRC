@@ -139,6 +139,9 @@ public class ProductInventoryController {
                 productInventory.setDisplayNamesCat(displayNamesCat.get());
                 productInventory.setArticleName(productInventoryDTO.getArticleName());
                 productInventory.setFabric(fabric.get());
+                productInventory.setCategory(displayNamesCat.get().getCategoryName());
+                productInventory.setSubcategory(displayNamesCat.get().getSubCategoryName());
+                productInventory.setFabricName(fabric.get().getDisplayName());
             }
 
             ProductInventory savedProductInventory = productInventoryRepository.save(productInventory);

@@ -100,6 +100,9 @@ public class UserAllProductController {
                 dto.setWebsiteName(display.getWebsiteName());
                 dto.setImageUrl(display.getImageUrl());
                 dto.setSelectdTheme(display.getSelectdTheme());
+            }else{
+                dto.setCategoryName(inventory.getCategory());
+                dto.setSubCategoryName(inventory.getSubcategory());
             }
 
             if (fabric != null) {
@@ -110,7 +113,13 @@ public class UserAllProductController {
                 dto.setWholesalePrice(fabric.getWholesalePrice());
                 dto.setMaximumPrice(fabric.getMaximumPrice());
                 dto.setRetailPrice(fabric.getRetailPrice());
+            }else{
+                dto.setCategoryName(inventory.getCategory());
+                dto.setSubCategoryName(inventory.getSubcategory());
+                dto.setFabricName(inventory.getFabricName());
+                dto.setFabricDisplayName(inventory.getFabricName());
             }
+
 
             dto.setSets(setDTOs);
 

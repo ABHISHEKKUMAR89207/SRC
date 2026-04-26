@@ -29,6 +29,7 @@ public class Discount {
     @AllArgsConstructor
     public static class DiscountWithProduct {
         private String productId;
+        private String size;
         private double price;
     }
 }
