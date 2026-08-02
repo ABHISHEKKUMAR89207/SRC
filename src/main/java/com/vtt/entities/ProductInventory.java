@@ -24,6 +24,8 @@ public class ProductInventory {
     private String productImage;
     private String productImag2;
     private String productImag3;
+    private String productImag4;   // 👈 NEW
+    private String productImag5;
     private String productDescription1;
     private String productDescription2;
     private String productDescription3;

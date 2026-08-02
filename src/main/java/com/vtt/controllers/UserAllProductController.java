@@ -81,6 +81,11 @@ public class UserAllProductController {
             dto.setProductImage(inventory.getProductImage());
             dto.setProductImag2(inventory.getProductImag2());
             dto.setProductImag3(inventory.getProductImag3());
+            dto.setProductImag4(inventory.getProductImag4());
+            dto.setProductImag5(inventory.getProductImag5());
+            dto.setProductDescription1(inventory.getProductDescription1());
+            dto.setProductDescription2(inventory.getProductDescription2());
+            dto.setProductDescription3(inventory.getProductDescription3());
             dto.setProductLocation(inventory.getProductLocation());
             dto.setSizes(inventory.getSizes());
 

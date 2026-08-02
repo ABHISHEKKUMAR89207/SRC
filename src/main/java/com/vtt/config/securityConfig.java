@@ -89,6 +89,8 @@ public class securityConfig {
                                 .requestMatchers("/api/discount/**").permitAll()
                                 .requestMatchers("/api/order-deliver/**").permitAll()
                                 .requestMatchers("/api/orders/**").permitAll()
+                                .requestMatchers("/api/retail/banners/**").permitAll()
+                                .requestMatchers("/api/admin/retail/banners/**").permitAll()
                                 .requestMatchers("/api/retail/payment/**").permitAll()
                                 .requestMatchers("/api/productinventory/**").permitAll()
                                 .requestMatchers("/api/retail/delivery/**").permitAll()

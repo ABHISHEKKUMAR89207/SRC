@@ -21,6 +21,8 @@ public class UserAllProductDTO {
     private String productImage;
     private String productImag2;
     private String productImag3;
+    private String productImag4;   // 👈 NEW
+    private String productImag5;
     private String productLocation;
     private List<SizeQuantity> sizes;
 
@@ -43,7 +45,9 @@ public class UserAllProductDTO {
     private double wholesalePrice;
     private double maximumPrice;
     private double retailPrice;
-
+    private String productDescription1;
+    private String productDescription2;
+    private String productDescription3;
     // List of ProductSets matching this inventory item
     private List<ProductSetDTO> sets;
 

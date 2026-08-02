@@ -88,6 +88,8 @@ public class AdminRetailProductController {
             product.setProductImage(request.getProductImage());
             product.setProductImag2(request.getProductImag2());
             product.setProductImag3(request.getProductImag3());
+            product.setProductImag4(request.getProductImag3());
+            product.setProductImag5(request.getProductImag5());
             product.setProductLocation(request.getProductLocation());
             product.setArticleName(request.getArticleName());
             product.setIsNotOurBrand(request.getIsNotOurBrand() != null ? request.getIsNotOurBrand() : false);
@@ -177,6 +179,12 @@ public class AdminRetailProductController {
             if (request.getProductImag3() != null)
                 product.setProductImag3(request.getProductImag3());
 
+            if (request.getProductImag4() != null)               // 👈 NEW
+                product.setProductImag4(request.getProductImag4());
+
+            if (request.getProductImag5() != null)               // 👈 NEW
+                product.setProductImag5(request.getProductImag5());
+
             if (request.getProductLocation() != null)
                 product.setProductLocation(request.getProductLocation());
 
@@ -234,12 +242,14 @@ public class AdminRetailProductController {
 
     // ================= UPLOAD PRODUCT IMAGES =================
     @PutMapping(value = "/{productId}/images", consumes = {"multipart/form-data"})
-    @Operation(summary = "Upload product images", description = "Upload up to 3 product images (image1, image2, image3)")
+    @Operation(summary = "Upload product images", description = "Upload up to 5 product images (image1-image5)")
     public ResponseEntity<?> uploadProductImages(
             @PathVariable String productId,
             @RequestPart(value = "image1", required = false) MultipartFile image1,
             @RequestPart(value = "image2", required = false) MultipartFile image2,
-            @RequestPart(value = "image3", required = false) MultipartFile image3) {
+            @RequestPart(value = "image3", required = false) MultipartFile image3,
+            @RequestPart(value = "image4", required = false) MultipartFile image4,   // 👈 NEW
+            @RequestPart(value = "image5", required = false) MultipartFile image5) { // 👈 NEW
         try {
             Optional<ProductInventory> productOpt = retailProductRepository.findById(productId);
             if (productOpt.isEmpty()) {
@@ -253,11 +263,8 @@ public class AdminRetailProductController {
             if (image1 != null && !image1.isEmpty()) {
                 if (product.getProductImage() != null && !product.getProductImage().isEmpty()) {
                     String oldFileName = product.getProductImage().replace(fileBaseUrl, "");
-                    try {
-                        fileStorageService.deleteFile(oldFileName);
-                    } catch (Exception e) {
-                        System.err.println("Failed to delete old image1: " + e.getMessage());
-                    }
+                    try { fileStorageService.deleteFile(oldFileName); }
+                    catch (Exception e) { System.err.println("Failed to delete old image1: " + e.getMessage()); }
                 }
                 String fileName = fileStorageService.storeFile(image1);
                 product.setProductImage(fileBaseUrl + fileName);
@@ -267,11 +274,8 @@ public class AdminRetailProductController {
             if (image2 != null && !image2.isEmpty()) {
                 if (product.getProductImag2() != null && !product.getProductImag2().isEmpty()) {
                     String oldFileName = product.getProductImag2().replace(fileBaseUrl, "");
-                    try {
-                        fileStorageService.deleteFile(oldFileName);
-                    } catch (Exception e) {
-                        System.err.println("Failed to delete old image2: " + e.getMessage());
-                    }
+                    try { fileStorageService.deleteFile(oldFileName); }
+                    catch (Exception e) { System.err.println("Failed to delete old image2: " + e.getMessage()); }
                 }
                 String fileName = fileStorageService.storeFile(image2);
                 product.setProductImag2(fileBaseUrl + fileName);
@@ -281,20 +285,41 @@ public class AdminRetailProductController {
             if (image3 != null && !image3.isEmpty()) {
                 if (product.getProductImag3() != null && !product.getProductImag3().isEmpty()) {
                     String oldFileName = product.getProductImag3().replace(fileBaseUrl, "");
-                    try {
-                        fileStorageService.deleteFile(oldFileName);
-                    } catch (Exception e) {
-                        System.err.println("Failed to delete old image3: " + e.getMessage());
-                    }
+                    try { fileStorageService.deleteFile(oldFileName); }
+                    catch (Exception e) { System.err.println("Failed to delete old image3: " + e.getMessage()); }
                 }
                 String fileName = fileStorageService.storeFile(image3);
                 product.setProductImag3(fileBaseUrl + fileName);
             }
 
+            // Update image4 — 👈 NEW
+            if (image4 != null && !image4.isEmpty()) {
+                if (product.getProductImag4() != null && !product.getProductImag4().isEmpty()) {
+                    String oldFileName = product.getProductImag4().replace(fileBaseUrl, "");
+                    try { fileStorageService.deleteFile(oldFileName); }
+                    catch (Exception e) { System.err.println("Failed to delete old image4: " + e.getMessage()); }
+                }
+                String fileName = fileStorageService.storeFile(image4);
+                product.setProductImag4(fileBaseUrl + fileName);
+            }
+
+            // Update image5 — 👈 NEW
+            if (image5 != null && !image5.isEmpty()) {
+                if (product.getProductImag5() != null && !product.getProductImag5().isEmpty()) {
+                    String oldFileName = product.getProductImag5().replace(fileBaseUrl, "");
+                    try { fileStorageService.deleteFile(oldFileName); }
+                    catch (Exception e) { System.err.println("Failed to delete old image5: " + e.getMessage()); }
+                }
+                String fileName = fileStorageService.storeFile(image5);
+                product.setProductImag5(fileBaseUrl + fileName);
+            }
+
             // Check if at least one image was uploaded
             if ((image1 == null || image1.isEmpty()) &&
                     (image2 == null || image2.isEmpty()) &&
-                    (image3 == null || image3.isEmpty())) {
+                    (image3 == null || image3.isEmpty()) &&
+                    (image4 == null || image4.isEmpty()) &&
+                    (image5 == null || image5.isEmpty())) {
                 return ResponseEntity.badRequest()
                         .body(new ApiResponse<>("At least one image must be provided", null, false));
             }
@@ -312,10 +337,189 @@ public class AdminRetailProductController {
                     .body(new ApiResponse<>("Error: " + e.getMessage(), null, false));
         }
     }
+//    @PutMapping(value = "/{productId}/images", consumes = {"multipart/form-data"})
+//    @Operation(summary = "Upload product images", description = "Upload up to 3 product images (image1, image2, image3)")
+//    public ResponseEntity<?> uploadProductImages(
+//            @PathVariable String productId,
+//            @RequestPart(value = "image1", required = false) MultipartFile image1,
+//            @RequestPart(value = "image2", required = false) MultipartFile image2,
+//            @RequestPart(value = "image3", required = false) MultipartFile image3) {
+//        try {
+//            Optional<ProductInventory> productOpt = retailProductRepository.findById(productId);
+//            if (productOpt.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body(new ApiResponse<>("Product not found", null, false));
+//            }
+//
+//            ProductInventory product = productOpt.get();
+//
+//            // Update image1
+//            if (image1 != null && !image1.isEmpty()) {
+//                if (product.getProductImage() != null && !product.getProductImage().isEmpty()) {
+//                    String oldFileName = product.getProductImage().replace(fileBaseUrl, "");
+//                    try {
+//                        fileStorageService.deleteFile(oldFileName);
+//                    } catch (Exception e) {
+//                        System.err.println("Failed to delete old image1: " + e.getMessage());
+//                    }
+//                }
+//                String fileName = fileStorageService.storeFile(image1);
+//                product.setProductImage(fileBaseUrl + fileName);
+//            }
+//
+//            // Update image2
+//            if (image2 != null && !image2.isEmpty()) {
+//                if (product.getProductImag2() != null && !product.getProductImag2().isEmpty()) {
+//                    String oldFileName = product.getProductImag2().replace(fileBaseUrl, "");
+//                    try {
+//                        fileStorageService.deleteFile(oldFileName);
+//                    } catch (Exception e) {
+//                        System.err.println("Failed to delete old image2: " + e.getMessage());
+//                    }
+//                }
+//                String fileName = fileStorageService.storeFile(image2);
+//                product.setProductImag2(fileBaseUrl + fileName);
+//            }
+//
+//            // Update image3
+//            if (image3 != null && !image3.isEmpty()) {
+//                if (product.getProductImag3() != null && !product.getProductImag3().isEmpty()) {
+//                    String oldFileName = product.getProductImag3().replace(fileBaseUrl, "");
+//                    try {
+//                        fileStorageService.deleteFile(oldFileName);
+//                    } catch (Exception e) {
+//                        System.err.println("Failed to delete old image3: " + e.getMessage());
+//                    }
+//                }
+//                String fileName = fileStorageService.storeFile(image3);
+//                product.setProductImag3(fileBaseUrl + fileName);
+//            }
+//
+//            // Check if at least one image was uploaded
+//            if ((image1 == null || image1.isEmpty()) &&
+//                    (image2 == null || image2.isEmpty()) &&
+//                    (image3 == null || image3.isEmpty())) {
+//                return ResponseEntity.badRequest()
+//                        .body(new ApiResponse<>("At least one image must be provided", null, false));
+//            }
+//
+//            product.setUpdatedAt(LocalDateTime.now());
+//            ProductInventory updatedProduct = retailProductRepository.save(product);
+//
+//            return ResponseEntity.ok(new ApiResponse<>("Images uploaded successfully", updatedProduct, true));
+//
+//        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ApiResponse<>("Failed to upload images: " + e.getMessage(), null, false));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ApiResponse<>("Error: " + e.getMessage(), null, false));
+//        }
+//    }
+
+    // ================= UPDATE PRODUCT DETAILS =================
+//    @PutMapping("/{productId}/details")
+//    @Operation(summary = "Update product details", description = "Update product information like location, name, active status, descriptions, ratings and sizes")
+//    public ResponseEntity<?> updateProductDetails(
+//            @PathVariable String productId,
+//            @RequestBody Map<String, Object> requestData) {
+//        try {
+//            Optional<ProductInventory> productOpt = retailProductRepository.findById(productId);
+//            if (productOpt.isEmpty()) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body(new ApiResponse<>("Product not found", null, false));
+//            }
+//
+//            ProductInventory product = productOpt.get();
+//
+//            // Update product location
+//            if (requestData.containsKey("productLocation")) {
+//                product.setProductLocation((String) requestData.get("productLocation"));
+//            }
+//
+//            // Update product name
+//            if (requestData.containsKey("nameOfProduct")) {
+//                product.setNameOfProduct((String) requestData.get("nameOfProduct"));
+//            }
+//
+//            // Update active status
+//            if (requestData.containsKey("active")) {
+//                product.setActive((String) requestData.get("active"));
+//            }
+//
+//            // Update article name
+//            if (requestData.containsKey("articleName")) {
+//                product.setArticleName((String) requestData.get("articleName"));
+//            }
+//
+//            // Update isNotOurBrand
+//            if (requestData.containsKey("isNotOurBrand")) {
+//                product.setIsNotOurBrand((Boolean) requestData.get("isNotOurBrand"));
+//            }
+//
+//            // Update descriptions
+//            if (requestData.containsKey("productDescription1")) {
+//                product.setProductDescription1((String) requestData.get("productDescription1"));
+//            }
+//
+//            if (requestData.containsKey("productDescription2")) {
+//                product.setProductDescription2((String) requestData.get("productDescription2"));
+//            }
+//
+//            if (requestData.containsKey("productDescription3")) {
+//                product.setProductDescription3((String) requestData.get("productDescription3"));
+//            }
+//
+//            // Update rating fields
+//            if (requestData.containsKey("rating")) {
+//                product.setRating(((Number) requestData.get("rating")).doubleValue());
+//            }
+//
+//            if (requestData.containsKey("totalRatings")) {
+//                product.setTotalRatings(((Number) requestData.get("totalRatings")).intValue());
+//            }
+//
+//            if (requestData.containsKey("totalSales")) {
+//                product.setTotalSales(((Number) requestData.get("totalSales")).doubleValue());
+//            }
+//
+//            // Update sizes if present in request
+//            if (requestData.containsKey("sizes")) {
+//                List<Map<String, Object>> sizesData = (List<Map<String, Object>>) requestData.get("sizes");
+//                List<ProductInventory.SizeQuantity> sizes = new ArrayList<>();
+//
+//                for (Map<String, Object> sizeData : sizesData) {
+//                    ProductInventory.SizeQuantity sizeQuantity = new ProductInventory.SizeQuantity();
+//                    sizeQuantity.setLabel((String) sizeData.get("label"));
+//                    sizeQuantity.setQuantity(((Number) sizeData.get("quantity")).intValue());
+//
+//                    if (sizeData.containsKey("price")) {
+//                        sizeQuantity.setPrice(((Number) sizeData.get("price")).doubleValue());
+//                    }
+//
+//                    if (sizeData.containsKey("wholesalePrice")) {
+//                        sizeQuantity.setWholesalePrice(((Number) sizeData.get("wholesalePrice")).doubleValue());
+//                    }
+//
+//                    sizes.add(sizeQuantity);
+//                }
+//                product.setSizes(sizes);
+//            }
+//
+//            product.setUpdatedAt(LocalDateTime.now());
+//            ProductInventory updatedProduct = retailProductRepository.save(product);
+//
+//            return ResponseEntity.ok(new ApiResponse<>("Product details updated successfully", updatedProduct, true));
+//
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ApiResponse<>("Error: " + e.getMessage(), null, false));
+//        }
+//    }
 
     // ================= UPDATE PRODUCT DETAILS =================
     @PutMapping("/{productId}/details")
-    @Operation(summary = "Update product details", description = "Update product information like location, name, active status, descriptions, ratings and sizes")
+    @Operation(summary = "Update product details", description = "Update product information including category, subcategory, fabric, and other fields")
     public ResponseEntity<?> updateProductDetails(
             @PathVariable String productId,
             @RequestBody Map<String, Object> requestData) {
@@ -377,6 +581,19 @@ public class AdminRetailProductController {
 
             if (requestData.containsKey("totalSales")) {
                 product.setTotalSales(((Number) requestData.get("totalSales")).doubleValue());
+            }
+
+            // ✅ NEW: Update category fields
+            if (requestData.containsKey("category")) {
+                product.setCategory((String) requestData.get("category"));
+            }
+
+            if (requestData.containsKey("subcategory")) {
+                product.setSubcategory((String) requestData.get("subcategory"));
+            }
+
+            if (requestData.containsKey("fabricName")) {
+                product.setFabricName((String) requestData.get("fabricName"));
             }
 
             // Update sizes if present in request
@@ -532,6 +749,8 @@ public class AdminRetailProductController {
         private String productDescription1;
         private String productDescription2;
         private String productDescription3;
+        private String productImag4;   // 👈 NEW
+        private String productImag5;
 
         private String displayNamesCatId;
         private String fabricId;
@@ -568,6 +787,8 @@ public class AdminRetailProductController {
         private String productImage;
         private String productImag2;
         private String productImag3;
+        private String productImag4;   // 👈 NEW
+        private String productImag5;
         private String productLocation;
         private String articleName;
         private Boolean isNotOurBrand;
