@@ -1,6 +1,6 @@
 package com.vtt.controllers;
 
-
+import com.vtt.FileStorage.FileStorageService;
 import com.vtt.commonfunc.TokenUtils;
 import com.vtt.entities.Fabric;
 import com.vtt.entities.FabricHistory;
@@ -12,10 +12,16 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -27,6 +33,9 @@ public class FabricController {
 
     @Autowired
     private TokenUtils tokenUtils;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     // Add new fabric or update existing one
     @PostMapping
@@ -58,10 +67,8 @@ public class FabricController {
                         .set("buyingPrice", fabric.getBuyingPrice())
                         .set("wholesalePrice", fabric.getWholesalePrice())
                         .set("retailPrice", fabric.getRetailPrice())
-//                        .set("totalAmount", fabric.getTotalAmount())
                         .set("maximumPrice", fabric.getMaximumPrice())
                         .set("updatedAt", fabric.getUpdatedAt());
-                System.out.println("fdreyhgfhfjh======"+fabric.getMaximumPrice());
                 mongoTemplate.updateFirst(query, update, Fabric.class);
                 return ResponseEntity.ok(fabric);
             }
@@ -71,11 +78,16 @@ public class FabricController {
         }
     }
 
-    // Add fabric transaction (invoice)
-    @PostMapping("/{fabricId}/transactions")
+    // Add fabric transaction (invoice) — now supports an optional paymentProof file (multipart/form-data)
+    @PostMapping(value = "/{fabricId}/transactions", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> addFabricTransaction(
             @PathVariable String fabricId,
-            @RequestBody FabricHistory transaction,
+            @RequestParam("invoiceNo") String invoiceNo,
+            @RequestParam(value = "invoiceDate", required = false) Long invoiceDateMillis,
+            @RequestParam(value = "quantityinMeter", defaultValue = "0") double quantityinMeter,
+            @RequestParam(value = "credit", required = false) Double credit,
+            @RequestParam(value = "debit", required = false) Double debit,
+            @RequestParam(value = "paymentProof", required = false) MultipartFile paymentProofFile,
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
@@ -89,27 +101,41 @@ public class FabricController {
                 return ResponseEntity.notFound().build();
             }
 
+            FabricHistory transaction = new FabricHistory();
             transaction.setFabric(fabric);
+            transaction.setInvoiceNo(invoiceNo);
+            if (invoiceDateMillis != null) {
+                transaction.setInvoiceDate(new Date(invoiceDateMillis));
+            }
+            transaction.setQuantityinMeter(quantityinMeter);
+            transaction.setCredit(credit);
+            transaction.setDebit(debit);
             transaction.setCreatedAt(Instant.now());
+
+            // Store the payment proof image, if provided
+            if (paymentProofFile != null && !paymentProofFile.isEmpty()) {
+                String storedFileName = fileStorageService.storeFile(paymentProofFile);
+                transaction.setPaymentProof(storedFileName);
+            }
 
             FabricHistory savedTransaction = mongoTemplate.save(transaction);
 
             Update fabricUpdate = new Update()
                     .set("updatedAt", Instant.now());
 
-            if (transaction.getQuantityinMeter() != 0) {
-                double newQuantity = fabric.getQuantityinMeter() + transaction.getQuantityinMeter();
+            if (quantityinMeter != 0) {
+                double newQuantity = fabric.getQuantityinMeter() + quantityinMeter;
                 fabricUpdate.set("quantityinMeter", newQuantity);
-                fabricUpdate.set("allTimeTotaluantityinMeter", fabric.getAllTimeTotaluantityinMeter()+transaction.getQuantityinMeter());
+                fabricUpdate.set("allTimeTotaluantityinMeter", fabric.getAllTimeTotaluantityinMeter() + quantityinMeter);
             }
 
-            if (transaction.getCredit() != null) {
-                double newPaymentDone = fabric.getPaymentDone() + transaction.getCredit();
+            if (credit != null) {
+                double newPaymentDone = fabric.getPaymentDone() + credit;
                 fabricUpdate.set("paymentDone", newPaymentDone);
             }
 
-            if (transaction.getDebit() != null) {
-                double newTotalAmount = fabric.getTotalAmount() + transaction.getDebit();
+            if (debit != null) {
+                double newTotalAmount = fabric.getTotalAmount() + debit;
                 fabricUpdate.set("totalAmount", newTotalAmount);
             }
 
@@ -117,9 +143,37 @@ public class FabricController {
             mongoTemplate.updateFirst(query, fabricUpdate, Fabric.class);
 
             return ResponseEntity.ok(savedTransaction);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to store payment proof: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid or expired token");
+        }
+    }
+
+    // Serve a stored payment proof image by its stored file name
+    // NOTE: kept unauthenticated so Image.network(...) can load it directly without custom headers.
+    // If these documents are sensitive, add a token/signature check here before serving.
+    @GetMapping("/payment-proof/{fileName}")
+    public ResponseEntity<byte[]> getPaymentProof(@PathVariable String fileName) {
+        try {
+            byte[] fileData = fileStorageService.loadFile(fileName);
+            MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+            String lower = fileName.toLowerCase();
+            if (lower.endsWith(".png")) {
+                mediaType = MediaType.IMAGE_PNG;
+            } else if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
+                mediaType = MediaType.IMAGE_JPEG;
+            } else if (lower.endsWith(".webp")) {
+                mediaType = MediaType.valueOf("image/webp");
+            }
+            return ResponseEntity.ok()
+                    .contentType(mediaType)
+                    .header(HttpHeaders.CACHE_CONTROL, "public, max-age=86400")
+                    .body(fileData);
+        } catch (IOException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -129,10 +183,9 @@ public class FabricController {
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN &&
-                    requestingUser.getMainRole() != MainRole.ADMIN) {
+            if (requestingUser.getMainRole() != MainRole.ADMIN) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN or VIEWER can access this endpoint");
+                        .body("Only ADMIN can access this endpoint");
             }
 
             List<Fabric> fabrics = mongoTemplate.findAll(Fabric.class);
@@ -150,10 +203,9 @@ public class FabricController {
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN &&
-                    requestingUser.getMainRole() != MainRole.ADMIN) {
+            if (requestingUser.getMainRole() != MainRole.ADMIN) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN or VIEWER can access this endpoint");
+                        .body("Only ADMIN can access this endpoint");
             }
 
             Fabric fabric = mongoTemplate.findById(id, Fabric.class);
@@ -174,10 +226,9 @@ public class FabricController {
             @RequestHeader("Authorization") String tokenHeader) {
         try {
             User requestingUser = tokenUtils.getUserFromToken(tokenHeader);
-            if (requestingUser.getMainRole() != MainRole.ADMIN &&
-                    requestingUser.getMainRole() != MainRole.ADMIN) {  // fix duplicate check
+            if (requestingUser.getMainRole() != MainRole.ADMIN) {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("Only ADMIN or VIEWER can access this endpoint");
+                        .body("Only ADMIN can access this endpoint");
             }
 
             Fabric fabric = mongoTemplate.findById(fabricId, Fabric.class);
@@ -185,7 +236,7 @@ public class FabricController {
                 return ResponseEntity.notFound().build();
             }
 
-            Query query = new Query(Criteria.where("fabric").is(fabric));  // ✅ correct DBRef query
+            Query query = new Query(Criteria.where("fabric").is(fabric));
             List<FabricHistory> history = mongoTemplate.find(query, FabricHistory.class);
 
             return ResponseEntity.ok(history);
@@ -194,7 +245,6 @@ public class FabricController {
                     .body("Invalid or expired token");
         }
     }
-
 
     // Delete fabric
     @DeleteMapping("/{id}")
@@ -221,7 +271,6 @@ public class FabricController {
         }
     }
 
-
     @DeleteMapping("/transactions/{transactionId}")
     public ResponseEntity<?> deleteFabricTransaction(
             @PathVariable String transactionId,
@@ -238,7 +287,6 @@ public class FabricController {
                 return ResponseEntity.notFound().build();
             }
 
-            // Optional: Update related Fabric data (quantity, payment, etc.)
             Fabric fabric = transaction.getFabric();
             if (fabric != null) {
                 Update update = new Update();
@@ -260,7 +308,15 @@ public class FabricController {
                 mongoTemplate.updateFirst(fabricQuery, update, Fabric.class);
             }
 
-            // Delete the transaction
+            // Optionally clean up the stored proof file
+            if (transaction.getPaymentProof() != null && !transaction.getPaymentProof().isEmpty()) {
+                try {
+                    fileStorageService.deleteFile(transaction.getPaymentProof());
+                } catch (IOException ignored) {
+                    // non-fatal: proceed with deleting the transaction record regardless
+                }
+            }
+
             Query query = new Query(Criteria.where("id").is(transactionId));
             mongoTemplate.remove(query, FabricHistory.class);
 
@@ -270,5 +326,4 @@ public class FabricController {
                     .body("Invalid or expired token");
         }
     }
-
 }

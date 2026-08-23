@@ -24,5 +24,7 @@ public class FabricHistory {
     private double quantityinMeter;
     private Double credit;  // can be null
     private Double debit;   // can be null
+    private String paymentProof;  // URL or path to the uploaded image
+
     private Instant createdAt;
 }
